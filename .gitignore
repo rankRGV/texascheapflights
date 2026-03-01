@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+.npm
+
+# Build output
+dist/
+.astro/
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Gemini / AI agent internals (not for the repo)
+.gemini/
