@@ -158,7 +158,7 @@ const ETHICS = [
 
       <!-- Subheadline -->
       <p class="anim-fade-up delay-3 max-w-2xl text-xl mb-12 text-slate-400 leading-relaxed font-body">
-        The first travel platform built specifically for Texans. Travel hacking isn't just about credit cards — it's about <span class="text-white font-semibold">hedging your trips</span> against regional price spikes.
+        They say if it sounds too good to be true, it probably is. <span class="text-white font-semibold">We agree.</span> Travel hacking isn't magic — it's just local Texas math that most banks hope you never figure out.
       </p>
 
       <!-- WAITLIST FORM -->
@@ -240,6 +240,57 @@ const ETHICS = [
       </div>
     </div>
   </section>
+
+  <!-- ═══════════════════════════ INOCULATION (SKEPTIC CHECK) ═══════════════════════════ -->
+  <section class="py-24 relative overflow-hidden flex flex-col items-center">
+    <div class="max-w-6xl mx-auto px-6 w-full relative z-10">
+      <div class="liquid-glass p-12 md:p-16 rounded-[3.5rem] bg-tcf-navy-mid/40 border-white/10 shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-tcf-gold/5 blur-[100px] rounded-full"></div>
+        
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <span class="label text-tcf-caution uppercase tracking-[0.3em] font-bold text-xs mb-6 inline-block">The Skeptic's Check</span>
+            <h2 class="text-4xl md:text-5xl mb-8 text-white">Wait... isn't this<br/><span class="text-gold italic">just a credit card trap?</span></h2>
+            <p class="text-lg text-slate-400 mb-10 leading-relaxed font-body">
+              Travel hacking has a reputation for being risky, complicated, or only for people in New York. We built this platform to prove that for Texans, it's the only logical way to fly.
+            </p>
+            <div class="flex flex-col gap-6">
+              <a href="/skeptics-guide" class="text-tcf-aviation-blue font-bold flex items-center gap-2 group/link no-underline text-lg">
+                Read the full Skeptic's Guide to Texas Points
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover/link:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="grid gap-6">
+            {[
+              {
+                title: 'Objection: "It ruins your credit"',
+                response: 'Actually, it protects it. We use a built-in velocity engine to ensure you only apply for cards you qualify for, keeping your score as healthy as your travel stash.',
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-alert"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>`
+              },
+              {
+                title: 'Objection: "I don\'t spend enough"',
+                response: 'This isn\'t about spending more. It\'s about making the $800 you already spend on groceries work like $8,000 in travel value through optimized multipliers.',
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wallet"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14c0 1.1.9 2 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>`
+              }
+            ].map(item => (
+              <div class="p-8 rounded-3xl bg-white/5 border border-white/5 hover:border-white/20 transition-all duration-300">
+                <div class="flex gap-5 items-start">
+                  <div class="w-12 h-12 rounded-xl bg-tcf-caution/10 flex items-center justify-center text-tcf-caution flex-shrink-0" set:html={item.icon}></div>
+                  <div>
+                    <h4 class="font-black text-white text-lg mb-2 tracking-tight">{item.title}</h4>
+                    <p class="text-sm text-slate-400 leading-relaxed font-body">{item.response}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 
   <!-- ═══════════════════════════ PAIN ═══════════════════════════ -->
   <section class="section-padding bg-black/30 relative border-y border-white/5 flex flex-col items-center overflow-hidden">
