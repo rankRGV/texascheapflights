@@ -1,10 +1,12 @@
 import { Resend } from 'resend';
 export { renderers } from '../../renderers.mjs';
 
-const resend = new Resend("re_XJzPTrfZ_2jmrPp8soVn6g5No95uRVoSH");
-const AUDIENCE_ID = "";
 const POST = async ({ request }) => {
   try {
+    const apiKey = "re_XJzPTrfZ_2jmrPp8soVn6g5No95uRVoSH";
+    const audienceId = undefined                                   ?? "";
+    if (!apiKey) ;
+    const resend = new Resend(apiKey);
     const body = await request.json();
     const { email, airport } = body;
     if (!email || !airport) {
@@ -13,12 +15,12 @@ const POST = async ({ request }) => {
         headers: { "Content-Type": "application/json" }
       });
     }
-    if (AUDIENCE_ID) ;
+    if (audienceId) ;
     await resend.emails.send({
-      from: "Texas Cheap Flights <waitlist@texascheapflights.co>",
+      from: "Texas Cheap Flights <onboarding@resend.dev>",
       to: email,
       subject: "✈️ You're on the list, Texas traveler.",
-      html: buildWelcomeEmail({ email, airport })
+      html: buildWelcomeEmail({ airport })
     });
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
@@ -32,7 +34,7 @@ const POST = async ({ request }) => {
     });
   }
 };
-function buildWelcomeEmail({ email, airport }) {
+function buildWelcomeEmail({ airport }) {
   const airportLabel = {
     MFE: "McAllen–Miller International (MFE)",
     LRD: "Laredo International (LRD)",
@@ -69,49 +71,36 @@ function buildWelcomeEmail({ email, airport }) {
           <!-- Body -->
           <tr>
             <td style="background:#0d1832;border-left:1px solid rgba(255,255,255,0.08);border-right:1px solid rgba(255,255,255,0.08);padding:40px 48px;">
-
               <p style="margin:0 0 24px;color:#94a3b8;font-size:16px;line-height:1.7;">
-                Hey! We're building the first points intelligence platform built <em>specifically for Texas regional flyers</em>. 
+                Hey! We're building the first points intelligence platform built <em>specifically for Texas regional flyers</em>.
                 Most travel hacking advice is written for people in New York. We're fixing that.
               </p>
 
               <!-- Airport callout -->
               <div style="background:rgba(14,165,233,0.08);border:1px solid rgba(14,165,233,0.2);border-radius:16px;padding:20px 24px;margin:0 0 32px;">
-                <p style="margin:0;font-size:12px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:#0ea5e9;margin-bottom:6px;">Your Home Airport</p>
+                <p style="margin:0 0 6px;font-size:12px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:#0ea5e9;">Your Home Airport</p>
                 <p style="margin:0;font-size:18px;font-weight:700;color:#ffffff;">${airportName}</p>
-                <p style="margin:6px 0 0;font-size:13px;color:#94a3b8;">We'll track the best sweet spots departing from your area. If you ever change airports, just reply to this email.</p>
+                <p style="margin:6px 0 0;font-size:13px;color:#94a3b8;">We'll track the best sweet spots departing from your area.</p>
               </div>
 
-              <p style="margin:0 0 16px;color:#94a3b8;font-size:15px;line-height:1.7;font-weight:700;color:#f8fafc;">Here's what you get as a <span style="color:#d4a843;">Founding Member:</span></p>
+              <p style="margin:0 0 16px;font-size:15px;font-weight:700;color:#f8fafc;">Here's what you get as a <span style="color:#d4a843;">Founding Member:</span></p>
               <table cellpadding="0" cellspacing="0" style="margin:0 0 32px;">
                 <tr>
-                  <td style="padding:10px 0;vertical-align:top;">
-                    <span style="display:inline-block;width:6px;height:6px;background:#d4a843;border-radius:50%;margin:6px 12px 0 0;"></span>
-                  </td>
-                  <td style="padding:10px 0;color:#94a3b8;font-size:15px;line-height:1.6;">
-                    <strong style="color:#f8fafc;">Monthly TX Points Digest</strong> — The top 3 sweet spots from Texas airports each month, hand-curated.
-                  </td>
+                  <td style="padding:8px 12px 8px 0;vertical-align:top;"><span style="display:inline-block;width:6px;height:6px;background:#d4a843;border-radius:50%;margin-top:6px;"></span></td>
+                  <td style="padding:8px 0;color:#94a3b8;font-size:15px;line-height:1.6;"><strong style="color:#f8fafc;">Monthly TX Points Digest</strong> — The top 3 sweet spots from Texas airports, hand-curated.</td>
                 </tr>
                 <tr>
-                  <td style="padding:10px 0;vertical-align:top;">
-                    <span style="display:inline-block;width:6px;height:6px;background:#d4a843;border-radius:50%;margin:6px 12px 0 0;"></span>
-                  </td>
-                  <td style="padding:10px 0;color:#94a3b8;font-size:15px;line-height:1.6;">
-                    <strong style="color:#f8fafc;">Founding Member Access</strong> — Early access to the full platform before public launch.
-                  </td>
+                  <td style="padding:8px 12px 8px 0;vertical-align:top;"><span style="display:inline-block;width:6px;height:6px;background:#d4a843;border-radius:50%;margin-top:6px;"></span></td>
+                  <td style="padding:8px 0;color:#94a3b8;font-size:15px;line-height:1.6;"><strong style="color:#f8fafc;">Founding Member Access</strong> — Early access to the full platform before public launch.</td>
                 </tr>
                 <tr>
-                  <td style="padding:10px 0;vertical-align:top;">
-                    <span style="display:inline-block;width:6px;height:6px;background:#d4a843;border-radius:50%;margin:6px 12px 0 0;"></span>
-                  </td>
-                  <td style="padding:10px 0;color:#94a3b8;font-size:15px;line-height:1.6;">
-                    <strong style="color:#f8fafc;">The Skeptic's Guide</strong> — Our full breakdown of the bank math behind travel hacking, written for Texas flyers.
-                  </td>
+                  <td style="padding:8px 12px 8px 0;vertical-align:top;"><span style="display:inline-block;width:6px;height:6px;background:#d4a843;border-radius:50%;margin-top:6px;"></span></td>
+                  <td style="padding:8px 0;color:#94a3b8;font-size:15px;line-height:1.6;"><strong style="color:#f8fafc;">The Skeptic's Guide</strong> — The bank math behind travel hacking, written for Texas flyers.</td>
                 </tr>
               </table>
 
               <p style="margin:0;color:#64748b;font-size:13px;line-height:1.6;">
-                In the meantime, bookmark our <a href="https://texascheapflights.co/skeptics-guide" style="color:#0ea5e9;text-decoration:none;font-weight:600;">Skeptic's Guide</a> — it's the best crash course on why Texas flyers have a unique advantage that nobody's talking about.
+                In the meantime, read the <a href="https://texascheapflights.co/skeptics-guide" style="color:#0ea5e9;text-decoration:none;font-weight:600;">Skeptic's Guide</a> — the best crash course on why Texas flyers have an edge nobody is talking about.
               </p>
             </td>
           </tr>
@@ -121,7 +110,7 @@ function buildWelcomeEmail({ email, airport }) {
             <td style="background:#050a14;border:1px solid rgba(255,255,255,0.05);border-radius:0 0 32px 32px;padding:28px 48px;text-align:center;">
               <p style="margin:0 0 8px;color:#334155;font-size:11px;">© 2026 Texas Cheap Flights. No spam, ever.</p>
               <p style="margin:0;color:#334155;font-size:11px;">
-                <a href="#" style="color:#475569;text-decoration:none;">Unsubscribe</a> · 
+                <a href="#" style="color:#475569;text-decoration:none;">Unsubscribe</a> ·
                 <a href="https://texascheapflights.co/skeptics-guide" style="color:#475569;text-decoration:none;">Skeptic's Guide</a>
               </p>
             </td>

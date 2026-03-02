@@ -22,14 +22,6 @@
 		{
 			"src": "^/api/subscribe/?$",
 			"dest": "_render"
-		},
-		{
-			"src": "^/skeptics-guide/?$",
-			"dest": "_render"
-		},
-		{
-			"src": "^/$",
-			"dest": "_render"
 		}
 	]
 }
