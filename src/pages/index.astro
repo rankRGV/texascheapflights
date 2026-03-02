@@ -76,12 +76,16 @@ const ETHICS = [
 <body class="bg-primary text-primary scroll-smooth">
 
   <!-- ═══════════════════════════ NAV ═══════════════════════════ -->
-  <nav id="nav" class="fixed top-0 left-0 right-0 z-50 px-6 py-4 transition-all duration-300 glass border-b border-white/5">
+  <nav id="nav" class="fixed top-0 left-0 right-0 z-50 px-6 py-5 transition-all duration-300 glass border-b border-white/5">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
       <!-- Logo -->
-      <a href="/" class="flex items-center gap-3 no-underline">
-        <img src="/logo-light.png" alt="Texas Cheap Flights" class="h-10 md:h-12 w-auto anim-float" />
-      </a>
+      <div class="flex items-center gap-3">
+        <span class="text-3xl anim-float">✈️</span>
+        <div class="flex flex-col leading-none">
+          <span class="label text-gold-solid tracking-[0.2em] mb-0.5">Texas</span>
+          <span class="font-black text-sm uppercase tracking-wider">Cheap Flights</span>
+        </div>
+      </div>
       <!-- CTA -->
       <a href="#waitlist" class="btn-primary" style="padding: 0.625rem 1.5rem; font-size: 0.875rem;">
         Early Access
@@ -90,7 +94,7 @@ const ETHICS = [
   </nav>
 
   <!-- ═══════════════════════════ HERO ═══════════════════════════ -->
-  <section class="hero-gradient relative min-h-screen flex items-center justify-center px-6 pt-32 pb-20 overflow-hidden">
+  <section class="hero-gradient relative min-h-screen flex flex-col items-center justify-center px-6 pt-32 pb-20 overflow-hidden text-center">
     <div class="starfield"></div>
 
     <!-- Ambient Glows -->
@@ -100,7 +104,7 @@ const ETHICS = [
     <div class="z-content max-w-5xl mx-auto w-full flex flex-col items-center">
 
       <!-- Badge -->
-      <div class="anim-fade-up delay-1 inline-flex items-center gap-2 badge badge-gold mb-10 mx-auto">
+      <div class="anim-fade-up delay-1 inline-flex items-center gap-2 badge badge-gold mb-10">
         <span class="flex h-2 w-2 relative">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tcf-gold opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2 w-2 bg-tcf-gold"></span>
@@ -109,20 +113,20 @@ const ETHICS = [
       </div>
 
       <!-- Hero headline -->
-      <h1 class="anim-fade-up delay-2 display mb-8 text-white text-center w-full" style="font-size: clamp(2.5rem, 8vw, 5.5rem); max-width: 12ch; margin-left: auto; margin-right: auto;">
+      <h1 class="anim-fade-up delay-2 display mb-8 text-white w-full" style="font-size: clamp(2.5rem, 8vw, 5.5rem);">
         Travel hacking<br/>
         <span class="text-gold">built specifically</span><br/>
         for Texas flyers.
       </h1>
 
       <!-- Subheadline -->
-      <p class="anim-fade-up delay-3 body max-w-2xl text-xl mb-12 text-center mx-auto">
+      <p class="anim-fade-up delay-3 body max-w-2xl text-xl mb-12">
         Most experts teach you how to earn points. We teach you how to <span class="text-white font-medium">actually use them</span> without getting burned by regional price hikes.
       </p>
 
       <!-- WAITLIST FORM -->
-      <div class="anim-fade-up delay-4 w-full max-w-lg mx-auto" id="waitlist">
-        <div class="glass card p-8 md:p-10 shadow-2xl shadow-black/50 mx-auto">
+      <div class="anim-fade-up delay-4 w-full max-w-lg" id="waitlist">
+        <div class="glass card p-8 md:p-10 shadow-2xl shadow-black/50">
           <form id="waitlist-form" class="flex flex-col gap-5">
             <div class="flex flex-col gap-2 text-left">
               <label class="label text-slate-400">Home Airport</label>
@@ -146,22 +150,22 @@ const ETHICS = [
               />
             </div>
 
-            <button type="submit" id="submit-btn" class="btn-primary w-full mt-2 mx-auto">
+            <button type="submit" id="submit-btn" class="btn-primary w-full mt-2">
               Get My Personalized TX Plan &nbsp; ✈️
             </button>
 
-            <p class="text-center text-xs text-slate-500 w-full">
+            <p class="text-center text-xs text-slate-500">
               No credit card required. Private early access.
             </p>
           </form>
 
           <!-- Success state -->
-          <div id="success-state" class="hidden text-center py-4 flex-col items-center">
-            <div class="text-5xl mb-4 mx-auto">🤠</div>
-            <h3 class="subhead text-2xl mb-2 text-gold-solid mx-auto">You're in the inner circle.</h3>
-            <p class="body mb-8 text-slate-400 mx-auto">We're building your sweet-spot report for your airport now.</p>
+          <div id="success-state" class="hidden text-center py-4">
+            <div class="text-5xl mb-4">🤠</div>
+            <h3 class="subhead text-2xl mb-2 text-gold-solid">You're in the inner circle.</h3>
+            <p class="body mb-8 text-slate-400">We're building your sweet-spot report for your airport now.</p>
 
-            <div class="glass-success p-6 rounded-2xl border border-tcf-success/20 mx-auto max-w-sm">
+            <div class="glass-success p-6 rounded-2xl border border-tcf-success/20">
               <p class="font-bold text-tcf-success mb-2 uppercase tracking-widest text-xs">🚀 Skip the line</p>
               <p class="text-sm text-slate-300 mb-4">
                 Refer 3 friends from Texas and get instant access to our "Airport Sweet Spot" hidden database.
@@ -175,14 +179,14 @@ const ETHICS = [
         </div>
 
         <!-- Social Proof -->
-        <div class="mt-8 flex flex-col items-center justify-center gap-4 text-sm text-slate-500 w-full">
+        <div class="mt-8 flex flex-col items-center justify-center gap-3 text-sm text-slate-500 w-full">
           <div class="flex items-center gap-3">
             <div class="flex -space-x-3">
               {[1,2,3].map(() => (
                 <div class="w-8 h-8 rounded-full border-2 border-tcf-navy-deep bg-tcf-navy-mid flex items-center justify-center text-[10px] glass">⭐</div>
               ))}
             </div>
-            <p class="m-0"><span class="text-white font-bold">247 Texans</span> joined this week</p>
+            <p><span class="text-white font-bold">247 Texans</span> joined this week</p>
           </div>
         </div>
       </div>
@@ -190,18 +194,18 @@ const ETHICS = [
   </section>
 
   <!-- ═══════════════════════════ PAIN ═══════════════════════════ -->
-  <section class="section-padding bg-deep relative border-y border-white/5">
-    <div class="max-w-6xl mx-auto px-6 flex flex-col items-center">
-      <div class="text-center mb-16 mx-auto">
-        <span class="label text-gold-solid mx-auto">The Reality</span>
-        <h2 class="heading text-4xl md:text-5xl mt-4 mb-6 mx-auto">Standard travel hacking<br/><span class="text-slate-500 italic">doesn't work for us.</span></h2>
+  <section class="section-padding bg-deep relative border-y border-white/5 text-center flex flex-col items-center">
+    <div class="max-w-6xl mx-auto px-6 w-full flex flex-col items-center">
+      <div class="mb-16">
+        <span class="label text-gold-solid">The Reality</span>
+        <h2 class="heading text-4xl md:text-5xl mt-4 mb-6">Standard travel hacking<br/><span class="text-slate-500 italic">doesn't work for us.</span></h2>
       </div>
 
       <div class="grid md:grid-cols-3 gap-8 w-full">
         {PAIN_QUOTES.map(item => (
-          <div class="glass p-8 rounded-3xl flex flex-col items-center text-center">
-            <div class="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-3xl mb-6 mx-auto">{item.icon}</div>
-            <p class="body text-white font-medium italic leading-relaxed mx-auto">{item.text}</p>
+          <div class="glass p-8 rounded-3xl flex flex-col items-center text-center justify-center">
+            <div class="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-3xl mb-6">{item.icon}</div>
+            <p class="body text-white font-medium italic leading-relaxed">{item.text}</p>
           </div>
         ))}
       </div>
@@ -209,20 +213,20 @@ const ETHICS = [
   </section>
 
   <!-- ═══════════════════════════ HOW IT WORKS ═══════════════════════════ -->
-  <section class="section-padding hero-gradient">
-    <div class="max-w-6xl mx-auto px-6 flex flex-col items-center">
-      <div class="text-center mb-20 mx-auto">
-        <span class="label text-blue mx-auto">The Strategy</span>
-        <h2 class="heading text-4xl md:text-5xl mt-4 mx-auto">Three steps to<br/><span class="text-gold">mastering your miles.</span></h2>
+  <section class="section-padding hero-gradient text-center flex flex-col items-center">
+    <div class="max-w-6xl mx-auto px-6 w-full flex flex-col items-center">
+      <div class="mb-20">
+        <span class="label text-blue">The Strategy</span>
+        <h2 class="heading text-4xl md:text-5xl mt-4">Three steps to<br/><span class="text-gold">mastering your miles.</span></h2>
       </div>
 
       <div class="grid md:grid-cols-3 gap-8 w-full">
         {HOW_IT_WORKS.map((f, idx) => (
           <div class={`glass p-10 rounded-[32px] relative overflow-hidden group hover:border-tcf-gold/30 transition-all duration-500 anim-fade-up delay-${idx+1} flex flex-col items-center text-center`}>
             <span class="absolute top-6 right-8 text-7xl font-black text-white/5 select-none">{f.step}</span>
-            <div class="text-4xl mb-8 group-hover:scale-110 transition-transform duration-500 mx-auto">{f.icon}</div>
-            <h3 class="subhead text-2xl mb-4 text-white mx-auto">{f.title}</h3>
-            <p class="body mx-auto">{f.desc}</p>
+            <div class="text-4xl mb-8 group-hover:scale-110 transition-transform duration-500">{f.icon}</div>
+            <h3 class="subhead text-2xl mb-4 text-white">{f.title}</h3>
+            <p class="body">{f.desc}</p>
           </div>
         ))}
       </div>
@@ -230,20 +234,20 @@ const ETHICS = [
   </section>
 
   <!-- ═══════════════════════════ TRAVEL HEDGING ═══════════════════════════ -->
-  <section class="section-padding bg-black/20">
+  <section class="section-padding bg-black/20 overflow-hidden">
     <div class="max-w-6xl mx-auto px-6">
       <div class="grid lg:grid-cols-2 gap-16 items-center">
         <div class="text-center lg:text-left flex flex-col items-center lg:items-start">
-          <span class="badge badge-gold px-4 py-1.5 label text-[10px] mb-8 mx-auto lg:mx-0">Proprietary Framework</span>
-          <h2 class="heading text-4xl md:text-5xl mb-8 leading-tight mx-auto lg:mx-0">
+          <span class="badge badge-gold px-4 py-1.5 label text-[10px] mb-8">Proprietary Framework</span>
+          <h2 class="heading text-4xl md:text-5xl mb-8 leading-tight">
             Stop guessing.<br/>
             Start <span class="text-gold">Hedging.</span>
           </h2>
-          <p class="body text-lg mb-10 leading-relaxed mx-auto lg:mx-0">
+          <p class="body text-lg mb-10 leading-relaxed">
             Cash prices are volatile. Rewards are stable. We teach you how to book refundable "hedge flights" using points you already have, so you NEVER pay a last-minute price spike again.
           </p>
           
-          <div class="grid sm:grid-cols-2 gap-6 w-full">
+          <div class="grid sm:grid-cols-2 gap-6 w-full max-w-2xl">
             {[
               { icon: '🛡️', title: 'Refundable awards', desc: 'Lock in deals with 0 risk.' },
               { icon: '🔄', title: 'Backup routes', desc: 'Always have a plan B.' },
@@ -262,9 +266,9 @@ const ETHICS = [
         </div>
 
         <!-- Dashboard Mockup -->
-        <div class="relative group max-w-md mx-auto lg:mx-0 w-full">
+        <div class="relative group w-full max-w-md mx-auto">
           <div class="absolute -inset-4 bg-tcf-gold/20 blur-3xl rounded-full opacity-50 group-hover:opacity-70 transition-opacity"></div>
-          <div class="glass rounded-3xl p-8 relative overflow-hidden border-white/10 shadow-2xl mx-auto w-full">
+          <div class="glass rounded-3xl p-8 relative overflow-hidden border-white/10 shadow-2xl w-full">
             <div class="flex items-center justify-between mb-10">
               <h4 class="label text-slate-400">Hedge Portfolio</h4>
               <div class="flex gap-1.5">
@@ -288,7 +292,7 @@ const ETHICS = [
               ))}
             </div>
 
-            <div class="p-4 rounded-2xl glass-success text-center mx-auto">
+            <div class="p-4 rounded-2xl glass-success text-center">
               <p class="font-bold text-tcf-success text-xs">✅ STATUS: INSULATED</p>
               <p class="text-[10px] text-slate-400 mt-1">Your summer vacation is protected against price hikes.</p>
             </div>
@@ -299,32 +303,32 @@ const ETHICS = [
   </section>
 
   <!-- ═══════════════════════════ AIRPORTS ═══════════════════════════ -->
-  <section class="section-padding bg-deep border-y border-white/5">
-    <div class="max-w-4xl mx-auto px-6 flex flex-col items-center text-center">
-      <span class="label text-gold-solid mb-4 mx-auto">Texas Coverage</span>
-      <h2 class="heading text-4xl md:text-5xl mt-4 mb-8 mx-auto">We track <span class="text-gold">15 Texas hubs.</span></h2>
-      <p class="body text-lg mb-16 mx-auto max-w-2xl text-center">
+  <section class="section-padding bg-deep border-y border-white/5 text-center flex flex-col items-center">
+    <div class="max-w-4xl mx-auto px-6 w-full flex flex-col items-center">
+      <span class="label text-gold-solid mb-4">Texas Coverage</span>
+      <h2 class="heading text-4xl md:text-5xl mt-4 mb-8">We track <span class="text-gold">15 Texas hubs.</span></h2>
+      <p class="body text-lg mb-16 mx-auto max-w-2xl">
         From the Valley to the Panhandle. We monitor award availability and cash routes for every regional airport in the state.
       </p>
 
       <div class="flex flex-wrap justify-center gap-3 w-full">
         {AIRPORTS.map(a => (
-          <div class={`badge px-4 py-2 text-sm font-bold ${a.hot ? 'badge-gold' : 'glass bg-white/5 text-slate-400 border-white/5'} flex-shrink-0`}>
+          <div class={`badge px-4 py-2 text-sm font-bold ${a.hot ? 'badge-gold' : 'glass bg-white/5 text-slate-400 border-white/5'}`}>
             {a.code} <span class="mx-1 opacity-30 font-light">|</span> {a.city} {a.hot && '🔥'}
           </div>
         ))}
-        <div class="badge px-4 py-2 text-sm font-bold glass bg-white/5 text-slate-500 italic border-white/5 flex-shrink-0">+4 more hubs</div>
+        <div class="badge px-4 py-2 text-sm font-bold glass bg-white/5 text-slate-500 italic border-white/5">+4 more hubs</div>
       </div>
     </div>
   </section>
 
   <!-- ═══════════════════════════ ETHICS ═══════════════════════════ -->
-  <section class="py-12 glass border-y border-white/5">
+  <section class="py-12 glass border-y border-white/5 text-center">
     <div class="max-w-7xl mx-auto px-6">
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {ETHICS.map(item => (
-          <div class="flex flex-col md:flex-row items-center justify-center gap-4 text-center md:text-left">
-            <span class="text-3xl flex-shrink-0">{item.icon}</span>
+          <div class="flex flex-col md:flex-row items-center justify-center gap-4">
+            <span class="text-3xl">{item.icon}</span>
             <span class="text-sm font-semibold text-white/80">{item.text}</span>
           </div>
         ))}
@@ -333,20 +337,20 @@ const ETHICS = [
   </section>
 
   <!-- ═══════════════════════════ FINAL CTA ═══════════════════════════ -->
-  <section class="section-padding hero-gradient relative overflow-hidden flex flex-col items-center">
+  <section class="section-padding hero-gradient relative overflow-hidden text-center flex flex-col items-center">
     <div class="starfield"></div>
-    <div class="z-content max-w-3xl mx-auto text-center px-6 flex flex-col items-center">
-      <div class="text-6xl mb-10 anim-float mx-auto">✈️</div>
-      <h2 class="heading text-4xl md:text-7xl mb-8 leading-tight mx-auto">Your next dream trip<br/><span class="text-gold">starts at home.</span></h2>
-      <p class="body text-xl mb-12 text-center mx-auto">
+    <div class="z-content max-w-3xl mx-auto px-6 flex flex-col items-center">
+      <div class="text-6xl mb-10 anim-float">✈️</div>
+      <h2 class="heading text-5xl md:text-7xl mb-8 leading-tight w-full">Your next dream trip<br/><span class="text-gold">starts at home.</span></h2>
+      <p class="body text-xl mb-12">
         Join the waitlist to receive your personalized "Texas Sweet Spot" report within 24 hours of launch.
       </p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
-        <a href="#waitlist" class="btn-primary w-full sm:w-auto px-12 py-5 text-lg shadow-gold/20 mx-auto">
+        <a href="#waitlist" class="btn-primary w-full sm:w-auto px-12 py-5 text-lg shadow-gold/20">
           Get My Texas Plan &nbsp; ✈️
         </a>
       </div>
-      <p class="mt-8 text-slate-500 text-sm mx-auto">
+      <p class="mt-8 text-slate-500 text-sm">
         Limited early access slots remaining for April 2026.
       </p>
     </div>
@@ -355,18 +359,22 @@ const ETHICS = [
   <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
   <footer class="py-16 bg-tcf-navy-deep border-t border-white/5">
     <div class="max-w-7xl mx-auto px-6">
-      <div class="flex flex-col md:flex-row items-center justify-between gap-10">
-        <a href="/" class="flex items-center gap-4 no-underline">
-          <img src="/logo-light.png" alt="Texas Cheap Flights" class="h-8 md:h-10 w-auto opacity-80 hover:opacity-100 transition-opacity" />
-        </a>
+      <div class="flex flex-col md:flex-row items-center justify-between gap-10 text-center md:text-left">
+        <div class="flex items-center gap-4 justify-center md:justify-start">
+          <span class="text-3xl grayscale">✈️</span>
+          <div class="flex flex-col text-left leading-tight">
+            <span class="label text-xs tracking-widest text-gold-solid mb-0.5">Texas</span>
+            <span class="font-black text-sm uppercase">Cheap Flights</span>
+          </div>
+        </div>
         
-        <div class="flex flex-wrap justify-center gap-x-8 gap-y-4 text-slate-500 text-xs font-semibold uppercase tracking-widest">
+        <div class="flex flex-wrap justify-center gap-8 text-slate-500 text-xs font-semibold uppercase tracking-widest">
           <a href="#" class="hover:text-gold transition-colors">Privacy</a>
           <a href="#" class="hover:text-gold transition-colors">Terms</a>
           <a href="#" class="hover:text-gold transition-colors">Affiliate Policy</a>
         </div>
 
-        <p class="text-slate-600 text-[10px] max-w-xs text-center md:text-right m-0">
+        <p class="text-slate-600 text-[10px] max-w-xs text-center md:text-right">
           © 2026 Texas Cheap Flights. Travel responsibly. Credit card strategies involve risk; always pay in full.
         </p>
       </div>
