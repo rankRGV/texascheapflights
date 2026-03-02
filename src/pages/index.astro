@@ -32,9 +32,9 @@ const HOW_IT_WORKS = [
 ];
 
 const HEDGING_TRIPS = [
-  { route: 'MFE → DFW → London', status: 'Hedged ✅', color: '#22c55e' },
-  { route: 'AUS → Tokyo via ANA', status: 'Backup ready ⚡', color: '#f59e0b' },
-  { route: 'DFW → Cancun award', status: 'Refundable 🛡️', color: '#22c55e' },
+  { route: 'MFE → DFW → London', status: 'Hedged ✅', color: 'var(--tcf-success)' },
+  { route: 'AUS → Tokyo via ANA', status: 'Backup ready ⚡', color: 'var(--tcf-caution)' },
+  { route: 'DFW → Cancun award', status: 'Refundable 🛡️', color: 'var(--tcf-success)' },
 ];
 
 const AIRPORTS = [
@@ -64,177 +64,146 @@ const ETHICS = [
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0d1832" />
   <title>Texas Cheap Flights — Travel Hacking Built for Texans</title>
   <meta name="description" content="The first travel hacking platform built specifically for Texas travelers. Enter your home airport, get your personalized plan to fly anywhere for less." />
   <meta property="og:title" content="Texas Cheap Flights — Travel Hacking Built for Texans" />
   <meta property="og:description" content="Enter your Texas airport. Get your personalized plan to fly anywhere for less." />
   <meta property="og:type" content="website" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 </head>
 
-<body>
+<body class="bg-primary text-primary scroll-smooth">
 
   <!-- ═══════════════════════════ NAV ═══════════════════════════ -->
-  <nav
-    id="nav"
-    class="fixed top-0 left-0 right-0 z-50 px-6 py-4 transition-all duration-300"
-    style="background: rgba(7,11,23,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.05);"
-  >
-    <div class="max-w-6xl mx-auto flex items-center justify-between">
+  <nav id="nav" class="fixed top-0 left-0 right-0 z-50 px-6 py-5 transition-all duration-300 glass border-b border-white/5">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
       <!-- Logo -->
-      <div class="flex items-center gap-2.5">
-        <div class="relative">
-          <span class="text-2xl anim-float" style="animation-duration: 4s;">✈️</span>
-        </div>
+      <div class="flex items-center gap-3">
+        <span class="text-3xl anim-float">✈️</span>
         <div class="flex flex-col leading-none">
-          <span class="font-black text-sm tracking-widest uppercase" style="color: var(--tcf-gold); letter-spacing: 0.12em;">Texas</span>
-          <span class="font-black text-sm tracking-wide uppercase" style="color: var(--tcf-white); letter-spacing: 0.06em;">Cheap Flights</span>
+          <span class="label text-gold-solid tracking-[0.2em] mb-0.5">Texas</span>
+          <span class="font-black text-sm uppercase tracking-wider">Cheap Flights</span>
         </div>
       </div>
       <!-- CTA -->
-      <a href="#waitlist" class="btn-primary" style="padding: 0.5rem 1.375rem; font-size: 0.875rem;">
-        Join Waitlist
+      <a href="#waitlist" class="btn-primary" style="padding: 0.625rem 1.5rem; font-size: 0.875rem;">
+        Early Access
       </a>
     </div>
   </nav>
 
   <!-- ═══════════════════════════ HERO ═══════════════════════════ -->
-  <section class="hero-gradient relative min-h-screen flex flex-col items-center justify-center px-6 pt-28 pb-24 overflow-hidden">
+  <section class="hero-gradient relative min-h-screen flex items-center justify-center px-6 pt-32 pb-20 overflow-hidden">
     <div class="starfield"></div>
 
-    <!-- Decorative star glows -->
-    <div class="absolute top-28 right-16 opacity-[0.06] text-9xl select-none pointer-events-none">⭐</div>
-    <div class="absolute bottom-44 left-6 opacity-[0.04] text-6xl select-none pointer-events-none">⭐</div>
+    <!-- Ambient Glows -->
+    <div class="absolute top-1/4 -right-20 w-96 h-96 bg-tcf-gold/5 blur-[120px] rounded-full"></div>
+    <div class="absolute bottom-1/4 -left-20 w-96 h-96 bg-tcf-navy-mid/10 blur-[120px] rounded-full"></div>
 
-    <div class="z-content max-w-4xl mx-auto text-center w-full">
+    <div class="z-content max-w-5xl mx-auto flex flex-col items-center text-center">
 
-      <!-- Live badge -->
-      <div class="anim-fade-1 inline-flex items-center gap-2 badge badge-gold mb-10">
-        <span class="pulse-dot"></span>
-        Texas-first · Safety-first · Early access open
+      <!-- Badge -->
+      <div class="anim-fade-up delay-1 inline-flex items-center gap-2 badge badge-gold mb-10">
+        <span class="flex h-2 w-2 relative">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tcf-gold opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-tcf-gold"></span>
+        </span>
+        Early access now open for all TX airports
       </div>
 
       <!-- Hero headline -->
-      <h1 class="anim-fade-2 display mb-6" style="font-size: clamp(2.5rem, 7vw, 5rem);">
-        Most travel hackers teach you<br/>
-        how to <span class="text-gold">earn points.</span><br/>
-        We teach you how to<br/>
-        <span style="color: #93c5fd;">use them without getting burned.</span>
+      <h1 class="anim-fade-up delay-2 display mb-8 text-white" style="font-size: clamp(2.5rem, 8vw, 5.5rem);">
+        Travel hacking<br/>
+        <span class="text-gold">built specifically</span><br/>
+        for Texas flyers.
       </h1>
 
       <!-- Subheadline -->
-      <p class="anim-fade-3 body text-secondary mb-10 max-w-xl mx-auto" style="font-size: 1.2rem;">
-        The only travel hacking platform built for Texans.
-        Enter your airport. Get your personalized plan — free.
+      <p class="anim-fade-up delay-3 body max-w-2xl text-xl mb-12">
+        Most experts teach you how to earn points. We teach you how to <span class="text-white font-medium">actually use them</span> without getting burned by regional price hikes.
       </p>
 
       <!-- WAITLIST FORM -->
-      <div class="anim-fade-4 max-w-lg mx-auto" id="waitlist">
-        <div class="glass card" style="border-radius: 1.5rem;">
-
-          <!-- Form -->
-          <form id="waitlist-form" class="flex flex-col gap-4">
-            <div class="flex flex-col gap-1.5 text-left">
-              <label class="label text-secondary">Your Texas Airport</label>
+      <div class="anim-fade-up delay-4 w-full max-w-lg" id="waitlist">
+        <div class="glass card p-8 md:p-10 shadow-2xl shadow-black/50">
+          <form id="waitlist-form" class="flex flex-col gap-5">
+            <div class="flex flex-col gap-2 text-left">
+              <label class="label text-slate-400">Home Airport</label>
               <select id="airport" name="airport" required class="input">
-                <option value="" disabled selected>Select your home airport...</option>
+                <option value="" disabled selected>Choose your airport...</option>
                 {TX_AIRPORTS.map(a => (
                   <option value={a.code}>{a.city} ({a.code})</option>
                 ))}
               </select>
             </div>
 
-            <div class="flex flex-col gap-1.5 text-left">
-              <label class="label text-secondary">Your Email</label>
+            <div class="flex flex-col gap-2 text-left">
+              <label class="label text-slate-400">Email Address</label>
               <input
                 id="email"
                 name="email"
                 type="email"
                 required
-                placeholder="you@example.com"
+                placeholder="you@email.com"
                 class="input"
               />
             </div>
 
-            <button type="submit" id="submit-btn" class="btn-primary w-full" style="padding: 1rem; font-size: 1.05rem; border-radius: 0.875rem;">
-              ✈️ &nbsp; Get My Personalized Flight Plan
+            <button type="submit" id="submit-btn" class="btn-primary w-full mt-2">
+              Get My Personalized TX Plan &nbsp; ✈️
             </button>
 
-            <p class="text-center" style="font-size: 0.8125rem; color: var(--tcf-slate-dark);">
-              No spam. No credit card. 100% free early access.
+            <p class="text-center text-xs text-slate-500">
+              No credit card required. Private early access.
             </p>
           </form>
 
           <!-- Success state -->
-          <div id="success-state" class="hidden text-center py-2">
-            <div style="font-size: 2.5rem;" class="mb-3">🎉</div>
-            <h3 class="subhead mb-2" style="font-size: 1.25rem; color: var(--tcf-gold);">You're on the list.</h3>
-            <p class="text-secondary mb-5" style="font-size: 0.9rem;">We're preparing your personalized airport plan.</p>
+          <div id="success-state" class="hidden text-center py-4">
+            <div class="text-5xl mb-4">🤠</div>
+            <h3 class="subhead text-2xl mb-2 text-gold-solid">You're in the inner circle.</h3>
+            <p class="body mb-8 text-slate-400">We're building your sweet-spot report for your airport now.</p>
 
-            <div class="glass-success card-sm" style="border-radius: 0.875rem;">
-              <p class="font-semibold mb-1" style="font-size: 0.875rem; color: var(--tcf-success);">🚀 Want to skip the line?</p>
-              <p class="text-secondary mb-3" style="font-size: 0.8125rem;">
-                Refer 3 Texas friends → early access + free airport sweet spot report
+            <div class="glass-success p-6 rounded-2xl border border-tcf-success/20">
+              <p class="font-bold text-tcf-success mb-2 uppercase tracking-widest text-xs">🚀 Skip the line</p>
+              <p class="text-sm text-slate-300 mb-4">
+                Refer 3 friends from Texas and get instant access to our "Airport Sweet Spot" hidden database.
               </p>
               <div class="flex gap-2">
-                <input
-                  id="referral-link"
-                  type="text"
-                  readonly
-                  value="texascheapflights.com/ref/TXSTART"
-                  class="input flex-1"
-                  style="font-size: 0.8125rem; padding: 0.625rem 0.875rem; border-radius: 0.625rem;"
-                />
-                <button
-                  id="copy-btn"
-                  class="btn-secondary"
-                  style="padding: 0.625rem 1rem; font-size: 0.8125rem; border-radius: 0.625rem; white-space: nowrap;"
-                  onclick="navigator.clipboard.writeText(document.getElementById('referral-link').value).then(() => { this.textContent = 'Copied ✓'; setTimeout(() => this.textContent = 'Copy', 2000); }); return false;"
-                >
-                  Copy
-                </button>
+                <input id="referral-link" readonly value="txflights.co/ref/TEXAS" class="input flex-1 text-sm bg-black/40" />
+                <button id="copy-btn" class="btn-secondary whitespace-nowrap text-sm px-4">Copy</button>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Social proof counter -->
-        <div class="mt-5 flex items-center justify-center gap-2.5" style="font-size: 0.875rem; color: var(--tcf-slate-dark);">
-          <div class="flex -space-x-2">
-            {['🤠', '✈️', '⭐'].map(emoji => (
-              <div class="w-7 h-7 glass rounded-full flex items-center justify-center text-xs" style="font-size: 0.75rem;">{emoji}</div>
+        <!-- Social Proof -->
+        <div class="mt-8 flex items-center justify-center gap-3 text-sm text-slate-500">
+          <div class="flex -space-x-3">
+            {[1,2,3].map(() => (
+              <div class="w-8 h-8 rounded-full border-2 border-tcf-navy-deep bg-tcf-navy-mid flex-center text-[10px] glass">⭐</div>
             ))}
           </div>
-          <span><strong style="color: var(--tcf-gold);">247 Texans</strong> already on the waitlist</span>
+          <p><span class="text-white font-bold">247 Texans</span> joined this week</p>
         </div>
-      </div>
-    </div>
-
-    <!-- Scroll cue -->
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30 pointer-events-none">
-      <span style="font-size: 0.75rem; color: var(--tcf-slate-dark); letter-spacing: 0.08em; text-transform: uppercase;">Scroll to explore</span>
-      <div class="w-5 h-8 rounded-full" style="border: 1px solid rgba(255,255,255,0.15);">
-        <div class="w-1.5 h-2.5 rounded-full mx-auto mt-1.5" style="background: rgba(212,168,67,0.5);"></div>
       </div>
     </div>
   </section>
 
   <!-- ═══════════════════════════ PAIN ═══════════════════════════ -->
-  <section class="py-24 px-6 bg-deep">
-    <div class="max-w-4xl mx-auto text-center">
-      <p class="label text-gold-solid mb-4">Sound familiar?</p>
-      <h2 class="heading mb-14" style="font-size: clamp(1.875rem, 4.5vw, 3rem);">
-        You know the deals are out there.<br />
-        <span class="text-gold">You just don't know how to get them.</span>
-      </h2>
+  <section class="section-padding bg-deep relative border-y border-white/5">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <span class="label text-gold-solid">The Reality</span>
+        <h2 class="heading text-4xl md:text-5xl mt-4 mb-6">Standard travel hacking<br/><span class="text-slate-500 italic">doesn't work for us.</span></h2>
+      </div>
 
-      <div class="grid md:grid-cols-3 gap-5 text-left">
+      <div class="grid md:grid-cols-3 gap-8">
         {PAIN_QUOTES.map(item => (
-          <div class="glass card">
-            <span style="font-size: 2rem;" class="block mb-4">{item.icon}</span>
-            <p class="body" style="font-style: italic; color: #cbd5e1; font-size: 1.0625rem; line-height: 1.65;">{item.text}</p>
+          <div class="glass p-8 rounded-3xl flex flex-col items-center text-center">
+            <div class="w-16 h-16 rounded-2xl bg-white/5 flex-center text-3xl mb-6">{item.icon}</div>
+            <p class="body text-white font-medium italic leading-relaxed">{item.text}</p>
           </div>
         ))}
       </div>
@@ -242,23 +211,20 @@ const ETHICS = [
   </section>
 
   <!-- ═══════════════════════════ HOW IT WORKS ═══════════════════════════ -->
-  <section class="py-28 px-6 hero-gradient">
-    <div class="max-w-5xl mx-auto">
-      <div class="text-center mb-16">
-        <p class="label text-gold-solid mb-4">How it works</p>
-        <h2 class="heading" style="font-size: clamp(1.875rem, 4.5vw, 3rem);">
-          Your airport. Your dream trip.<br />
-          <span style="color: #93c5fd;">Your step-by-step plan.</span>
-        </h2>
+  <section class="section-padding hero-gradient">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-20">
+        <span class="label text-blue">The Strategy</span>
+        <h2 class="heading text-4xl md:text-5xl mt-4">Three steps to<br/><span class="text-gold">mastering your miles.</span></h2>
       </div>
 
-      <div class="grid md:grid-cols-3 gap-7">
-        {HOW_IT_WORKS.map(f => (
-          <div class="glass card relative">
-            <div class="label mb-5" style="color: rgba(212,168,67,0.4);">{f.step}</div>
-            <span style="font-size: 2.25rem;" class="block mb-4">{f.icon}</span>
-            <h3 class="subhead mb-3" style="font-size: 1.15rem; color: var(--tcf-white);">{f.title}</h3>
-            <p class="body text-secondary" style="font-size: 0.9375rem;">{f.desc}</p>
+      <div class="grid md:grid-cols-3 gap-8">
+        {HOW_IT_WORKS.map((f, idx) => (
+          <div class={`glass p-10 rounded-[32px] relative overflow-hidden group hover:border-tcf-gold/30 transition-all duration-500 anim-fade-up delay-${idx+1}`}>
+            <span class="absolute top-6 right-8 text-7xl font-black text-white/5 select-none">{f.step}</span>
+            <div class="text-4xl mb-8 group-hover:scale-110 transition-transform duration-500">{f.icon}</div>
+            <h3 class="subhead text-2xl mb-4 text-white">{f.title}</h3>
+            <p class="body">{f.desc}</p>
           </div>
         ))}
       </div>
@@ -266,56 +232,68 @@ const ETHICS = [
   </section>
 
   <!-- ═══════════════════════════ TRAVEL HEDGING ═══════════════════════════ -->
-  <section class="py-28 px-6" style="background: linear-gradient(135deg, rgba(26,58,107,0.15) 0%, var(--tcf-navy) 60%);">
-    <div class="max-w-5xl mx-auto">
-      <div class="grid md:grid-cols-2 gap-14 items-center">
-
-        <!-- Copy -->
+  <section class="section-padding bg-black/20">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
         <div>
-          <div class="badge badge-gold mb-6" style="text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.7rem;">
-            Category Creator
-          </div>
-          <h2 class="heading mb-5" style="font-size: clamp(2rem, 4vw, 3rem);">
-            Nobody teaches<br />
-            <span class="text-gold">Travel Hedging.</span><br />
-            We do.
+          <span class="badge badge-gold px-4 py-1.5 label text-[10px] mb-8">Proprietary Framework</span>
+          <h2 class="heading text-4xl md:text-5xl mb-8 leading-tight">
+            Stop guessing.<br/>
+            Start <span class="text-gold">Hedging.</span>
           </h2>
-          <p class="body text-secondary mb-8" style="font-size: 1.0625rem;">
-            Cash prices spike overnight. Points stay stable. We'll show you how to book refundable award flights as a hedge — so you're always protected, whatever the market does.
+          <p class="body text-lg mb-10 leading-relaxed">
+            Cash prices are volatile. Rewards are stable. We teach you how to book refundable "hedge flights" using points you already have, so you NEVER pay a last-minute price spike again.
           </p>
-          <ul class="flex flex-col gap-3.5">
+          
+          <div class="grid sm:grid-cols-2 gap-6">
             {[
-              'Refundable award bookings for price protection',
-              'Backup route generator for every key trip',
-              'Overexposure alerts if you\'re too heavy in one program',
-              'Positioning flight risk scoring for regional TX flyers',
+              { icon: '🛡️', title: 'Refundable awards', desc: 'Lock in deals with 0 risk.' },
+              { icon: '🔄', title: 'Backup routes', desc: 'Always have a plan B.' },
+              { icon: '📊', title: 'Risk scoring', desc: 'Know when to pay cash.' },
+              { icon: '🔥', title: 'Sweet spots', desc: 'Airport-specific secrets.' },
             ].map(item => (
-              <li class="flex items-start gap-3" style="font-size: 0.9375rem;">
-                <span style="color: var(--tcf-success); margin-top: 2px; flex-shrink: 0;">✓</span>
-                <span class="text-secondary">{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <!-- Dashboard mockup -->
-        <div class="glass card relative overflow-hidden" style="border-radius: 1.25rem;">
-          <div class="label text-muted mb-5">Your Hedging Dashboard</div>
-          <div class="flex flex-col gap-3">
-            {HEDGING_TRIPS.map(trip => (
-              <div class="card-sm" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 0.75rem;">
-                <div class="flex items-center justify-between">
-                  <div>
-                    <div class="font-semibold" style="font-size: 0.9375rem; color: var(--tcf-white);">{trip.route}</div>
-                    <div style="font-size: 0.8125rem; color: {trip.color}; margin-top: 2px;">{trip.status}</div>
-                  </div>
+              <div class="flex gap-4">
+                <div class="text-2xl pt-1">{item.icon}</div>
+                <div>
+                  <h4 class="font-bold text-white text-sm mb-1">{item.title}</h4>
+                  <p class="text-xs text-slate-500 leading-relaxed">{item.desc}</p>
                 </div>
               </div>
             ))}
           </div>
-          <div class="glass-success card-sm mt-4" style="border-radius: 0.75rem;">
-            <p style="font-size: 0.8125rem; font-weight: 600; color: var(--tcf-success);">🛡️ All trips protected</p>
-            <p style="font-size: 0.8125rem; color: var(--tcf-slate-dark); margin-top: 3px;">Points locked in. Price spikes can't hurt you.</p>
+        </div>
+
+        <!-- Dashboard Mockup -->
+        <div class="relative group">
+          <div class="absolute -inset-4 bg-tcf-gold/20 blur-3xl rounded-full opacity-50 group-hover:opacity-70 transition-opacity"></div>
+          <div class="glass rounded-3xl p-8 relative overflow-hidden border-white/10 shadow-2xl">
+            <div class="flex items-center justify-between mb-10">
+              <h4 class="label text-slate-400">Hedge Portfolio</h4>
+              <div class="flex gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-red-500/50"></span>
+                <span class="w-2 h-2 rounded-full bg-tcf-caution/50"></span>
+                <span class="w-2 h-2 rounded-full bg-tcf-success/50"></span>
+              </div>
+            </div>
+            
+            <div class="space-y-4 mb-8">
+              {HEDGING_TRIPS.map(trip => (
+                <div class="p-4 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between hover:bg-white/10 transition-colors">
+                  <div>
+                    <div class="font-bold text-sm text-white mb-0.5">{trip.route}</div>
+                    <div class="text-[10px] uppercase tracking-widest font-bold opacity-70" style={`color: ${trip.color}`}>{trip.status}</div>
+                  </div>
+                  <div class="h-1 w-16 bg-white/10 rounded-full overflow-hidden">
+                    <div class="h-full bg-tcf-gold w-3/4"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div class="p-4 rounded-2xl glass-success text-center">
+              <p class="font-bold text-tcf-success text-xs">✅ STATUS: INSULATED</p>
+              <p class="text-[10px] text-slate-400 mt-1">Your summer vacation is protected against price hikes.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -323,42 +301,33 @@ const ETHICS = [
   </section>
 
   <!-- ═══════════════════════════ AIRPORTS ═══════════════════════════ -->
-  <section class="py-24 px-6 bg-deep">
-    <div class="max-w-4xl mx-auto text-center">
-      <p class="label text-gold-solid mb-4">Texas-first</p>
-      <h2 class="heading mb-4" style="font-size: clamp(1.875rem, 4.5vw, 3rem);">
-        We know <span class="text-gold">your airport.</span>
-      </h2>
-      <p class="body text-secondary mb-12 max-w-xl mx-auto" style="font-size: 1.0625rem;">
-        TPG writes for JFK flyers. We write for MFE flyers. Every guide, every sweet spot, every card recommendation is built around where you actually live.
+  <section class="section-padding bg-deep border-y border-white/5">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <span class="label text-gold-solid mb-4">Texas Coverage</span>
+      <h2 class="heading text-4xl md:text-5xl mt-4 mb-8">We track <span class="text-gold">15 Texas hubs.</span></h2>
+      <p class="body text-lg mb-16 mx-auto max-w-2xl">
+        From the Valley to the Panhandle. We monitor award availability and cash routes for every regional airport in the state.
       </p>
 
       <div class="flex flex-wrap justify-center gap-3">
         {AIRPORTS.map(a => (
-          <div
-            class={a.hot ? 'badge badge-gold' : 'badge'}
-            style={a.hot ? '' : 'background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--tcf-slate); font-size: 0.8rem;'}
-          >
-            <strong>{a.code}</strong>&nbsp;·&nbsp;{a.city}
-            {a.hot ? ' 🔥' : ''}
+          <div class={`badge px-4 py-2 text-sm font-bold ${a.hot ? 'badge-gold' : 'glass bg-white/5 text-slate-400 border-white/5'}`}>
+            {a.code} <span class="mx-1 opacity-30 font-light">|</span> {a.city} {a.hot && '🔥'}
           </div>
         ))}
+        <div class="badge px-4 py-2 text-sm font-bold glass bg-white/5 text-slate-500 italic border-white/5">+4 more hubs</div>
       </div>
-
-      <p class="mt-5" style="font-size: 0.8125rem; color: var(--tcf-slate-muted);">
-        🔥 Regional airports with sweet spots nobody else has documented yet.
-      </p>
     </div>
   </section>
 
-  <!-- ═══════════════════════════ ETHICS BAR ═══════════════════════════ -->
-  <section class="py-14 px-6" style="background: rgba(26,58,107,0.12); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);">
-    <div class="max-w-4xl mx-auto">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+  <!-- ═══════════════════════════ ETHICS ═══════════════════════════ -->
+  <section class="py-12 glass border-y border-white/5">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
         {ETHICS.map(item => (
-          <div class="flex flex-col items-center gap-2">
-            <span style="font-size: 1.625rem;">{item.icon}</span>
-            <span class="text-secondary" style="font-size: 0.875rem;">{item.text}</span>
+          <div class="flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
+            <span class="text-3xl">{item.icon}</span>
+            <span class="text-sm font-semibold text-white/80">{item.text}</span>
           </div>
         ))}
       </div>
@@ -366,74 +335,106 @@ const ETHICS = [
   </section>
 
   <!-- ═══════════════════════════ FINAL CTA ═══════════════════════════ -->
-  <section class="py-36 px-6 hero-gradient relative overflow-hidden">
-    <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 50% 60%, rgba(212,168,67,0.08) 0%, transparent 65%);"></div>
+  <section class="section-padding hero-gradient relative overflow-hidden">
     <div class="starfield"></div>
-
-    <div class="z-content max-w-2xl mx-auto text-center">
-      <div class="anim-float text-6xl mb-8" style="animation-duration: 3.5s;">✈️</div>
-      <h2 class="heading mb-5" style="font-size: clamp(2rem, 4.5vw, 3.25rem);">
-        Your first free trip starts<br />
-        <span class="text-gold">with your airport.</span>
-      </h2>
-      <p class="body text-secondary mb-10" style="font-size: 1.125rem;">
-        Join 247 Texans building smarter travel plans.
-        Early access is free. Always.
+    <div class="z-content max-w-3xl mx-auto text-center px-6">
+      <div class="text-6xl mb-10 anim-float">✈️</div>
+      <h2 class="heading text-5xl md:text-7xl mb-8 leading-tight">Your next dream trip<br/><span class="text-gold">starts at home.</span></h2>
+      <p class="body text-xl mb-12">
+        Join the waitlist to receive your personalized "Texas Sweet Spot" report within 24 hours of launch.
       </p>
-      <a href="#waitlist" class="btn-primary" style="font-size: 1.0625rem; padding: 1.1rem 2.5rem;">
-        ✈️ &nbsp; Get My Texas Flight Plan
-      </a>
-      <p class="mt-5 text-muted" style="font-size: 0.8125rem;">
-        Refer 3 Texans → skip the line + free airport sweet spot report
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#waitlist" class="btn-primary w-full sm:w-auto px-12 py-5 text-lg shadow-gold/20">
+          Get My Texas Plan &nbsp; ✈️
+        </a>
+      </div>
+      <p class="mt-8 text-slate-500 text-sm">
+        Limited early access slots remaining for April 2026.
       </p>
     </div>
   </section>
 
   <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
-  <footer class="py-12 px-6 text-center bg-deep" style="border-top: 1px solid var(--glass-border);">
-    <div class="max-w-4xl mx-auto">
-      <div class="flex items-center justify-center gap-2.5 mb-4">
-        <span>✈️</span>
-        <div class="flex flex-col leading-none text-left">
-          <span class="font-black text-xs tracking-widest uppercase" style="color: var(--tcf-gold); letter-spacing: 0.12em;">Texas</span>
-          <span class="font-black text-xs tracking-wide uppercase" style="color: var(--tcf-white);">Cheap Flights</span>
+  <footer class="py-16 bg-tcf-navy-deep border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-10">
+        <div class="flex items-center gap-4">
+          <span class="text-3xl grayscale">✈️</span>
+          <div class="flex flex-col text-left leading-tight">
+            <span class="label text-xs tracking-widest text-gold-solid mb-0.5">Texas</span>
+            <span class="font-black text-sm uppercase">Cheap Flights</span>
+          </div>
         </div>
+        
+        <div class="flex gap-8 text-slate-500 text-xs font-semibold uppercase tracking-widest">
+          <a href="#" class="hover:text-gold transition-colors">Privacy</a>
+          <a href="#" class="hover:text-gold transition-colors">Terms</a>
+          <a href="#" class="hover:text-gold transition-colors">Affiliate Policy</a>
+        </div>
+
+        <p class="text-slate-600 text-[10px] max-w-xs text-center md:text-right">
+          © 2026 Texas Cheap Flights. Travel responsibly. Credit card strategies involve risk; always pay in full.
+        </p>
       </div>
-      <p class="text-muted mb-3" style="font-size: 0.8125rem;">Travel hacking built for Texans. Not financial advice. Affiliate links disclosed clearly on every recommendation.</p>
-      <p style="font-size: 0.75rem; color: var(--tcf-slate-muted);">© 2026 Texas Cheap Flights. All rights reserved.</p>
     </div>
   </footer>
 
+  <script>
+    const form = document.getElementById('waitlist-form') as HTMLFormElement | null;
+    const successState = document.getElementById('success-state') as HTMLElement | null;
+    const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
+    const referralLink = document.getElementById('referral-link') as HTMLInputElement | null;
+    const copyBtn = document.getElementById('copy-btn') as HTMLButtonElement | null;
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const emailInput = document.getElementById('email') as HTMLInputElement;
+      const airportInput = document.getElementById('airport') as HTMLSelectElement;
+
+      if (!emailInput?.value || !airportInput?.value) return;
+
+      if (submitBtn) {
+        submitBtn.innerHTML = '<span class="animate-pulse">Building your plan...</span>';
+        submitBtn.disabled = true;
+      }
+
+      // Simulate API
+      await new Promise(r => setTimeout(r, 1500));
+
+      if (form) form.style.display = 'none';
+      if (successState) successState.classList.remove('hidden');
+
+      // Generate random ref code
+      const refCode = airportInput.value + Math.random().toString(36).substring(2,7).toUpperCase();
+      if (referralLink) referralLink.value = `txflights.co/ref/${refCode}`;
+    });
+
+    copyBtn?.addEventListener('click', () => {
+      if (referralLink) {
+        navigator.clipboard.writeText(referralLink.value);
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => copyBtn.textContent = 'Copy', 2000);
+      }
+    });
+
+    // Observer for fade-up animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('anim-fade-up');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.anim-fade-up').forEach(el => observer.observe(el));
+  </script>
+
 </body>
 </html>
-
-<script>
-  const form = document.getElementById('waitlist-form') as HTMLFormElement | null;
-  const successState = document.getElementById('success-state') as HTMLElement | null;
-  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
-  const referralLink = document.getElementById('referral-link') as HTMLInputElement | null;
-
-  form?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const email = (document.getElementById('email') as HTMLInputElement)?.value;
-    const airport = (document.getElementById('airport') as HTMLSelectElement)?.value;
-
-    if (!email || !airport) return;
-
-    if (submitBtn) {
-      submitBtn.textContent = 'Joining...';
-      submitBtn.disabled = true;
-    }
-
-    // Simulate API — replace with real Convex mutation / email endpoint
-    await new Promise(r => setTimeout(r, 900));
-
-    if (form) form.style.display = 'none';
-    successState?.classList.remove('hidden');
-
-    // Generate referral link with airport + random suffix
-    const code = airport + Math.random().toString(36).substring(2, 7).toUpperCase();
-    if (referralLink) referralLink.value = `texascheapflights.com/ref/${code}`;
-  });
-</script>
