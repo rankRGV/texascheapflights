@@ -1,9 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 @import url('https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,300,400&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+    --color-tcf-navy-deep: var(--tcf-navy-deep);
+    --color-tcf-navy-mid: var(--tcf-navy-mid);
+    --color-tcf-gold: var(--tcf-gold);
+    --color-tcf-gold-muted: var(--tcf-gold-muted);
+    --color-tcf-aviation-blue: var(--tcf-aviation-blue);
+    --color-tcf-success: var(--tcf-success);
+    --color-tcf-caution: var(--tcf-caution);
+    --color-tcf-danger: var(--tcf-danger);
+}
 
 :root {
     /* Core Colors - "Aviation Tech Luxury" */
