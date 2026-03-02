@@ -1,261 +1,141 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,300,400&display=swap');
 
-@import "tailwindcss";
-
-/* ═══════════════════════════════════════════════
-   TEXAS CHEAP FLIGHTS — BRAND DESIGN SYSTEM v1.1
-   ═══════════════════════════════════════════════ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-    /* Primary */
-    --tcf-navy: #0d1832;
-    --tcf-navy-deep: #070b17;
+    /* Core Colors - "Aviation Tech Luxury" */
+    --tcf-navy-deep: #050a14;
+    /* Obsidian Navy */
+    --tcf-navy-mid: #0d1832;
+    /* Brand Navy */
     --tcf-gold: #d4a843;
-    --tcf-gold-light: #e8c06a;
-    --tcf-white: #ffffff;
-
-    /* Secondary */
-    --tcf-navy-mid: #1a3a6b;
-    --tcf-navy-card: #111d3d;
-    --tcf-slate: #94a3b8;
-    --tcf-slate-dark: #475569;
-    --tcf-slate-muted: #334155;
-
-    /* Status */
-    --tcf-success: #22c55e;
+    /* Texas Gold */
+    --tcf-gold-muted: rgba(212, 168, 67, 0.1);
+    --tcf-aviation-blue: #0ea5e9;
+    /* High-Aviation Sky Blue */
+    --tcf-success: #10b981;
     --tcf-caution: #f59e0b;
     --tcf-danger: #ef4444;
 
-    /* Glassmorphism Refined */
+    /* Text */
+    --tcf-text-primary: #f8fafc;
+    --tcf-text-secondary: #94a3b8;
+
+    /* Glassmorphism - "Liquid Glass" */
     --glass-bg: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.07);
-    --glass-hover: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-blur: 16px;
 
-    /* Gold glass */
-    --gold-glass-bg: rgba(212, 168, 67, 0.06);
-    --gold-glass-border: rgba(212, 168, 67, 0.2);
+    /* Spacing Scale */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --space-3xl: 4rem;
 }
 
-/* ═══════════════ RESET ═══════════════ */
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
+/* Base Styles */
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background-color: var(--tcf-navy);
-    color: var(--tcf-white);
+    background-color: var(--tcf-navy-deep);
+    color: var(--tcf-text-primary);
+    font-family: 'Satoshi', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    line-height: 1.6;
 }
 
-/* ═══════════════ LAYOUT HELPERS ═══════════════ */
-.section-padding {
-    padding-top: 6rem;
-    padding-bottom: 6rem;
+.font-body {
+    font-family: 'Outfit', sans-serif;
 }
 
-@media (min-width: 768px) {
-    .section-padding {
-        padding-top: 8rem;
-        padding-bottom: 8rem;
-    }
-}
-
-.flex-center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.flex-col-center {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-/* ═══════════════ BACKGROUNDS ═══════════════ */
-.bg-deep {
-    background: var(--tcf-navy-deep);
-}
-
-.bg-primary {
-    background: var(--tcf-navy);
-}
-
-.bg-card {
-    background: var(--tcf-navy-card);
-}
-
-.bg-mid {
-    background: var(--tcf-navy-mid);
-}
-
-.hero-gradient {
-    background:
-        radial-gradient(ellipse at 15% 50%, rgba(26, 58, 107, 0.4) 0%, transparent 60%),
-        radial-gradient(ellipse at 85% 20%, rgba(212, 168, 67, 0.1) 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 90%, rgba(26, 58, 107, 0.15) 0%, transparent 55%),
-        var(--tcf-navy);
-}
-
-.section-gradient {
-    background: linear-gradient(180deg, var(--tcf-navy-deep) 0%, var(--tcf-navy) 100%);
-}
-
-/* ═══════════════ GLASSMORPHISM ═══════════════ */
-.glass {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-}
-
-.glass-gold {
-    background: var(--gold-glass-bg);
-    border: 1px solid var(--gold-glass-border);
-}
-
-.glass-success {
-    background: rgba(34, 197, 94, 0.05);
-    border: 1px solid rgba(34, 197, 94, 0.15);
-}
-
-/* ═══════════════ TYPOGRAPHY ═══════════════ */
+/* Typography */
+h1,
+h2,
+h3,
 .display {
+    font-family: 'Satoshi', sans-serif;
     font-weight: 900;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.03em;
     line-height: 1.1;
 }
 
-.heading {
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    line-height: 1.2;
-}
-
 .subhead {
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.3;
-}
-
-.label {
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-}
-
-.body {
-    line-height: 1.7;
-    color: var(--tcf-slate);
-}
-
-.text-gold {
-    background: linear-gradient(135deg, var(--tcf-gold-light) 0%, var(--tcf-gold) 60%, #c8943a 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.text-blue {
-    color: #93c5fd;
-}
-
-.text-gold-solid {
-    color: var(--tcf-gold);
-}
-
-/* ═══════════════ BUTTONS ═══════════════ */
-.btn-primary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.625rem;
-    padding: 1rem 2.25rem;
-    border-radius: 9999px;
-    font-weight: 700;
-    font-size: 1rem;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
     letter-spacing: -0.01em;
-    background: linear-gradient(135deg, var(--tcf-gold) 0%, var(--tcf-gold-light) 50%, var(--tcf-gold) 100%);
-    background-size: 200% auto;
-    color: var(--tcf-navy-deep);
-    border: none;
-    cursor: pointer;
+}
+
+/* Glassmorphism Utilities */
+.liquid-glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-    box-shadow: 0 4px 20px rgba(212, 168, 67, 0.3);
-    text-decoration: none;
+}
+
+.liquid-glass:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Branded Components */
+.btn-primary {
+    @apply relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 rounded-full overflow-hidden;
+    background: linear-gradient(135deg, var(--tcf-aviation-blue) 0%, #0369a1 100%);
+    box-shadow: 0 4px 20px rgba(14, 165, 233, 0.3);
 }
 
 .btn-primary:hover {
-    background-position: right center;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(212, 168, 67, 0.45);
-}
-
-.btn-primary:active {
-    transform: translateY(0);
+    @apply -translate-y-0.5;
+    box-shadow: 0 8px 30px rgba(14, 165, 233, 0.5);
 }
 
 .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.875rem 2rem;
-    border-radius: 9999px;
-    font-weight: 600;
-    font-size: 0.9375rem;
-    background: transparent;
+    @apply inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 rounded-full border border-white/20 hover:bg-white/5;
+}
+
+.badge-gold {
+    @apply px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest;
+    background: var(--tcf-gold-muted);
     color: var(--tcf-gold);
-    border: 1px solid var(--gold-glass-border);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-decoration: none;
+    border: 1px solid rgba(212, 168, 67, 0.2);
 }
 
-.btn-secondary:hover {
-    background: var(--gold-glass-bg);
-    border-color: rgba(212, 168, 67, 0.4);
-    transform: translateY(-1px);
-}
-
-/* ═══════════════ FORMS ═══════════════ */
 .input {
-    width: 100%;
-    padding: 1rem 1.375rem;
-    border-radius: 1rem;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--tcf-white);
-    font-family: inherit;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    outline: none;
+    @apply w-full px-5 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-slate-500 transition-all duration-300 outline-none;
 }
 
 .input:focus {
-    border-color: rgba(212, 168, 67, 0.4);
-    background: rgba(255, 255, 255, 0.06);
-    box-shadow: 0 0 0 4px rgba(212, 168, 67, 0.05);
+    @apply border-tcf-aviation-blue/50 ring-4 ring-tcf-aviation-blue/10;
 }
 
-/* ═══════════════ ANIMATIONS ═══════════════ */
-@keyframes fadeUp {
+/* Background Effects */
+.starfield {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        radial-gradient(white, rgba(255, 255, 255, 0.2) 2px, transparent 40px),
+        radial-gradient(white, rgba(255, 255, 255, 0.15) 1px, transparent 30px);
+    background-size: 550px 550px, 350px 350px;
+    background-position: 0 0, 40px 60px;
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+/* Animations */
+@keyframes fade-up {
     from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(20px);
     }
 
     to {
@@ -265,8 +145,26 @@ body {
 }
 
 .anim-fade-up {
+    animation: fade-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
     opacity: 0;
-    animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.anim-float {
+    animation: float 6s ease-in-out infinite;
 }
 
 .delay-1 {
@@ -289,25 +187,21 @@ body {
     animation-delay: 0.5s;
 }
 
-/* ═══════════════ STAR FIELD ═══════════════ */
-.starfield {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.6;
+/* Interactive Cursor */
+.cursor-pointer {
+    cursor: pointer !important;
 }
 
-.starfield::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image:
-        radial-gradient(1px 1px at 10% 20%, #fff 100%, transparent),
-        radial-gradient(1px 1px at 30% 50%, #fff 100%, transparent),
-        radial-gradient(1.5px 1.5px at 60% 80%, var(--tcf-gold) 100%, transparent),
-        radial-gradient(1px 1px at 80% 30%, #fff 100%, transparent),
-        radial-gradient(1px 1px at 90% 60%, var(--tcf-gold) 100%, transparent);
-    background-size: 400px 400px;
+/* Utilities */
+.hero-gradient {
+    background: radial-gradient(circle at top center, #1a2c4e 0%, var(--tcf-navy-deep) 100%);
+}
+
+.text-gold {
+    color: var(--tcf-gold);
+}
+
+.glass-success {
+    background: rgba(16, 185, 129, 0.05);
+    border: 1px solid rgba(16, 185, 129, 0.2);
 }
