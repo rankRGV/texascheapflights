@@ -29,9 +29,9 @@ const PAIN_QUOTES = [
     icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-alert-circle"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>`, 
     text: '"Every time I search from Laredo, flights are $800. There has to be a better way."' 
   },
-  { 
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brain-circuit"><path d="M12 4.5a2.5 2.5 0 0 0-4.96-.46 2.5 2.5 0 0 0-1.98 3 2.5 2.5 0 0 0-1.32 4.24 3 3 0 0 0 .34 5.58 2.5 2.5 0 0 0 2.96 3.08 2.5 2.5 0 0 0 4.96.46 2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 12 4.5Z"/><path d="M9 10a3 3 0 1 1 6 0"/><path d="M12 13V11"/><path d="M12 18v-2"/><path d="M9 15.3V14"/><path d="M15 15.3V14"/><path d="M12 13v5"/><path d="M9 15.3c0 .1 0 .2.1.2s.2.1.2.1h5.4c.1 0 .2 0 .2-.1s.1-.2.1-.2"/><path d="M12 8a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>`, 
-    text: '"I tried reading The Points Guy. Two hours later I was more confused than before."' 
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
+    text: '"I saw a $290 roundtrip to Cancun from Harlingen. By the time I found it, it was $1,100. I had no idea those windows existed."'
   },
 ];
 
@@ -45,8 +45,8 @@ const HOW_IT_WORKS = [
   { 
     step: '02', 
     icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-compass"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>`, 
-    title: 'Pick your dream destination', 
-    desc: 'Tokyo, London, Cancun. We reverse-engineer exactly which points you need, which card earns them fastest, and when to book.' 
+    title: 'Pick your dream destination',
+    desc: 'Tokyo, London, Cancun. We track both award sweet spots (points priced by zone, not distance) and cash glitch windows (algorithm errors that slash fares for hours). You get alerted on both.'
   },
   { 
     step: '03', 
@@ -185,7 +185,7 @@ const FEATURED_DEALS = [
         {[
           { label: 'The Reality', href: '#pain' },
           { label: 'The Strategy', href: '#how-it-works' },
-          { label: 'Sweet Spots', href: '#featured-deals' }
+          { label: 'Anomaly Alerts', href: '#featured-deals' }
         ].map(link => (
           <a href={link.href} class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-white transition-colors no-underline">
             {link.label}
@@ -221,13 +221,13 @@ const FEATURED_DEALS = [
 
       <!-- Hero headline -->
       <h1 class="anim-fade-up delay-2 mb-8 text-white w-full max-w-4xl" style="font-size: clamp(2.5rem, 8vw, 5.5rem);">
-        Most hackers earn points.<br/>
-        We teach you how to <span class="text-gold">use them.</span>
+        Airline algorithms make mistakes.<br/>
+        We send Texas <span class="text-gold">the alert first.</span>
       </h1>
 
       <!-- Subheadline -->
       <p class="anim-fade-up delay-3 max-w-2xl text-xl mb-12 text-slate-400 leading-relaxed font-body">
-        They say if it sounds too good to be true, it probably is. <span class="text-white font-semibold">We agree.</span> Travel hacking isn't magic — it's just local Texas math that most banks hope you never figure out.
+        Two types of mistakes, both worth money: award seats priced the same from McAllen as Dallas, and cash fares the algorithm fat-fingered down to half price. <span class="text-white font-semibold">Both close within hours. We track both for every Texas airport.</span>
       </p>
 
       <!-- WAITLIST FORM -->
@@ -503,10 +503,10 @@ const FEATURED_DEALS = [
     <div class="max-w-7xl mx-auto px-6 relative z-10">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20 anim-fade-up">
         <div class="max-w-xl">
-          <span class="label text-tcf-aviation-blue uppercase tracking-[0.3em] font-bold text-xs mb-4 inline-block">Real Values</span>
-          <h2 class="text-4xl md:text-5xl text-white font-black mb-6">Recent <span class="text-tcf-aviation-blue">Texas Sweet Spots.</span></h2>
+          <span class="label text-tcf-aviation-blue uppercase tracking-[0.3em] font-bold text-xs mb-4 inline-block">Live Anomaly Tracker</span>
+          <h2 class="text-4xl md:text-5xl text-white font-black mb-6">Recent <span class="text-tcf-aviation-blue">Texas Anomaly Alerts.</span></h2>
           <p class="text-slate-400 font-body leading-relaxed">
-            We don't do "general" advice. Here are real routes we tracked last week where points crushed the cash price.
+            Award seats priced far below cash. Cash fares the algorithm fat-fingered. Both are real. Both close fast. Here's what we caught last week.
           </p>
         </div>
         <div class="flex items-center gap-4 text-xs font-black uppercase tracking-widest text-slate-500">
