@@ -154,6 +154,16 @@ const FEATURED_DEALS = [
   <meta property="og:description" content="Enter your Texas airport. Get your personalized plan to fly anywhere for less." />
   <meta property="og:type" content="website" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>" />
+  <!-- Fonts (async — non-blocking) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,300,400&display=swap" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,300,400&display=swap">
+  </noscript>
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XSTNVD0CLC"></script>
   <script>
@@ -200,6 +210,8 @@ const FEATURED_DEALS = [
     </div>
   </nav>
 
+  <main>
+
   <!-- ═══════════════════════════ HERO ═══════════════════════════ -->
   <section class="hero-gradient relative min-h-screen flex flex-col items-center justify-center px-6 pt-32 pb-20 overflow-hidden text-center">
     <div class="starfield"></div>
@@ -237,7 +249,7 @@ const FEATURED_DEALS = [
           
           <form id="waitlist-form" class="flex flex-col gap-6 relative">
             <div class="flex flex-col gap-2.5 text-left">
-              <label class="text-slate-400 text-xs font-bold uppercase tracking-widest pl-1">Home Airport</label>
+              <label for="airport" class="text-slate-400 text-xs font-bold uppercase tracking-widest pl-1">Home Airport</label>
               <select id="airport" name="airport" required class="input appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20class%3D%22lucide%20lucide-chevron-down%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25em] bg-[right_1.25rem_center] bg-no-repeat">
                 <option value="" disabled selected>Select nearest Texas hub...</option>
                 {TX_AIRPORTS.map(a => (
@@ -247,7 +259,7 @@ const FEATURED_DEALS = [
             </div>
 
             <div class="flex flex-col gap-2.5 text-left">
-              <label class="text-slate-400 text-xs font-bold uppercase tracking-widest pl-1">Email Address</label>
+              <label for="email" class="text-slate-400 text-xs font-bold uppercase tracking-widest pl-1">Email Address</label>
               <input
                 id="email"
                 name="email"
@@ -348,7 +360,7 @@ const FEATURED_DEALS = [
                 <div class="flex gap-5 items-start">
                   <div class="w-12 h-12 rounded-xl bg-tcf-caution/10 flex items-center justify-center text-tcf-caution flex-shrink-0" set:html={item.icon}></div>
                   <div>
-                    <h4 class="font-black text-white text-lg mb-2 tracking-tight">{item.title}</h4>
+                    <h3 class="font-black text-white text-lg mb-2 tracking-tight">{item.title}</h3>
                     <p class="text-sm text-slate-400 leading-relaxed font-body">{item.response}</p>
                   </div>
                 </div>
@@ -443,8 +455,8 @@ const FEATURED_DEALS = [
               <div class="flex gap-4 items-start text-left cursor-pointer group">
                 <div class="w-10 h-10 rounded-xl bg-tcf-aviation-blue/10 flex items-center justify-center text-tcf-aviation-blue flex-shrink-0 group-hover:bg-tcf-aviation-blue/20 transition-colors" set:html={item.icon} />
                 <div>
-                  <h4 class="font-black text-white text-sm mb-1 uppercase tracking-tight">{item.title}</h4>
-                  <p class="text-xs text-slate-500 leading-relaxed font-body">{item.desc}</p>
+                  <h3 class="font-black text-white text-sm mb-1 uppercase tracking-tight">{item.title}</h3>
+                  <p class="text-xs text-slate-400 leading-relaxed font-body">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -667,11 +679,13 @@ const FEATURED_DEALS = [
           Secure My Early Access
         </a>
       </div>
-      <p class="mt-12 text-slate-500 text-xs font-black uppercase tracking-[0.2em]">
+      <p class="mt-12 text-slate-400 text-xs font-black uppercase tracking-[0.2em]">
         Limited entry available for Texas ID holders
       </p>
     </div>
   </section>
+
+  </main>
 
   <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
   <footer class="py-20 bg-tcf-navy-deep border-t border-white/5 relative">
@@ -687,14 +701,14 @@ const FEATURED_DEALS = [
           </div>
         </div>
         
-        <div class="flex flex-wrap justify-center gap-10 text-slate-500 text-[10px] font-black uppercase tracking-[0.3em]">
+        <div class="flex flex-wrap justify-center gap-10 text-slate-400 text-[10px] font-black uppercase tracking-[0.3em]">
           <a href="#" class="hover:text-tcf-aviation-blue transition-colors">Privacy</a>
           <a href="#" class="hover:text-tcf-aviation-blue transition-colors">Terms</a>
           <a href="#" class="hover:text-tcf-aviation-blue transition-colors">Affiliate Policy</a>
         </div>
 
         <div class="flex flex-col items-center md:items-end gap-3">
-          <p class="text-slate-600 text-[9px] font-bold uppercase tracking-widest m-0">
+          <p class="text-slate-400 text-[9px] font-bold uppercase tracking-widest m-0">
             © 2026 Texas Cheap Flights. Travel Responsibly.
           </p>
           <div class="flex gap-4">
