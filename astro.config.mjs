@@ -10,8 +10,14 @@ export default defineConfig({
     webAnalytics: {
       enabled: false,
     },
+    imagesConfig: {
+      sizes: [320, 640, 1280],
+    },
   }),
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    ssr: {
+      noExternal: ['resend']
+    }
   }
 });
