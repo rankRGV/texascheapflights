@@ -37,9 +37,9 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // 2. Send welcome email
-    // NOTE: Using onboarding@resend.dev until texascheapflights.co domain is verified in Resend
+    // Official domain is now verified
     await resend.emails.send({
-      from: 'Texas Cheap Flights <onboarding@resend.dev>',
+      from: 'Texas Cheap Flights <waitlist@texascheapflights.com>',
       to: email,
       subject: "✈️ You're on the list, Texas traveler.",
       html: buildWelcomeEmail({ airport }),

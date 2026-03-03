@@ -17,7 +17,7 @@ const POST = async ({ request }) => {
     }
     if (audienceId) ;
     await resend.emails.send({
-      from: "Texas Cheap Flights <onboarding@resend.dev>",
+      from: "Texas Cheap Flights <waitlist@texascheapflights.com>",
       to: email,
       subject: "✈️ You're on the list, Texas traveler.",
       html: buildWelcomeEmail({ airport })
