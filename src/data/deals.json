@@ -1,5 +1,6 @@
 [
     {
+        "type": "award_sweet_spot",
         "origin": "MFE",
         "dest": "London",
         "points": "60,000",
@@ -13,6 +14,7 @@
         "icon": "diamond"
     },
     {
+        "type": "award_sweet_spot",
         "origin": "SAT",
         "dest": "Tokyo",
         "points": "70,000",
@@ -26,6 +28,7 @@
         "icon": "globe"
     },
     {
+        "type": "award_sweet_spot",
         "origin": "LRD",
         "dest": "Cancun",
         "points": "15,000",
@@ -37,5 +40,25 @@
             "Zero Fees"
         ],
         "icon": "map-pin"
+    },
+    {
+        "type": "cash_glitch",
+        "origin": "HRL",
+        "dest": "Cancun",
+        "glitch_price": "$290",
+        "normal_price": "$1,100",
+        "airline": "United",
+        "lifespan": "24h",
+        "icon": "zap"
+    },
+    {
+        "type": "cash_glitch",
+        "origin": "CRP",
+        "dest": "Miami",
+        "glitch_price": "$180",
+        "normal_price": "$780",
+        "airline": "American",
+        "lifespan": "18h",
+        "icon": "zap"
     }
 ]

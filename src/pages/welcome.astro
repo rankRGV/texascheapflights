@@ -7,8 +7,11 @@ import deals from '../data/deals.json';
 const ICON_MAP: Record<string, string> = {
   diamond: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9l4-6z"/><path d="M12 22 4.5 9"/><path d="M12 22 19.5 9"/><path d="M2 9h20"/><path d="M10 3 4.5 9"/><path d="M14 3 19.5 9"/></svg>`,
   globe: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>`,
-  'map-pin': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`
+  'map-pin': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`,
+  zap: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`
 };
+
+const typedDeals = deals as any[];
 
 const AIRPORT_LABELS: Record<string, string> = {
   MFE: 'McAllen (MFE)',
@@ -79,16 +82,27 @@ const AIRPORT_LABELS: Record<string, string> = {
         <div class="lg:col-span-2 space-y-12">
           <section>
             <div class="flex items-center justify-between mb-8">
-              <h2 class="text-2xl font-black text-white uppercase tracking-tight">Sample Sweet Spots</h2>
+              <h2 class="text-2xl font-black text-white uppercase tracking-tight">Sample Anomaly Alerts</h2>
               <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Live alerts start when you confirm your plan</span>
             </div>
-            
+
             <div class="grid md:grid-cols-2 gap-6">
-              {deals.map(deal => (
-                <div class="liquid-glass group overflow-hidden rounded-[2.5rem] border border-white/5 hover:border-tcf-aviation-blue/30 transition-all duration-500">
-                  <div class="p-8 pb-4">
+              {typedDeals.map((deal: any) => (
+                <div class={`liquid-glass group overflow-hidden rounded-[2.5rem] border transition-all duration-500 ${deal.type === 'cash_glitch' ? 'border-red-500/20 hover:border-red-500/40' : 'border-white/5 hover:border-tcf-aviation-blue/30'}`}>
+                  <div class="px-8 pt-6 pb-0">
+                    {deal.type === 'cash_glitch' ? (
+                      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-[9px] font-black uppercase tracking-widest text-red-400">
+                        ⚡ Algorithm Glitch
+                      </span>
+                    ) : (
+                      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tcf-aviation-blue/10 border border-tcf-aviation-blue/20 text-[9px] font-black uppercase tracking-widest text-tcf-aviation-blue">
+                        ✈ Award Sweet Spot
+                      </span>
+                    )}
+                  </div>
+                  <div class="p-8 pb-4 pt-4">
                     <div class="flex justify-between items-start mb-6">
-                      <div class="p-4 rounded-2xl bg-white/5 text-white group-hover:scale-110 group-hover:bg-tcf-aviation-blue/10 transition-all duration-500" set:html={ICON_MAP[deal.icon]} />
+                      <div class={`p-4 rounded-2xl bg-white/5 group-hover:scale-110 transition-all duration-500 ${deal.type === 'cash_glitch' ? 'text-red-400 group-hover:bg-red-500/10' : 'text-white group-hover:bg-tcf-aviation-blue/10'}`} set:html={ICON_MAP[deal.icon]} />
                       <div class="text-right">
                         <div class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-1">Origin</div>
                         <div class="text-lg font-black text-white">{deal.origin}</div>
@@ -101,19 +115,37 @@ const AIRPORT_LABELS: Record<string, string> = {
                   </div>
                   <div class="p-8 pt-0 mt-auto">
                     <div class="h-px w-full bg-white/5 mb-6"></div>
-                    <div class="flex items-end justify-between">
+                    {deal.type === 'cash_glitch' ? (
                       <div>
-                        <div class="text-[10px] font-black uppercase tracking-[0.2em] text-tcf-aviation-blue mb-1">Award Cost</div>
-                        <div class="flex items-baseline gap-1.5">
-                          <span class="text-2xl font-black text-white">{deal.points}</span>
-                          <span class="text-[10px] font-bold text-slate-500">pts</span>
+                        <div class="flex items-end justify-between mb-4">
+                          <div>
+                            <div class="text-[10px] font-black uppercase tracking-[0.2em] text-red-400 mb-1">Glitch Price</div>
+                            <div class="text-2xl font-black text-red-400">{deal.glitch_price}</div>
+                          </div>
+                          <div class="text-right">
+                            <div class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-1">Normal Price</div>
+                            <div class="text-md font-bold text-slate-400 line-through decoration-red-900/50">{deal.normal_price}</div>
+                          </div>
+                        </div>
+                        <div class="pt-4 border-t border-white/5">
+                          <span class="text-[10px] font-black uppercase tracking-widest text-red-400/70">Glitch lifespan: ~{deal.lifespan}</span>
                         </div>
                       </div>
-                      <div class="text-right">
-                        <div class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-1">Cash Price</div>
-                        <div class="text-md font-bold text-slate-400 line-through decoration-red-900/50">{deal.cash}</div>
+                    ) : (
+                      <div class="flex items-end justify-between">
+                        <div>
+                          <div class="text-[10px] font-black uppercase tracking-[0.2em] text-tcf-aviation-blue mb-1">Award Cost</div>
+                          <div class="flex items-baseline gap-1.5">
+                            <span class="text-2xl font-black text-white">{deal.points}</span>
+                            <span class="text-[10px] font-bold text-slate-500">pts</span>
+                          </div>
+                        </div>
+                        <div class="text-right">
+                          <div class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-1">Cash Price</div>
+                          <div class="text-md font-bold text-slate-400 line-through decoration-red-900/50">{deal.cash}</div>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               ))}
