@@ -693,18 +693,20 @@ const FEATURED_DEALS = [
         });
 
         if (!res.ok) {
-          throw new Error('Subscription failed');
+          const errorData = await res.json().catch(() => ({}));
+          throw new Error(errorData.details || errorData.error || 'Subscription failed');
         }
 
         // Success redirect
         window.location.href = `/welcome?email=${encodeURIComponent(emailInput.value)}&airport=${encodeURIComponent(airportInput.value)}`;
 
-      } catch {
+      } catch (err: any) {
         if (submitBtn) {
           submitBtn.innerHTML = 'Try Again';
           submitBtn.disabled = false;
         }
-        alert('Something went wrong. Please try again in a moment.');
+        console.error('Signup error:', err);
+        alert(`Error: ${err.message || 'Something went wrong. Please try again.'}`);
       }
     });
 
