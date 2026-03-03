@@ -7,8 +7,8 @@ export const POST: APIRoute = async ({ request }) => {
     const audienceId = import.meta.env.RESEND_AUDIENCE_ID ?? '';
 
     if (!apiKey) {
-      console.error('RESEND_API_KEY is not set');
-      return new Response(JSON.stringify({ error: 'Server misconfiguration.' }), {
+      console.error('RESEND_API_KEY is not set in environment variables');
+      return new Response(JSON.stringify({ error: 'Server misconfiguration: Missing API Key.' }), {
         status: 500,
         headers: { 'Content-Type': 'application/json' },
       });
@@ -25,33 +25,61 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
+    console.log(`Attempting signup for: ${email} from ${airport}`);
+
     // 1. Add contact to Resend Audience
     if (audienceId) {
-      await resend.contacts.create({
-        email,
-        audienceId,
-        unsubscribed: false,
-        firstName: '',
-        lastName: '',
-      });
+      try {
+        await resend.contacts.create({
+          email,
+          audienceId,
+          unsubscribed: false,
+          firstName: '',
+          lastName: '',
+        });
+        console.log(`Contact added to audience ${audienceId}`);
+      } catch (contactErr) {
+        console.warn('Failed to add contact to audience (user might already exist):', contactErr);
+        // We continue anyway so they get the email/redirect
+      }
     }
 
     // 2. Send welcome email
-    // Official domain is now verified
-    await resend.emails.send({
-      from: 'Texas Cheap Flights <waitlist@texascheapflights.com>',
-      to: email,
-      subject: "✈️ You're on the list, Texas traveler.",
-      html: buildWelcomeEmail({ airport }),
-    });
+    try {
+      const { data, error } = await resend.emails.send({
+        from: 'Texas Cheap Flights <waitlist@texascheapflights.com>',
+        to: email,
+        subject: "✈️ You're on the list, Texas traveler.",
+        html: buildWelcomeEmail({ airport }),
+      });
+
+      if (error) {
+        console.error('Resend email error:', error);
+        throw new Error(error.message);
+      }
+
+      console.log('Welcome email sent successfully:', data?.id);
+    } catch (emailErr: any) {
+      console.error('Email sending failed:', emailErr);
+      return new Response(JSON.stringify({
+        error: 'Email delivery failed.',
+        details: emailErr.message
+      }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (err) {
-    console.error('Subscribe error:', err);
-    return new Response(JSON.stringify({ error: 'Something went wrong. Please try again.' }), {
+  } catch (err: any) {
+    console.error('CATCH: Subscribe error:', err);
+    return new Response(JSON.stringify({
+      error: 'Subscription failed.',
+      details: err.message
+    }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
