@@ -1,39 +1,58 @@
 import type { APIRoute } from 'astro';
+import { Webhook } from 'svix';
 
 export const POST: APIRoute = async ({ request }) => {
+  try {
+    // 1. Verify this request actually came from Resend using Svix
+    const secret = import.meta.env.RESEND_WEBHOOK_SECRET || process.env.RESEND_WEBHOOK_SECRET;
+
+    if (!secret) {
+      console.warn("RESEND_WEBHOOK_SECRET is not set");
+      return new Response(JSON.stringify({ error: 'Server misconfiguration' }), { status: 500 });
+    }
+
+    // Get the raw body as a string for Svix verification
+    const payloadString = await request.text();
+
+    // Get the Svix headers from the request
+    const svix_id = request.headers.get('svix-id');
+    const svix_timestamp = request.headers.get('svix-timestamp');
+    const svix_signature = request.headers.get('svix-signature');
+
+    if (!svix_id || !svix_timestamp || !svix_signature) {
+      return new Response('Missing svix headers', { status: 400 });
+    }
+
+    const wh = new Webhook(secret);
+    let payload;
+
     try {
-        // 1. Verify this request actually came from Resend
-        // Resend sends webhooks as POST requests with a JSON payload
-
-        // We will need a secret token to prevent random people from hitting this endpoint
-        const authHeader = request.headers.get('Authorization');
-        const secret = import.meta.env.INGEST_SECRET || process.env.INGEST_SECRET;
-
-        if (!secret || authHeader !== \`Bearer \${secret}\`) {
-      console.warn("Unauthorized attempt to access /api/ingest");
+      payload = wh.verify(payloadString, {
+        'svix-id': svix_id,
+        'svix-timestamp': svix_timestamp,
+        'svix-signature': svix_signature,
+      }) as any;
+    } catch (err: any) {
+      console.warn("Invalid webhook signature:", err.message);
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         status: 401,
         headers: { 'Content-Type': 'application/json' },
       });
     }
 
-    // 2. Parse the payload from Resend
-    const payload = await request.json();
-    
-    // Resend Webhooks usually wrap the data: { type: 'email.received', data: { ... } }
-    console.log("📥 Received Ingestion Webhook:", payload.type);
+    // 2. Parse the verified payload from Resend
+    console.log("📥 Received Verified Webhook:", payload.type);
 
     if (payload.type === 'email.received') {
       const emailSubject = payload.data?.subject || "No Subject";
-      const emailBody = payload.data?.text || payload.data?.html || "No Body";
       const fromAddress = payload.data?.from || "Unknown Sender";
 
-      console.log(\`   📧 From: \${fromAddress}\`);
-      console.log(\`   📌 Subject: \${emailSubject}\`);
+      console.log(`   📧 From: ${fromAddress}`);
+      console.log(`   📌 Subject: ${emailSubject}`);
 
       // TODO: Pass this to the AI Brain (Step 3)
     } else {
-        console.log(\`   ⚠️ Ignored payload type: \${payload.type}\`);
+      console.log(`   ⚠️ Ignored payload type: ${payload.type}`);
     }
 
     // 3. Acknowledge receipt quickly so Resend doesn't retry
