@@ -94,6 +94,39 @@ const ETHICS = [
     text: 'Your airport. Your plan.' 
   },
 ];
+
+const FEATURED_DEALS = [
+  {
+    origin: 'MFE',
+    dest: 'London',
+    points: '60,000',
+    cash: '$1,450',
+    airline: 'Virgin Atlantic',
+    alliance: 'SkyTeam',
+    tags: ['Business Class Possible', 'Low Surcharge'],
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9l4-6z"/><path d="M12 22 4.5 9"/><path d="M12 22 19.5 9"/><path d="M2 9h20"/><path d="M10 3 4.5 9"/><path d="M14 3 19.5 9"/></svg>`
+  },
+  {
+    origin: 'SAT',
+    dest: 'Tokyo',
+    points: '70,000',
+    cash: '$1,820',
+    airline: 'ANA',
+    alliance: 'Star Alliance',
+    tags: ['The "Virgin Loop"', 'Direct from Hub'],
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>`
+  },
+  {
+    origin: 'LRD',
+    dest: 'Cancun',
+    points: '15,000',
+    cash: '$580',
+    airline: 'United',
+    alliance: 'Star Alliance',
+    tags: ['Regional Shortcut', 'Zero Fees'],
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`
+  }
+];
 ---
 
 <!DOCTYPE html>
@@ -435,6 +468,87 @@ const ETHICS = [
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ FEATURED DEALS ═══════════════════════════ -->
+  <section class="section-padding relative overflow-hidden bg-black/50">
+    <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20 anim-fade-up">
+        <div class="max-w-xl">
+          <span class="label text-tcf-aviation-blue uppercase tracking-[0.3em] font-bold text-xs mb-4 inline-block">Real Values</span>
+          <h2 class="text-4xl md:text-5xl text-white font-black mb-6">Recent <span class="text-tcf-aviation-blue">Texas Sweet Spots.</span></h2>
+          <p class="text-slate-400 font-body leading-relaxed">
+            We don't do "general" advice. Here are real routes we tracked last week where points crushed the cash price.
+          </p>
+        </div>
+        <div class="flex items-center gap-4 text-xs font-black uppercase tracking-widest text-slate-500">
+          <span class="w-2 h-2 rounded-full bg-tcf-success animate-pulse"></span>
+          Live Market Data
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        {FEATURED_DEALS.map(deal => (
+          <div class="liquid-glass group overflow-hidden rounded-[2.5rem] border border-white/5 hover:border-tcf-aviation-blue/30 transition-all duration-500">
+            <div class="p-8 pb-4">
+              <div class="flex justify-between items-start mb-8">
+                <div class="p-4 rounded-2xl bg-white/5 text-white group-hover:scale-110 group-hover:bg-tcf-aviation-blue/10 transition-all duration-500" set:html={deal.icon} />
+                <div class="text-right">
+                  <div class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-1">Origin</div>
+                  <div class="text-xl font-black text-white">{deal.origin}</div>
+                </div>
+              </div>
+
+              <div class="mb-8">
+                <div class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-2">Destination</div>
+                <div class="text-3xl font-black text-white group-hover:text-tcf-aviation-blue transition-colors">{deal.dest}</div>
+              </div>
+
+              <div class="flex flex-wrap gap-2 mb-8">
+                {deal.tags.map(tag => (
+                  <span class="px-3 py-1 rounded-full bg-white/5 text-[9px] font-black uppercase tracking-widest text-slate-400 border border-white/5">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div class="p-8 pt-0 mt-auto">
+              <div class="h-px w-full bg-white/5 mb-8"></div>
+              <div class="flex items-end justify-between">
+                <div>
+                  <div class="text-[10px] font-black uppercase tracking-[0.2em] text-tcf-aviation-blue mb-2">Hedge Value</div>
+                  <div class="flex items-baseline gap-2">
+                    <span class="text-3xl font-black text-white">{deal.points}</span>
+                    <span class="text-xs font-bold text-slate-500">pts</span>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <div class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-2">Cash equivalent</div>
+                  <div class="text-lg font-bold text-slate-400 line-through decoration-red-900/50 decoration-2">{deal.cash}</div>
+                </div>
+              </div>
+              
+              <div class="mt-8 pt-8 border-t border-white/5 flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-slate-500">
+                <div class="flex items-center gap-2">
+                  <div class="w-1.5 h-1.5 rounded-full bg-tcf-success"></div>
+                  {deal.airline}
+                </div>
+                <span>{deal.alliance}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-20 text-center">
+        <a href="#waitlist" class="inline-flex items-center gap-3 text-slate-400 hover:text-white transition-colors group">
+          <span class="text-xs font-black uppercase tracking-[0.3em]">Want more sweet spots?</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="translate-y-px group-hover:translate-x-1 transition-transform"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
       </div>
     </div>
   </section>
