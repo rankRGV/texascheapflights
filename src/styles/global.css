@@ -127,6 +127,12 @@ h3,
     @apply border-tcf-aviation-blue/50 ring-4 ring-tcf-aviation-blue/10;
 }
 
+/* Fix dropdown unreadability on some browsers */
+select.input option {
+    background-color: var(--tcf-navy-mid);
+    color: white;
+}
+
 /* Background Effects */
 .starfield {
     position: absolute;
@@ -177,6 +183,12 @@ h3,
 
 .anim-float {
     animation: float 6s ease-in-out infinite;
+}
+
+.nav-scrolled {
+    @apply py-3 shadow-2xl;
+    background: rgba(5, 10, 20, 0.85);
+    backdrop-filter: blur(20px);
 }
 
 .delay-1 {
