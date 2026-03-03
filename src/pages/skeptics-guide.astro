@@ -5,21 +5,33 @@ import '../styles/global.css';
 const OBJECTIONS = [
   {
     id: 'credit',
-    q: "Isn't opening more cards bad for my credit score?",
-    a: "Short term? A small dip (5-10 points) from the inquiry. Long term? Your score usually goes UP. More accounts mean a higher total credit limit, which lowers your relative 'utilization.' Higher limits + on-time payments = a bulletproof score. We teach you to pace it so you never trigger a red flag.",
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><path d="M17 6h6v6"/></svg>`
+    q: "Won't opening new cards trash my credit score?",
+    a: "Short term: a 5-10 point dip from the inquiry — it's real, and we won't pretend it isn't. Long term: your score usually climbs. More accounts = higher total credit limit = lower utilization ratio. We teach you to pace applications so you never trigger a velocity flag. Most of our users see their score go up within 90 days.",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><path d="M17 6h6v6"/></svg>`
+  },
+  {
+    id: 'debt',
+    q: "I don't want to get into debt chasing points.",
+    a: "You shouldn't. Carrying a balance wipes out every dollar of value from rewards in days. Our spend pacing tool keeps you inside your existing budget — we never recommend spending more than you already do. No balance. No interest. If you can't pay it off monthly, we'll tell you to wait.",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`
   },
   {
     id: 'spend',
-    q: "I don't spend thousands. How can I hit those bonuses?",
-    a: "If you spend $1,000/mo on life (groceries, gas, insurance), you can hit almost any starter bonus. We show you how to 'time' your applications around natural big spends—like car insurance renewals or holiday shopping—so you hit the goal without spending a penny more than you already do.",
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>`
+    q: "I don't spend thousands a month. Can I even hit these bonuses?",
+    a: "$1,000/month on groceries, gas, and insurance gets you most starter bonuses. We show you how to time your application around expenses you already have — car insurance renewal, back-to-school, holiday shopping — so you hit the goal without spending a single extra dollar. You already earn these points. You just aren't collecting them.",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>`
+  },
+  {
+    id: 'complex',
+    q: "This sounds incredibly complicated. I don't have time to learn all of this.",
+    a: "The learning curve is why we exist. Our Dream Trip Engine gives you one checklist: your airport, your destination, which card, when to apply, how to book. You follow the steps. We did the research. The average user goes from zero to a booked award itinerary without reading a single points blog.",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>`
   },
   {
     id: 'regional',
-    q: "I fly from McAllen/Laredo. The deals are only for DFW.",
-    a: "This is the biggest lie in travel. While cash prices from regional hubs are high, award prices are often 'zone-based' or distance-based. That means a flight from MFE to London can cost the SAME points as a flight from DFW. We specialize in finding these 'arbitrage' sweet spots built for Texas regional flyers.",
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`
+    q: "I fly out of McAllen or Laredo. Deals are only for DFW, right?",
+    a: "This is the biggest myth in travel hacking — and it costs Texas regional flyers thousands every year. Award prices are often zone-based, not distance-based. A flight from MFE to London can cost the same points as one from DFW. We track these arbitrage windows specifically. Regional hubs are an advantage, not a limitation.",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`
   }
 ];
 ---
@@ -63,23 +75,41 @@ const OBJECTIONS = [
     <div class="max-w-4xl mx-auto">
       <!-- Hero -->
       <header class="text-center mb-20 anim-fade-up">
-        <span class="label text-gold uppercase tracking-[0.3em] font-bold text-xs mb-6 inline-block">Full Disclosure</span>
+        <span class="label text-gold uppercase tracking-[0.3em] font-bold text-xs mb-6 inline-block">The Honest Breakdown</span>
         <h1 class="text-5xl md:text-7xl mb-8 text-white font-black leading-tight">
           The Skeptic's Guide to <span class="text-gold">Texas Points</span>
         </h1>
         <p class="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-          We built this because we were sick of "travel gurus" promising the moon while hiding the math. Here is exactly how travel hacking works for normal Texans.
+          You've probably heard this is complicated, risky, or only for big spenders.<br/><span class="text-white font-bold">It's not.</span> Here's the math — no gurus, no hype, no hidden catch.
         </p>
       </header>
+
+      <!-- Objections List — front-loaded -->
+      <section class="space-y-12 mb-32">
+        <h2 class="text-3xl font-black text-center text-white mb-16">Common Objections, Answered.</h2>
+        <div class="grid gap-8">
+          {OBJECTIONS.map(obj => (
+            <div id={obj.id} class="liquid-glass p-8 md:p-12 rounded-[2.5rem] border-white/5 hover:border-white/20 transition-all duration-300">
+              <div class="flex flex-col md:flex-row gap-8">
+                <div class="w-16 h-16 rounded-2xl bg-tcf-gold/10 flex items-center justify-center text-tcf-gold flex-shrink-0" set:html={obj.icon}></div>
+                <div>
+                  <h3 class="text-2xl font-black text-white mb-4 tracking-tight">{obj.q}</h3>
+                  <p class="text-lg text-slate-400 leading-relaxed font-body">{obj.a}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <!-- The Math Section -->
       <section class="mb-32">
         <div class="liquid-glass p-10 md:p-16 rounded-[3rem] relative overflow-hidden">
           <div class="absolute -top-20 -left-20 w-64 h-64 bg-tcf-aviation-blue/10 blur-[120px] rounded-full"></div>
-          
+
           <h2 class="text-3xl font-black mb-10 text-white">Rule #1: This is not "Free."</h2>
           <p class="text-slate-400 mb-8 leading-relaxed text-lg font-body">
-            Let's be clear: You aren't getting anything for free. You are performing a service for the banks. 
+            Good. Now here's why this actually works — and why the banks designed it this way. You aren't getting anything for free. You are performing a service for the banks.
           </p>
           <div class="grid md:grid-cols-2 gap-10">
             <div class="space-y-4">
@@ -104,34 +134,16 @@ const OBJECTIONS = [
         </div>
       </section>
 
-      <!-- Objections List -->
-      <section class="space-y-12 mb-32">
-        <h2 class="text-3xl font-black text-center text-white mb-16">Common Objections, Answered.</h2>
-        <div class="grid gap-8">
-          {OBJECTIONS.map(obj => (
-            <div id={obj.id} class="liquid-glass p-8 md:p-12 rounded-[2.5rem] border-white/5 hover:border-white/20 transition-all duration-300">
-              <div class="flex flex-col md:flex-row gap-8">
-                <div class="w-16 h-16 rounded-2xl bg-tcf-gold/10 flex items-center justify-center text-tcf-gold flex-shrink-0" set:html={obj.icon}></div>
-                <div>
-                  <h3 class="text-2xl font-black text-white mb-4 tracking-tight">{obj.q}</h3>
-                  <p class="text-lg text-slate-400 leading-relaxed font-body">{obj.a}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
       <!-- The Texas Edge -->
       <section class="mb-32 text-center">
         <div class="p-12 md:p-20 rounded-[4rem] bg-tcf-gold/5 border border-tcf-gold/10 relative overflow-hidden">
           <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tcf-gold)_0%,_transparent_20%)] opacity-10"></div>
-          <h2 class="text-4xl md:text-5xl font-black text-white mb-8">The Texas "Zone" Arbitrage</h2>
+          <h2 class="text-4xl md:text-5xl font-black text-white mb-8">The Texas Sweet Spot Nobody Talks About</h2>
           <p class="text-xl text-slate-400 max-w-2xl mx-auto mb-12 font-body">
-            Because we are in the middle of the country, Texas regional flyers have unique 'Sweet Spots' that people in coastal hubs don't. We track the specific routes from <span class="text-gold font-bold">MFE, LRD, BRO, and CRP</span> where your points buy 2x more travel than cash.
+            Being landlocked in the middle of the country sounds like a disadvantage. It isn't. Award programs price routes by zone — not by how close you are to a hub. Texas regional flyers get access to the same international sweet spots as DFW, at the same point cost, with less competition for seats. We track every one of these windows from <span class="text-gold font-bold">MFE, LRD, BRO, and CRP</span>.
           </p>
           <a href="/#waitlist" class="btn-primary px-12 py-5 text-lg">
-            Start My Texas Plan
+            Claim My Texas Plan
           </a>
         </div>
       </section>

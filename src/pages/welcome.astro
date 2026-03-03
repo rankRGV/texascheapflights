@@ -57,9 +57,9 @@ const AIRPORT_LABELS: Record<string, string> = {
       <header class="mb-16 anim-fade-up">
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div>
-            <span class="label text-gold uppercase tracking-[0.3em] font-bold text-[10px] mb-4 inline-block">Priority Access Active</span>
+            <span class="label text-gold uppercase tracking-[0.3em] font-bold text-[10px] mb-4 inline-block">You're in. Here's what happens next.</span>
             <h1 class="text-4xl md:text-6xl text-white font-black leading-tight">
-              Welcome aboard, <br/><span class="text-gold italic">Founding Member.</span>
+              Your Texas deal <br/><span class="text-gold italic">alerts are live.</span>
             </h1>
           </div>
           <div class="liquid-glass p-6 rounded-3xl border border-white/10 min-w-[300px]">
@@ -68,7 +68,7 @@ const AIRPORT_LABELS: Record<string, string> = {
               <span class="text-[10px] font-black uppercase tracking-widest text-tcf-success">Active</span>
             </div>
             <div class="text-2xl font-black text-white mb-2" id="display-airport">...</div>
-            <p class="text-[10px] text-slate-500 font-medium">We're scanning every award route from your home hub.</p>
+            <p class="text-[10px] text-slate-500 font-medium">The moment a sweet spot opens from here, you'll know before anyone else.</p>
           </div>
         </div>
       </header>
@@ -79,8 +79,8 @@ const AIRPORT_LABELS: Record<string, string> = {
         <div class="lg:col-span-2 space-y-12">
           <section>
             <div class="flex items-center justify-between mb-8">
-              <h2 class="text-2xl font-black text-white uppercase tracking-tight">Recent Sweet Spots</h2>
-              <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Updated 2h ago</span>
+              <h2 class="text-2xl font-black text-white uppercase tracking-tight">Sample Sweet Spots</h2>
+              <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Live alerts start when you confirm your plan</span>
             </div>
             
             <div class="grid md:grid-cols-2 gap-6">
@@ -103,14 +103,14 @@ const AIRPORT_LABELS: Record<string, string> = {
                     <div class="h-px w-full bg-white/5 mb-6"></div>
                     <div class="flex items-end justify-between">
                       <div>
-                        <div class="text-[10px] font-black uppercase tracking-[0.2em] text-tcf-aviation-blue mb-1">Hedge Value</div>
+                        <div class="text-[10px] font-black uppercase tracking-[0.2em] text-tcf-aviation-blue mb-1">Award Cost</div>
                         <div class="flex items-baseline gap-1.5">
                           <span class="text-2xl font-black text-white">{deal.points}</span>
                           <span class="text-[10px] font-bold text-slate-500">pts</span>
                         </div>
                       </div>
                       <div class="text-right">
-                        <div class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-1">Cash Value</div>
+                        <div class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-1">Cash Price</div>
                         <div class="text-md font-bold text-slate-400 line-through decoration-red-900/50">{deal.cash}</div>
                       </div>
                     </div>
@@ -124,13 +124,13 @@ const AIRPORT_LABELS: Record<string, string> = {
           <section class="liquid-glass p-10 md:p-16 rounded-[4rem] border-white/10 relative overflow-hidden group">
             <div class="absolute -top-24 -right-24 w-64 h-64 bg-tcf-aviation-blue/10 blur-[120px] rounded-full group-hover:bg-tcf-aviation-blue/20 transition-all duration-700"></div>
             <div class="relative z-10">
-              <span class="label text-gold uppercase tracking-[0.3em] font-bold text-[10px] mb-6 inline-block">Next Step</span>
-              <h2 class="text-3xl md:text-5xl text-white font-black mb-6 leading-tight">Review the <br/><span class="text-gold">Skeptic's Masterclass.</span></h2>
+              <span class="label text-gold uppercase tracking-[0.3em] font-bold text-[10px] mb-6 inline-block">Before Your First Alert</span>
+              <h2 class="text-3xl md:text-5xl text-white font-black mb-6 leading-tight">Unlock the <br/><span class="text-gold">Skeptic's Masterclass.</span></h2>
               <p class="text-slate-400 mb-10 max-w-xl leading-relaxed">
-                Before we send your first alert, you need to understand the "Aviation Hedge." Our guide breaks down the math behind why Texas flyers have a 2x points advantage.
+                Most Texans overpay for flights because no one ever showed them the math. This guide does that in 10 minutes. Once you read it, every deal we send you will make sense.
               </p>
               <a href="/skeptics-guide" class="btn-primary px-10 py-4 inline-flex items-center gap-3">
-                Read the Guide
+                See the Math
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </a>
             </div>
@@ -143,23 +143,23 @@ const AIRPORT_LABELS: Record<string, string> = {
             <h3 class="text-sm font-black text-white uppercase tracking-widest mb-8">Onboarding Status</h3>
             <div class="space-y-6">
               {[
-                { label: 'Priority Account Reserved', done: true },
-                { label: 'Home Airport Monitored', done: true },
-                { label: 'Skeptic\'s Guide Unlocked', done: true },
-                { label: 'First Deal Analysis', done: false },
-                { label: 'Platform Alpha Access', done: false },
+                { label: 'Founding Member Spot — Locked In', done: true },
+                { label: 'Routes — Live Tracking', done: true, id: 'airport-checklist-item' },
+                { label: "Skeptic's Masterclass — Unlocked", done: true },
+                { label: 'First Alert — Coming Your Way', done: false },
+                { label: 'Full Platform — Launching Soon', done: false },
               ].map(item => (
                 <div class="flex items-center gap-4">
                   <div class={`w-5 h-5 rounded-full flex items-center justify-center border ${item.done ? 'bg-tcf-success/20 border-tcf-success/50 text-tcf-success' : 'border-white/10 text-transparent'}`}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                   </div>
-                  <span class={`text-xs font-bold ${item.done ? 'text-slate-300' : 'text-slate-600'}`}>{item.label}</span>
+                  <span id={item.id} class={`text-xs font-bold ${item.done ? 'text-slate-300' : 'text-slate-600'}`}>{item.label}</span>
                 </div>
               ))}
             </div>
             <div class="mt-10 pt-8 border-t border-white/5">
-                <p class="text-[10px] text-slate-500 uppercase tracking-widest font-black mb-4">Sharing Loop</p>
-                <p class="text-xs text-slate-400 mb-6 leading-relaxed">Skip 500 spots on the waitlist by sharing your link.</p>
+                <p class="text-[10px] text-slate-500 uppercase tracking-widest font-black mb-4">Move Up the List</p>
+                <p class="text-xs text-slate-400 mb-6 leading-relaxed">Every share moves you 500 spots closer to full platform access. Founding members who refer friends get first access to the Dream Trip Engine.</p>
                 <div class="flex gap-4">
                     <!-- X / Twitter -->
                     <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftexascheapflights.com&text=I%20just%20secured%20my%20spot%20on%20the%20Texas%20Cheap%20Flights%20waitlist!%20%E2%9C%88%EF%B8%8F" target="_blank" rel="noopener noreferrer" class="flex-1 p-3 rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-tcf-aviation-blue/30 hover:text-tcf-aviation-blue transition-all duration-300 flex items-center justify-center">
@@ -178,8 +178,8 @@ const AIRPORT_LABELS: Record<string, string> = {
           </div>
 
           <div class="liquid-glass p-8 rounded-3xl border border-white/5">
-              <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-6">Support</h3>
-              <p class="text-xs text-slate-400 leading-relaxed mb-6">Need help with your Texas plan? Reply to any of our emails for a direct response from our founding team.</p>
+              <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-6">Your Founding Team</h3>
+              <p class="text-xs text-slate-400 leading-relaxed mb-6">Have a question about your airport's best routes or which card to start with? Reach out directly — you get a real person, not a bot.</p>
               <a href="mailto:waitlist@texascheapflights.com" class="text-gold text-xs font-black uppercase tracking-widest hover:text-white transition-colors">Contact Founder</a>
           </div>
         </div>
@@ -212,7 +212,11 @@ const AIRPORT_LABELS: Record<string, string> = {
     };
 
     if (email) document.getElementById('display-email')!.textContent = email;
-    if (airport) document.getElementById('display-airport')!.textContent = AIRPORT_LABELS[airport] || airport;
+    if (airport) {
+      document.getElementById('display-airport')!.textContent = AIRPORT_LABELS[airport] || airport;
+      const checklistItem = document.getElementById('airport-checklist-item');
+      if (checklistItem) checklistItem.textContent = `${AIRPORT_LABELS[airport] || airport} — Live Tracking`;
+    }
 
     // Observe fade-up
     const observer = new IntersectionObserver((entries) => {
