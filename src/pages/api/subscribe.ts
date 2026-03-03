@@ -3,8 +3,8 @@ import { Resend } from 'resend';
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const apiKey = import.meta.env.RESEND_API_KEY;
-    const audienceId = import.meta.env.RESEND_AUDIENCE_ID ?? '';
+    const apiKey = import.meta.env.RESEND_API_KEY || process.env.RESEND_API_KEY;
+    const audienceId = import.meta.env.RESEND_AUDIENCE_ID || process.env.RESEND_AUDIENCE_ID || '';
 
     if (!apiKey) {
       console.error('RESEND_API_KEY is not set in environment variables');
@@ -31,16 +31,14 @@ export const POST: APIRoute = async ({ request }) => {
     if (audienceId) {
       try {
         await resend.contacts.create({
-          email,
-          audienceId,
+          email: email,
+          audienceId: audienceId,
           unsubscribed: false,
-          firstName: '',
-          lastName: '',
+          // Removed firstName and lastName empty strings as Resend API rejects them
         });
         console.log(`Contact added to audience ${audienceId}`);
-      } catch (contactErr) {
-        console.warn('Failed to add contact to audience (user might already exist):', contactErr);
-        // We continue anyway so they get the email/redirect
+      } catch (contactErr: any) {
+        console.warn('Failed to add contact (user might exist or invalid payload):', contactErr.message || contactErr);
       }
     }
 

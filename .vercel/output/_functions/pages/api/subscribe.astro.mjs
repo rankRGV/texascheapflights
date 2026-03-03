@@ -4,7 +4,7 @@ export { renderers } from '../../renderers.mjs';
 const POST = async ({ request }) => {
   try {
     const apiKey = "re_XJzPTrfZ_2jmrPp8soVn6g5No95uRVoSH";
-    const audienceId = undefined                                   ?? "";
+    const audienceId = undefined                                   || process.env.RESEND_AUDIENCE_ID || "";
     if (!apiKey) ;
     const resend = new Resend(apiKey);
     const body = await request.json();
@@ -15,20 +15,52 @@ const POST = async ({ request }) => {
         headers: { "Content-Type": "application/json" }
       });
     }
-    if (audienceId) ;
-    await resend.emails.send({
-      from: "Texas Cheap Flights <waitlist@texascheapflights.com>",
-      to: email,
-      subject: "✈️ You're on the list, Texas traveler.",
-      html: buildWelcomeEmail({ airport })
-    });
+    console.log(`Attempting signup for: ${email} from ${airport}`);
+    if (audienceId) {
+      try {
+        await resend.contacts.create({
+          email,
+          audienceId,
+          unsubscribed: false
+          // Removed firstName and lastName empty strings as Resend API rejects them
+        });
+        console.log(`Contact added to audience ${audienceId}`);
+      } catch (contactErr) {
+        console.warn("Failed to add contact (user might exist or invalid payload):", contactErr.message || contactErr);
+      }
+    }
+    try {
+      const { data, error } = await resend.emails.send({
+        from: "Texas Cheap Flights <waitlist@texascheapflights.com>",
+        to: email,
+        subject: "✈️ You're on the list, Texas traveler.",
+        html: buildWelcomeEmail({ airport })
+      });
+      if (error) {
+        console.error("Resend email error:", error);
+        throw new Error(error.message);
+      }
+      console.log("Welcome email sent successfully:", data?.id);
+    } catch (emailErr) {
+      console.error("Email sending failed:", emailErr);
+      return new Response(JSON.stringify({
+        error: "Email delivery failed.",
+        details: emailErr.message
+      }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: { "Content-Type": "application/json" }
     });
   } catch (err) {
-    console.error("Subscribe error:", err);
-    return new Response(JSON.stringify({ error: "Something went wrong. Please try again." }), {
+    console.error("CATCH: Subscribe error:", err);
+    return new Response(JSON.stringify({
+      error: "Subscription failed.",
+      details: err.message
+    }), {
       status: 500,
       headers: { "Content-Type": "application/json" }
     });
