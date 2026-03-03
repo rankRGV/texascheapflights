@@ -1,0 +1,41 @@
+[
+    {
+        "origin": "MFE",
+        "dest": "London",
+        "points": "60,000",
+        "cash": "$1,450",
+        "airline": "Virgin Atlantic",
+        "alliance": "SkyTeam",
+        "tags": [
+            "Business Class Possible",
+            "Low Surcharge"
+        ],
+        "icon": "diamond"
+    },
+    {
+        "origin": "SAT",
+        "dest": "Tokyo",
+        "points": "70,000",
+        "cash": "$1,820",
+        "airline": "ANA",
+        "alliance": "Star Alliance",
+        "tags": [
+            "The \"Virgin Loop\"",
+            "Direct from Hub"
+        ],
+        "icon": "globe"
+    },
+    {
+        "origin": "LRD",
+        "dest": "Cancun",
+        "points": "15,000",
+        "cash": "$580",
+        "airline": "United",
+        "alliance": "Star Alliance",
+        "tags": [
+            "Regional Shortcut",
+            "Zero Fees"
+        ],
+        "icon": "map-pin"
+    }
+]

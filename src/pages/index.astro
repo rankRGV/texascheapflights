@@ -684,12 +684,8 @@ const FEATURED_DEALS = [
           throw new Error('Subscription failed');
         }
 
-        if (form) form.style.display = 'none';
-        if (successState) successState.classList.remove('hidden');
-
-        // Generate referral code tied to airport
-        const refCode = airportInput.value + Math.random().toString(36).substring(2, 7).toUpperCase();
-        if (referralLink) referralLink.value = `txflights.co/ref/${refCode}`;
+        // Success redirect
+        window.location.href = `/welcome?email=${encodeURIComponent(emailInput.value)}&airport=${encodeURIComponent(airportInput.value)}`;
 
       } catch {
         if (submitBtn) {
