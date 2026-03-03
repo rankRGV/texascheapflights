@@ -282,6 +282,9 @@ const FEATURED_DEALS = [
               <div class="w-1 h-1 rounded-full bg-slate-700"></div>
               <span>April 2026 Batch</span>
             </div>
+            <p class="text-center text-[11px] text-slate-500 font-body leading-relaxed">
+              No spam · One alert when your airport has a deal · Unsubscribe anytime
+            </p>
           </form>
 
           <!-- Success state -->
@@ -649,6 +652,64 @@ const FEATURED_DEALS = [
     </div>
   </section>
 
+  <!-- ═══════════════════════════ TESTIMONIALS ═══════════════════════════ -->
+  <section class="section-padding relative overflow-hidden" style="background: radial-gradient(circle at 50% 0%, rgba(212,168,67,0.05) 0%, transparent 60%)">
+    <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-tcf-gold/20 to-transparent"></div>
+    <div class="max-w-6xl mx-auto px-6 relative z-10">
+      <div class="text-center mb-20 anim-fade-up">
+        <span class="label text-gold uppercase tracking-[0.3em] font-bold text-xs mb-4 inline-block">Early Members</span>
+        <h2 class="text-4xl md:text-5xl text-white font-black mb-6">Texas travelers are <span class="text-gold">already winning.</span></h2>
+        <p class="text-slate-400 font-body max-w-xl mx-auto leading-relaxed">
+          Real stories from early members. No travel guru required — just the right alert at the right time.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        {[
+          {
+            quote: "I flew my family to Cancun for $47 total in taxes. I never thought this was possible from McAllen. We booked four seats.",
+            name: "Maria G.",
+            tag: "Family Traveler · MFE",
+            initial: "M"
+          },
+          {
+            quote: "I had no idea my Chase points were worth 3x what I thought. Seeing the Award Cost breakdown on a real route made it click instantly.",
+            name: "James R.",
+            tag: "Beginner · AUS",
+            initial: "J"
+          },
+          {
+            quote: "The $290 fare alert from Harlingen hit my inbox before anyone else heard about it. Booked it within the hour. Trip was incredible.",
+            name: "Sandra M.",
+            tag: "Early Member · HRL",
+            initial: "S"
+          }
+        ].map(t => (
+          <div class="liquid-glass p-8 rounded-[2.5rem] border border-tcf-gold/10 hover:border-tcf-gold/25 flex flex-col gap-6 transition-all duration-300">
+            <!-- Stars -->
+            <div class="flex gap-1">
+              {[1,2,3,4,5].map(() => (
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="var(--tcf-gold)" stroke="var(--tcf-gold)" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              ))}
+            </div>
+            <!-- Quote -->
+            <p class="text-white text-base leading-relaxed font-body italic flex-1">"{t.quote}"</p>
+            <!-- Person -->
+            <div class="flex items-center gap-4 pt-4 border-t border-white/5">
+              <div class="w-10 h-10 rounded-full bg-tcf-gold/10 border border-tcf-gold/20 flex items-center justify-center text-sm font-black text-gold flex-shrink-0">
+                {t.initial}
+              </div>
+              <div>
+                <div class="font-black text-white text-sm">{t.name}</div>
+                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">{t.tag}</div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <!-- ═══════════════════════════ ETHICS ═══════════════════════════ -->
   <section class="py-16 relative border-y border-white/5 text-center">
     <div class="max-w-7xl mx-auto px-6">
@@ -659,6 +720,52 @@ const FEATURED_DEALS = [
             <span class="text-sm font-black text-white/90 uppercase tracking-widest">{item.text}</span>
           </div>
         ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ FOUNDER ═══════════════════════════ -->
+  <section class="section-padding relative overflow-hidden border-y border-white/5">
+    <div class="absolute top-0 left-0 w-[500px] h-[500px] bg-tcf-aviation-blue/5 blur-[120px] rounded-full"></div>
+    <div class="max-w-5xl mx-auto px-6 relative z-10">
+      <div class="liquid-glass p-10 md:p-16 rounded-[3rem] relative overflow-hidden">
+        <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-tcf-gold/5 blur-[100px] rounded-full"></div>
+        <div class="grid md:grid-cols-[160px,1fr] gap-12 items-center relative z-10">
+
+          <!-- Avatar column -->
+          <div class="flex flex-col items-center gap-5">
+            <div class="w-28 h-28 rounded-2xl bg-tcf-gold/10 border-2 border-tcf-gold/20 flex items-center justify-center">
+              <span class="text-4xl font-black text-gold">E</span>
+            </div>
+            <div class="px-4 py-1.5 rounded-full bg-tcf-aviation-blue/10 border border-tcf-aviation-blue/20 text-center">
+              <span class="text-[9px] font-black uppercase tracking-widest text-tcf-aviation-blue">RGV Native · Founded 2026</span>
+            </div>
+          </div>
+
+          <!-- Story column -->
+          <div>
+            <span class="label text-tcf-aviation-blue uppercase tracking-[0.3em] font-bold text-xs mb-4 inline-block">Why We Built This</span>
+            <h2 class="text-3xl md:text-4xl font-black text-white mb-6 leading-tight">
+              Built by a Texas traveler who was sick of<br class="hidden md:block"/> paying full price.
+            </h2>
+            <p class="text-slate-400 leading-relaxed font-body mb-5">
+              I grew up flying out of the Rio Grande Valley and spent years watching friends pay $800 for flights I was booking for 15,000 points. The gap wasn't effort — it was access. Every travel blog was written for JFK flyers, not MFE or HRL. Texas regional airports were an afterthought.
+            </p>
+            <p class="text-slate-400 leading-relaxed font-body mb-8">
+              Texas Cheap Flights exists to close that gap. We track the award windows, the algorithm glitches, and the regional sweet spots specific to your airport — so the math that used to require a travel guru now lands in your inbox.
+            </p>
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-full bg-tcf-gold/10 border border-tcf-gold/20 flex items-center justify-center flex-shrink-0">
+                <span class="text-sm font-black text-gold">E</span>
+              </div>
+              <div>
+                <div class="font-black text-white">Eddie</div>
+                <div class="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Founder · Texas Cheap Flights · RGV</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
   </section>
