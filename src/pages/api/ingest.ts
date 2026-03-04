@@ -39,16 +39,29 @@ export const POST: APIRoute = async ({ request }) => {
     console.log("📥 Received Verified Webhook:", payload.type);
 
     if (payload.type === 'email.received') {
+      const emailId = payload.data?.email_id;
       const emailSubject = payload.data?.subject || "No Subject";
 
-      // Resend Inbound can be in .text or .html - we check both
-      const emailText = payload.data?.text || "";
-      const emailHtml = payload.data?.html || "";
-      const finalContent = emailText || emailHtml || payload.data?.body || "No Body Found";
+      console.log(`📡 Inbound Payload: ${JSON.stringify(payload.data)}`);
 
-      console.log(`📡 Inbound Data Keys: ${Object.keys(payload.data || {}).join(', ')}`);
+      let finalContent = payload.data?.text || payload.data?.html || "";
 
-      // 3. Process the deal using our shared engine
+      // 3. Fallback: If content is missing from the webhook (common in some configs), 
+      // fetch the full email via API using the email_id
+      const resendApiKey = import.meta.env.RESEND_API_KEY || process.env.RESEND_API_KEY;
+      if (!finalContent && emailId && resendApiKey) {
+        console.log(`   🔍 Content missing in webhook. Fetching full email via API for ID: ${emailId}`);
+        const { Resend } = await import('resend');
+        const resend = new Resend(resendApiKey);
+        const { data: fullEmail } = await resend.emails.get(emailId);
+        if (fullEmail) {
+          finalContent = fullEmail.text || fullEmail.html || "No Body in API Result";
+        }
+      }
+
+      if (!finalContent) finalContent = "No Body Found in Webhook or API Fallback";
+
+      // 4. Process the deal using our shared engine
       await processDeal(emailSubject, finalContent, 'Email/Resend');
 
     } else {
