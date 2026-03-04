@@ -15,6 +15,8 @@ export async function processDeal(title: string, content: string, source: string
             destination: "ADMIN",
             price: 0,
             airline: "Internal",
+            priceStrengthScore: 5,
+            hedgeValueScore: 5,
             totalScore: 10,
             explanation: `Admin Message: ${title}`,
             isTexasOrigin: true
@@ -48,8 +50,20 @@ export async function processDeal(title: string, content: string, source: string
             }
         }
     } else {
-        console.log("   ❌ AI Failed to parse deal.");
-        return { success: false, reason: 'AI Parse Failure' };
+        // 3. Fallback: If it's not a deal and not a system email, it's likely a human message!
+        console.log("   👤 Human message detected. Sending to Discord Support...");
+        await triggerAlerts({
+            originAirport: "SUPPORT",
+            destination: "FOUNDER",
+            price: 0,
+            airline: "Customer",
+            priceStrengthScore: 5,
+            hedgeValueScore: 5,
+            totalScore: 10,
+            explanation: `Support Message: ${title}`,
+            isTexasOrigin: true
+        }, content);
+        return { success: true, reason: 'Human Support' };
     }
 }
 
@@ -60,8 +74,8 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string) {
 
         let draftLink = "https://resend.com/broadcasts";
 
-        // Only create drafts for REAL deals (not system alerts)
-        if (resendApiKey && dealData.originAirport !== "SYSTEM") {
+        // Only create drafts for REAL deals (not system or support alerts)
+        if (resendApiKey && dealData.originAirport !== "SYSTEM" && dealData.originAirport !== "SUPPORT") {
             const resend = new Resend(resendApiKey);
             const audiences = await resend.audiences.list();
             const audienceId = audiences.data?.data?.[0]?.id;
@@ -89,9 +103,15 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string) {
         }
 
         if (discordWebhookUrl) {
-            const message = dealData.originAirport === "SYSTEM"
-                ? `🛠️ **SYSTEM ALERT / ADMIN MESSAGE** 🛠️\n\n**Subject:** ${dealData.explanation}\n\n**Content Snippet:**\n\`\`\`${rawContent?.substring(0, 1500)}\`\`\``
-                : `🚨 **NEW DEAL FOUND (Score: ${dealData.totalScore}/10)** 🚨\n\n**Route:** ${dealData.originAirport} ➔ ${dealData.destination}\n**Price:** $${dealData.price} on ${dealData.airline}\n**Analysis:** ${dealData.explanation}\n\n📝 **Draft Created:** [Review & Send in Resend](${draftLink})`;
+            let message = "";
+
+            if (dealData.originAirport === "SYSTEM") {
+                message = `🛠️ **SYSTEM ALERT / ADMIN MESSAGE** 🛠️\n\n**Subject:** ${dealData.explanation}\n\n**Content Snippet:**\n\`\`\`${rawContent?.substring(0, 1500)}\`\`\``;
+            } else if (dealData.originAirport === "SUPPORT") {
+                message = `👤 **CUSTOMER SUPPORT INQUIRY** 👤\n\n**From:** (Check Resend/Email)\n**Subject:** ${dealData.explanation}\n\n**Message:**\n\`\`\`${rawContent?.substring(0, 1500)}\`\`\``;
+            } else {
+                message = `🚨 **NEW DEAL FOUND (Score: ${dealData.totalScore}/10)** 🚨\n\n**Route:** ${dealData.originAirport} ➔ ${dealData.destination}\n**Price:** $${dealData.price} on ${dealData.airline}\n**Analysis:** ${dealData.explanation}\n\n📝 **Draft Created:** [Review & Send in Resend](${draftLink})`;
+            }
 
             await fetch(discordWebhookUrl, {
                 method: 'POST',
