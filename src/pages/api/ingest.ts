@@ -98,7 +98,7 @@ export const POST: APIRoute = async ({ request }) => {
                     `
                   });
                   if (draft.data?.id) {
-                    draftLink = `https://resend.com/emails/${draft.data.id}`;
+                    draftLink = `https://resend.com/broadcasts/${draft.data.id}`;
                   }
                   console.log(`   📝 Draft created in Resend`);
                 }

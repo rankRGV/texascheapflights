@@ -32,6 +32,13 @@ const AIRPORT_LABELS: Record<string, string> = {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Welcome | Texas Cheap Flights</title>
+  <meta name="description" content="You're on the list! Start saving on flights from Texas regional hubs." />
+  <meta property="og:title" content="Texas Cheap Flights — I'm on the list!" />
+  <meta property="og:description" content="Just secured my spot for Texas-first flight deals and error fares." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://texascheapflights.com/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://texascheapflights.com/og-image.png" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>" />
   <!-- Fonts (async — non-blocking) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -204,15 +211,15 @@ const AIRPORT_LABELS: Record<string, string> = {
                 <p class="text-xs text-slate-400 mb-6 leading-relaxed">Every share moves you 500 spots closer to full platform access. Founding members who refer friends get first access to the Dream Trip Engine.</p>
                 <div class="flex gap-4">
                     <!-- X / Twitter -->
-                    <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftexascheapflights.com&text=I%20just%20secured%20my%20spot%20on%20the%20Texas%20Cheap%20Flights%20waitlist!%20%E2%9C%88%EF%B8%8F" target="_blank" rel="noopener noreferrer" class="flex-1 p-3 rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-tcf-aviation-blue/30 hover:text-tcf-aviation-blue transition-all duration-300 flex items-center justify-center">
+                    <a id="share-twitter" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 p-3 rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-tcf-aviation-blue/30 hover:text-tcf-aviation-blue transition-all duration-300 flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
                     </a>
                     <!-- LinkedIn -->
-                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ftexascheapflights.com" target="_blank" rel="noopener noreferrer" class="flex-1 p-3 rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-tcf-aviation-blue/30 hover:text-tcf-aviation-blue transition-all duration-300 flex items-center justify-center">
+                    <a id="share-linkedin" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 p-3 rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-tcf-aviation-blue/30 hover:text-tcf-aviation-blue transition-all duration-300 flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
                     </a>
                     <!-- Facebook -->
-                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftexascheapflights.com" target="_blank" rel="noopener noreferrer" class="flex-1 p-3 rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-tcf-aviation-blue/30 hover:text-tcf-aviation-blue transition-all duration-300 flex items-center justify-center">
+                    <a id="share-facebook" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 p-3 rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-tcf-aviation-blue/30 hover:text-tcf-aviation-blue transition-all duration-300 flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
                     </a>
                 </div>
@@ -254,11 +261,20 @@ const AIRPORT_LABELS: Record<string, string> = {
     };
 
     if (email) document.getElementById('display-email')!.textContent = email;
-    if (airport) {
-      document.getElementById('display-airport')!.textContent = AIRPORT_LABELS[airport] || airport;
-      const checklistItem = document.getElementById('airport-checklist-item');
       if (checklistItem) checklistItem.textContent = `${AIRPORT_LABELS[airport] || airport} — Live Tracking`;
     }
+
+    // Update Share Links with Referral
+    const shareUrl = encodeURIComponent(`https://texascheapflights.com?ref=${email || 'TCF'}`);
+    const shareText = encodeURIComponent("I just secured my spot on the Texas Cheap Flights waitlist! ✈️");
+    
+    const twitterBtn = document.getElementById('share-twitter') as HTMLAnchorElement;
+    const linkedinBtn = document.getElementById('share-linkedin') as HTMLAnchorElement;
+    const facebookBtn = document.getElementById('share-facebook') as HTMLAnchorElement;
+
+    if (twitterBtn) twitterBtn.href = `https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareText}`;
+    if (linkedinBtn) linkedinBtn.href = `https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`;
+    if (facebookBtn) facebookBtn.href = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
 
     // Observe fade-up
     const observer = new IntersectionObserver((entries) => {
