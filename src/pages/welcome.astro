@@ -261,6 +261,9 @@ const AIRPORT_LABELS: Record<string, string> = {
     };
 
     if (email) document.getElementById('display-email')!.textContent = email;
+    if (airport) {
+      document.getElementById('display-airport')!.textContent = AIRPORT_LABELS[airport] || airport;
+      const checklistItem = document.getElementById('airport-checklist-item');
       if (checklistItem) checklistItem.textContent = `${AIRPORT_LABELS[airport] || airport} — Live Tracking`;
     }
 
