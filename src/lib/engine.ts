@@ -87,12 +87,50 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string) {
                     subject: `✈️ ALERT: ${dealData.originAirport} ➔ ${dealData.destination} for $${dealData.price}!`,
                     name: `Deal: ${dealData.originAirport} to ${dealData.destination}`,
                     html: `
-            <h2>Texas Cheap Flights Alert!</h2>
-            <p>We found a massive deal from <strong>${dealData.originAirport}</strong> to <strong>${dealData.destination}</strong>.</p>
-            <p><strong>Price:</strong> $${dealData.price}</p>
-            <p><strong>Airline:</strong> ${dealData.airline}</p>
-            <p><strong>Why this is a great deal:</strong> ${dealData.explanation}</p>
-            <p>Book quickly before it disappears!</p>
+            <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; color: #1e293b; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+              <!-- Header -->
+              <div style="background-color: #050a14; padding: 32px 20px; text-align: center; border-bottom: 3px solid #f59e0b;">
+                <h1 style="margin: 0; color: #ffffff; font-size: 22px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px;">Texas <span style="color: #f59e0b;">Cheap Flights</span></h1>
+              </div>
+              
+              <!-- Content -->
+              <div style="padding: 40px 30px;">
+                <p style="margin: 0 0 12px 0; font-size: 12px; font-weight: 800; color: #f59e0b; text-transform: uppercase; letter-spacing: 2px;">🚨 Anomaly Alert Detected</p>
+                <h2 style="margin: 0 0 24px 0; font-size: 32px; font-weight: 900; color: #0f172a; line-height: 1.1;">${dealData.originAirport} ➔ ${dealData.destination}</h2>
+                
+                <!-- Deal Card -->
+                <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; margin-bottom: 32px;">
+                  <table style="width: 100%; border-collapse: collapse; margin-bottom: 16px;">
+                    <tr>
+                      <td style="padding-bottom: 0;">
+                        <p style="margin: 0; font-size: 10px; text-transform: uppercase; color: #64748b; font-weight: 800; letter-spacing: 1px;">Price</p>
+                        <p style="margin: 4px 0 0 0; font-size: 36px; font-weight: 900; color: #1e3a8a; letter-spacing: -1px;">$${dealData.price}</p>
+                      </td>
+                      <td style="padding-bottom: 0; text-align: right;">
+                        <p style="margin: 0; font-size: 10px; text-transform: uppercase; color: #64748b; font-weight: 800; letter-spacing: 1px;">Airline</p>
+                        <p style="margin: 4px 0 0 0; font-size: 18px; font-weight: 800; color: #0f172a;">${dealData.airline}</p>
+                      </td>
+                    </tr>
+                  </table>
+                  
+                  <div style="border-top: 1px solid #e2e8f0; padding-top: 16px;">
+                    <p style="margin: 0 0 6px 0; font-size: 10px; text-transform: uppercase; color: #64748b; font-weight: 800; letter-spacing: 1px;">The Strategy</p>
+                    <p style="margin: 0; font-size: 15px; color: #334155; line-height: 1.6; font-weight: 500;">${dealData.explanation}</p>
+                  </div>
+                </div>
+                
+                <p style="margin: 0 0 32px 0; font-size: 15px; color: #475569; line-height: 1.6;">Most anomaly fares like this disappear within 12-24 hours. Because of the 24-hour cancellation rule, the smartest move is to book it now and check your PTO later.</p>
+                
+                <div style="text-align: center;">
+                  <a href="https://www.google.com/travel/flights?q=Flights%20to%20${dealData.destination}%20from%20${dealData.originAirport}" style="display: inline-block; background-color: #1e3a8a; color: #ffffff; font-size: 14px; font-weight: 700; text-decoration: none; padding: 18px 36px; border-radius: 6px; text-transform: uppercase; letter-spacing: 1.5px;">Search This Route</a>
+                </div>
+              </div>
+              
+              <!-- Footer -->
+              <div style="background-color: #f1f5f9; padding: 24px; text-align: center; border-top: 1px solid #e2e8f0;">
+                <p style="margin: 0; font-size: 12px; color: #64748b;">You received this because you are an early member of Texas Cheap Flights.</p>
+              </div>
+            </div>
           `
                 });
                 if (draft.data?.id) {
