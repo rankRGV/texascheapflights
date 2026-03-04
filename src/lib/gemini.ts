@@ -46,7 +46,7 @@ export async function parseEmailToDeal(emailSubject: string, emailBody: string):
     if (!apiKey) return null;
 
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
         const prompt = `${SYSTEM_PROMPT}\n\nEmail Subject: ${emailSubject}\n\nEmail Body:\n${emailBody}`;
 
