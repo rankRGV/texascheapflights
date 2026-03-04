@@ -4,6 +4,29 @@ import { parseEmailToDeal, type ParsedDeal } from './gemini';
 export async function processDeal(title: string, content: string, source: string) {
     console.log(`🤖 Processing deal from ${source}: ${title}`);
 
+    // 1. Handle "System" emails (Gmail Confirmation, Webhook Tests, etc.)
+    const isSystemEmail = /confirm|verify|verification|code|password|welcome|resend/i.test(title + content);
+    const isNoise = /unsubscribe|privacy policy|terms of service/i.test(title) && content.length < 500;
+
+    if (isSystemEmail) {
+        console.log("   🛠️ System Email detected. Bypassing score and alerting Discord...");
+        await triggerAlerts({
+            originAirport: "SYSTEM",
+            destination: "ADMIN",
+            price: 0,
+            airline: "Internal",
+            totalScore: 10,
+            explanation: `Admin Message: ${title}`,
+            isTexasOrigin: true
+        }, content);
+        return { success: true, reason: 'System Alert' };
+    }
+
+    if (isNoise) {
+        console.log("   🔇 Noise/Spam detected. Dropping.");
+        return { success: false, reason: 'Noise filter' };
+    }
+
     const dealData = await parseEmailToDeal(title, content);
 
     if (dealData) {
@@ -30,17 +53,16 @@ export async function processDeal(title: string, content: string, source: string
     }
 }
 
-async function triggerAlerts(dealData: ParsedDeal) {
+async function triggerAlerts(dealData: ParsedDeal, rawContent?: string) {
     try {
         const resendApiKey = import.meta.env.RESEND_API_KEY || process.env.RESEND_API_KEY;
         const discordWebhookUrl = import.meta.env.DISCORD_WEBHOOK_URL || process.env.DISCORD_WEBHOOK_URL;
 
         let draftLink = "https://resend.com/broadcasts";
 
-        if (resendApiKey) {
+        // Only create drafts for REAL deals (not system alerts)
+        if (resendApiKey && dealData.originAirport !== "SYSTEM") {
             const resend = new Resend(resendApiKey);
-
-            // Fetch the audience to send this to
             const audiences = await resend.audiences.list();
             const audienceId = audiences.data?.data?.[0]?.id;
 
@@ -67,12 +89,14 @@ async function triggerAlerts(dealData: ParsedDeal) {
         }
 
         if (discordWebhookUrl) {
+            const message = dealData.originAirport === "SYSTEM"
+                ? `🛠️ **SYSTEM ALERT / ADMIN MESSAGE** 🛠️\n\n**Subject:** ${dealData.explanation}\n\n**Content Snippet:**\n\`\`\`${rawContent?.substring(0, 1500)}\`\`\``
+                : `🚨 **NEW DEAL FOUND (Score: ${dealData.totalScore}/10)** 🚨\n\n**Route:** ${dealData.originAirport} ➔ ${dealData.destination}\n**Price:** $${dealData.price} on ${dealData.airline}\n**Analysis:** ${dealData.explanation}\n\n📝 **Draft Created:** [Review & Send in Resend](${draftLink})`;
+
             await fetch(discordWebhookUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    content: `🚨 **NEW DEAL FOUND (Score: ${dealData.totalScore}/10)** 🚨\n\n**Route:** ${dealData.originAirport} ➔ ${dealData.destination}\n**Price:** $${dealData.price} on ${dealData.airline}\n**Analysis:** ${dealData.explanation}\n\n📝 **Draft Created:** [Review & Send in Resend](${draftLink})`
-                })
+                body: JSON.stringify({ content: message })
             });
             console.log("   ✅ Sent to Discord!");
         }
