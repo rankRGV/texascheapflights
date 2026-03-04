@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { Webhook } from 'svix';
+import { parseEmailToDeal } from '../../lib/gemini';
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -46,11 +47,34 @@ export const POST: APIRoute = async ({ request }) => {
     if (payload.type === 'email.received') {
       const emailSubject = payload.data?.subject || "No Subject";
       const fromAddress = payload.data?.from || "Unknown Sender";
+      const emailHtml = payload.data?.html || "";
+      const emailText = payload.data?.text || emailHtml || "No Content";
 
       console.log(`   📧 From: ${fromAddress}`);
       console.log(`   📌 Subject: ${emailSubject}`);
 
-      // TODO: Pass this to the AI Brain (Step 3)
+      // 3. Pass this to the AI Brain
+      console.log("🤖 Passing to Gemini for Texas Relevance and Scoring...");
+      const dealData = await parseEmailToDeal(emailSubject, emailText);
+
+      if (dealData) {
+        if (!dealData.isTexasOrigin) {
+          console.log(`   🚀 Auto-Drop: Deal origin is not Texas. Found: ${dealData.originAirport}`);
+        } else {
+          console.log(`   ✅ TEXAS DEAL SPOTTED!`);
+          console.log(`   ✈️ Route: ${dealData.originAirport} ➔ ${dealData.destination} ($${dealData.price} via ${dealData.airline})`);
+          console.log(`   📈 Total Score: ${dealData.totalScore}/10 (${dealData.explanation})`);
+
+          if (dealData.totalScore >= 7) {
+            console.log(`   🎉 HIGH SCORE - SEND TO DISCORD QUEUE NOW!`);
+          } else {
+            console.log(`   📉 SCORE TOO LOW - Skipping alerts.`);
+          }
+        }
+      } else {
+        console.log("   ❌ AI Failed to parse deal.");
+      }
+
     } else {
       console.log(`   ⚠️ Ignored payload type: ${payload.type}`);
     }
