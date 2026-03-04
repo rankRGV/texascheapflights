@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { Webhook } from 'svix';
+import { Resend } from 'resend';
 import { parseEmailToDeal } from '../../lib/gemini';
 
 export const POST: APIRoute = async ({ request }) => {
@@ -67,6 +68,57 @@ export const POST: APIRoute = async ({ request }) => {
 
           if (dealData.totalScore >= 7) {
             console.log(`   🎉 HIGH SCORE - SEND TO DISCORD QUEUE NOW!`);
+
+            try {
+              const resendApiKey = import.meta.env.RESEND_API_KEY || process.env.RESEND_API_KEY;
+              const discordWebhookUrl = import.meta.env.DISCORD_WEBHOOK_URL || process.env.DISCORD_WEBHOOK_URL;
+
+              let draftLink = "https://resend.com/broadcasts";
+
+              if (resendApiKey) {
+                const resend = new Resend(resendApiKey);
+
+                // Fetch the audience to send this to
+                const audiences = await resend.audiences.list();
+                const audienceId = audiences.data?.data?.[0]?.id;
+
+                if (audienceId) {
+                  const draft = await resend.broadcasts.create({
+                    audienceId,
+                    from: 'Texas Cheap Flights <waitlist@texascheapflights.com>',
+                    subject: `✈️ ALERT: ${dealData.originAirport} ➔ ${dealData.destination} for $${dealData.price}!`,
+                    name: `Deal: ${dealData.originAirport} to ${dealData.destination}`,
+                    html: `
+                      <h2>Texas Cheap Flights Alert!</h2>
+                      <p>We found a massive deal from <strong>${dealData.originAirport}</strong> to <strong>${dealData.destination}</strong>.</p>
+                      <p><strong>Price:</strong> $${dealData.price}</p>
+                      <p><strong>Airline:</strong> ${dealData.airline}</p>
+                      <p><strong>Why this is a great deal:</strong> ${dealData.explanation}</p>
+                      <p>Book quickly before it disappears!</p>
+                    `
+                  });
+                  if (draft.data?.id) {
+                    draftLink = `https://resend.com/emails/${draft.data.id}`;
+                  }
+                  console.log(`   📝 Draft created in Resend`);
+                }
+              }
+
+              if (discordWebhookUrl) {
+                await fetch(discordWebhookUrl, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    content: `🚨 **NEW DEAL FOUND (Score: ${dealData.totalScore}/10)** 🚨\n\n**Route:** ${dealData.originAirport} ➔ ${dealData.destination}\n**Price:** $${dealData.price} on ${dealData.airline}\n**Analysis:** ${dealData.explanation}\n\n📝 **Draft Created:** [Review & Send in Resend](${draftLink})`
+                  })
+                });
+                console.log("   ✅ Sent to Discord!");
+              } else {
+                console.warn("   ⚠️ DISCORD_WEBHOOK_URL not set.");
+              }
+            } catch (err) {
+              console.error("   ❌ Failed to push to Drafts or Discord:", err);
+            }
           } else {
             console.log(`   📉 SCORE TOO LOW - Skipping alerts.`);
           }
