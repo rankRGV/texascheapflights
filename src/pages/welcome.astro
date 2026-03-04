@@ -237,58 +237,72 @@ const AIRPORT_LABELS: Record<string, string> = {
   </main>
 
   <script>
-    // Get URL Params
-    const urlParams = new URLSearchParams(window.location.search);
-    const email = urlParams.get('email');
-    const airport = urlParams.get('airport');
+    function initializeDashboard() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const email = urlParams.get('email');
+      const airport = urlParams.get('airport');
 
-    const AIRPORT_LABELS: Record<string, string> = {
-      MFE: 'McAllen (MFE)',
-      LRD: 'Laredo (LRD)',
-      HRL: 'Harlingen (HRL)',
-      BRO: 'South Padre Island (BRO)',
-      CRP: 'Corpus Christi (CRP)',
-      SAT: 'San Antonio (SAT)',
-      DFW: 'Dallas (DFW)',
-      IAH: 'Houston (IAH)',
-      AUS: 'Austin (AUS)',
-      AMA: 'Amarillo (AMA)',
-      LBB: 'Lubbock (LBB)',
-      ELP: 'El Paso (ELP)',
-      MAF: 'Midland (MAF)',
-      HOU: 'Houston (HOU)',
-      DAL: 'Dallas Love (DAL)'
-    };
+      const labels: Record<string, string> = {
+        MFE: 'McAllen (MFE)',
+        LRD: 'Laredo (LRD)',
+        HRL: 'Harlingen (HRL)',
+        BRO: 'South Padre Island (BRO)',
+        CRP: 'Corpus Christi (CRP)',
+        SAT: 'San Antonio (SAT)',
+        DFW: 'Dallas (DFW)',
+        IAH: 'Houston (IAH)',
+        AUS: 'Austin (AUS)',
+        AMA: 'Amarillo (AMA)',
+        LBB: 'Lubbock (LBB)',
+        ELP: 'El Paso (ELP)',
+        MAF: 'Midland (MAF)',
+        HOU: 'Houston (HOU)',
+        DAL: 'Dallas Love (DAL)'
+      };
 
-    if (email) document.getElementById('display-email')!.textContent = email;
-    if (airport) {
-      document.getElementById('display-airport')!.textContent = AIRPORT_LABELS[airport] || airport;
-      const checklistItem = document.getElementById('airport-checklist-item');
-      if (checklistItem) checklistItem.textContent = `${AIRPORT_LABELS[airport] || airport} — Live Tracking`;
+      if (email) {
+        const emailEl = document.getElementById('display-email');
+        if (emailEl) emailEl.textContent = email;
+      }
+
+      if (airport) {
+        const label = labels[airport] || airport;
+        const airportEl = document.getElementById('display-airport');
+        if (airportEl) airportEl.textContent = label;
+
+        const checklistItem = document.getElementById('airport-checklist-item');
+        if (checklistItem) checklistItem.textContent = `${label} — Live Tracking`;
+      }
+
+      // Initialize Sharing Links
+      const shareUrl = encodeURIComponent(`https://texascheapflights.com?ref=${email || 'TCF'}`);
+      const shareText = encodeURIComponent("I just secured my spot on the Texas Cheap Flights waitlist! ✈️");
+      
+      const sharePlatforms: Record<string, string> = {
+        'share-twitter': `https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareText}`,
+        'share-linkedin': `https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`,
+        'share-facebook': `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`
+      };
+
+      Object.entries(sharePlatforms).forEach(([id, href]) => {
+        const el = document.getElementById(id) as HTMLAnchorElement | null;
+        if (el) el.href = href;
+      });
+
+      // Observe animations
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('anim-fade-up');
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.anim-fade-up, .liquid-glass').forEach(el => observer.observe(el));
     }
 
-    // Update Share Links with Referral
-    const shareUrl = encodeURIComponent(`https://texascheapflights.com?ref=${email || 'TCF'}`);
-    const shareText = encodeURIComponent("I just secured my spot on the Texas Cheap Flights waitlist! ✈️");
-    
-    const twitterBtn = document.getElementById('share-twitter') as HTMLAnchorElement;
-    const linkedinBtn = document.getElementById('share-linkedin') as HTMLAnchorElement;
-    const facebookBtn = document.getElementById('share-facebook') as HTMLAnchorElement;
-
-    if (twitterBtn) twitterBtn.href = `https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareText}`;
-    if (linkedinBtn) linkedinBtn.href = `https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`;
-    if (facebookBtn) facebookBtn.href = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
-
-    // Observe fade-up
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('anim-fade-up');
-        }
-      });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.anim-fade-up, .liquid-glass').forEach(el => observer.observe(el));
+    // Run on load
+    initializeDashboard();
   </script>
 </body>
 </html>
