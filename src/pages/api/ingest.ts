@@ -42,24 +42,29 @@ export const POST: APIRoute = async ({ request }) => {
       const emailId = payload.data?.email_id;
       const emailSubject = payload.data?.subject || "No Subject";
 
-      console.log(`📡 Inbound Payload: ${JSON.stringify(payload.data)}`);
+      console.log(`📡 Inbound Payload Meta: From ${payload.data?.from}, Subject: ${emailSubject}`);
 
       let finalContent = payload.data?.text || payload.data?.html || "";
 
-      // 3. Fallback: If content is missing from the webhook (common in some configs), 
-      // fetch the full email via API using the email_id
+      // 3. Fallback: Fetch via API with a tiny delay to allow indexing
       const resendApiKey = import.meta.env.RESEND_API_KEY || process.env.RESEND_API_KEY;
       if (!finalContent && emailId && resendApiKey) {
-        console.log(`   🔍 Content missing in webhook. Fetching full email via API for ID: ${emailId}`);
+        console.log(`   🔍 Content missing. Waiting 1.5s for Resend indexing...`);
+        await new Promise(resolve => setTimeout(resolve, 1500)); // Small delay for race condition
+
         const { Resend } = await import('resend');
         const resend = new Resend(resendApiKey);
-        const { data: fullEmail } = await resend.emails.get(emailId);
-        if (fullEmail) {
-          finalContent = fullEmail.text || fullEmail.html || "No Body in API Result";
+        const response = await resend.emails.get(emailId);
+
+        if (response.data) {
+          finalContent = response.data.text || response.data.html || "";
         }
       }
 
-      if (!finalContent) finalContent = "No Body Found in Webhook or API Fallback";
+      if (!finalContent) {
+        // Ultimate fallback: stringify the whole payload so we at least see metadata in Discord
+        finalContent = `Metadata Only Found: ${JSON.stringify(payload.data)}`;
+      }
 
       // 4. Process the deal using our shared engine
       await processDeal(emailSubject, finalContent, 'Email/Resend');
