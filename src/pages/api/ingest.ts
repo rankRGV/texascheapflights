@@ -40,11 +40,16 @@ export const POST: APIRoute = async ({ request }) => {
 
     if (payload.type === 'email.received') {
       const emailSubject = payload.data?.subject || "No Subject";
+
+      // Resend Inbound can be in .text or .html - we check both
+      const emailText = payload.data?.text || "";
       const emailHtml = payload.data?.html || "";
-      const emailText = payload.data?.text || emailHtml || "No Content";
+      const finalContent = emailText || emailHtml || payload.data?.body || "No Body Found";
+
+      console.log(`📡 Inbound Data Keys: ${Object.keys(payload.data || {}).join(', ')}`);
 
       // 3. Process the deal using our shared engine
-      await processDeal(emailSubject, emailText, 'Email/Resend');
+      await processDeal(emailSubject, finalContent, 'Email/Resend');
 
     } else {
       console.log(`   ⚠️ Ignored payload type: ${payload.type}`);
