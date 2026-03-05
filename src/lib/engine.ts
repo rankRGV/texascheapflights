@@ -2,91 +2,91 @@ import { Resend } from 'resend';
 import { parseEmailToDeal, type ParsedDeal } from './gemini';
 
 export async function processDeal(title: string, content: string, source: string) {
-    console.log(`🤖 Processing deal from ${source}: ${title}`);
+  console.log(`🤖 Processing deal from ${source}: ${title}`);
 
-    // 1. Handle "System" emails (Gmail Confirmation, Webhook Tests, etc.)
-    const isSystemEmail = /confirm|verify|verification|code|password|welcome|resend/i.test(title + content);
-    const isNoise = /unsubscribe|privacy policy|terms of service/i.test(title) && content.length < 500;
+  // 1. Handle "System" emails (Gmail Confirmation, Webhook Tests, etc.)
+  const isSystemEmail = /confirm|verify|verification|code|password|welcome|resend/i.test(title + content);
+  const isNoise = /unsubscribe|privacy policy|terms of service/i.test(title) && content.length < 500;
 
-    if (isSystemEmail) {
-        console.log("   🛠️ System Email detected. Bypassing score and alerting Discord...");
-        await triggerAlerts({
-            originAirport: "SYSTEM",
-            destination: "ADMIN",
-            price: 0,
-            airline: "Internal",
-            priceStrengthScore: 5,
-            hedgeValueScore: 5,
-            totalScore: 10,
-            explanation: `Admin Message: ${title}`,
-            isTexasOrigin: true
-        }, content);
-        return { success: true, reason: 'System Alert' };
-    }
+  if (isSystemEmail) {
+    console.log("   🛠️ System Email detected. Bypassing score and alerting Discord...");
+    await triggerAlerts({
+      originAirport: "SYSTEM",
+      destination: "ADMIN",
+      price: 0,
+      airline: "Internal",
+      priceStrengthScore: 5,
+      hedgeValueScore: 5,
+      totalScore: 10,
+      explanation: `Admin Message: ${title}`,
+      isTexasOrigin: true
+    }, content);
+    return { success: true, reason: 'System Alert' };
+  }
 
-    if (isNoise) {
-        console.log("   🔇 Noise/Spam detected. Dropping.");
-        return { success: false, reason: 'Noise filter' };
-    }
+  if (isNoise) {
+    console.log("   🔇 Noise/Spam detected. Dropping.");
+    return { success: false, reason: 'Noise filter' };
+  }
 
-    const dealData = await parseEmailToDeal(title, content);
+  const dealData = await parseEmailToDeal(title, content);
 
-    if (dealData) {
-        if (!dealData.isTexasOrigin) {
-            console.log(`   🚀 Auto-Drop: Deal origin is not Texas. Found: ${dealData.originAirport}`);
-            return { success: false, reason: 'Not Texas origin' };
-        } else {
-            console.log(`   ✅ TEXAS DEAL SPOTTED!`);
-            console.log(`   ✈️ Route: ${dealData.originAirport} ➔ ${dealData.destination} ($${dealData.price} via ${dealData.airline})`);
-            console.log(`   📈 Total Score: ${dealData.totalScore}/10 (${dealData.explanation})`);
-
-            if (dealData.totalScore >= 7) {
-                console.log(`   🎉 HIGH SCORE - SENDING ALERTS...`);
-                await triggerAlerts(dealData);
-                return { success: true, score: dealData.totalScore };
-            } else {
-                console.log(`   📉 SCORE TOO LOW - Skipping alerts.`);
-                return { success: false, reason: 'Score too low' };
-            }
-        }
+  if (dealData) {
+    if (!dealData.isTexasOrigin) {
+      console.log(`   🚀 Auto-Drop: Deal origin is not Texas. Found: ${dealData.originAirport}`);
+      return { success: false, reason: 'Not Texas origin' };
     } else {
-        // 3. Fallback: If it's not a deal and not a system email, it's likely a human message!
-        console.log("   👤 Human message detected. Sending to Discord Support...");
-        await triggerAlerts({
-            originAirport: "SUPPORT",
-            destination: "FOUNDER",
-            price: 0,
-            airline: "Customer",
-            priceStrengthScore: 5,
-            hedgeValueScore: 5,
-            totalScore: 10,
-            explanation: `Support Message: ${title}`,
-            isTexasOrigin: true
-        }, content);
-        return { success: true, reason: 'Human Support' };
+      console.log(`   ✅ TEXAS DEAL SPOTTED!`);
+      console.log(`   ✈️ Route: ${dealData.originAirport} ➔ ${dealData.destination} ($${dealData.price} via ${dealData.airline})`);
+      console.log(`   📈 Total Score: ${dealData.totalScore}/10 (${dealData.explanation})`);
+
+      if (dealData.totalScore >= 7) {
+        console.log(`   🎉 HIGH SCORE - SENDING ALERTS...`);
+        await triggerAlerts(dealData);
+        return { success: true, score: dealData.totalScore };
+      } else {
+        console.log(`   📉 SCORE TOO LOW - Skipping alerts.`);
+        return { success: false, reason: 'Score too low' };
+      }
     }
+  } else {
+    // 3. Fallback: If it's not a deal and not a system email, it's likely a human message!
+    console.log("   👤 Human message detected. Sending to Discord Support...");
+    await triggerAlerts({
+      originAirport: "SUPPORT",
+      destination: "FOUNDER",
+      price: 0,
+      airline: "Customer",
+      priceStrengthScore: 5,
+      hedgeValueScore: 5,
+      totalScore: 10,
+      explanation: `Support Message: ${title}`,
+      isTexasOrigin: true
+    }, content);
+    return { success: true, reason: 'Human Support' };
+  }
 }
 
 async function triggerAlerts(dealData: ParsedDeal, rawContent?: string) {
-    try {
-        const resendApiKey = import.meta.env.RESEND_API_KEY || process.env.RESEND_API_KEY;
-        const discordWebhookUrl = import.meta.env.DISCORD_WEBHOOK_URL || process.env.DISCORD_WEBHOOK_URL;
+  try {
+    const resendApiKey = import.meta.env.RESEND_API_KEY || process.env.RESEND_API_KEY;
+    const discordWebhookUrl = import.meta.env.DISCORD_WEBHOOK_URL || process.env.DISCORD_WEBHOOK_URL;
 
-        let draftLink = "https://resend.com/broadcasts";
+    let draftLink = "https://resend.com/broadcasts";
 
-        // Only create drafts for REAL deals (not system or support alerts)
-        if (resendApiKey && dealData.originAirport !== "SYSTEM" && dealData.originAirport !== "SUPPORT") {
-            const resend = new Resend(resendApiKey);
-            const audiences = await resend.audiences.list();
-            const audienceId = audiences.data?.data?.[0]?.id;
+    // Only create drafts for REAL deals (not system or support alerts)
+    if (resendApiKey && dealData.originAirport !== "SYSTEM" && dealData.originAirport !== "SUPPORT") {
+      const resend = new Resend(resendApiKey);
+      const audiences = await resend.audiences.list();
+      const audienceId = audiences.data?.data?.[0]?.id;
 
-            if (audienceId) {
-                const draft = await resend.broadcasts.create({
-                    audienceId,
-                    from: 'Texas Cheap Flights <waitlist@texascheapflights.com>',
-                    subject: `✈️ ALERT: ${dealData.originAirport} ➔ ${dealData.destination} for $${dealData.price}!`,
-                    name: `Deal: ${dealData.originAirport} to ${dealData.destination}`,
-                    html: `
+      if (audienceId) {
+        const draft = await resend.broadcasts.create({
+          audienceId,
+          from: 'Texas Cheap Flights <waitlist@texascheapflights.com>',
+          subject: `✈️ ALERT: ${dealData.originAirport} ➔ ${dealData.destination} for $${dealData.price}!`,
+          name: `Deal: ${dealData.originAirport} to ${dealData.destination}`,
+          html: `
             <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; color: #1e293b; overflow: hidden; border: 1px solid #e2e8f0;">
 
               <!-- Header -->
@@ -108,6 +108,32 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string) {
                 <!-- Route Headline -->
                 <h2 style="margin: 0 0 6px 0; font-size: 38px; font-weight: 900; color: #0f172a; line-height: 1.05; letter-spacing: -0.5px;">${dealData.originAirport} → ${dealData.destination}</h2>
                 <p style="margin: 0 0 32px 0; font-size: 14px; color: #94a3b8; font-weight: 500; text-transform: uppercase; letter-spacing: 1px;">Departing from Texas</p>
+
+                ${(() => {
+              if (rawContent) {
+                const typicalMatch = rawContent.match(/Typical:\s*\$?(\d+)\s*[-to]+\s*\$?(\d+)/i);
+                const cheaperMatch = rawContent.match(/Cheaper:\s*\$?(\d+)/i);
+
+                if (typicalMatch) {
+                  const lowTyp = typicalMatch[1];
+                  const highTyp = typicalMatch[2];
+                  const cheaperText = cheaperMatch ? `$${cheaperMatch[1]} cheaper than usual` : `well below the typical range`;
+
+                  return `
+                                <!-- Price Insight Widget -->
+                                <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; border-left: 4px solid #22c55e; border-radius: 6px; padding: 18px 24px; margin-bottom: 28px;">
+                                    <p style="margin: 0 0 6px 0; font-size: 16px; color: #166534; font-weight: 600;">
+                                        Prices are currently <span style="color: #15803d; font-weight: 800;">low</span> — ${cheaperText}
+                                    </p>
+                                    <p style="margin: 0; font-size: 13px; color: #166534; opacity: 0.9; line-height: 1.5;">
+                                        The least expensive flights for similar trips usually cost between <strong>$${lowTyp}–$${highTyp}</strong>.
+                                    </p>
+                                </div>
+                            `;
+                }
+              }
+              return '';
+            })()}
 
                 <!-- Deal Card -->
                 <div style="background-color: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #f59e0b; border-radius: 6px; padding: 24px; margin-bottom: 28px;">
@@ -150,33 +176,33 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string) {
 
             </div>
           `
-                });
-                if (draft.data?.id) {
-                    draftLink = `https://resend.com/broadcasts/${draft.data.id}`;
-                }
-                console.log(`   📝 Draft created in Resend`);
-            }
+        });
+        if (draft.data?.id) {
+          draftLink = `https://resend.com/broadcasts/${draft.data.id}`;
         }
-
-        if (discordWebhookUrl) {
-            let message = "";
-
-            if (dealData.originAirport === "SYSTEM") {
-                message = `🛠️ **SYSTEM ALERT / ADMIN MESSAGE** 🛠️\n\n**Subject:** ${dealData.explanation}\n\n**Content Snippet:**\n\`\`\`${rawContent?.substring(0, 1500)}\`\`\``;
-            } else if (dealData.originAirport === "SUPPORT") {
-                message = `👤 **CUSTOMER SUPPORT INQUIRY** 👤\n\n**From:** (Check Resend/Email)\n**Subject:** ${dealData.explanation}\n\n**Message:**\n\`\`\`${rawContent?.substring(0, 1500)}\`\`\``;
-            } else {
-                message = `🚨 **NEW DEAL FOUND (Score: ${dealData.totalScore}/10)** 🚨\n\n**Route:** ${dealData.originAirport} ➔ ${dealData.destination}\n**Price:** $${dealData.price} on ${dealData.airline}\n**Analysis:** ${dealData.explanation}\n\n📝 **Draft Created:** [Review & Send in Resend](${draftLink})`;
-            }
-
-            await fetch(discordWebhookUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ content: message })
-            });
-            console.log("   ✅ Sent to Discord!");
-        }
-    } catch (err) {
-        console.error("   ❌ Failed to trigger alerts:", err);
+        console.log(`   📝 Draft created in Resend`);
+      }
     }
+
+    if (discordWebhookUrl) {
+      let message = "";
+
+      if (dealData.originAirport === "SYSTEM") {
+        message = `🛠️ **SYSTEM ALERT / ADMIN MESSAGE** 🛠️\n\n**Subject:** ${dealData.explanation}\n\n**Content Snippet:**\n\`\`\`${rawContent?.substring(0, 1500)}\`\`\``;
+      } else if (dealData.originAirport === "SUPPORT") {
+        message = `👤 **CUSTOMER SUPPORT INQUIRY** 👤\n\n**From:** (Check Resend/Email)\n**Subject:** ${dealData.explanation}\n\n**Message:**\n\`\`\`${rawContent?.substring(0, 1500)}\`\`\``;
+      } else {
+        message = `🚨 **NEW DEAL FOUND (Score: ${dealData.totalScore}/10)** 🚨\n\n**Route:** ${dealData.originAirport} ➔ ${dealData.destination}\n**Price:** $${dealData.price} on ${dealData.airline}\n**Analysis:** ${dealData.explanation}\n\n📝 **Draft Created:** [Review & Send in Resend](${draftLink})`;
+      }
+
+      await fetch(discordWebhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: message })
+      });
+      console.log("   ✅ Sent to Discord!");
+    }
+  } catch (err) {
+    console.error("   ❌ Failed to trigger alerts:", err);
+  }
 }
