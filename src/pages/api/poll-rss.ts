@@ -23,7 +23,8 @@ export const GET: APIRoute = async ({ request }) => {
 
     const results = [];
     const now = new Date();
-    const ONE_HOUR_AGO = now.getTime() - (60 * 60 * 1000);
+    // Since this runs every ~10 and ~14 hours, we look back 15 hours to safely catch all deals.
+    const FIFTEEN_HOURS_AGO = now.getTime() - (15 * 60 * 60 * 1000);
 
     console.log("🕒 Starting RSS Poll...");
 
@@ -35,8 +36,8 @@ export const GET: APIRoute = async ({ request }) => {
             for (const item of feed.items) {
                 const pubDate = item.pubDate ? new Date(item.pubDate).getTime() : 0;
 
-                // Only process items from the last 60 minutes
-                if (pubDate > ONE_HOUR_AGO) {
+                // Only process items from the last 15 hours
+                if (pubDate > FIFTEEN_HOURS_AGO) {
                     console.log(`   ✨ New RSS Item: ${item.title}`);
                     const res = await processDeal(item.title || "No Title", item.content || item.contentSnippet || "", `RSS: ${feed.title}`);
                     results.push({ title: item.title, status: res });
