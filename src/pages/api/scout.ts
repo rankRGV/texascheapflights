@@ -8,12 +8,16 @@ export const GET: APIRoute = async ({ request }) => {
             return new Response(JSON.stringify({ error: "⚠️ SERP_API_KEY is not set. Go to https://serpapi.com/ to get a free API Key." }), { status: 500, headers: { 'Content-Type': 'application/json' } });
         }
 
+        const urlParams = new URL(request.url).searchParams;
+        const isTest = urlParams.get('test') === 'true';
+        const priceLimit = isTest ? 1000 : 350;
+
         // Our target Texas regional airports
         const origins = ["MFE", "HRL", "LRD", "BRO", "CRP", "SAT", "AUS"];
         // /m/02j71 is Google's Knowledge Graph ID for "Earth" (Anywhere)
         const arrivalId = "/m/02j71";
 
-        console.log(`🦅 Regional Scout scanning Google Flights (via SerpApi)...`);
+        console.log(`🦅 Regional Scout scanning Google Flights (via SerpApi)... Limit: $${priceLimit}`);
         let allDealsFound: any[] = [];
 
         // Let's scout the first 3 airports to keep the API limits safe for the free tier
@@ -35,8 +39,8 @@ export const GET: APIRoute = async ({ request }) => {
             const data = await res.json();
 
             if (data.destinations && data.destinations.length > 0) {
-                // Filter for glitches under $350
-                const deals = data.destinations.filter((d: any) => d.flight?.price <= 350);
+                // Filter for glitches under our dynamic limit
+                const deals = data.destinations.filter((d: any) => d.flight?.price <= priceLimit);
 
                 deals.forEach((deal: any) => {
                     allDealsFound.push({
@@ -51,13 +55,13 @@ export const GET: APIRoute = async ({ request }) => {
         }
 
         if (allDealsFound.length === 0) {
-            console.log("   ❌ Scout found no anomalous deals under $350 today.");
+            console.log(`   ❌ Scout found no anomalous deals under $${priceLimit} today.`);
             return new Response(JSON.stringify({ message: "No deals found." }), { status: 200, headers: { 'Content-Type': 'application/json' } });
         }
 
         // Format the deals and send them to Discord
         const discordWebhookUrl = import.meta.env.DISCORD_WEBHOOK_URL || process.env.DISCORD_WEBHOOK_URL;
-        let dealsReport = "🦅 **REGIONAL SCOUT REPORT [GOOGLE FLIGHTS SCAN]** 🦅\n\nThe Regional Scout just completed a sweep. It found these anomalies under $350:\n\n";
+        let dealsReport = `🦅 **REGIONAL SCOUT REPORT [GOOGLE FLIGHTS SCAN]** 🦅\n\nThe Regional Scout just completed a sweep. It found these anomalies under $${priceLimit}:\n\n`;
 
         // Only send top 5 to avoid Discord text limits
         const topDeals = allDealsFound.sort((a, b) => a.price - b.price).slice(0, 5);
