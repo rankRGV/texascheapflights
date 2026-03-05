@@ -37,15 +37,15 @@ export const GET: APIRoute = async ({ request }) => {
 
             if (data.destinations && data.destinations.length > 0) {
                 // Filter for glitches under our dynamic limit
-                const deals = data.destinations.filter((d: any) => d.flight?.price <= priceLimit);
+                const deals = data.destinations.filter((d: any) => d.flight_price <= priceLimit);
 
                 deals.forEach((deal: any) => {
                     allDealsFound.push({
                         origin: origin,
                         destination: deal.name,
-                        price: deal.flight?.price,
-                        airline: deal.flight?.airline || "Multiple",
-                        link: deal.flight?.link || `https://www.google.com/travel/flights?q=Flights%20from%20${origin}%20to%20${deal.name}`
+                        price: deal.flight_price,
+                        airline: deal.airline || "Multiple",
+                        link: deal.link || `https://www.google.com/travel/flights?q=Flights%20from%20${origin}%20to%20${deal.name}`
                     });
                 });
             }
