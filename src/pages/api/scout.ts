@@ -12,14 +12,23 @@ export const GET: APIRoute = async ({ request }) => {
         const isTest = urlParams.get('test') === 'true';
         const priceLimit = isTest ? 1000 : 350;
 
-        // Our target Texas regional airports
-        const origins = ["MFE", "HRL", "LRD", "BRO", "CRP", "SAT", "AUS"];
+        // Our comprehensive list of Texas regional airports (excluding DFW, IAH, HOU, DAL)
+        const origins = [
+            "MFE", "HRL", "LRD", "BRO", "CRP", "SAT", "AUS", // South/Central/Valley
+            "ELP", "LBB", "MAF", "AMA", "SJT",             // West/Panhandle
+            "BPT", "GRK", "TYR", "GGG", "ABI", "TXK",      // East/Central Minor
+            "VCT", "ACT"                                   // Coast/Central Minor
+        ];
 
         console.log(`🦅 Regional Scout scanning Google Flights (via SerpApi)... Limit: $${priceLimit}`);
         let allDealsFound: any[] = [];
 
-        // Let's scout the first 3 airports to keep the API limits safe for the free tier
-        const scoutList = origins.slice(0, 3);
+        // To stay under the free 250 searches/month limit, we randomly select a batch of 3 airports per run.
+        // If we run this twice a day, it's 6 searches/day. 6 * 30 days = 180 searches/month.
+        const shuffledOrigins = origins.sort(() => 0.5 - Math.random());
+        const scoutList = shuffledOrigins.slice(0, 3);
+
+        console.log(`   📍 Randomly selected batch for this sweep: ${scoutList.join(', ')}`);
 
         for (const origin of scoutList) {
             const params = new URLSearchParams({
