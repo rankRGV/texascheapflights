@@ -14,8 +14,6 @@ export const GET: APIRoute = async ({ request }) => {
 
         // Our target Texas regional airports
         const origins = ["MFE", "HRL", "LRD", "BRO", "CRP", "SAT", "AUS"];
-        // /m/02j71 is Google's Knowledge Graph ID for "Earth" (Anywhere)
-        const arrivalId = "/m/02j71";
 
         console.log(`🦅 Regional Scout scanning Google Flights (via SerpApi)... Limit: $${priceLimit}`);
         let allDealsFound: any[] = [];
@@ -25,9 +23,8 @@ export const GET: APIRoute = async ({ request }) => {
 
         for (const origin of scoutList) {
             const params = new URLSearchParams({
-                engine: 'google_flights_explore',
+                engine: 'google_travel_explore',
                 departure_id: origin,
-                arrival_id: arrivalId,
                 currency: 'USD',
                 hl: 'en',
                 api_key: serpApiKey
