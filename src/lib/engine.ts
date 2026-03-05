@@ -87,49 +87,67 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string) {
                     subject: `✈️ ALERT: ${dealData.originAirport} ➔ ${dealData.destination} for $${dealData.price}!`,
                     name: `Deal: ${dealData.originAirport} to ${dealData.destination}`,
                     html: `
-            <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; color: #1e293b; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+            <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; color: #1e293b; overflow: hidden; border: 1px solid #e2e8f0;">
+
               <!-- Header -->
-              <div style="background-color: #050a14; padding: 32px 20px; text-align: center; border-bottom: 3px solid #f59e0b;">
-                <h1 style="margin: 0; color: #ffffff; font-size: 22px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px;">Texas <span style="color: #f59e0b;">Cheap Flights</span></h1>
+              <div style="background-color: #050a14; padding: 28px 24px; text-align: center; border-bottom: 3px solid #f59e0b;">
+                <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 900; text-transform: uppercase; letter-spacing: 3px;">Texas <span style="color: #f59e0b;">Cheap Flights</span></h1>
               </div>
-              
-              <!-- Content -->
-              <div style="padding: 40px 30px;">
-                <p style="margin: 0 0 12px 0; font-size: 12px; font-weight: 800; color: #f59e0b; text-transform: uppercase; letter-spacing: 2px;">🚨 Anomaly Alert Detected</p>
-                <h2 style="margin: 0 0 24px 0; font-size: 32px; font-weight: 900; color: #0f172a; line-height: 1.1;">${dealData.originAirport} ➔ ${dealData.destination}</h2>
-                
+
+              <!-- Urgency Strip -->
+              <div style="background-color: #fff7ed; border-bottom: 2px solid #fed7aa; padding: 11px 24px; text-align: center;">
+                <p style="margin: 0; font-size: 13px; font-weight: 700; color: #c2410c;">⚡ Error fares vanish within 12–24 hours — usually before airlines catch them.</p>
+              </div>
+
+              <!-- Main Content -->
+              <div style="padding: 40px 32px 32px 32px;">
+
+                <!-- Tag -->
+                <p style="margin: 0 0 10px 0; font-size: 11px; font-weight: 800; color: #f59e0b; text-transform: uppercase; letter-spacing: 2.5px;">🔥 Error Fare Detected</p>
+
+                <!-- Route Headline -->
+                <h2 style="margin: 0 0 6px 0; font-size: 38px; font-weight: 900; color: #0f172a; line-height: 1.05; letter-spacing: -0.5px;">${dealData.originAirport} → ${dealData.destination}</h2>
+                <p style="margin: 0 0 32px 0; font-size: 14px; color: #94a3b8; font-weight: 500; text-transform: uppercase; letter-spacing: 1px;">Departing from Texas</p>
+
                 <!-- Deal Card -->
-                <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; margin-bottom: 32px;">
-                  <table style="width: 100%; border-collapse: collapse; margin-bottom: 16px;">
+                <div style="background-color: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #f59e0b; border-radius: 6px; padding: 24px; margin-bottom: 28px;">
+                  <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
                     <tr>
-                      <td style="padding-bottom: 0;">
-                        <p style="margin: 0; font-size: 10px; text-transform: uppercase; color: #64748b; font-weight: 800; letter-spacing: 1px;">Price</p>
-                        <p style="margin: 4px 0 0 0; font-size: 36px; font-weight: 900; color: #1e3a8a; letter-spacing: -1px;">$${dealData.price}</p>
+                      <td style="vertical-align: top;">
+                        <p style="margin: 0 0 4px 0; font-size: 10px; font-weight: 800; color: #92400e; text-transform: uppercase; letter-spacing: 1.5px;">Round-trip from</p>
+                        <p style="margin: 0; font-size: 54px; font-weight: 900; color: #0f172a; letter-spacing: -2px; line-height: 1;">$${dealData.price}</p>
                       </td>
-                      <td style="padding-bottom: 0; text-align: right;">
-                        <p style="margin: 0; font-size: 10px; text-transform: uppercase; color: #64748b; font-weight: 800; letter-spacing: 1px;">Airline</p>
-                        <p style="margin: 4px 0 0 0; font-size: 18px; font-weight: 800; color: #0f172a;">${dealData.airline}</p>
-                      </td>
+                      ${dealData.airline ? `<td style="vertical-align: top; text-align: right; padding-left: 16px;">
+                        <p style="margin: 0 0 4px 0; font-size: 10px; font-weight: 800; color: #92400e; text-transform: uppercase; letter-spacing: 1.5px;">Airline</p>
+                        <p style="margin: 0; font-size: 18px; font-weight: 800; color: #0f172a;">${dealData.airline}</p>
+                      </td>` : ''}
                     </tr>
                   </table>
-                  
-                  <div style="border-top: 1px solid #e2e8f0; padding-top: 16px;">
-                    <p style="margin: 0 0 6px 0; font-size: 10px; text-transform: uppercase; color: #64748b; font-weight: 800; letter-spacing: 1px;">The Strategy</p>
-                    <p style="margin: 0; font-size: 15px; color: #334155; line-height: 1.6; font-weight: 500;">${dealData.explanation}</p>
+                  <div style="border-top: 1px solid #fde68a; padding-top: 16px;">
+                    <p style="margin: 0 0 6px 0; font-size: 10px; font-weight: 800; color: #92400e; text-transform: uppercase; letter-spacing: 1.5px;">Why this deal matters</p>
+                    <p style="margin: 0; font-size: 15px; color: #1e293b; line-height: 1.65; font-weight: 500;">${dealData.explanation}</p>
                   </div>
                 </div>
-                
-                <p style="margin: 0 0 32px 0; font-size: 15px; color: #475569; line-height: 1.6;">Most anomaly fares like this disappear within 12-24 hours. Because of the 24-hour cancellation rule, the smartest move is to book it now and check your PTO later.</p>
-                
-                <div style="text-align: center;">
-                  <a href="https://www.google.com/travel/flights?q=Flights%20to%20${dealData.destination}%20from%20${dealData.originAirport}" style="display: inline-block; background-color: #1e3a8a; color: #ffffff; font-size: 14px; font-weight: 700; text-decoration: none; padding: 18px 36px; border-radius: 6px; text-transform: uppercase; letter-spacing: 1.5px;">Search This Route</a>
+
+                <!-- Body Copy -->
+                <p style="margin: 0 0 32px 0; font-size: 16px; color: #334155; line-height: 1.75;">This is your window. Error fares like this disappear fast — airlines fix them the moment someone notices. The <strong>24-hour cancellation rule</strong> is your safety net: book it right now and sort out the details later. PTO not approved yet? Book it anyway.</p>
+
+                <!-- CTA -->
+                <div style="text-align: center; margin-bottom: 14px;">
+                  <a href="https://www.google.com/travel/flights?q=Flights+to+${encodeURIComponent(dealData.destination)}+from+${encodeURIComponent(dealData.originAirport)}" style="display: inline-block; background-color: #f59e0b; color: #0f172a; font-size: 15px; font-weight: 900; text-decoration: none; padding: 18px 44px; border-radius: 6px; text-transform: uppercase; letter-spacing: 2px;">Lock In This Price &rarr;</a>
                 </div>
+
+                <!-- Trust Line Under CTA -->
+                <p style="margin: 0; text-align: center; font-size: 13px; color: #64748b; line-height: 1.5;">&#10003; Most airlines offer <strong>free cancellation within 24 hours</strong> of booking.</p>
+
               </div>
-              
+
               <!-- Footer -->
-              <div style="background-color: #f1f5f9; padding: 24px; text-align: center; border-top: 1px solid #e2e8f0;">
-                <p style="margin: 0; font-size: 12px; color: #64748b;">You received this because you are an early member of Texas Cheap Flights.</p>
+              <div style="background-color: #f8fafc; padding: 24px 32px; text-align: center; border-top: 1px solid #e2e8f0;">
+                <p style="margin: 0 0 4px 0; font-size: 12px; color: #94a3b8;">You're receiving this as an early member of Texas Cheap Flights.</p>
+                <p style="margin: 0; font-size: 11px; color: #cbd5e1;">We only alert you when we find something genuinely worth your attention.</p>
               </div>
+
             </div>
           `
                 });
