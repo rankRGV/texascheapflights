@@ -3,6 +3,10 @@
         {
             "path": "/api/poll-rss",
             "schedule": "0 0 * * *"
+        },
+        {
+            "path": "/api/scout",
+            "schedule": "0 12,22 * * *"
         }
     ]
 }
