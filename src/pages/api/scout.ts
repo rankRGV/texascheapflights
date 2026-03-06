@@ -55,7 +55,9 @@ export const GET: APIRoute = async ({ request }) => {
                         destination: deal.name,
                         price: deal.flight_price,
                         airline: deal.airline || "Multiple",
-                        link: deal.link || `https://www.google.com/travel/flights?q=Flights%20from%20${origin}%20to%20${deal.name}`
+                        link: deal.share_flights_url || deal.link || `https://www.google.com/travel/flights?q=Flights%20from%20${origin}%20to%20${deal.name}`,
+                        start_date: deal.start_date,
+                        end_date: deal.end_date
                     });
                 });
             }
@@ -83,6 +85,7 @@ export const GET: APIRoute = async ({ request }) => {
             const content = `
                 The Regional Scout found a Flight Anomaly!
                 Route: ${flight.origin} to ${flight.destination}
+                Dates: ${flight.start_date || 'Flexible'} to ${flight.end_date || 'Flexible'}
                 Price: $${flight.price}
                 Airline: ${flight.airline}
                 

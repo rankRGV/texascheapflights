@@ -20,9 +20,7 @@ async function test() {
         console.log("Keys:", Object.keys(data));
         if (data.destinations) {
             console.log("DESTINATIONS:", data.destinations.length);
-            if (data.destinations[0].flight) {
-                console.log("First flight price:", data.destinations[0].flight.price);
-            }
+            console.log(JSON.stringify(data.destinations[0], null, 2));
         }
     } catch (e) {
         console.error(e);

@@ -75,6 +75,20 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string) {
     let draftLink = "https://resend.com/broadcasts";
 
     // Only create drafts for REAL deals (not system or support alerts)
+
+    let bookLink = `https://www.google.com/travel/flights?q=Flights+to+${encodeURIComponent(dealData.destination)}+from+${encodeURIComponent(dealData.originAirport)}`;
+    let datesText = "";
+    if (rawContent) {
+      const linkMatch = rawContent.match(/Book Link:\s*(https?:\/\/[^\s<]+)/i);
+      if (linkMatch && linkMatch[1]) {
+        bookLink = linkMatch[1];
+      }
+      const datesMatch = rawContent.match(/Dates:\s*([^\n<]+)/i);
+      if (datesMatch && datesMatch[1]) {
+        datesText = datesMatch[1].trim();
+      }
+    }
+
     if (resendApiKey && dealData.originAirport !== "SYSTEM" && dealData.originAirport !== "SUPPORT") {
       const resend = new Resend(resendApiKey);
       const audiences = await resend.audiences.list();
@@ -107,7 +121,7 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string) {
 
                 <!-- Route Headline -->
                 <h2 style="margin: 0 0 6px 0; font-size: 38px; font-weight: 900; color: #0f172a; line-height: 1.05; letter-spacing: -0.5px;">${dealData.originAirport} → ${dealData.destination}</h2>
-                <p style="margin: 0 0 32px 0; font-size: 14px; color: #94a3b8; font-weight: 500; text-transform: uppercase; letter-spacing: 1px;">Departing from Texas</p>
+                <p style="margin: 0 0 32px 0; font-size: 14px; color: #94a3b8; font-weight: 500; text-transform: uppercase; letter-spacing: 1px;">Departing from Texas ${datesText ? ` &nbsp;•&nbsp; <span style="color:#0ea5e9;">Travel Dates: ${datesText}</span>` : ''}</p>
 
                 ${(() => {
               if (rawContent) {
@@ -160,7 +174,7 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string) {
 
                 <!-- CTA -->
                 <div style="text-align: center; margin-bottom: 14px;">
-                  <a href="https://www.google.com/travel/flights?q=Flights+to+${encodeURIComponent(dealData.destination)}+from+${encodeURIComponent(dealData.originAirport)}" style="display: inline-block; background-color: #f59e0b; color: #0f172a; font-size: 15px; font-weight: 900; text-decoration: none; padding: 18px 44px; border-radius: 6px; text-transform: uppercase; letter-spacing: 2px;">Lock In This Price &rarr;</a>
+                  <a href="${bookLink}" style="display: inline-block; background-color: #f59e0b; color: #0f172a; font-size: 15px; font-weight: 900; text-decoration: none; padding: 18px 44px; border-radius: 6px; text-transform: uppercase; letter-spacing: 2px;">Lock In This Price &rarr;</a>
                 </div>
 
                 <!-- Trust Line Under CTA -->
@@ -192,7 +206,7 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string) {
       } else if (dealData.originAirport === "SUPPORT") {
         message = `👤 **CUSTOMER SUPPORT INQUIRY** 👤\n\n**From:** (Check Resend/Email)\n**Subject:** ${dealData.explanation}\n\n**Message:**\n\`\`\`${rawContent?.substring(0, 1500)}\`\`\``;
       } else {
-        message = `🚨 **NEW DEAL FOUND (Score: ${dealData.totalScore}/10)** 🚨\n\n**Route:** ${dealData.originAirport} ➔ ${dealData.destination}\n**Price:** $${dealData.price} on ${dealData.airline}\n**Analysis:** ${dealData.explanation}\n\n📝 **Draft Created:** [Review & Send in Resend](${draftLink})`;
+        message = `🚨 **NEW DEAL FOUND (Score: ${dealData.totalScore}/10)** 🚨\n\n**Route:** ${dealData.originAirport} ➔ ${dealData.destination}\n**Price:** $${dealData.price} on ${dealData.airline}\n${datesText ? `**Dates:** ${datesText}\n` : ''}**Analysis:** ${dealData.explanation}\n\n🔗 **Verify:** [Check Google Flights](${bookLink})\n📝 **Draft Created:** [Review & Send in Resend](${draftLink})`;
       }
 
       await fetch(discordWebhookUrl, {
