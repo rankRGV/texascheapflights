@@ -4,11 +4,10 @@ import { processDeal } from '../../lib/engine';
 
 const parser = new Parser();
 
-// The feeds we want to monitor
+// Texas-specific feeds only - no global feeds to avoid non-Texas deals
 const FEEDS = [
     'https://www.theflightdeal.com/category/flight-deals/hou/feed/',
     'https://www.theflightdeal.com/category/flight-deals/dfw/feed/',
-    'https://www.theflightdeal.com/feed/',
     'https://www.faredealalert.com/feed/'
 ];
 

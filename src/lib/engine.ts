@@ -55,7 +55,13 @@ export async function processDeal(title: string, content: string, source: string
       }
     }
   } else {
-    // 3. Fallback: If it's not a deal and not a system email, it's likely a human message!
+    // 3. Fallback: Gemini couldn't parse a deal. Could be a human email OR unparseable RSS HTML.
+    // Only route to Discord support if it came from a real inbound email, not a feed or scout.
+    const isRSSSource = source?.startsWith('RSS:') || source === 'Regional Scout';
+    if (isRSSSource) {
+      console.log(`   🔇 Unparseable RSS/Scout item silently dropped. Source: ${source}`);
+      return { success: false, reason: 'Unparseable feed item - dropped' };
+    }
     console.log("   👤 Human message detected. Sending to Discord Support...");
     await triggerAlerts({
       originAirport: "SUPPORT",
