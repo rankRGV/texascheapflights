@@ -13,6 +13,14 @@ export const GET: APIRoute = async ({ request }) => {
         const isTest = urlParams.get('test') === 'true';
         const priceLimit = isTest ? 1000 : 350;
 
+        // Check for a secret to prevent random people from triggering this
+        const cronSecret = import.meta.env.CRON_SECRET || process.env.CRON_SECRET;
+        const authHeader = request.headers.get('Authorization');
+
+        if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+            return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
+        }
+
         // Our comprehensive list of Texas regional airports (excluding DFW, IAH, HOU, DAL)
         const origins = [
             "MFE", "HRL", "LRD", "BRO", "CRP", "SAT", "AUS", // South/Central/Valley
