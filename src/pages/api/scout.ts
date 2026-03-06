@@ -84,7 +84,7 @@ export const GET: APIRoute = async ({ request }) => {
         for (const flight of topDeals) {
             console.log(`🧠 Sending Scout Deal to Engine: ${flight.origin} -> ${flight.destination}`);
 
-            const title = `✈️ SCOUT FIND: ${flight.origin} to ${flight.destination} for $${flight.price}`;
+            const title = `✈️ ${isTest ? '[TEST] ' : ''}SCOUT FIND: ${flight.origin} to ${flight.destination} for $${flight.price}`;
 
             // Generate a synthetic "Typical" price based on the current price to activate the Price Insight widget
             const typicalLow = flight.price + 120;

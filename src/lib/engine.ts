@@ -41,7 +41,7 @@ export async function processDeal(title: string, content: string, source: string
       console.log(`   📈 Total Score: ${dealData.totalScore}/10 (${dealData.explanation})`);
 
       // Force the scout finds to succeed during test sweeps, or use normal scoring
-      const isScoutTest = title.includes("SCOUT FIND") && source === "Regional Scout";
+      const isScoutTest = title.includes("[TEST]") && source === "Regional Scout";
 
       if (dealData.totalScore >= 7 || isScoutTest) {
         if (isScoutTest) console.log(`   🚀 Bypassing Score Threshold for Test Scout Deal`);
