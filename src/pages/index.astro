@@ -142,13 +142,13 @@ const FEATURED_DEALS = [
 ];
 
 const RECENT_TICKER = [
-  "🔥 MFE to Orlando: $95 (Scouted 2h ago)",
-  "✈️ SAT to Denver: $148 (Scouted 14h ago)",
-  "🔥 CRP to Grand Canyon: $160 (Scouted 1d ago)",
-  "✈️ AUS to Tokyo: 70k Pts (Scouted 2d ago)",
-  "🔥 HRL to Cancun: $290 (Scouted 3d ago)",
-  "✈️ DFW to London: $450 (Scouted 4d ago)",
-  "🔥 LRD to Vegas: $118 (Scouted 1w ago)",
+  { text: "MFE to Orlando: $95 (Scouted 2h ago)", type: "glitch" },
+  { text: "SAT to Denver: $148 (Scouted 14h ago)", type: "sweetspot" },
+  { text: "CRP to Grand Canyon: $160 (Scouted 1d ago)", type: "glitch" },
+  { text: "AUS to Tokyo: 70k Pts (Scouted 2d ago)", type: "sweetspot" },
+  { text: "HRL to Cancun: $290 (Scouted 3d ago)", type: "glitch" },
+  { text: "DFW to London: $450 (Scouted 4d ago)", type: "sweetspot" },
+  { text: "LRD to Vegas: $118 (Scouted 1w ago)", type: "glitch" },
 ];
 ---
 
@@ -339,24 +339,32 @@ const RECENT_TICKER = [
   </section>
 
   <!-- ═══════════════════════════ LIVE TICKER (FOMO) ═══════════════════════════ -->
-  <div class="w-full bg-tcf-gold text-tcf-navy-deep py-2.5 overflow-hidden flex border-y border-tcf-gold/50 relative z-20 shadow-[0_0_30px_rgba(212,168,67,0.15)]">
-    <div class="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-tcf-gold to-transparent z-10"></div>
-    <div class="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-tcf-gold to-transparent z-10"></div>
+  <div class="w-full bg-tcf-gold text-tcf-navy-deep py-3 overflow-hidden flex border-y border-tcf-gold/50 relative z-20 shadow-[0_0_30px_rgba(212,168,67,0.15)]">
+    <div class="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-tcf-gold to-transparent z-10 pointer-events-none"></div>
+    <div class="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-tcf-gold to-transparent z-10 pointer-events-none"></div>
     
     <!-- We create two identical tracks for seamless infinite scroll -->
-    <div class="flex whitespace-nowrap animate-marquee items-center font-black text-xs uppercase tracking-[0.2em]">
+    <div class="flex whitespace-nowrap animate-marquee items-center font-black text-xs md:text-sm uppercase tracking-[0.2em]">
       {RECENT_TICKER.map(item => (
-        <span class="mx-8 flex items-center gap-3">
-          <span class="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>
-          {item}
+        <span class="mx-12 flex items-center gap-3">
+          {item.type === 'glitch' ? (
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="animate-pulse"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 22h20"/><path d="M6.36 17.4 4 17l-2-4 1.1-.55L5.05 15l4.44.75L10.5 11l4.44.75L14.5 17h1l5.5-5.5L22 13l-4 4 2 4h-1.5l-2.5-4-3.5-1.5h-2L6.36 17.4z"/></svg>
+          )}
+          {item.text}
         </span>
       ))}
     </div>
-    <div class="flex whitespace-nowrap animate-marquee items-center font-black text-xs uppercase tracking-[0.2em] absolute top-2.5" style="animation-delay: -15s;">
+    <div class="flex whitespace-nowrap animate-marquee items-center font-black text-xs md:text-sm uppercase tracking-[0.2em] absolute top-3" style="animation-delay: -45s;">
       {RECENT_TICKER.map(item => (
-        <span class="mx-8 flex items-center gap-3">
-          <span class="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>
-          {item}
+        <span class="mx-12 flex items-center gap-3">
+          {item.type === 'glitch' ? (
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="animate-pulse"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 22h20"/><path d="M6.36 17.4 4 17l-2-4 1.1-.55L5.05 15l4.44.75L10.5 11l4.44.75L14.5 17h1l5.5-5.5L22 13l-4 4 2 4h-1.5l-2.5-4-3.5-1.5h-2L6.36 17.4z"/></svg>
+          )}
+          {item.text}
         </span>
       ))}
     </div>
@@ -550,6 +558,7 @@ const RECENT_TICKER = [
   </section>
 
   <!-- ═══════════════════════════ FEATURED DEALS ═══════════════════════════ -->
+  <!-- Temporarily hidden until Database integration is complete to ensure 100% authenticity
   <section id="featured-deals" class="section-padding relative overflow-hidden bg-black/50">
     <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
     <div class="max-w-7xl mx-auto px-6 relative z-10">
@@ -661,6 +670,7 @@ const RECENT_TICKER = [
       </div>
     </div>
   </section>
+  -->
 
   <!-- ═══════════════════════════ AIRPORTS ═══════════════════════════ -->
   <section class="section-padding bg-deep border-y border-white/5 text-center flex flex-col items-center relative overflow-hidden">
