@@ -140,6 +140,16 @@ const FEATURED_DEALS = [
     icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`
   }
 ];
+
+const RECENT_TICKER = [
+  "🔥 MFE to Orlando: $95 (Scouted 2h ago)",
+  "✈️ SAT to Denver: $148 (Scouted 14h ago)",
+  "🔥 CRP to Grand Canyon: $160 (Scouted 1d ago)",
+  "✈️ AUS to Tokyo: 70k Pts (Scouted 2d ago)",
+  "🔥 HRL to Cancun: $290 (Scouted 3d ago)",
+  "✈️ DFW to London: $450 (Scouted 4d ago)",
+  "🔥 LRD to Vegas: $118 (Scouted 1w ago)",
+];
 ---
 
 <!DOCTYPE html>
@@ -327,6 +337,30 @@ const FEATURED_DEALS = [
       </div>
     </div>
   </section>
+
+  <!-- ═══════════════════════════ LIVE TICKER (FOMO) ═══════════════════════════ -->
+  <div class="w-full bg-tcf-gold text-tcf-navy-deep py-2.5 overflow-hidden flex border-y border-tcf-gold/50 relative z-20 shadow-[0_0_30px_rgba(212,168,67,0.15)]">
+    <div class="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-tcf-gold to-transparent z-10"></div>
+    <div class="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-tcf-gold to-transparent z-10"></div>
+    
+    <!-- We create two identical tracks for seamless infinite scroll -->
+    <div class="flex whitespace-nowrap animate-marquee items-center font-black text-xs uppercase tracking-[0.2em]">
+      {RECENT_TICKER.map(item => (
+        <span class="mx-8 flex items-center gap-3">
+          <span class="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>
+          {item}
+        </span>
+      ))}
+    </div>
+    <div class="flex whitespace-nowrap animate-marquee items-center font-black text-xs uppercase tracking-[0.2em] absolute top-2.5" style="animation-delay: -15s;">
+      {RECENT_TICKER.map(item => (
+        <span class="mx-8 flex items-center gap-3">
+          <span class="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>
+          {item}
+        </span>
+      ))}
+    </div>
+  </div>
 
   <!-- ═══════════════════════════ INOCULATION (SKEPTIC CHECK) ═══════════════════════════ -->
   <section class="section-padding relative overflow-hidden flex flex-col items-center">
