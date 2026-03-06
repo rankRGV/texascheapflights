@@ -50,7 +50,12 @@ export async function parseEmailToDeal(emailSubject: string, emailBody: string):
 
         const prompt = `${SYSTEM_PROMPT}\n\nEmail Subject: ${emailSubject}\n\nEmail Body:\n${emailBody}`;
 
-        const result = await model.generateContent(prompt);
+        // Wrap in a 20s timeout to prevent Vercel function hangs if Google API is slow
+        const timeoutPromise = new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error('Gemini API timeout after 20s')), 20000)
+        );
+
+        const result = await Promise.race([model.generateContent(prompt), timeoutPromise]);
         const response = await result.response;
         let text = response.text();
 

@@ -4,8 +4,8 @@ import { parseEmailToDeal, type ParsedDeal } from './gemini';
 export async function processDeal(title: string, content: string, source: string) {
   console.log(`🤖 Processing deal from ${source}: ${title}`);
 
-  // 1. Handle "System" emails (Gmail Confirmation, Webhook Tests, etc.)
-  const isSystemEmail = /confirm|verify|verification|code|password|welcome|resend/i.test(title + content);
+  // Only match against title — narrow word-boundary check to avoid false positives on real deals
+  const isSystemEmail = /\b(confirm your|verify your|verification code|reset password|welcome to|sent by resend|webhook test)\b/i.test(title);
   const isNoise = /unsubscribe|privacy policy|terms of service/i.test(title) && content.length < 500;
 
   if (isSystemEmail) {

@@ -27,23 +27,32 @@ export const GET: APIRoute = async ({ request }) => {
 
     console.log("🕒 Starting RSS Poll...");
 
-    for (const feedUrl of FEEDS) {
-        try {
+    // Fetch all feeds in parallel instead of sequentially for faster runs
+    const feedResults = await Promise.allSettled(
+        FEEDS.map(async (feedUrl) => {
             console.log(`📡 Fetching: ${feedUrl}`);
             const feed = await parser.parseURL(feedUrl);
+            return { feed, feedUrl };
+        })
+    );
 
-            for (const item of feed.items) {
-                const pubDate = item.pubDate ? new Date(item.pubDate).getTime() : 0;
+    for (const result of feedResults) {
+        if (result.status === 'rejected') {
+            console.error(`❌ Failed to poll feed:`, result.reason);
+            continue;
+        }
 
-                // Only process items from the last 15 hours
-                if (pubDate > FIFTEEN_HOURS_AGO) {
-                    console.log(`   ✨ New RSS Item: ${item.title}`);
-                    const res = await processDeal(item.title || "No Title", item.content || item.contentSnippet || "", `RSS: ${feed.title}`);
-                    results.push({ title: item.title, status: res });
-                }
+        const { feed } = result.value;
+
+        for (const item of feed.items) {
+            const pubDate = item.pubDate ? new Date(item.pubDate).getTime() : 0;
+
+            // Only process items from the last 15 hours
+            if (pubDate > FIFTEEN_HOURS_AGO) {
+                console.log(`   ✨ New RSS Item: ${item.title}`);
+                const res = await processDeal(item.title || "No Title", item.content || item.contentSnippet || "", `RSS: ${feed.title}`);
+                results.push({ title: item.title, status: res });
             }
-        } catch (err) {
-            console.error(`❌ Failed to poll ${feedUrl}:`, err);
         }
     }
 

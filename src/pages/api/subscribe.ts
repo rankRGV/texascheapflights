@@ -18,8 +18,19 @@ export const POST: APIRoute = async ({ request }) => {
     const body = await request.json();
     const { email, airport } = body as { email: string; airport: string };
 
-    if (!email || !airport) {
-      return new Response(JSON.stringify({ error: 'Email and airport are required.' }), {
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      return new Response(JSON.stringify({ error: 'Valid email address is required.' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Allowlist validation - only accept known Texas airport codes
+    const VALID_AIRPORTS = ['MFE', 'HRL', 'BRO', 'LRD', 'CRP', 'SAT', 'AUS', 'IAH', 'HOU', 'DFW', 'DAL', 'ELP', 'LBB', 'AMA', 'MAF', 'GRK', 'TYR', 'GGG', 'ABI'];
+    if (!airport || !VALID_AIRPORTS.includes(airport.toUpperCase())) {
+      return new Response(JSON.stringify({ error: 'Invalid airport code. Please select a Texas airport.' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       });
@@ -162,7 +173,7 @@ function buildWelcomeEmail({ airport }: { airport: string }): string {
             <td style="background:#050a14;border:1px solid rgba(255,255,255,0.05);border-radius:0 0 32px 32px;padding:28px 48px;text-align:center;">
               <p style="margin:0 0 8px;color:#334155;font-size:11px;">© 2026 Texas Cheap Flights. No spam, ever.</p>
               <p style="margin:0;color:#334155;font-size:11px;">
-                <a href="#" style="color:#475569;text-decoration:none;">Unsubscribe</a> ·
+                <a href="https://resend.com/unsubscribe" style="color:#475569;text-decoration:none;">Unsubscribe</a> ·
                 <a href="https://texascheapflights.co/skeptics-guide" style="color:#475569;text-decoration:none;">Skeptic's Guide</a>
               </p>
             </td>

@@ -1,0 +1,27 @@
+Fetching: https://serpapi.com/search.json?engine=google_travel_explore&departure_id=MFE&currency=USD&hl=en&api_key=HIDDEN
+Status: 200
+Keys: [ 'search_metadata', 'search_parameters', 'destinations' ]
+DESTINATIONS: 85
+{
+  "destination_id": "/m/0ply0",
+  "name": "Orlando",
+  "country": "United States",
+  "gps_coordinates": {
+    "latitude": 28.5383832,
+    "longitude": -81.3789269
+  },
+  "thumbnail": "https://encrypted-tbn2.gstatic.com/licensed-image?q=tbn:ANd9GcS3xnYk_lGP7Z8SnXNwAITWUnFAzk9EgdltcnifbUZ4YmM98UmHYrvAcE2BdOo4UqiROPXA25uWGlUJbglqLWoptWA76kEGZm09ppMA8A",
+  "destination_airport": {
+    "code": "SFB"
+  },
+  "start_date": "2026-05-17",
+  "end_date": "2026-05-25",
+  "flight_price": 95,
+  "hotel_price": 138,
+  "flight_duration": 152,
+  "number_of_stops": 0,
+  "airline": "Allegiant",
+  "airline_code": "G4",
+  "link": "https://www.google.com/travel/explore?hl=en&gl=us&curr=USD&tfs=CBwQAxoVEgoyMDI2LTA1LTE3agcIARIDTUZFGhUSCjIwMjYtMDUtMjVyBwgBEgNNRkVCAQFIAXABggELCP___________wGYAQGyAQ4qDAgDEggvbS8wcGx5MA",
+  "serpapi_link": "https://serpapi.com/search.json?arrival_id=%2Fm%2F0ply0&currency=USD&departure_id=MFE&engine=google_travel_explore&gl=us&hl=en&outbound_date=2026-05-17&return_date=2026-05-25"
+}

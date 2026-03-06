@@ -66,6 +66,9 @@ export const POST: APIRoute = async ({ request }) => {
         finalContent = `Metadata Only Found: ${JSON.stringify(payload.data)}`;
       }
 
+      // Strip HTML tags before sending to Gemini — prevents prompt injection via malicious HTML emails
+      finalContent = finalContent.replace(/<[^>]*>/g, ' ').replace(/&[a-z]+;/gi, ' ').replace(/\s+/g, ' ').trim();
+
       // 4. Process the deal using our shared engine
       await processDeal(emailSubject, finalContent, 'Email/Resend');
 
