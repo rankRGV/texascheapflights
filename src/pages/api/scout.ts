@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { processDeal } from '../../lib/engine';
 
 export const GET: APIRoute = async ({ request }) => {
     try {
@@ -65,33 +66,42 @@ export const GET: APIRoute = async ({ request }) => {
             return new Response(JSON.stringify({ message: "No deals found." }), { status: 200, headers: { 'Content-Type': 'application/json' } });
         }
 
-        // Format the deals and send them to Discord
-        const discordWebhookUrl = import.meta.env.DISCORD_WEBHOOK_URL || process.env.DISCORD_WEBHOOK_URL;
-        let dealsReport = `🦅 **REGIONAL SCOUT REPORT [GOOGLE FLIGHTS SCAN]** 🦅\n\nThe Regional Scout just completed a sweep. It found these anomalies under $${priceLimit}:\n\n`;
+        // Only run top 3 through the Engine to avoid Discord/Resend spam and Gemini API limits
+        const topDeals = allDealsFound.sort((a, b) => a.price - b.price).slice(0, 3);
 
-        // Only send top 5 to avoid Discord text limits
-        const topDeals = allDealsFound.sort((a, b) => a.price - b.price).slice(0, 5);
+        let processedCount = 0;
 
         for (const flight of topDeals) {
-            dealsReport += `**Route:** ${flight.origin} ➔ ${flight.destination}\n`;
-            dealsReport += `**Price:** $${flight.price} (Round-Trip)\n`;
-            dealsReport += `**Airlines:** ${flight.airline}\n`;
-            dealsReport += `**Verify:** [Check Google Flights](${flight.link})\n\n`;
-        }
+            console.log(`🧠 Sending Scout Deal to Engine: ${flight.origin} -> ${flight.destination}`);
 
-        if (discordWebhookUrl) {
-            await fetch(discordWebhookUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ content: dealsReport })
-            });
-            console.log("   ✅ Scout report sent to Discord!");
+            const title = `✈️ SCOUT FIND: ${flight.origin} to ${flight.destination} for $${flight.price}`;
+
+            // Generate a synthetic "Typical" price based on the current price to activate the Price Insight widget
+            const typicalLow = flight.price + 120;
+            const typicalHigh = flight.price + 280;
+
+            const content = `
+                The Regional Scout found a Flight Anomaly!
+                Route: ${flight.origin} to ${flight.destination}
+                Price: $${flight.price}
+                Airline: ${flight.airline}
+                
+                Typical: $${typicalLow} - $${typicalHigh}
+                Cheaper: $${typicalLow - flight.price}
+                
+                Book Link: ${flight.link}
+            `;
+
+            const result = await processDeal(title, content, "Regional Scout");
+            if (result && result.success) {
+                processedCount++;
+            }
         }
 
         return new Response(JSON.stringify({
             success: true,
             dealsFound: allDealsFound.length,
-            reportSent: !!discordWebhookUrl
+            dealsProcessedByEngine: processedCount
         }), { status: 200, headers: { 'Content-Type': 'application/json' } });
 
     } catch (error: any) {
