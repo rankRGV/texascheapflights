@@ -29,3 +29,8 @@ Thumbs.db
 
 # Gemini / AI agent internals (not for the repo)
 .gemini/
+
+out.txt
+test-price-insights.js
+test-trigger-email.js
+*.log
