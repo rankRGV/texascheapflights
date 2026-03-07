@@ -75,6 +75,14 @@ const OBJECTIONS = [
         </div>
         <span class="font-black text-lg uppercase tracking-tight text-white">Texas Cheap Flights</span>
       </a>
+      <div class="hidden lg:flex items-center gap-8">
+        {[
+          { label: "The Strategy", href: '/#how-it-works' },
+          { label: "Past Deals", href: '/past-deals' },
+        ].map(link => (
+          <a href={link.href} class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-white transition-colors no-underline">{link.label}</a>
+        ))}
+      </div>
       <a href="/#waitlist" class="btn-primary" style="padding: 0.75rem 1.5rem; font-size: 0.875rem;">
         Join the Waitlist
       </a>
@@ -166,12 +174,18 @@ const OBJECTIONS = [
           <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tcf-gold)_0%,_transparent_20%)] opacity-10"></div>
           <h2 class="text-4xl md:text-5xl font-black text-white mb-8">The Texas Sweet Spot Nobody Talks About</h2>
           <p class="text-xl text-slate-400 max-w-2xl mx-auto mb-8 font-body">
-            Being landlocked in the middle of the country sounds like a disadvantage. It isn't. Award programs price routes by zone — not by how close you are to a hub. Texas regional flyers get access to the same international sweet spots as DFW, at the same point cost, with less competition for seats. We track every one of these windows from <span class="text-gold font-bold">MFE, LRD, BRO, and CRP</span>.
+            Being landlocked in the middle of the country sounds like a disadvantage. It isn't. Award programs price routes by zone — not by how close you are to a hub. Texas regional flyers get access to the same international sweet spots as DFW, at the same point cost, with less competition for seats. We track every one of these windows from <span class="text-tcf-gold font-bold">MFE, LRD, BRO, and CRP</span>.
           </p>
-          <p class="text-lg text-white font-bold mb-6">You're already in. We'll reach out the moment one of these opens from your airport.</p>
-          <a href="/welcome" class="text-gold text-sm font-black uppercase tracking-widest hover:text-white transition-colors">
-            ← Back to your dashboard
-          </a>
+          <p class="text-lg text-white font-bold mb-10">Still not convinced? See every deal we've actually found and sent — real routes, real prices, no cherry-picking.</p>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="/past-deals" class="btn-primary px-8 py-4 inline-flex items-center gap-2 no-underline">
+              See Real Past Deals
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+            <a href="/#waitlist" class="text-tcf-gold font-bold text-sm hover:text-white transition-colors no-underline">
+              Or join the waitlist →
+            </a>
+          </div>
         </div>
       </section>
     </div>

@@ -64,17 +64,38 @@ function getDealTypeLabel(type: string, score: number) {
 <body class="bg-tcf-navy-deep text-white min-h-screen">
 
   <!-- ══ NAV ══ -->
-  <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between border-b border-white/5" style="background: rgba(5, 10, 20, 0.85); backdrop-filter: blur(16px);">
-    <a href="/" class="flex items-center gap-3 no-underline">
-      <div class="w-8 h-8 rounded-lg bg-tcf-gold flex items-center justify-center">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#050a14" stroke="#050a14" stroke-width="2"><path d="M2 22h20"/><path d="M6.36 17.4 4 17l-2-4 1.1-.55L5.05 15l4.44.75L10.5 11l4.44.75L14.5 17h1l5.5-5.5L22 13l-4 4 2 4h-1.5l-2.5-4-3.5-1.5h-2L6.36 17.4z"/></svg>
+  <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-5 transition-all duration-300 border-b border-white/5" style="background: rgba(5, 10, 20, 0.85); backdrop-filter: blur(16px);">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-3 no-underline group">
+        <div class="p-2 rounded-xl bg-tcf-aviation-blue/10 border border-tcf-aviation-blue/20 transition-all duration-300 group-hover:scale-110">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-tcf-aviation-blue"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+        </div>
+        <div class="flex flex-col leading-none">
+          <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-tcf-gold mb-0.5">Texas</span>
+          <span class="font-black text-lg uppercase tracking-tight text-white">Cheap Flights</span>
+        </div>
+      </a>
+
+      <!-- Nav Links -->
+      <div class="hidden lg:flex items-center gap-10">
+        {[
+          { label: 'Home', href: '/' },
+          { label: 'The Strategy', href: '/#how-it-works' },
+          { label: "Skeptic's Guide", href: '/skeptics-guide' },
+          { label: 'Past Deals', href: '/past-deals', active: true },
+        ].map(link => (
+          <a href={link.href} class={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors no-underline ${'active' in link && link.active ? 'text-tcf-gold border-b border-tcf-gold/50 pb-0.5' : 'text-slate-400 hover:text-white'}`}>
+            {link.label}
+          </a>
+        ))}
       </div>
-      <span class="font-black tracking-widest text-sm uppercase text-white">Texas Cheap Flights</span>
-    </a>
-    <a href="/" class="text-sm text-slate-400 hover:text-white transition-colors no-underline flex items-center gap-2">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-      Back to Home
-    </a>
+
+      <!-- CTA -->
+      <a href="/#waitlist" class="btn-primary" style="padding: 0.75rem 1.75rem; font-size: 0.875rem;">
+        Get Early Access
+      </a>
+    </div>
   </nav>
 
   <!-- ══ HERO ══ -->
