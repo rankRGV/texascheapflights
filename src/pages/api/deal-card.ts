@@ -4,6 +4,14 @@ import { ImageResponse } from '@vercel/og';
 export const GET: APIRoute = async ({ url }) => {
     const p = url.searchParams;
 
+    // Security check: Must supply the correct key to generate an image
+    // Pass ?key=YOUR_KEY in the URL.
+    const providedKey = p.get('key');
+    const requiredKey = import.meta.env.DEAL_CARD_SECRET || import.meta.env.ADMIN_PASSWORD;
+    if (!providedKey || providedKey !== requiredKey) {
+        return new Response('Unauthorized: Invalid or missing deal card API key.', { status: 401 });
+    }
+
     // Deal data from query params
     const origin = p.get('origin') ?? 'MFE';
     const destination = p.get('destination') ?? 'CUN';
