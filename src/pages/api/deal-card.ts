@@ -4,32 +4,46 @@ import { ImageResponse } from '@vercel/og';
 export const GET: APIRoute = async ({ url }) => {
     const p = url.searchParams;
 
-    // Deal data from query params (so the engine can call this URL)
+    // Deal data from query params
     const origin = p.get('origin') ?? 'MFE';
     const destination = p.get('destination') ?? 'CUN';
-    const price = p.get('price') ?? null;       // e.g. "299"
-    const points = p.get('points') ?? null;       // e.g. "35000"
+    const price = p.get('price') ?? null;
+    const points = p.get('points') ?? null;
     const airline = p.get('airline') ?? '';
-    const dealType = p.get('type') ?? 'sale';     // 'error_fare' | 'sweetspot' | 'sale'
-    const savings = p.get('savings') ?? null;       // e.g. "61" (percent off)
+    const dealType = p.get('type') ?? 'sale';
+    const savings = p.get('savings') ?? null;
     const dates = p.get('dates') ?? '';
+    const theme = p.get('theme') ?? 'dark'; // 'dark' | 'light' | 'brand'
 
-    // ── Computed display values ──────────────────────────────────────────────
-    const priceDisplay = price
-        ? `$${price}`
-        : points
-            ? `${Number(points).toLocaleString()} pts`
-            : 'Deal Alert';
+    // ── Theme configuration ───────────────────────────────────────────────
+    const isLight = theme === 'light';
+    const isBrand = theme === 'brand';
+
+    const bgGradient =
+        isBrand ? 'linear-gradient(135deg, #d97706 0%, #f5c842 100%)' // Gold gradient
+            : isLight ? 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)' // Light slate
+                : 'linear-gradient(135deg, #050a14 0%, #0a1628 50%, #050a14 100%)'; // Dark navy
+
+    const gridColor = isLight ? 'rgba(0,0,0,0.05)' : isBrand ? 'rgba(255,255,255,0.1)' : 'rgba(245,200,66,0.04)';
+    const textColorPrimary = isLight ? '#0f172a' : isBrand ? '#050a14' : 'white';
+    const textColorSecondary = isLight ? '#64748b' : isBrand ? '#050a1499' : '#64748b';
+    const textColorTertiary = isLight ? '#94a3b8' : isBrand ? '#050a1477' : '#94a3b8';
 
     const dealLabel =
         dealType === 'error_fare' ? '⚡ ERROR FARE'
             : dealType === 'sweetspot' ? '🎯 SWEET SPOT'
                 : '✈ DEAL ALERT';
 
-    const dealColor =
-        dealType === 'error_fare' ? '#ef4444'
-            : dealType === 'sweetspot' ? '#38bdf8'
-                : '#f5c842';
+    // Accent color base (modified slightly by theme for contrast)
+    let dealColor =
+        dealType === 'error_fare' ? '#ef4444' // Red
+            : dealType === 'sweetspot' ? (isLight ? '#0284c7' : '#38bdf8') // Blue
+                : (isLight ? '#d97706' : '#f5c842'); // Gold
+
+    // On the brand theme (gold bg), red stays red, blue stays blue, but gold deal becomes white/black
+    if (isBrand && dealType === 'sale') dealColor = '#050a14';
+
+    const priceDisplay = price ? `$${price}` : points ? `${Number(points).toLocaleString()} pts` : 'Alert';
 
     // ── Card layout (1200×630) ───────────────────────────────────────────────
     return new ImageResponse(
@@ -39,7 +53,7 @@ export const GET: APIRoute = async ({ url }) => {
                 style: {
                     width: '1200px',
                     height: '630px',
-                    background: 'linear-gradient(135deg, #050a14 0%, #0a1628 50%, #050a14 100%)',
+                    background: bgGradient,
                     display: 'flex',
                     flexDirection: 'column',
                     fontFamily: 'Inter, sans-serif',
@@ -54,14 +68,14 @@ export const GET: APIRoute = async ({ url }) => {
                         props: {
                             style: {
                                 position: 'absolute', inset: 0,
-                                backgroundImage: 'linear-gradient(rgba(245,200,66,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(245,200,66,0.04) 1px, transparent 1px)',
+                                backgroundImage: `linear-gradient(${gridColor} 1px, transparent 1px), linear-gradient(90deg, ${gridColor} 1px, transparent 1px)`,
                                 backgroundSize: '60px 60px',
                             },
                         },
                     },
 
-                    // ── Ambient glow ──
-                    {
+                    // ── Ambient glow (disabled on light/brand for cleaner look) ──
+                    ...(!isLight && !isBrand ? [{
                         type: 'div',
                         props: {
                             style: {
@@ -71,7 +85,7 @@ export const GET: APIRoute = async ({ url }) => {
                                 borderRadius: '50%',
                             },
                         },
-                    },
+                    }] : []),
 
                     // ── Deal type badge ──
                     {
@@ -86,13 +100,13 @@ export const GET: APIRoute = async ({ url }) => {
                                     type: 'div',
                                     props: {
                                         style: {
-                                            background: `${dealColor}22`,
-                                            border: `1.5px solid ${dealColor}66`,
+                                            background: isBrand ? 'rgba(255,255,255,0.2)' : isLight ? `${dealColor}11` : `${dealColor}22`,
+                                            border: `1.5px solid ${isBrand ? 'rgba(255,255,255,0.4)' : dealColor}66`,
                                             borderRadius: '12px',
                                             padding: '8px 18px',
                                             fontSize: '18px',
                                             fontWeight: 800,
-                                            color: dealColor,
+                                            color: isBrand ? '#050a14' : dealColor,
                                             letterSpacing: '0.12em',
                                             textTransform: 'uppercase',
                                             display: 'flex',
@@ -104,13 +118,13 @@ export const GET: APIRoute = async ({ url }) => {
                                     type: 'div',
                                     props: {
                                         style: {
-                                            background: '#10b98122',
-                                            border: '1.5px solid #10b98166',
+                                            background: isBrand ? 'rgba(255,255,255,0.2)' : isLight ? '#10b98111' : '#10b98122',
+                                            border: `1.5px solid ${isBrand ? 'rgba(255,255,255,0.4)' : '#10b98166'}`,
                                             borderRadius: '12px',
                                             padding: '8px 18px',
                                             fontSize: '18px',
                                             fontWeight: 800,
-                                            color: '#10b981',
+                                            color: isBrand ? '#050a14' : '#10b981',
                                             letterSpacing: '0.1em',
                                             display: 'flex',
                                         },
@@ -133,14 +147,14 @@ export const GET: APIRoute = async ({ url }) => {
                                 {
                                     type: 'div',
                                     props: {
-                                        style: { fontSize: '13px', fontWeight: 800, color: '#f5c842', letterSpacing: '0.3em', textTransform: 'uppercase', display: 'flex' },
+                                        style: { fontSize: '13px', fontWeight: 800, color: isBrand ? '#050a14' : (isLight ? '#d97706' : '#f5c842'), letterSpacing: '0.3em', textTransform: 'uppercase', display: 'flex' },
                                         children: 'Texas',
                                     },
                                 },
                                 {
                                     type: 'div',
                                     props: {
-                                        style: { fontSize: '20px', fontWeight: 900, color: 'white', letterSpacing: '0.05em', textTransform: 'uppercase', display: 'flex' },
+                                        style: { fontSize: '20px', fontWeight: 900, color: textColorPrimary, letterSpacing: '0.05em', textTransform: 'uppercase', display: 'flex' },
                                         children: 'Cheap Flights',
                                     },
                                 },
@@ -167,14 +181,14 @@ export const GET: APIRoute = async ({ url }) => {
                                             {
                                                 type: 'div',
                                                 props: {
-                                                    style: { fontSize: '100px', fontWeight: 900, color: 'white', letterSpacing: '-0.02em', lineHeight: 1, display: 'flex' },
+                                                    style: { fontSize: '100px', fontWeight: 900, color: textColorPrimary, letterSpacing: '-0.02em', lineHeight: 1, display: 'flex' },
                                                     children: origin,
                                                 },
                                             },
                                             {
                                                 type: 'div',
                                                 props: {
-                                                    style: { fontSize: '18px', color: '#64748b', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', display: 'flex', marginTop: '4px' },
+                                                    style: { fontSize: '18px', color: textColorSecondary, fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', display: 'flex', marginTop: '4px' },
                                                     children: 'From',
                                                 },
                                             },
@@ -193,13 +207,13 @@ export const GET: APIRoute = async ({ url }) => {
                                             {
                                                 type: 'div',
                                                 props: {
-                                                    style: { width: '120px', height: '2px', background: `linear-gradient(90deg, transparent, ${dealColor}, transparent)`, display: 'flex' },
+                                                    style: { width: '120px', height: '2px', background: `linear-gradient(90deg, transparent, ${isBrand ? '#050a14' : dealColor}, transparent)`, display: 'flex' },
                                                 },
                                             },
                                             {
                                                 type: 'div',
                                                 props: {
-                                                    style: { fontSize: '32px', display: 'flex' },
+                                                    style: { fontSize: '32px', color: textColorPrimary, display: 'flex' },
                                                     children: '✈',
                                                 },
                                             },
@@ -216,14 +230,14 @@ export const GET: APIRoute = async ({ url }) => {
                                             {
                                                 type: 'div',
                                                 props: {
-                                                    style: { fontSize: '100px', fontWeight: 900, color: 'white', letterSpacing: '-0.02em', lineHeight: 1, display: 'flex' },
+                                                    style: { fontSize: '100px', fontWeight: 900, color: textColorPrimary, letterSpacing: '-0.02em', lineHeight: 1, display: 'flex' },
                                                     children: destination,
                                                 },
                                             },
                                             {
                                                 type: 'div',
                                                 props: {
-                                                    style: { fontSize: '18px', color: '#64748b', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', display: 'flex', marginTop: '4px' },
+                                                    style: { fontSize: '18px', color: textColorSecondary, fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', display: 'flex', marginTop: '4px' },
                                                     children: 'To',
                                                 },
                                             },
@@ -253,7 +267,7 @@ export const GET: APIRoute = async ({ url }) => {
                                 ...(price ? [{
                                     type: 'div',
                                     props: {
-                                        style: { fontSize: '24px', color: '#64748b', fontWeight: 600, display: 'flex', paddingBottom: '12px' },
+                                        style: { fontSize: '24px', color: textColorSecondary, fontWeight: 600, display: 'flex', paddingBottom: '12px' },
                                         children: 'roundtrip',
                                     },
                                 }] : []),
@@ -273,20 +287,20 @@ export const GET: APIRoute = async ({ url }) => {
                                 ...(airline ? [{
                                     type: 'div',
                                     props: {
-                                        style: { fontSize: '20px', color: '#94a3b8', fontWeight: 600, display: 'flex' },
+                                        style: { fontSize: '20px', color: textColorTertiary, fontWeight: 600, display: 'flex' },
                                         children: airline,
                                     },
                                 }] : []),
                                 ...(airline && dates ? [{
                                     type: 'div',
                                     props: {
-                                        style: { width: '4px', height: '4px', borderRadius: '50%', background: '#475569', display: 'flex' },
+                                        style: { width: '4px', height: '4px', borderRadius: '50%', background: textColorTertiary, display: 'flex' },
                                     },
                                 }] : []),
                                 ...(dates ? [{
                                     type: 'div',
                                     props: {
-                                        style: { fontSize: '20px', color: '#94a3b8', fontWeight: 600, display: 'flex' },
+                                        style: { fontSize: '20px', color: textColorTertiary, fontWeight: 600, display: 'flex' },
                                         children: dates,
                                     },
                                 }] : []),
@@ -300,7 +314,7 @@ export const GET: APIRoute = async ({ url }) => {
                         props: {
                             style: {
                                 position: 'absolute', bottom: '48px', right: '60px',
-                                background: dealColor,
+                                background: isBrand ? '#050a14' : dealColor,
                                 borderRadius: '16px',
                                 padding: '16px 36px',
                                 display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px',
@@ -309,14 +323,14 @@ export const GET: APIRoute = async ({ url }) => {
                                 {
                                     type: 'div',
                                     props: {
-                                        style: { fontSize: '18px', fontWeight: 900, color: '#050a14', letterSpacing: '0.08em', textTransform: 'uppercase', display: 'flex' },
+                                        style: { fontSize: '18px', fontWeight: 900, color: isBrand ? '#f5c842' : (isLight ? 'white' : '#050a14'), letterSpacing: '0.08em', textTransform: 'uppercase', display: 'flex' },
                                         children: 'Get the Next Deal',
                                     },
                                 },
                                 {
                                     type: 'div',
                                     props: {
-                                        style: { fontSize: '14px', fontWeight: 600, color: '#050a1499', display: 'flex' },
+                                        style: { fontSize: '14px', fontWeight: 600, color: isBrand ? '#ffffff99' : (isLight ? 'rgba(255,255,255,0.8)' : '#050a1499'), display: 'flex' },
                                         children: 'texascheapflights.com',
                                     },
                                 },

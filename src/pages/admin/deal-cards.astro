@@ -5,10 +5,10 @@ import GlobalNav from '../../components/GlobalNav.astro';
 
 // Sample deals to preview different card styles
 const samples = [
-  { origin: 'MFE', destination: 'CUN', price: '299', airline: 'United', type: 'error_fare', savings: '72', dates: 'Apr–May 2026' },
-  { origin: 'HRL', destination: 'JFK', price: '187', airline: 'American', type: 'sale', savings: '54', dates: 'Mar–Jun 2026' },
-  { origin: 'LRD', destination: 'CDG', points: '35000', airline: 'Air France', type: 'sweetspot', dates: 'May 2026' },
-  { origin: 'BRO', destination: 'LAX', price: '149', airline: 'Spirit', type: 'sale', savings: '38', dates: 'Flexible' },
+  { origin: 'MFE', destination: 'CUN', price: '299', airline: 'United', type: 'error_fare', savings: '72', dates: 'Apr–May 2026', theme: 'dark' },
+  { origin: 'HRL', destination: 'JFK', price: '187', airline: 'American', type: 'sale', savings: '54', dates: 'Mar–Jun 2026', theme: 'brand' },
+  { origin: 'LRD', destination: 'CDG', points: '35000', airline: 'Air France', type: 'sweetspot', dates: 'May 2026', theme: 'light' },
+  { origin: 'BRO', destination: 'LAX', price: '149', airline: 'Spirit', type: 'sale', savings: '38', dates: 'Flexible', theme: 'dark' },
 ];
 ---
 
@@ -82,7 +82,15 @@ const samples = [
               <option value="sale" selected class="bg-slate-800 text-white">Sale</option>
             </select>
           </div>
-          <div class="col-span-2 md:col-span-3">
+          <div class="md:col-span-1">
+            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Theme</label>
+            <select id="c-theme" class="w-full bg-white/10 border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-tcf-gold/50">
+              <option value="dark" selected class="bg-slate-800 text-white">Dark (Navy)</option>
+              <option value="light" class="bg-slate-800 text-white">Light (Slate)</option>
+              <option value="brand" class="bg-slate-800 text-white">Brand (Gold)</option>
+            </select>
+          </div>
+          <div class="col-span-2 md:col-span-2">
             <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Travel Dates</label>
             <input id="c-dates" type="text" value="Apr–May 2026" class="w-full bg-white/10 border border-white/10 rounded-xl px-3 py-2 text-white text-lg focus:outline-none focus:border-tcf-gold/50" />
           </div>
@@ -113,7 +121,7 @@ const samples = [
           {samples.map(s => {
             const params = new URLSearchParams({
               origin: s.origin, destination: s.destination, airline: s.airline,
-              type: s.type, dates: s.dates,
+              type: s.type, dates: s.dates, theme: s.theme,
               ...(s.price ? { price: s.price } : {}),
               ...(s.points ? { points: s.points } : {}),
               ...(s.savings ? { savings: s.savings } : {}),
@@ -152,8 +160,9 @@ const samples = [
       const airline  = (document.getElementById('c-airline') as HTMLInputElement).value.trim();
       const savings  = (document.getElementById('c-savings') as HTMLInputElement).value.trim();
       const type     = (document.getElementById('c-type')    as HTMLSelectElement).value;
+      const theme    = (document.getElementById('c-theme')   as HTMLSelectElement).value;
       const dates    = (document.getElementById('c-dates')   as HTMLInputElement).value.trim();
-      const params = new URLSearchParams({ origin, destination: dest, type });
+      const params = new URLSearchParams({ origin, destination: dest, type, theme });
       if (price)   params.set('price',   price);
       if (airline) params.set('airline', airline);
       if (savings) params.set('savings', savings);
