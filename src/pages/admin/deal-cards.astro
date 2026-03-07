@@ -41,7 +41,22 @@ const samples = [
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
           <div>
             <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Origin Airport</label>
-            <input id="c-origin" type="text" value="MFE" maxlength="3" class="w-full bg-white/10 border border-white/10 rounded-xl px-3 py-2 text-white font-black text-lg uppercase focus:outline-none focus:border-tcf-gold/50 tracking-widest" />
+            <select id="c-origin" class="w-full bg-white/10 border border-white/10 rounded-xl px-3 py-2 text-white font-black text-lg uppercase focus:outline-none focus:border-tcf-gold/50 tracking-widest">
+              <option value="AUS" class="bg-slate-800 text-white font-sans text-base tracking-normal normal-case">AUS - Austin</option>
+              <option value="BRO" class="bg-slate-800 text-white font-sans text-base tracking-normal normal-case">BRO - Brownsville</option>
+              <option value="CRP" class="bg-slate-800 text-white font-sans text-base tracking-normal normal-case">CRP - Corpus Christi</option>
+              <option value="DAL" class="bg-slate-800 text-white font-sans text-base tracking-normal normal-case">DAL - Dallas Love Field</option>
+              <option value="DFW" class="bg-slate-800 text-white font-sans text-base tracking-normal normal-case">DFW - Dallas/Fort Worth</option>
+              <option value="ELP" class="bg-slate-800 text-white font-sans text-base tracking-normal normal-case">ELP - El Paso</option>
+              <option value="HOU" class="bg-slate-800 text-white font-sans text-base tracking-normal normal-case">HOU - Houston Hobby</option>
+              <option value="HRL" class="bg-slate-800 text-white font-sans text-base tracking-normal normal-case">HRL - Harlingen</option>
+              <option value="IAH" class="bg-slate-800 text-white font-sans text-base tracking-normal normal-case">IAH - Houston Bush</option>
+              <option value="LBB" class="bg-slate-800 text-white font-sans text-base tracking-normal normal-case">LBB - Lubbock</option>
+              <option value="LRD" class="bg-slate-800 text-white font-sans text-base tracking-normal normal-case">LRD - Laredo</option>
+              <option value="MAF" class="bg-slate-800 text-white font-sans text-base tracking-normal normal-case">MAF - Midland/Odessa</option>
+              <option value="MFE" selected class="bg-slate-800 text-white font-sans text-base tracking-normal normal-case">MFE - McAllen</option>
+              <option value="SAT" class="bg-slate-800 text-white font-sans text-base tracking-normal normal-case">SAT - San Antonio</option>
+            </select>
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Destination</label>
@@ -62,9 +77,9 @@ const samples = [
           <div>
             <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Deal Type</label>
             <select id="c-type" class="w-full bg-white/10 border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-tcf-gold/50">
-              <option value="error_fare">Error Fare</option>
-              <option value="sweetspot">Sweet Spot</option>
-              <option value="sale" selected>Sale</option>
+              <option value="error_fare" class="bg-slate-800 text-white">Error Fare</option>
+              <option value="sweetspot" class="bg-slate-800 text-white">Sweet Spot</option>
+              <option value="sale" selected class="bg-slate-800 text-white">Sale</option>
             </select>
           </div>
           <div class="col-span-2 md:col-span-3">
