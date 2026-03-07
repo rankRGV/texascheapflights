@@ -1,0 +1,167 @@
+---
+export const prerender = true;
+import '../../styles/global.css';
+import GlobalNav from '../../components/GlobalNav.astro';
+
+// Sample deals to preview different card styles
+const samples = [
+  { origin: 'MFE', destination: 'CUN', price: '299', airline: 'United', type: 'error_fare', savings: '72', dates: 'Apr–May 2026' },
+  { origin: 'HRL', destination: 'JFK', price: '187', airline: 'American', type: 'sale', savings: '54', dates: 'Mar–Jun 2026' },
+  { origin: 'LRD', destination: 'CDG', points: '35000', airline: 'Air France', type: 'sweetspot', dates: 'May 2026' },
+  { origin: 'BRO', destination: 'LAX', price: '149', airline: 'Spirit', type: 'sale', savings: '38', dates: 'Flexible' },
+];
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deal Card Preview — TCF Admin</title>
+  <meta name="robots" content="noindex, nofollow" />
+</head>
+<body class="bg-tcf-navy-deep text-white min-h-screen">
+
+  <GlobalNav activePage="admin" />
+
+  <main class="pt-32 pb-20 px-6">
+    <div class="max-w-5xl mx-auto">
+
+      <div class="mb-12">
+        <div class="flex items-center gap-3 mb-2">
+          <a href="/admin" class="text-slate-500 hover:text-white transition-colors no-underline text-xs font-bold uppercase tracking-wider">← Admin</a>
+        </div>
+        <h1 class="text-4xl font-black text-white mb-3">Deal Card Generator</h1>
+        <p class="text-slate-400 text-lg">Each card is a 1200×630 PNG — ready for Twitter &amp; Facebook. Right-click → Save image.</p>
+      </div>
+
+      <!-- Custom Card Builder -->
+      <div class="mb-16 p-8 rounded-3xl border border-white/10 bg-white/5">
+        <h2 class="text-lg font-black text-white uppercase tracking-widest mb-6">Build a Custom Card</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+          <div>
+            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Origin Airport</label>
+            <input id="c-origin" type="text" value="MFE" maxlength="3" class="w-full bg-white/10 border border-white/10 rounded-xl px-3 py-2 text-white font-black text-lg uppercase focus:outline-none focus:border-tcf-gold/50 tracking-widest" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Destination</label>
+            <input id="c-dest" type="text" value="CUN" maxlength="3" class="w-full bg-white/10 border border-white/10 rounded-xl px-3 py-2 text-white font-black text-lg uppercase focus:outline-none focus:border-tcf-gold/50 tracking-widest" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Price ($)</label>
+            <input id="c-price" type="text" value="299" class="w-full bg-white/10 border border-white/10 rounded-xl px-3 py-2 text-white text-lg focus:outline-none focus:border-tcf-gold/50" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Airline</label>
+            <input id="c-airline" type="text" value="United" class="w-full bg-white/10 border border-white/10 rounded-xl px-3 py-2 text-white text-lg focus:outline-none focus:border-tcf-gold/50" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Savings (%)</label>
+            <input id="c-savings" type="text" value="72" class="w-full bg-white/10 border border-white/10 rounded-xl px-3 py-2 text-white text-lg focus:outline-none focus:border-tcf-gold/50" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Deal Type</label>
+            <select id="c-type" class="w-full bg-white/10 border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-tcf-gold/50">
+              <option value="error_fare">Error Fare</option>
+              <option value="sweetspot">Sweet Spot</option>
+              <option value="sale" selected>Sale</option>
+            </select>
+          </div>
+          <div class="col-span-2 md:col-span-3">
+            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Travel Dates</label>
+            <input id="c-dates" type="text" value="Apr–May 2026" class="w-full bg-white/10 border border-white/10 rounded-xl px-3 py-2 text-white text-lg focus:outline-none focus:border-tcf-gold/50" />
+          </div>
+        </div>
+
+        <!-- Preview -->
+        <div class="mb-6 rounded-2xl overflow-hidden border border-white/10">
+          <img id="preview-img" src="/api/deal-card?origin=MFE&destination=CUN&price=299&airline=United&savings=72&type=error_fare&dates=Apr–May+2026" alt="Deal card preview" class="w-full" />
+        </div>
+
+        <div class="flex gap-3">
+          <button id="update-preview" class="btn-primary px-6 py-3 text-sm font-black uppercase tracking-widest">
+            Update Preview
+          </button>
+          <a id="download-link" href="/api/deal-card?origin=MFE&destination=CUN&price=299&airline=United&savings=72&type=error_fare&dates=Apr–May+2026" download="deal-card.png" class="px-6 py-3 rounded-2xl text-sm font-black uppercase tracking-widest bg-white/10 border border-white/10 text-white hover:bg-white/20 transition-all no-underline">
+              Download PNG
+            </a>
+          <button id="copy-url" class="px-6 py-3 rounded-2xl text-sm font-black uppercase tracking-widest bg-white/10 border border-white/10 text-slate-400 hover:text-white hover:bg-white/20 transition-all">
+            Copy Card URL
+          </button>
+        </div>
+      </div>
+
+      <!-- Sample Cards Grid -->
+      <div>
+        <h2 class="text-lg font-black text-white uppercase tracking-widest mb-6">Sample Cards</h2>
+        <div class="grid gap-8">
+          {samples.map(s => {
+            const params = new URLSearchParams({
+              origin: s.origin, destination: s.destination, airline: s.airline,
+              type: s.type, dates: s.dates,
+              ...(s.price ? { price: s.price } : {}),
+              ...(s.points ? { points: s.points } : {}),
+              ...(s.savings ? { savings: s.savings } : {}),
+            });
+            const cardUrl = `/api/deal-card?${params.toString()}`;
+            return (
+              <div class="rounded-2xl overflow-hidden border border-white/10 bg-white/5">
+                <img src={cardUrl} alt={`${s.origin} to ${s.destination} deal card`} class="w-full" loading="lazy" />
+                <div class="p-4 flex items-center justify-between">
+                  <div>
+                    <p class="font-black text-white">{s.origin} → {s.destination}</p>
+                    <p class="text-xs text-slate-500 font-mono mt-1 break-all">/api/deal-card?{params.toString()}</p>
+                  </div>
+                  <a
+                    href={cardUrl}
+                    download={`tcf-deal-${s.origin}-${s.destination}.png`}
+                    class="shrink-0 ml-4 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider bg-tcf-gold/10 border border-tcf-gold/20 text-tcf-gold hover:bg-tcf-gold/20 transition-all no-underline"
+                  >
+                    Save PNG
+                  </a>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    function buildUrl() {
+      const origin   = (document.getElementById('c-origin')  as HTMLInputElement).value.trim().toUpperCase();
+      const dest     = (document.getElementById('c-dest')    as HTMLInputElement).value.trim().toUpperCase();
+      const price    = (document.getElementById('c-price')   as HTMLInputElement).value.trim();
+      const airline  = (document.getElementById('c-airline') as HTMLInputElement).value.trim();
+      const savings  = (document.getElementById('c-savings') as HTMLInputElement).value.trim();
+      const type     = (document.getElementById('c-type')    as HTMLSelectElement).value;
+      const dates    = (document.getElementById('c-dates')   as HTMLInputElement).value.trim();
+      const params = new URLSearchParams({ origin, destination: dest, type });
+      if (price)   params.set('price',   price);
+      if (airline) params.set('airline', airline);
+      if (savings) params.set('savings', savings);
+      if (dates)   params.set('dates',   dates);
+      return `/api/deal-card?${params.toString()}`;
+    }
+
+    document.getElementById('update-preview')?.addEventListener('click', () => {
+      const url = buildUrl();
+      (document.getElementById('preview-img') as HTMLImageElement).src = url;
+      (document.getElementById('download-link') as HTMLAnchorElement).href = url;
+      (document.getElementById('copy-url') as HTMLButtonElement).dataset.url = url;
+    });
+
+    document.getElementById('copy-url')?.addEventListener('click', (e) => {
+      const fullUrl = window.location.origin + ((e.currentTarget as HTMLElement).dataset.url ?? buildUrl());
+      navigator.clipboard.writeText(fullUrl).then(() => {
+        const btn = e.currentTarget as HTMLButtonElement;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy Card URL', 2000);
+      });
+    });
+  </script>
+
+</body>
+</html>
