@@ -1,5 +1,6 @@
 import { Resend } from 'resend';
 import { parseEmailToDeal, type ParsedDeal } from './gemini';
+import { supabase } from './supabase';
 
 export async function processDeal(title: string, content: string, source: string) {
   console.log(`🤖 Processing deal from ${source}: ${title}`);
@@ -35,24 +36,45 @@ export async function processDeal(title: string, content: string, source: string
     if (!dealData.isTexasOrigin) {
       console.log(`   🚀 Auto-Drop: Deal origin is not Texas. Found: ${dealData.originAirport}`);
       return { success: false, reason: 'Not Texas origin' };
+    }
+
+    // --- SUPABASE GUARD: Blocklist ---
+    const isBlocked = await checkBlocklist(dealData);
+    if (isBlocked) {
+      console.log(`   🚫 BLOCKLIST: Suppressing deal for ${dealData.airline} or ${dealData.destination}`);
+      await logDealToDb(dealData, title, content, source, false, 'Blocked');
+      return { success: false, reason: 'Blocklisted' };
+    }
+
+    // --- SUPABASE GUARD: Fatigue/Duplicate Check ---
+    const isDupe = await checkFatigue(dealData);
+    const isHighPriority = dealData.totalScore >= 9; // Always send unicorns even if dupes
+
+    if (isDupe && !isHighPriority) {
+      console.log(`   💤 FATIGUE: Already sent ${dealData.originAirport} ➔ ${dealData.destination} recently. Skipping.`);
+      await logDealToDb(dealData, title, content, source, false, 'Fatigue/Duplicate');
+      return { success: false, reason: 'Fatigue/Duplicate' };
+    }
+
+    console.log(`   ✅ TEXAS DEAL SPOTTED!`);
+    console.log(`   ✈️ Route: ${dealData.originAirport} ➔ ${dealData.destination} ($${dealData.price} via ${dealData.airline})`);
+    console.log(`   📈 Total Score: ${dealData.totalScore}/10 (${dealData.explanation})`);
+
+    // Force the scout finds to succeed during test sweeps, or use normal scoring
+    const isScoutTest = title.includes("[TEST]") && source === "Regional Scout";
+
+    if (dealData.totalScore >= 7 || isScoutTest) {
+      if (isScoutTest) console.log(`   🚀 Bypassing Score Threshold for Test Scout Deal`);
+      else console.log(`   🎉 HIGH SCORE - SENDING ALERTS...`);
+
+      const sent = await triggerAlerts(dealData, content);
+      await logDealToDb(dealData, title, content, source, sent, sent ? 'Sent' : 'Alert Failed');
+
+      return { success: sent, score: dealData.totalScore };
     } else {
-      console.log(`   ✅ TEXAS DEAL SPOTTED!`);
-      console.log(`   ✈️ Route: ${dealData.originAirport} ➔ ${dealData.destination} ($${dealData.price} via ${dealData.airline})`);
-      console.log(`   📈 Total Score: ${dealData.totalScore}/10 (${dealData.explanation})`);
-
-      // Force the scout finds to succeed during test sweeps, or use normal scoring
-      const isScoutTest = title.includes("[TEST]") && source === "Regional Scout";
-
-      if (dealData.totalScore >= 7 || isScoutTest) {
-        if (isScoutTest) console.log(`   🚀 Bypassing Score Threshold for Test Scout Deal`);
-        else console.log(`   🎉 HIGH SCORE - SENDING ALERTS...`);
-
-        await triggerAlerts(dealData, content);
-        return { success: true, score: dealData.totalScore };
-      } else {
-        console.log(`   📉 SCORE TOO LOW - Skipping alerts.`);
-        return { success: false, reason: 'Score too low' };
-      }
+      console.log(`   📉 SCORE TOO LOW - Skipping alerts.`);
+      await logDealToDb(dealData, title, content, source, false, 'Low Score');
+      return { success: false, reason: 'Score too low' };
     }
   } else {
     // 3. Fallback: Gemini couldn't parse a deal. Could be a human email OR unparseable RSS HTML.
@@ -78,7 +100,79 @@ export async function processDeal(title: string, content: string, source: string
   }
 }
 
-async function triggerAlerts(dealData: ParsedDeal, rawContent?: string) {
+async function checkBlocklist(deal: ParsedDeal): Promise<boolean> {
+  try {
+    const { data } = await supabase
+      .from('blocklist')
+      .select('type, value')
+      .eq('active', true);
+
+    if (!data) return false;
+
+    return data.some(b => {
+      if (b.type === 'airline' && deal.airline.toLowerCase().includes(b.value.toLowerCase())) return true;
+      if (b.type === 'destination' && deal.destination.toLowerCase().includes(b.value.toLowerCase())) return true;
+      if (b.type === 'route' && `${deal.originAirport}-${deal.destination}`.toUpperCase() === b.value.toUpperCase()) return true;
+      return false;
+    });
+  } catch (err) {
+    console.warn("   ⚠️ Blocklist check failed:", err);
+    return false;
+  }
+}
+
+async function checkFatigue(deal: ParsedDeal): Promise<boolean> {
+  try {
+    const SEVEN_DAYS_AGO = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+
+    const { data } = await supabase
+      .from('deals')
+      .select('id')
+      .eq('origin', deal.originAirport)
+      .eq('destination', deal.destination)
+      .not('sent_at', 'is', null)
+      .gt('sent_at', SEVEN_DAYS_AGO)
+      .limit(1);
+
+    return !!(data && data.length > 0);
+  } catch (err) {
+    console.warn("   ⚠️ Fatigue check failed:", err);
+    return false;
+  }
+}
+
+async function logDealToDb(deal: ParsedDeal, title: string, content: string, source: string, wasSent: boolean, status: string) {
+  try {
+    // Extract dates if present in content
+    const datesMatch = content.match(/Dates:\s*([^\n<]+)/i);
+    const travelDates = datesMatch ? datesMatch[1].trim() : null;
+
+    // Extract booking link if present
+    const linkMatch = content.match(/Book Link:\s*(https?:\/\/[^\s<]+)/i);
+    const bookingLink = linkMatch ? linkMatch[1] : `https://www.google.com/travel/flights?q=Flights+to+${encodeURIComponent(deal.destination)}+from+${encodeURIComponent(deal.originAirport)}`;
+
+    const { error } = await supabase.from('deals').insert({
+      origin: deal.originAirport,
+      destination: deal.destination,
+      price: deal.price || null,
+      airline: deal.airline || null,
+      score: deal.totalScore,
+      source: source,
+      raw_title: title,
+      travel_dates: travelDates,
+      booking_link: bookingLink,
+      sent_at: wasSent ? new Date().toISOString() : null,
+      deal_type: deal.totalScore >= 9 ? 'error_fare' : 'sale'
+    });
+
+    if (error) throw error;
+    console.log(`   💾 Deal persisted to Supabase (${status})`);
+  } catch (err) {
+    console.error("   ❌ Failed to log deal to Supabase:", err);
+  }
+}
+
+async function triggerAlerts(dealData: ParsedDeal, rawContent?: string): Promise<boolean> {
   try {
     const resendApiKey = import.meta.env.RESEND_API_KEY || process.env.RESEND_API_KEY;
     const discordWebhookUrl = import.meta.env.DISCORD_WEBHOOK_URL || process.env.DISCORD_WEBHOOK_URL;
@@ -227,7 +321,9 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string) {
       });
       console.log("   ✅ Sent to Discord!");
     }
+    return true;
   } catch (err) {
     console.error("   ❌ Failed to trigger alerts:", err);
+    return false;
   }
 }

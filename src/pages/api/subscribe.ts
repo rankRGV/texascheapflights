@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { Resend } from 'resend';
+import { supabase } from '../../lib/supabase';
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -53,7 +54,23 @@ export const POST: APIRoute = async ({ request }) => {
       }
     }
 
-    // 2. Send welcome email
+    // 2. Sync to Supabase Subscribers Table
+    try {
+      const { error: dbError } = await supabase.from('subscribers').upsert({
+        email: email.toLowerCase(),
+        home_airport: airport.toUpperCase(),
+        active: true,
+        source: 'waitlist'
+      }, { onConflict: 'email' });
+
+      if (dbError) throw dbError;
+      console.log(`Contact synced to Supabase database`);
+    } catch (dbErr: any) {
+      console.error('Supabase subscriber sync failed:', dbErr.message || dbErr);
+      // Non-blocking: we still want to send the email even if DB sync fails
+    }
+
+    // 3. Send welcome email
     try {
       const { data, error } = await resend.emails.send({
         from: 'Texas Cheap Flights <waitlist@texascheapflights.com>',
