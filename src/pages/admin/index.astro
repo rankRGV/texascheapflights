@@ -1,0 +1,414 @@
+---
+import '../styles/global.css';
+import { supabase } from '../../lib/supabase';
+
+// Password check — simple server-side auth header or query param
+// In production, use proper session auth. This is a lightweight guard.
+const ADMIN_PASSWORD = import.meta.env.ADMIN_PASSWORD ?? 'tcf-admin-2026';
+const url = new URL(Astro.request.url);
+const suppliedPw = url.searchParams.get('pw') ?? Astro.cookies.get('tcf_admin')?.value ?? '';
+const isAuthed = suppliedPw === ADMIN_PASSWORD;
+
+// Set cookie if just authenticated
+if (isAuthed && url.searchParams.has('pw')) {
+  Astro.cookies.set('tcf_admin', ADMIN_PASSWORD, { 
+    path: '/', 
+    maxAge: 60 * 60 * 8, // 8 hours
+    httpOnly: true,
+    sameSite: 'strict'
+  });
+}
+
+let deals: any[] = [];
+let subscribers: any[] = [];
+let blocklist: any[] = [];
+let stats = { totalDeals: 0, sentDeals: 0, totalSubscribers: 0, avgScore: 0 };
+
+if (isAuthed) {
+  try {
+    const [dealsRes, subsRes, blockRes] = await Promise.all([
+      supabase.from('deals').select('*').order('created_at', { ascending: false }).limit(50),
+      supabase.from('subscribers').select('id, email, home_airport, active, created_at, source').order('created_at', { ascending: false }).limit(100),
+      supabase.from('blocklist').select('*').order('created_at', { ascending: false }),
+    ]);
+
+    deals = dealsRes.data ?? [];
+    subscribers = subsRes.data ?? [];
+    blocklist = blockRes.data ?? [];
+
+    const sent = deals.filter(d => d.sent_at);
+    const scored = deals.filter(d => d.score);
+    stats = {
+      totalDeals: deals.length,
+      sentDeals: sent.length,
+      totalSubscribers: subscribers.length,
+      avgScore: scored.length > 0 ? Math.round((scored.reduce((s, d) => s + d.score, 0) / scored.length) * 10) / 10 : 0,
+    };
+  } catch (err) {
+    console.error('Admin data fetch failed:', err);
+  }
+}
+
+function timeAgo(dateStr: string) {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  return `${Math.floor(hrs / 24)}d ago`;
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Texas Cheap Flights</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&display=swap" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-tcf-navy-deep text-white min-h-screen font-body" style="font-family: 'Outfit', sans-serif; background: #050a14;">
+
+{!isAuthed ? (
+  <!-- ══ LOGIN ══ -->
+  <div class="min-h-screen flex items-center justify-center px-6">
+    <div class="w-full max-w-sm">
+      <div class="text-center mb-10">
+        <div class="w-12 h-12 rounded-xl bg-tcf-gold/10 border border-tcf-gold/20 flex items-center justify-center mx-auto mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--tcf-gold)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h1 class="text-2xl font-black text-white mb-1">TCF Admin</h1>
+        <p class="text-sm text-slate-500">Texas Cheap Flights Control Panel</p>
+      </div>
+      <form method="GET" action="/admin" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Password</label>
+          <input 
+            type="password" 
+            name="pw" 
+            autofocus
+            class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-tcf-gold/50 transition-colors"
+            placeholder="Enter admin password"
+          />
+        </div>
+        <button type="submit" class="w-full py-3 rounded-xl font-black text-sm uppercase tracking-widest transition-all duration-200 hover:opacity-90" style="background: var(--tcf-gold); color: #050a14;">
+          Enter Dashboard
+        </button>
+      </form>
+    </div>
+  </div>
+) : (
+  <!-- ══ DASHBOARD ══ -->
+  <div class="min-h-screen">
+
+    <!-- Top Bar -->
+    <header class="border-b border-white/5 px-6 py-4 flex items-center justify-between sticky top-0 z-10" style="background: rgba(5,10,20,0.95); backdrop-filter: blur(12px);">
+      <div class="flex items-center gap-4">
+        <a href="/" class="text-slate-500 hover:text-white transition-colors no-underline text-xs">← Site</a>
+        <span class="text-white/20">|</span>
+        <h1 class="text-sm font-black text-white uppercase tracking-widest">TCF Admin</h1>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse inline-block"></span>
+        <span class="text-xs text-slate-500 font-bold">Live</span>
+        <a href="/admin?logout=1" class="ml-4 text-xs text-slate-500 hover:text-red-400 transition-colors no-underline font-bold">Sign out</a>
+      </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-6 py-10">
+
+      <!-- Stats Row -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+        {[
+          { label: 'Deals Found', value: stats.totalDeals, color: 'text-white' },
+          { label: 'Deals Sent', value: stats.sentDeals, color: 'text-tcf-gold' },
+          { label: 'Subscribers', value: stats.totalSubscribers, color: 'text-sky-400' },
+          { label: 'Avg AI Score', value: stats.avgScore, color: 'text-green-400' },
+        ].map(s => (
+          <div class="rounded-2xl border border-white/10 bg-white/5 p-5 text-center">
+            <p class={`text-4xl font-black mb-1 ${s.color}`} style="font-family: 'Satoshi', sans-serif;">{s.value}</p>
+            <p class="text-xs text-slate-500 uppercase tracking-widest font-bold">{s.label}</p>
+          </div>
+        ))}
+      </div>
+
+      <!-- Tabs -->
+      <div class="flex gap-1 mb-8 bg-white/5 border border-white/10 rounded-2xl p-1 w-fit">
+        {['deals', 'subscribers', 'blocklist'].map(tab => (
+          <button
+            data-tab={tab}
+            class={`tab-btn px-5 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-200 ${tab === 'deals' ? 'bg-white/10 text-white' : 'text-slate-500 hover:text-white'}`}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+
+      <!-- DEALS TAB -->
+      <div id="tab-deals" class="tab-content">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-sm font-black text-white uppercase tracking-widest">Recent Deals (last 50)</h2>
+          <div class="flex gap-2">
+            <button data-filter="all" class="filter-btn active text-xs font-bold px-3 py-1 rounded-lg bg-white/10 text-white">All</button>
+            <button data-filter="sent" class="filter-btn text-xs font-bold px-3 py-1 rounded-lg bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white transition-all">Sent Only</button>
+          </div>
+        </div>
+        <div class="rounded-2xl border border-white/10 overflow-hidden">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-white/10 bg-white/5">
+                <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Route</th>
+                <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider hidden md:table-cell">Price</th>
+                <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider hidden md:table-cell">Airline</th>
+                <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Score</th>
+                <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Status</th>
+                <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider hidden lg:table-cell">Source</th>
+                <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Found</th>
+              </tr>
+            </thead>
+            <tbody>
+              {deals.map((deal, i) => (
+                <tr class={`deal-row border-b border-white/5 hover:bg-white/5 transition-colors ${deal.sent_at ? 'sent' : ''} ${i % 2 === 0 ? '' : 'bg-white/[0.02]'}`}>
+                  <td class="px-4 py-3 font-bold text-white whitespace-nowrap">
+                    {deal.origin} → {deal.destination}
+                  </td>
+                  <td class="px-4 py-3 text-slate-300 hidden md:table-cell">
+                    {deal.price ? `$${deal.price}` : deal.points_value ? `${deal.points_value}pts` : '—'}
+                  </td>
+                  <td class="px-4 py-3 text-slate-400 text-xs hidden md:table-cell">{deal.airline ?? '—'}</td>
+                  <td class="px-4 py-3">
+                    {deal.score ? (
+                      <span class={`font-black text-sm ${deal.score >= 9 ? 'text-red-400' : deal.score >= 7 ? 'text-amber-400' : 'text-slate-400'}`}>
+                        {deal.score}
+                      </span>
+                    ) : '—'}
+                  </td>
+                  <td class="px-4 py-3">
+                    {deal.sent_at ? (
+                      <span class="text-green-400 text-xs font-bold uppercase tracking-wider">Sent</span>
+                    ) : (
+                      <span class="text-slate-600 text-xs font-bold uppercase tracking-wider">Not sent</span>
+                    )}
+                  </td>
+                  <td class="px-4 py-3 text-slate-500 text-xs hidden lg:table-cell max-w-[150px] truncate">{deal.source ?? '—'}</td>
+                  <td class="px-4 py-3 text-slate-500 text-xs whitespace-nowrap">{timeAgo(deal.created_at)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {deals.length === 0 && (
+            <div class="text-center py-16 text-slate-500">
+              <p class="text-sm font-bold">No deals found yet. The Scout is warming up.</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <!-- SUBSCRIBERS TAB -->
+      <div id="tab-subscribers" class="tab-content hidden">
+        <h2 class="text-sm font-black text-white uppercase tracking-widest mb-4">Subscribers ({subscribers.length})</h2>
+        <div class="rounded-2xl border border-white/10 overflow-hidden">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-white/10 bg-white/5">
+                <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Email</th>
+                <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Airport</th>
+                <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Status</th>
+                <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Source</th>
+                <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Joined</th>
+              </tr>
+            </thead>
+            <tbody>
+              {subscribers.map((sub, i) => (
+                <tr class={`border-b border-white/5 hover:bg-white/5 transition-colors ${i % 2 === 0 ? '' : 'bg-white/[0.02]'}`}>
+                  <td class="px-4 py-3 text-slate-300 font-medium">{sub.email}</td>
+                  <td class="px-4 py-3 font-black text-tcf-gold">{sub.home_airport ?? '—'}</td>
+                  <td class="px-4 py-3">
+                    <span class={`text-xs font-bold uppercase tracking-wider ${sub.active ? 'text-green-400' : 'text-red-400'}`}>
+                      {sub.active ? 'Active' : 'Inactive'}
+                    </span>
+                  </td>
+                  <td class="px-4 py-3 text-slate-500 text-xs">{sub.source ?? 'waitlist'}</td>
+                  <td class="px-4 py-3 text-slate-500 text-xs">{timeAgo(sub.created_at)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {subscribers.length === 0 && (
+            <div class="text-center py-16 text-slate-500">
+              <p class="text-sm font-bold">No subscribers yet.</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <!-- BLOCKLIST TAB -->
+      <div id="tab-blocklist" class="tab-content hidden">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-sm font-black text-white uppercase tracking-widest">Blocklist ({blocklist.filter(b => b.active).length} active)</h2>
+        </div>
+
+        <!-- Add form -->
+        <form id="add-blocklist-form" class="mb-6 p-5 rounded-2xl border border-white/10 bg-white/5 flex flex-wrap gap-3 items-end">
+          <div>
+            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Type</label>
+            <select name="type" class="bg-white/10 border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-tcf-gold/50">
+              <option value="airline">Airline</option>
+              <option value="destination">Destination</option>
+              <option value="route">Route (e.g. MFE-ORD)</option>
+            </select>
+          </div>
+          <div class="flex-1 min-w-[180px]">
+            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Value</label>
+            <input type="text" name="value" required placeholder="e.g. Spirit Airlines" class="w-full bg-white/10 border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-tcf-gold/50" />
+          </div>
+          <div class="flex-1 min-w-[180px]">
+            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Reason (optional)</label>
+            <input type="text" name="reason" placeholder="e.g. Poor ratings" class="w-full bg-white/10 border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-tcf-gold/50" />
+          </div>
+          <button type="submit" class="px-5 py-2 rounded-xl font-black text-sm uppercase tracking-widest transition-all hover:opacity-90" style="background: var(--tcf-gold); color: #050a14;">
+            Add Block
+          </button>
+          <p id="blocklist-feedback" class="hidden text-xs text-green-400 font-bold w-full"></p>
+        </form>
+
+        <!-- Blocklist table -->
+        <div class="rounded-2xl border border-white/10 overflow-hidden">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-white/10 bg-white/5">
+                <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Type</th>
+                <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Value</th>
+                <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Reason</th>
+                <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Status</th>
+                <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Action</th>
+              </tr>
+            </thead>
+            <tbody id="blocklist-tbody">
+              {blocklist.map((entry, i) => (
+                <tr class={`border-b border-white/5 hover:bg-white/5 transition-colors ${i % 2 === 0 ? '' : 'bg-white/[0.02]'}`}>
+                  <td class="px-4 py-3">
+                    <span class={`text-xs font-bold uppercase tracking-wider px-2 py-1 rounded-lg ${entry.type === 'airline' ? 'text-red-400 bg-red-500/10' : entry.type === 'destination' ? 'text-amber-400 bg-amber-500/10' : 'text-sky-400 bg-sky-500/10'}`}>
+                      {entry.type}
+                    </span>
+                  </td>
+                  <td class="px-4 py-3 font-bold text-white">{entry.value}</td>
+                  <td class="px-4 py-3 text-slate-500 text-xs">{entry.reason ?? '—'}</td>
+                  <td class="px-4 py-3">
+                    <span class={`text-xs font-bold ${entry.active ? 'text-green-400' : 'text-slate-600'}`}>
+                      {entry.active ? 'Active' : 'Off'}
+                    </span>
+                  </td>
+                  <td class="px-4 py-3">
+                    <button
+                      class="toggle-block text-xs font-bold uppercase tracking-wider hover:text-white transition-colors px-2 py-1 rounded hover:bg-white/10"
+                      data-id={entry.id}
+                      data-active={entry.active ? 'true' : 'false'}
+                      style={`color: ${entry.active ? '#ef4444' : '#10b981'};`}
+                    >
+                      {entry.active ? 'Disable' : 'Enable'}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {blocklist.length === 0 && (
+            <div class="text-center py-16 text-slate-500">
+              <p class="text-sm font-bold">Blocklist is empty. Add entries to suppress specific airlines, destinations, or routes.</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+    </div>
+  </div>
+)}
+
+<script>
+  // Tab switching
+  const tabs = document.querySelectorAll('.tab-btn');
+  const contents = document.querySelectorAll('.tab-content');
+  tabs.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = (btn as HTMLElement).dataset.tab;
+      tabs.forEach(t => {
+        t.classList.remove('bg-white/10', 'text-white');
+        t.classList.add('text-slate-500');
+      });
+      btn.classList.add('bg-white/10', 'text-white');
+      btn.classList.remove('text-slate-500');
+      contents.forEach(c => {
+        c.classList.toggle('hidden', c.id !== `tab-${target}`);
+      });
+    });
+  });
+
+  // Deal filter
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = (btn as HTMLElement).dataset.filter;
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.classList.remove('bg-white/10', 'text-white', 'active');
+        b.classList.add('bg-white/5', 'text-slate-400');
+      });
+      btn.classList.add('bg-white/10', 'text-white', 'active');
+      btn.classList.remove('bg-white/5', 'text-slate-400');
+      document.querySelectorAll('.deal-row').forEach(row => {
+        if (filter === 'sent') {
+          (row as HTMLElement).style.display = row.classList.contains('sent') ? '' : 'none';
+        } else {
+          (row as HTMLElement).style.display = '';
+        }
+      });
+    });
+  });
+
+  // Add blocklist entry
+  document.getElementById('add-blocklist-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const data = Object.fromEntries(new FormData(form));
+    const feedback = document.getElementById('blocklist-feedback');
+    try {
+      const res = await fetch('/api/admin/blocklist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (res.ok) {
+        feedback?.classList.remove('hidden');
+        feedback!.textContent = `✓ "${data.value}" added to blocklist.`;
+        form.reset();
+        setTimeout(() => window.location.reload(), 1500);
+      } else {
+        feedback?.classList.remove('hidden');
+        feedback!.style.color = '#ef4444';
+        feedback!.textContent = 'Failed to add. Check console.';
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  });
+
+  // Toggle blocklist entry
+  document.querySelectorAll('.toggle-block').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = (btn as HTMLElement).dataset.id;
+      const isActive = (btn as HTMLElement).dataset.active === 'true';
+      const res = await fetch('/api/admin/blocklist', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, active: !isActive })
+      });
+      if (res.ok) window.location.reload();
+    });
+  });
+</script>
+
+</body>
+</html>

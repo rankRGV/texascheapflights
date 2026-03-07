@@ -1,6 +1,7 @@
 ---
 export const prerender = false;
 import '../styles/global.css';
+import GlobalNav from '../components/GlobalNav.astro';
 import deals from '../data/deals.json';
 
 // We'll use icons based on the deal icon string
@@ -54,21 +55,7 @@ const AIRPORT_LABELS: Record<string, string> = {
 
 <body class="bg-primary text-primary font-body selection:bg-tcf-aviation-blue/30 selection:text-white">
 
-  <!-- Nav -->
-  <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-5 glass border-b border-white/5">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
-      <a href="/" class="flex items-center gap-3 no-underline group">
-        <div class="p-2 rounded-xl bg-tcf-aviation-blue/10 border border-tcf-aviation-blue/20">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-tcf-aviation-blue"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
-        </div>
-        <span class="font-black text-lg uppercase tracking-tight text-white">Texas Cheap Flights</span>
-      </a>
-      <div id="user-badge" class="hidden md:flex items-center gap-4 bg-white/5 border border-white/10 rounded-full px-5 py-2">
-        <span id="display-email" class="text-xs font-bold text-slate-400">...</span>
-        <div class="w-2 h-2 rounded-full bg-tcf-success animate-pulse"></div>
-      </div>
-    </div>
-  </nav>
+  <GlobalNav activePage="welcome" />
 
   <main class="pt-32 pb-20 px-6">
     <div class="max-w-7xl mx-auto">
