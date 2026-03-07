@@ -1,6 +1,38 @@
 ---
-export const prerender = true;
 import '../styles/global.css';
+import { supabase } from '../lib/supabase';
+
+// Fetch recent deals from Supabase for the live ticker
+let RECENT_TICKER: { text: string; type: string }[] = [];
+try {
+  const { data: dbDeals } = await supabase
+    .from('deals')
+    .select('origin, destination, price, airline, sent_at, deal_type, score')
+    .not('sent_at', 'is', null)
+    .order('sent_at', { ascending: false })
+    .limit(10);
+
+  if (dbDeals && dbDeals.length > 0) {
+    RECENT_TICKER = dbDeals.map(d => {
+      const daysAgo = Math.floor((Date.now() - new Date(d.sent_at).getTime()) / (1000 * 60 * 60 * 24));
+      const age = daysAgo === 0 ? 'Today' : daysAgo === 1 ? '1d ago' : `${daysAgo}d ago`;
+      const type = (d.deal_type === 'error_fare' || d.score >= 9) ? 'glitch' : 'sweetspot';
+      const priceText = d.price ? `$${d.price}` : 'Points Deal';
+      return { text: `${d.origin} to ${d.destination}: ${priceText} (${age})`, type };
+    });
+  }
+} catch (_) {}
+
+// Fallback: use hardcoded examples if no real data in DB yet
+const TICKER_ITEMS = RECENT_TICKER.length > 0 ? RECENT_TICKER : [
+  { text: "MFE to Orlando: $95 (Scouted 2h ago)", type: "glitch" },
+  { text: "SAT to Denver: $148 (Scouted 14h ago)", type: "sweetspot" },
+  { text: "CRP to Grand Canyon: $160 (Scouted 1d ago)", type: "glitch" },
+  { text: "AUS to Tokyo: 70k Pts (Scouted 2d ago)", type: "sweetspot" },
+  { text: "HRL to Cancun: $290 (Scouted 3d ago)", type: "glitch" },
+  { text: "DFW to London: $450 (Scouted 4d ago)", type: "sweetspot" },
+  { text: "LRD to Vegas: $118 (Scouted 1w ago)", type: "glitch" },
+];
 
 const TX_AIRPORTS = [
   { code: 'MFE', city: 'McAllen' },
@@ -141,15 +173,7 @@ const FEATURED_DEALS = [
   }
 ];
 
-const RECENT_TICKER = [
-  { text: "MFE to Orlando: $95 (Scouted 2h ago)", type: "glitch" },
-  { text: "SAT to Denver: $148 (Scouted 14h ago)", type: "sweetspot" },
-  { text: "CRP to Grand Canyon: $160 (Scouted 1d ago)", type: "glitch" },
-  { text: "AUS to Tokyo: 70k Pts (Scouted 2d ago)", type: "sweetspot" },
-  { text: "HRL to Cancun: $290 (Scouted 3d ago)", type: "glitch" },
-  { text: "DFW to London: $450 (Scouted 4d ago)", type: "sweetspot" },
-  { text: "LRD to Vegas: $118 (Scouted 1w ago)", type: "glitch" },
-];
+// (Ticker data is now fetched live from Supabase above — see TICKER_ITEMS)
 ---
 
 <!DOCTYPE html>
@@ -208,7 +232,8 @@ const RECENT_TICKER = [
         {[
           { label: 'The Reality', href: '#pain' },
           { label: 'The Strategy', href: '#how-it-works' },
-          { label: 'Anomaly Alerts', href: '#featured-deals' }
+          { label: 'Anomaly Alerts', href: '#featured-deals' },
+          { label: 'Past Deals', href: '/past-deals' },
         ].map(link => (
           <a href={link.href} class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-white transition-colors no-underline">
             {link.label}
@@ -345,7 +370,7 @@ const RECENT_TICKER = [
     
     <!-- Unified seamless scrolling track -->
     <div class="flex whitespace-nowrap animate-marquee items-center font-black text-xs md:text-sm uppercase tracking-[0.2em] w-max group-hover:[animation-play-state:paused]">
-      {[...RECENT_TICKER, ...RECENT_TICKER].map(item => (
+      {[...TICKER_ITEMS, ...TICKER_ITEMS].map(item => (
         <div class="mx-12 flex items-center gap-3">
           {item.type === 'glitch' ? (
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="animate-pulse"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>

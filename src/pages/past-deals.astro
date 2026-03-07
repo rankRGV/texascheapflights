@@ -1,0 +1,243 @@
+---
+import '../styles/global.css';
+import { supabase } from '../lib/supabase';
+
+// Fetch real deals from Supabase at build time
+let deals: any[] = [];
+let stats = { totalSent: 0, avgPrice: 0, bestDeal: null as number | null, topDestination: '' };
+
+try {
+  const { data: sentDeals } = await supabase
+    .from('deals')
+    .select('id, created_at, origin, destination, price, airline, score, deal_type, travel_dates, sent_at')
+    .not('sent_at', 'is', null)
+    .order('sent_at', { ascending: false })
+    .limit(50);
+
+  deals = sentDeals ?? [];
+
+  if (deals.length > 0) {
+    const priced = deals.filter(d => d.price);
+    stats.totalSent = deals.length;
+    stats.avgPrice = priced.length > 0 ? Math.round(priced.reduce((s, d) => s + d.price, 0) / priced.length) : 0;
+    stats.bestDeal = priced.length > 0 ? Math.min(...priced.map(d => d.price)) : null;
+    // Top destination
+    const destCount: Record<string, number> = {};
+    deals.forEach(d => { destCount[d.destination] = (destCount[d.destination] || 0) + 1; });
+    stats.topDestination = Object.entries(destCount).sort((a, b) => b[1] - a[1])[0]?.[0] ?? '';
+  }
+} catch (err) {
+  console.error('Failed to fetch deals for past-deals page:', err);
+}
+
+const hasDeals = deals.length > 0;
+
+function formatDate(dateStr: string) {
+  return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function getDealAge(dateStr: string) {
+  const days = Math.floor((Date.now() - new Date(dateStr).getTime()) / (1000 * 60 * 60 * 24));
+  if (days === 0) return 'Today';
+  if (days === 1) return 'Yesterday';
+  return `${days} days ago`;
+}
+
+function getDealTypeLabel(type: string, score: number) {
+  if (type === 'error_fare' || score >= 9) return { label: 'Error Fare', color: 'text-red-400 border-red-500/30 bg-red-500/10' };
+  if (score >= 7) return { label: 'Sweet Spot', color: 'text-amber-400 border-amber-500/30 bg-amber-500/10' };
+  return { label: 'Good Deal', color: 'text-sky-400 border-sky-500/30 bg-sky-500/10' };
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Past Deals — Texas Cheap Flights | Real Deals We've Found</title>
+  <meta name="description" content="Every deal our AI Scout has found and sent to Texas subscribers. Real routes, real prices, straight from the source." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;900&family=Outfit:wght@400;500;700&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-tcf-navy-deep text-white min-h-screen">
+
+  <!-- ══ NAV ══ -->
+  <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between border-b border-white/5" style="background: rgba(5, 10, 20, 0.85); backdrop-filter: blur(16px);">
+    <a href="/" class="flex items-center gap-3 no-underline">
+      <div class="w-8 h-8 rounded-lg bg-tcf-gold flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#050a14" stroke="#050a14" stroke-width="2"><path d="M2 22h20"/><path d="M6.36 17.4 4 17l-2-4 1.1-.55L5.05 15l4.44.75L10.5 11l4.44.75L14.5 17h1l5.5-5.5L22 13l-4 4 2 4h-1.5l-2.5-4-3.5-1.5h-2L6.36 17.4z"/></svg>
+      </div>
+      <span class="font-black tracking-widest text-sm uppercase text-white">Texas Cheap Flights</span>
+    </a>
+    <a href="/" class="text-sm text-slate-400 hover:text-white transition-colors no-underline flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+      Back to Home
+    </a>
+  </nav>
+
+  <!-- ══ HERO ══ -->
+  <section class="pt-32 pb-16 px-6 text-center relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-tcf-gold/5 via-transparent to-transparent pointer-events-none"></div>
+    <div class="max-w-4xl mx-auto relative z-10">
+      <span class="inline-flex items-center gap-2 text-tcf-gold font-bold text-xs uppercase tracking-[0.3em] mb-6 border border-tcf-gold/30 rounded-full px-4 py-2 bg-tcf-gold/5">
+        <span class="w-2 h-2 rounded-full bg-tcf-gold animate-pulse inline-block"></span>
+        Live Deal Archive
+      </span>
+      <h1 class="text-5xl md:text-7xl font-black tracking-tight leading-[1.05] mb-6">
+        Deals You<br/>
+        <span style="color: var(--tcf-gold); font-style: italic;">Might Have Missed.</span>
+      </h1>
+      <p class="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed font-body mb-4">
+        Every alert our Scout has fired — real routes, real prices, straight from Texas airports.
+        These aren't cherry-picked. This is the unfiltered feed.
+      </p>
+      <p class="text-sm text-slate-500 font-body">
+        Error fares typically vanish within <strong class="text-slate-300">12–24 hours</strong>. The only way not to miss the next one is to be on the list.
+      </p>
+    </div>
+  </section>
+
+  <!-- ══ STATS STRIP ══ -->
+  {hasDeals && (
+    <section class="px-6 pb-12">
+      <div class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="rounded-2xl border border-white/10 bg-white/5 p-6 text-center">
+          <p class="text-4xl font-black text-white mb-1">{stats.totalSent}</p>
+          <p class="text-xs text-slate-400 uppercase tracking-widest font-bold">Deals Sent</p>
+        </div>
+        {stats.bestDeal && (
+          <div class="rounded-2xl border border-tcf-gold/20 bg-tcf-gold/5 p-6 text-center">
+            <p class="text-4xl font-black text-tcf-gold mb-1">${stats.bestDeal}</p>
+            <p class="text-xs text-slate-400 uppercase tracking-widest font-bold">Lowest Price Found</p>
+          </div>
+        )}
+        {stats.avgPrice > 0 && (
+          <div class="rounded-2xl border border-white/10 bg-white/5 p-6 text-center">
+            <p class="text-4xl font-black text-white mb-1">${stats.avgPrice}</p>
+            <p class="text-xs text-slate-400 uppercase tracking-widest font-bold">Avg Deal Price</p>
+          </div>
+        )}
+        {stats.topDestination && (
+          <div class="rounded-2xl border border-sky-500/20 bg-sky-500/5 p-6 text-center">
+            <p class="text-2xl font-black text-sky-400 mb-1">{stats.topDestination}</p>
+            <p class="text-xs text-slate-400 uppercase tracking-widest font-bold">Most Recurring</p>
+          </div>
+        )}
+      </div>
+    </section>
+  )}
+
+  <!-- ══ DEALS GRID ══ -->
+  <section class="px-6 pb-24">
+    <div class="max-w-4xl mx-auto">
+
+      {hasDeals ? (
+        <div class="grid gap-4">
+          {deals.map((deal) => {
+            const badge = getDealTypeLabel(deal.deal_type, deal.score);
+            const age = getDealAge(deal.sent_at);
+            const isRecent = new Date(deal.sent_at).getTime() > Date.now() - 48 * 60 * 60 * 1000;
+            return (
+              <div class={`relative rounded-2xl border p-6 md:p-8 transition-all duration-300 group ${isRecent ? 'border-tcf-gold/30 bg-tcf-gold/5 hover:border-tcf-gold/50' : 'border-white/8 bg-white/3 hover:border-white/20 hover:bg-white/5'}`}>
+                {isRecent && (
+                  <span class="absolute top-4 right-4 text-xs font-bold text-tcf-gold bg-tcf-gold/10 border border-tcf-gold/30 rounded-full px-3 py-1 uppercase tracking-wider">
+                    ⚡ Recent
+                  </span>
+                )}
+                <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
+                  <!-- Route -->
+                  <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-2">
+                      <span class={`text-xs font-bold uppercase tracking-wider px-2 py-1 rounded-full border ${badge.color}`}>{badge.label}</span>
+                      <span class="text-xs text-slate-500">{age}</span>
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-black text-white tracking-tight leading-tight mb-1">
+                      {deal.origin} <span class="text-slate-500 font-normal">→</span> {deal.destination}
+                    </h3>
+                    <p class="text-sm text-slate-400">
+                      {deal.airline && <span class="text-slate-300 font-medium">{deal.airline}</span>}
+                      {deal.travel_dates && <span class="text-slate-500"> · {deal.travel_dates}</span>}
+                    </p>
+                  </div>
+
+                  <!-- Price -->
+                  <div class="text-left md:text-right shrink-0">
+                    {deal.price ? (
+                      <div>
+                        <p class="text-4xl md:text-5xl font-black text-white leading-none mb-1">${deal.price}</p>
+                        <p class="text-xs text-slate-500 uppercase tracking-wider">Roundtrip</p>
+                      </div>
+                    ) : (
+                      <p class="text-slate-500 text-sm italic">Points Deal</p>
+                    )}
+                  </div>
+
+                  <!-- AI Score -->
+                  {deal.score && (
+                    <div class="shrink-0 text-center">
+                      <div class={`w-14 h-14 rounded-xl flex items-center justify-center font-black text-xl border ${deal.score >= 9 ? 'border-red-500/30 bg-red-500/10 text-red-400' : deal.score >= 7 ? 'border-amber-500/30 bg-amber-500/10 text-amber-400' : 'border-white/10 bg-white/5 text-slate-400'}`}>
+                        {deal.score}
+                      </div>
+                      <p class="text-xs text-slate-500 mt-1 uppercase tracking-wider">Score</p>
+                    </div>
+                  )}
+                </div>
+
+                <!-- Sent badge -->
+                <div class="mt-4 pt-4 border-t border-white/5 flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+                  <span class="text-xs text-slate-500">Alert sent to subscribers on {formatDate(deal.sent_at)}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <!-- EMPTY STATE: No deals yet — use FOMO to drive signups -->
+        <div class="text-center py-24">
+          <div class="w-20 h-20 rounded-2xl bg-tcf-gold/10 border border-tcf-gold/20 flex items-center justify-center mx-auto mb-8">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--tcf-gold)" stroke-width="2"><path d="M2 22h20"/><path d="M6.36 17.4 4 17l-2-4 1.1-.55L5.05 15l4.44.75L10.5 11l4.44.75L14.5 17h1l5.5-5.5L22 13l-4 4 2 4h-1.5l-2.5-4-3.5-1.5h-2L6.36 17.4z"/></svg>
+          </div>
+          <h2 class="text-3xl font-black mb-4 text-white">The Scout is warming up.</h2>
+          <p class="text-slate-400 max-w-lg mx-auto font-body text-lg leading-relaxed mb-8">
+            Our AI is scanning Texas airports right now. The first deals will appear here the moment we find something worth sending.
+            <strong class="text-white block mt-3">Don't be the person who finds out about it too late.</strong>
+          </p>
+          <a href="/#signup" class="inline-block bg-tcf-gold text-tcf-navy-deep font-black text-sm uppercase tracking-[0.2em] px-8 py-4 rounded-xl hover:bg-tcf-gold/90 transition-colors no-underline">
+            Get on the list first →
+          </a>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- ══ CTA STRIP ══ -->
+  <section class="px-6 pb-24">
+    <div class="max-w-4xl mx-auto rounded-3xl border border-tcf-gold/20 bg-gradient-to-br from-tcf-gold/10 via-tcf-navy-mid/30 to-transparent p-12 text-center relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-b from-tcf-gold/5 to-transparent pointer-events-none rounded-3xl"></div>
+      <div class="relative z-10">
+        <h2 class="text-4xl md:text-5xl font-black mb-4 leading-tight">
+          These deals won't<br/>
+          <span style="color: var(--tcf-gold); font-style: italic;">wait for you.</span>
+        </h2>
+        <p class="text-slate-400 max-w-lg mx-auto font-body text-lg leading-relaxed mb-8">
+          Error fares close in hours. The subscribers who got these deals didn't find them by searching Kayak.
+          They got an alert the moment we did.
+        </p>
+        <a href="/#signup" class="inline-block bg-tcf-gold text-tcf-navy-deep font-black text-sm uppercase tracking-[0.2em] px-10 py-5 rounded-xl hover:bg-tcf-gold/90 transition-all duration-200 hover:scale-[1.02] no-underline shadow-lg shadow-tcf-gold/20">
+          Alert Me When the Next Deal Drops →
+        </a>
+        <p class="text-xs text-slate-500 mt-4 font-body">Free. No credit card. Unsubscribe anytime.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="border-t border-white/5 px-6 py-10 text-center text-xs text-slate-600">
+    <p>© 2026 Texas Cheap Flights · <a href="/skeptics-guide" class="text-slate-500 hover:text-white transition-colors no-underline">Skeptic's Guide</a> · <a href="/" class="text-slate-500 hover:text-white transition-colors no-underline">Home</a></p>
+  </footer>
+
+</body>
+</html>
