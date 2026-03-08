@@ -451,11 +451,13 @@ function timeAgo(dateStr: string) {
           el.style.opacity = '0.7';
           el.dataset.posted = 'true';
         } else {
+          const errData = await res.json().catch(() => ({ details: 'Unknown 500 Error' }));
           el.innerHTML = 'Error';
           el.style.backgroundColor = '#ef4444';
+          alert('API Error: ' + (errData.details || errData.error || 'Check server logs'));
         }
-      } catch (err) {
-        alert('Network error connecting to social-post API');
+      } catch (err: any) {
+        alert('Browser exception connecting to social-post API: ' + err.message);
         el.innerHTML = 'Failed';
       } finally {
         el.style.pointerEvents = 'auto';
