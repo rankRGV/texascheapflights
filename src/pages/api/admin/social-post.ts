@@ -16,11 +16,14 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     try {
         // 2. Parse request body
         const body = await request.json();
-        const { dealId, n8nWebhookUrl } = body;
+        const { dealId } = body;
 
-        if (!dealId || !n8nWebhookUrl) {
-            return new Response(JSON.stringify({ error: 'Missing dealId or n8nWebhookUrl' }), { status: 400 });
+        if (!dealId) {
+            return new Response(JSON.stringify({ error: 'Missing dealId' }), { status: 400 });
         }
+
+        // Use environment variable or the provided true Production Webhook URL
+        const n8nWebhookUrl = import.meta.env.N8N_WEBHOOK_URL ?? 'https://jarvis-ens.app.n8n.cloud/webhook/433eb27d-eee4-4eaa-92fa-bba533544d43';
 
         // 3. Fetch deal data from Supabase to send to n8n
         const { data: deal, error: fetchError } = await supabase

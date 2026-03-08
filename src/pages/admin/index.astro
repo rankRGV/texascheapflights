@@ -431,10 +431,6 @@ function timeAgo(dateStr: string) {
         if (!confirm('This deal was already posted to social media. Post it again?')) return;
       }
       
-      const webhookUrl = prompt('Enter your n8n Catch Webhook URL (saved for session):', sessionStorage.getItem('n8nWebhookUrl') || 'https://');
-      if (!webhookUrl || !webhookUrl.startsWith('http')) return;
-      sessionStorage.setItem('n8nWebhookUrl', webhookUrl);
-      
       el.innerHTML = 'Sending...';
       el.style.opacity = '0.5';
       el.style.pointerEvents = 'none';
@@ -443,7 +439,7 @@ function timeAgo(dateStr: string) {
         const res = await fetch('/api/admin/social-post', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ dealId, n8nWebhookUrl: webhookUrl })
+          body: JSON.stringify({ dealId })
         });
         
         if (res.ok) {
