@@ -1,0 +1,75 @@
+---
+import '../styles/global.css';
+import GlobalNav from '../components/GlobalNav.astro';
+
+export const prerender = true;
+
+const title = "Privacy Policy | Texas Cheap Flights";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;900&family=Outfit:wght@400;500;700&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-tcf-navy-deep text-white min-h-screen font-body">
+
+  <GlobalNav activePage="" />
+
+  <main class="pt-32 pb-24 px-6">
+    <div class="max-w-3xl mx-auto">
+      <h1 class="text-4xl md:text-6xl font-black mb-12">Privacy Policy</h1>
+      
+      <div class="prose prose-invert prose-lg max-w-none space-y-8 text-slate-400">
+        <p class="text-white font-bold">Last Updated: March 8, 2026</p>
+
+        <section>
+          <h2 class="text-2xl font-black text-white mb-4">1. Information We Collect</h2>
+          <p>
+            Texas Cheap Flights collects minimal data required to provide our service. This includes your email address and your preferred departure airport(s). We do not collect your physical address, phone number, or payment information directly on our servers.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-black text-white mb-4">2. How We Use Data</h2>
+          <p>
+            Your email is used exclusively to send you flight deal alerts and security updates related to your account. Your airport preference allows our AI Scout to filter deals relevant to your location.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-black text-white mb-4">3. Data Sharing</h2>
+          <p>
+            We never sell your personal data to third parties. We use industry-standard providers like Resend (for email delivery) and Supabase (for database hosting) to maintain our service. These providers are strictly prohibited from using your data for any other purpose.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-black text-white mb-4">4. Affiliate Disclosure</h2>
+          <p>
+            Texas Cheap Flights is supported by affiliate partnerships. When you click on a deal link or apply for a credit card through our site, we may earn a commission. This does not impact the price you pay or the integrity of our scouts.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-black text-white mb-4">5. Your Rights</h2>
+          <p>
+            You can unsubscribe from deal alerts at any time via the link in our emails. To request a full deletion of your data from our database, please contact us at privacy@texascheapflights.com.
+          </p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="py-10 border-t border-white/5 text-center text-xs text-slate-600">
+    <p>© 2026 Texas Cheap Flights · <a href="/" class="text-slate-500 hover:text-white transition-colors no-underline">Home</a></p>
+  </footer>
+
+</body>
+</html>

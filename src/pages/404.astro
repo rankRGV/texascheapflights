@@ -1,0 +1,61 @@
+---
+import '../styles/global.css';
+import GlobalNav from '../components/GlobalNav.astro';
+
+export const prerender = true;
+
+const title = "404 - Pilot Error | Texas Cheap Flights";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;900&family=Outfit:wght@400;500;700&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-primary text-primary font-body hero-gradient min-h-screen flex flex-col items-center justify-center overflow-hidden">
+  <div class="starfield"></div>
+
+  <GlobalNav activePage="" />
+
+  <main class="relative z-10 text-center px-6">
+    <div class="w-32 h-32 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-12 anim-float">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--tcf-gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M2 12h20"/><path d="m4.93 4.93 14.14 14.14"/><path d="m4.93 19.07 14.14-14.14"/></svg>
+    </div>
+
+    <h1 class="text-7xl md:text-9xl font-black text-white mb-6">404</h1>
+    <h2 class="text-2xl md:text-3xl font-black text-gold uppercase tracking-[0.2em] mb-8">Pilot Error: Route Not Found</h2>
+    
+    <p class="text-slate-400 max-w-lg mx-auto leading-relaxed mb-12">
+        Looks like we've hit some turbulence. The route you're looking for doesn't exist or has been archived by our AI Scout.
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/" class="btn-primary px-10 py-4 no-underline">Return Home</a>
+        <a href="/past-deals" class="liquid-glass border border-white/10 px-10 py-4 rounded-xl text-white font-bold hover:bg-white/5 transition-all no-underline">View Recent Deals</a>
+    </div>
+  </main>
+
+  <footer class="absolute bottom-10 left-0 right-0 text-center text-xs text-slate-600">
+    <p>© 2026 Texas Cheap Flights · Built for Texans</p>
+  </footer>
+
+  <script>
+    // Simple float animation simulation
+    const el = document.querySelector('.anim-float');
+    if (el) {
+        let angle = 0;
+        setInterval(() => {
+            angle += 0.05;
+            const y = Math.sin(angle) * 15;
+            (el as HTMLElement).style.transform = `translateY(${y}px)`;
+        }, 16);
+    }
+  </script>
+</body>
+</html>

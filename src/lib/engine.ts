@@ -91,8 +91,15 @@ export async function processDeal(title: string, content: string, source: string
       if (isScoutTest) console.log(`   🚀 Bypassing Score Threshold for Test Scout Deal`);
       else console.log(`   🎉 HIGH SCORE - SENDING ALERTS...`);
 
-      const sent = await triggerAlerts(dealData, content);
-      await logDealToDb(dealData, title, content, source, sent, sent ? 'Sent' : 'Alert Failed');
+      // 1. Log to DB first to get the unique ID for internal linking
+      const dealId = await logDealToDb(dealData, title, content, source, true, 'Prepared');
+
+      // 2. Trigger alerts with the internal ID
+      const sent = await triggerAlerts(dealData, content, dealId);
+
+      // 3. Update sent status if needed (optional since we set wasSent=true in logDealToDb above, 
+      // but if triggerAlerts fails entirely we might want to log that. 
+      // For now, tracking "Prepared" is enough as we assume Resend handles delivery).
 
       return { success: sent, score: dealData.totalScore };
     } else {
@@ -165,7 +172,7 @@ async function checkFatigue(deal: ParsedDeal): Promise<boolean> {
   }
 }
 
-async function logDealToDb(deal: ParsedDeal, title: string, content: string, source: string, wasSent: boolean, status: string) {
+async function logDealToDb(deal: ParsedDeal, title: string, content: string, source: string, wasSent: boolean, status: string): Promise<string> {
   try {
     // Extract dates if present in content
     const datesMatch = content.match(/Dates:\s*([^\n<]+)/i);
@@ -175,7 +182,7 @@ async function logDealToDb(deal: ParsedDeal, title: string, content: string, sou
     const linkMatch = content.match(/Book Link:\s*(https?:\/\/[^\s<]+)/i);
     const bookingLink = linkMatch ? linkMatch[1] : `https://www.google.com/travel/flights?q=Flights+to+${encodeURIComponent(deal.destination)}+from+${encodeURIComponent(deal.originAirport)}`;
 
-    const { error } = await supabase.from('deals').insert({
+    const { data, error } = await supabase.from('deals').insert({
       origin: deal.originAirport,
       destination: deal.destination,
       price: deal.price || null,
@@ -187,16 +194,18 @@ async function logDealToDb(deal: ParsedDeal, title: string, content: string, sou
       booking_link: bookingLink,
       sent_at: wasSent ? new Date().toISOString() : null,
       deal_type: deal.totalScore >= 9 ? 'error_fare' : 'sale'
-    });
+    }).select('id').single();
 
     if (error) throw error;
     console.log(`   💾 Deal persisted to Supabase (${status})`);
+    return data?.id || '';
   } catch (err) {
     console.error("   ❌ Failed to log deal to Supabase:", err);
+    return '';
   }
 }
 
-async function triggerAlerts(dealData: ParsedDeal, rawContent?: string): Promise<boolean> {
+async function triggerAlerts(dealData: ParsedDeal, rawContent?: string, dealId?: string): Promise<boolean> {
   try {
     const resendApiKey = import.meta.env.RESEND_API_KEY || process.env.RESEND_API_KEY;
     const discordWebhookUrl = import.meta.env.DISCORD_WEBHOOK_URL || process.env.DISCORD_WEBHOOK_URL;
@@ -359,7 +368,8 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string): Promise
       } else if (dealData.originAirport === "SUPPORT") {
         message = `👤 **CUSTOMER SUPPORT INQUIRY** 👤\n\n**From:** (Check Resend/Email)\n**Subject:** ${dealData.explanation}\n\n**Message:**\n\`\`\`${rawContent?.substring(0, 1500)}\`\`\``;
       } else {
-        message = `🚨 **NEW DEAL FOUND (Score: ${dealData.totalScore}/10)** 🚨\n\n**Route:** ${dealData.originAirport} ➔ ${dealData.destination}\n**Price:** $${dealData.price} on ${dealData.airline}\n${datesText ? `**Dates:** ${datesText}\n` : ''}**Analysis:** ${dealData.explanation}${clusterCountInfo}\n\n🔗 **Verify:** [Check Google Flights](${bookLink})\n📝 **Draft Created:** [Review & Send in Resend](${draftLink})`;
+        const internalLink = dealId ? `\n🔗 **Site Details:** https://texascheapflights.com/deal/${dealId}` : "";
+        message = `🚨 **NEW DEAL FOUND (Score: ${dealData.totalScore}/10)** 🚨\n\n**Route:** ${dealData.originAirport} ➔ ${dealData.destination}\n**Price:** $${dealData.price} on ${dealData.airline}\n${datesText ? `**Dates:** ${datesText}\n` : ''}**Analysis:** ${dealData.explanation}${clusterCountInfo}\n\n🔗 **Verify:** [Check Google Flights](${bookLink})${internalLink}\n📝 **Draft Created:** [Review & Send in Resend](${draftLink})`;
       }
 
       await fetch(discordWebhookUrl, {

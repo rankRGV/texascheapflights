@@ -58,6 +58,10 @@ function getDealTypeLabel(type: string, score: number) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Past Deals — Texas Cheap Flights | Real Deals We've Found</title>
   <meta name="description" content="Every deal our AI Scout has found and sent to Texas subscribers. Real routes, real prices, straight from the source." />
+  <link rel="canonical" href="https://texascheapflights.com/past-deals" />
+  <meta property="og:image" content="https://texascheapflights.com/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;900&family=Outfit:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -81,6 +85,9 @@ function getDealTypeLabel(type: string, score: number) {
       <p class="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed font-body mb-4">
         Every alert our Scout has fired — real routes, real prices, straight from Texas airports.
         These aren't cherry-picked. This is the unfiltered feed.
+      </p>
+      <p class="text-xs text-slate-500 font-bold uppercase tracking-[0.2em] mt-8">
+        Last updated: <time datetime="2026-03-08">March 8, 2026</time>
       </p>
       <p class="text-sm text-slate-500 font-body">
         Error fares typically vanish within <strong class="text-slate-300">12–24 hours</strong>. The only way not to miss the next one is to be on the list.
@@ -142,8 +149,8 @@ function getDealTypeLabel(type: string, score: number) {
                       <span class={`text-xs font-bold uppercase tracking-wider px-2 py-1 rounded-full border ${badge.color}`}>{badge.label}</span>
                       <span class="text-xs text-slate-500">{age}</span>
                     </div>
-                    <h3 class="text-2xl md:text-3xl font-black text-white tracking-tight leading-tight mb-1">
-                      {deal.origin} <span class="text-slate-500 font-normal">→</span> {deal.destination}
+                    <h3 class="text-2xl md:text-3xl font-black text-white tracking-tight leading-tight mb-1 group-hover:text-tcf-gold transition-colors">
+                      <a href={`/deal/${deal.id}`} class="no-underline text-inherit">{deal.origin} <span class="text-slate-500 font-normal">→</span> {deal.destination}</a>
                     </h3>
                     <p class="text-sm text-slate-400">
                       {deal.airline && <span class="text-slate-300 font-medium">{deal.airline}</span>}

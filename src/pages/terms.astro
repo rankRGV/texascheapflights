@@ -1,0 +1,68 @@
+---
+import '../styles/global.css';
+import GlobalNav from '../components/GlobalNav.astro';
+
+export const prerender = true;
+
+const title = "Terms of Service | Texas Cheap Flights";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;900&family=Outfit:wght@400;500;700&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-tcf-navy-deep text-white min-h-screen font-body">
+
+  <GlobalNav activePage="" />
+
+  <main class="pt-32 pb-24 px-6">
+    <div class="max-w-3xl mx-auto">
+      <h1 class="text-4xl md:text-6xl font-black mb-12">Terms of Service</h1>
+      
+      <div class="prose prose-invert prose-lg max-w-none space-y-8 text-slate-400">
+        <p class="text-white font-bold">Effective Date: March 8, 2026</p>
+
+        <section>
+          <h2 class="text-2xl font-black text-white mb-4">1. Acceptance of Terms</h2>
+          <p>
+            By accessing Texas Cheap Flights, you agree to these terms. We provide flight deal alerts and travel hedging education. We are not a travel agency, airline, or financial institution.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-black text-white mb-4">2. Service Disclaimer</h2>
+          <p>
+            Flight prices and award availability change by the second. We do not guarantee that any deal scouted by our AI will remain available by the time you attempt to book. All travel bookings are made directly with third-party airlines or providers, and Texas Cheap Flights is not responsible for any issues arising from those bookings.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-black text-white mb-4">3. Use of Content</h2>
+          <p>
+            The deal alerts, "Skeptic's Guide," and proprietary "Travel Hedging" frameworks provided on this site are for your personal use only. Unauthorized redistribution of our alerts or content is prohibited.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-black text-white mb-4">4. Limitation of Liability</h2>
+          <p>
+            Texas Cheap Flights shall not be liable for any financial losses, travel disruptions, or missed opportunities resulting from the use of our service. Use our data to inform your decisions, but always verify details with the airline before booking.
+          </p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="py-10 border-t border-white/5 text-center text-xs text-slate-600">
+    <p>© 2026 Texas Cheap Flights · <a href="/" class="text-slate-500 hover:text-white transition-colors no-underline">Home</a></p>
+  </footer>
+
+</body>
+</html>

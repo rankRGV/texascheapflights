@@ -19,7 +19,7 @@ try {
       const age = daysAgo === 0 ? 'Today' : daysAgo === 1 ? '1d ago' : `${daysAgo}d ago`;
       const type = (d.deal_type === 'error_fare' || d.score >= 9) ? 'glitch' : 'sweetspot';
       const priceText = d.price ? `$${d.price}` : 'Points Deal';
-      return { text: `${d.origin} to ${d.destination}: ${priceText} (${age})`, type };
+      return { id: d.id, text: `${d.origin} to ${d.destination}: ${priceText} (${age})`, type };
     });
   }
 } catch (_) {}
@@ -192,6 +192,73 @@ const FEATURED_DEALS = [
   <meta name="twitter:description" content="Enter your Texas airport. Get your personalized plan to fly anywhere for less." />
   <meta name="twitter:image" content="https://texascheapflights.com/og-image.png" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>" />
+  <link rel="canonical" href="https://texascheapflights.com/" />
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://texascheapflights.com/#organization",
+        "name": "Texas Cheap Flights",
+        "url": "https://texascheapflights.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://texascheapflights.com/logo-light.png"
+        },
+        "description": "AI-powered flight deal alerts for Texas travelers. Monitors error fares and award sweet spots departing from Texas airports."
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://texascheapflights.com/#website",
+        "url": "https://texascheapflights.com",
+        "name": "Texas Cheap Flights",
+        "publisher": {
+          "@id": "https://texascheapflights.com/#organization"
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://texascheapflights.com/past-deals?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://texascheapflights.com/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How is this different from Scott's Cheap Flights or Going?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Generic deal sites focus on huge hubs like JFK or LAX. We are built specifically for Texas. We track regional feeders like McAllen, Laredo, and Harlingen, and we include award sweet spots (points) which most other sites ignore."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do I need to live in a major city like Dallas or Houston?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. In fact, we built this because regional Texas airports are often overlooked. We monitor 15+ Texas airports including MFE, LRD, BRO, CRP, and ELP."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is an 'Error Fare'?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "An error fare is when an airline's pricing algorithm makes a mistake, sometimes selling international tickets for 50-90% off. These 'glitch' windows usually close within hours, which is why we send alerts immediately."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
   <!-- Fonts (async — non-blocking) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -338,15 +405,15 @@ const FEATURED_DEALS = [
     
     <!-- Unified seamless scrolling track -->
     <div class="flex whitespace-nowrap animate-marquee items-center font-black text-xs md:text-sm uppercase tracking-[0.2em] w-max group-hover:[animation-play-state:paused]">
-      {[...TICKER_ITEMS, ...TICKER_ITEMS].map(item => (
-        <div class="mx-12 flex items-center gap-3">
+      {TICKER_ITEMS.map(item => (
+        <a href={item.id ? `/deal/${item.id}` : '#'} class="mx-12 flex items-center gap-3 no-underline text-inherit hover:text-white transition-colors">
           {item.type === 'glitch' ? (
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="animate-pulse"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
           ) : (
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 22h20"/><path d="M6.36 17.4 4 17l-2-4 1.1-.55L5.05 15l4.44.75L10.5 11l4.44.75L14.5 17h1l5.5-5.5L22 13l-4 4 2 4h-1.5l-2.5-4-3.5-1.5h-2L6.36 17.4z"/></svg>
           )}
           {item.text}
-        </div>
+        </a>
       ))}
     </div>
   </div>
@@ -665,12 +732,12 @@ const FEATURED_DEALS = [
 
       <div class="flex flex-wrap justify-center gap-4 w-full">
         {AIRPORTS.map(a => (
-          <div class={`px-6 py-4 rounded-2xl text-sm font-black transition-all duration-300 cursor-pointer ${a.hot ? 'bg-tcf-gold text-tcf-navy-deep shadow-lg shadow-tcf-gold/20' : 'liquid-glass text-slate-400 hover:text-white hover:border-white/20'}`}>
+          <a href={`/deals/from/${a.code.toLowerCase()}`} class={`px-6 py-4 rounded-2xl text-sm font-black transition-all duration-300 no-underline ${a.hot ? 'bg-tcf-gold text-tcf-navy-deep shadow-lg shadow-tcf-gold/20 hover:opacity-90' : 'liquid-glass text-slate-400 hover:text-white hover:border-white/20'}`}>
             <span class="tracking-widest uppercase">{a.code}</span>
-            <span class="mx-2 opacity-30 font-light">|</span> 
+            <span class="mx-2 opacity-30 font-light">|</span>
             <span class="font-body font-bold">{a.city}</span>
             {a.hot && <span class="ml-2">🔥</span>}
-          </div>
+          </a>
         ))}
         <div class="px-6 py-4 rounded-2xl text-sm font-black liquid-glass text-slate-500 italic flex items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
@@ -794,6 +861,45 @@ const FEATURED_DEALS = [
           </div>
 
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ FAQ ═══════════════════════════ -->
+  <section id="faq" class="section-padding relative overflow-hidden">
+    <div class="max-w-4xl mx-auto px-6 relative z-10">
+      <div class="text-center mb-16">
+        <span class="label text-tcf-aviation-blue uppercase tracking-[0.3em] font-bold text-xs mb-4 inline-block">Questions?</span>
+        <h2 class="text-4xl md:text-6xl text-white font-black mb-6">Common <span class="text-gold italic">Curiosities.</span></h2>
+      </div>
+
+      <div class="space-y-4">
+        {[
+          {
+            q: "How is this different from 'Going' or 'Scott's'?",
+            a: "Generic sites focus on huge hubs like JFK. We are built specifically for Texas. We track everything from McAllen (MFE) to Amarillo (AMA), and we include award sweet spots (points) which most others ignore."
+          },
+          {
+            q: "Do I need to be a travel expert?",
+            a: "No. Our AI Scout does the research. You just get an alert that says 'Book this route on this airline for this many points.' We provide the step-by-step instructions for every deal."
+          },
+          {
+            q: "Does this work for regional airports?",
+            a: "Yes. That is our primary mission. We monitor 15+ Texas airports. We specifically look for 'Zone-Based' awards where flying from Laredo costs the same as flying from Dallas."
+          },
+          {
+            q: "Is it really free?",
+            a: "The baseline alert service is free. We earn through affiliate partnerships when you book travel or sign up for cards through our links. This keeps the scout's eyes open 24/7 at no cost to you."
+          }
+        ].map((item) => (
+          <div class="liquid-glass p-8 rounded-[2rem] border border-white/5 hover:border-white/10 transition-all duration-300 group cursor-pointer">
+            <h3 class="text-lg font-black text-white mb-4 flex justify-between items-center group-hover:text-tcf-aviation-blue transition-colors">
+              {item.q}
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-slate-600 group-hover:text-tcf-aviation-blue transition-transform group-hover:rotate-90 duration-300"><path d="m9 18 6-6-6-6"/></svg>
+            </h3>
+            <p class="text-slate-400 leading-relaxed font-body text-sm md:text-base">{item.a}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>
