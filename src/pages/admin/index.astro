@@ -169,6 +169,7 @@ function timeAgo(dateStr: string) {
                 <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Status</th>
                 <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider hidden lg:table-cell">Source</th>
                 <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Found</th>
+                <th class="text-right px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -197,6 +198,16 @@ function timeAgo(dateStr: string) {
                   </td>
                   <td class="px-4 py-3 text-slate-500 text-xs hidden lg:table-cell max-w-[150px] truncate">{deal.source ?? '—'}</td>
                   <td class="px-4 py-3 text-slate-500 text-xs whitespace-nowrap">{timeAgo(deal.created_at)}</td>
+                  <td class="px-4 py-3 text-right">
+                    <button
+                      class="post-social-btn text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all hover:scale-105"
+                      style="background: var(--tcf-gold); color: #050a14;"
+                      data-deal-id={deal.id}
+                      data-posted={deal.posted_to_social ? 'true' : 'false'}
+                    >
+                      {deal.posted_to_social ? '✓ Posted' : '🚀 Post'}
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -407,6 +418,48 @@ function timeAgo(dateStr: string) {
         body: JSON.stringify({ id, active: !isActive })
       });
       if (res.ok) window.location.reload();
+    });
+  });
+
+  // Post to Social (Webhooks)
+  document.querySelectorAll('.post-social-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const el = btn as HTMLElement;
+      const dealId = el.dataset.dealId;
+      const posted = el.dataset.posted === 'true';
+      if (posted) {
+        if (!confirm('This deal was already posted to social media. Post it again?')) return;
+      }
+      
+      const webhookUrl = prompt('Enter your n8n Catch Webhook URL (saved for session):', sessionStorage.getItem('n8nWebhookUrl') || 'https://');
+      if (!webhookUrl || !webhookUrl.startsWith('http')) return;
+      sessionStorage.setItem('n8nWebhookUrl', webhookUrl);
+      
+      el.innerHTML = 'Sending...';
+      el.style.opacity = '0.5';
+      el.style.pointerEvents = 'none';
+      
+      try {
+        const res = await fetch('/api/admin/social-post', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ dealId, n8nWebhookUrl: webhookUrl })
+        });
+        
+        if (res.ok) {
+          el.innerHTML = '✓ Posted';
+          el.style.opacity = '0.7';
+          el.dataset.posted = 'true';
+        } else {
+          el.innerHTML = 'Error';
+          el.style.backgroundColor = '#ef4444';
+        }
+      } catch (err) {
+        alert('Network error connecting to social-post API');
+        el.innerHTML = 'Failed';
+      } finally {
+        el.style.pointerEvents = 'auto';
+      }
     });
   });
 </script>
