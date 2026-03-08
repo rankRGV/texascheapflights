@@ -176,7 +176,9 @@ function timeAgo(dateStr: string) {
               {deals.map((deal, i) => (
                 <tr class={`deal-row border-b border-white/5 hover:bg-white/5 transition-colors ${deal.sent_at ? 'sent' : ''} ${i % 2 === 0 ? '' : 'bg-white/[0.02]'}`}>
                   <td class="px-4 py-3 font-bold text-white whitespace-nowrap">
-                    {deal.origin} → {deal.destination}
+                    <a href={deal.booking_link} target="_blank" class="hover:underline transition-all" style="color: var(--tcf-gold);">
+                      {deal.origin} → {deal.destination}
+                    </a>
                   </td>
                   <td class="px-4 py-3 text-slate-300 hidden md:table-cell">
                     {deal.price ? `$${deal.price}` : deal.points_value ? `${deal.points_value}pts` : '—'}
