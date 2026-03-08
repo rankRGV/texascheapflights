@@ -143,6 +143,7 @@ function buildWelcomeEmail({ airport, token }: { airport: string; token?: string
   };
 
   const airportName = airportLabel[airport] ?? airport;
+  const manageLink = `https://texascheapflights.com/manage-subscription?token=${token ?? ''}`;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -151,64 +152,96 @@ function buildWelcomeEmail({ airport, token }: { airport: string; token?: string
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Welcome to Texas Cheap Flights</title>
 </head>
-<body style="margin:0;padding:0;background:#050a14;font-family:'Helvetica Neue',Arial,sans-serif;">
+<body style="margin:0;padding:0;background:#050a14;font-family:'Outfit', 'Helvetica Neue', Arial, sans-serif; color: #ffffff;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#050a14;min-height:100vh;">
     <tr>
-      <td align="center" style="padding:48px 24px;">
-        <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
-
-          <!-- Header -->
+      <td align="center" style="padding:40px 20px;">
+        <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%; background:#0d1832; border-radius:32px; border:1px solid rgba(245,200,66,0.15); overflow:hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.5);">
+          
+          <!-- Header/Hero Section -->
           <tr>
-            <td style="background:linear-gradient(135deg,#0d1832 0%,#050a14 100%);border:1px solid rgba(255,255,255,0.08);border-radius:32px 32px 0 0;padding:40px 48px 32px;text-align:center;">
-              <p style="margin:0 0 8px;font-size:10px;font-weight:800;letter-spacing:0.4em;text-transform:uppercase;color:#d4a843;">Texas Cheap Flights</p>
-              <h1 style="margin:0;font-size:36px;font-weight:900;color:#ffffff;line-height:1.1;">You're on the list,<br/><span style="color:#d4a843;font-style:italic;">Texas traveler.</span></h1>
+            <td style="padding:48px 48px 32px; text-align:center; background: radial-gradient(circle at top right, rgba(245,200,66,0.1) 0%, transparent 70%);">
+              <div style="margin-bottom: 24px;">
+                <img src="https://texascheapflights.com/logo.png" alt="Texas Cheap Flights" style="height:40px; width:auto;" />
+              </div>
+              <p style="margin:0 0 12px;font-size:11px;font-weight:800;letter-spacing:0.4em;text-transform:uppercase;color:#f5c842;">Founding Member Ops</p>
+              <h1 style="margin:0;font-size:32px;font-weight:900;color:#ffffff;line-height:1.2; letter-spacing:-0.02em;">Welcome to the <br/><span style="color:#f5c842;">Scout Network.</span></h1>
             </td>
           </tr>
 
-          <!-- Body -->
+          <!-- Body Content -->
           <tr>
-            <td style="background:#0d1832;border-left:1px solid rgba(255,255,255,0.08);border-right:1px solid rgba(255,255,255,0.08);padding:40px 48px;">
+            <td style="padding:0 48px 48px;">
               <p style="margin:0 0 24px;color:#94a3b8;font-size:16px;line-height:1.7;">
-                Hey! We're building the first points intelligence platform built <em>specifically for Texas regional flyers</em>.
-                Most travel hacking advice is written for people in New York. We're fixing that.
+                Most flight alerts are built for New York or LA. We're building something different: the first intelligence platform built <strong style="color:#ffffff;">specifically for Texas flyers.</strong>
               </p>
 
-              <!-- Airport callout -->
-              <div style="background:rgba(14,165,233,0.08);border:1px solid rgba(14,165,233,0.2);border-radius:16px;padding:20px 24px;margin:0 0 32px;">
-                <p style="margin:0 0 6px;font-size:12px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:#0ea5e9;">Your Home Airport</p>
-                <p style="margin:0;font-size:18px;font-weight:700;color:#ffffff;">${airportName}</p>
-                <p style="margin:6px 0 0;font-size:13px;color:#94a3b8;">We'll track the best sweet spots departing from your area.</p>
+              <!-- Strategy Box -->
+              <div style="background:rgba(245,200,66,0.05); border:1px solid rgba(245,200,66,0.2); border-radius:20px; padding:24px; margin-bottom:32px;">
+                <table width="100%" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="padding-bottom:16px;">
+                      <p style="margin:0; font-size:12px; font-weight:800; color:#f5c842; text-transform:uppercase; tracking:0.2em;">Active Scout: ${airportName}</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <p style="margin:0 0 12px; font-size:14px; color:#ffffff; line-height:1.6;">We're now monitoring two specific types of anomalies for you:</p>
+                      <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                          <td style="padding:4px 12px 12px 0; vertical-align:top;"><span style="color:#f5c842; font-weight:bold;">$</span></td>
+                          <td style="padding-bottom:12px; font-size:14px; color:#cbd5e1;"><strong style="color:#ffffff;">Massive Cash Drops:</strong> Like $380 roundtrip to Europe or $290 to Cancun when the algorithm slips up.</td>
+                        </tr>
+                        <tr>
+                          <td style="padding:4px 12px 12px 0; vertical-align:top;"><span style="color:#f5c842; font-weight:bold;">pts</span></td>
+                          <td style="padding-bottom:12px; font-size:14px; color:#cbd5e1;"><strong style="color:#ffffff;">Award Sweet Spots:</strong> Like 20k points to Japan or 15k to Mexico by using regional arbitrage.</td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
               </div>
 
-              <p style="margin:0 0 16px;font-size:15px;font-weight:700;color:#f8fafc;">Here's what you get as a <span style="color:#d4a843;">Founding Member:</span></p>
-              <table cellpadding="0" cellspacing="0" style="margin:0 0 32px;">
+              <h3 style="margin:0 0 16px; font-size:16px; font-weight:800; color:#ffffff; text-transform:uppercase; letter-spacing:0.05em;">Our Founding Principles</h3>
+              
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
                 <tr>
-                  <td style="padding:8px 12px 8px 0;vertical-align:top;"><span style="display:inline-block;width:6px;height:6px;background:#d4a843;border-radius:50%;margin-top:6px;"></span></td>
-                  <td style="padding:8px 0;color:#94a3b8;font-size:15px;line-height:1.6;"><strong style="color:#f8fafc;">Monthly TX Points Digest</strong> — The top 3 sweet spots from Texas airports, hand-curated.</td>
+                  <td width="24" style="vertical-align:top; padding-top:4px;">
+                    <div style="width:8px; height:8px; background:#f5c842; border-radius:50%;"></div>
+                  </td>
+                  <td style="padding-bottom:16px;">
+                    <strong style="color:#ffffff; font-size:15px; display:block; margin-bottom:4px;">Zero Bot Spam</strong>
+                    <p style="margin:0; color:#94a3b8; font-size:14px; line-height:1.5;">Every deal is hand-vetted by our analysts. If it's not a deal we'd book for our own families, we don't send it.</p>
+                  </td>
                 </tr>
                 <tr>
-                  <td style="padding:8px 12px 8px 0;vertical-align:top;"><span style="display:inline-block;width:6px;height:6px;background:#d4a843;border-radius:50%;margin-top:6px;"></span></td>
-                  <td style="padding:8px 0;color:#94a3b8;font-size:15px;line-height:1.6;"><strong style="color:#f8fafc;">Founding Member Access</strong> — Early access to the full platform before public launch.</td>
-                </tr>
-                <tr>
-                  <td style="padding:8px 12px 8px 0;vertical-align:top;"><span style="display:inline-block;width:6px;height:6px;background:#d4a843;border-radius:50%;margin-top:6px;"></span></td>
-                  <td style="padding:8px 0;color:#94a3b8;font-size:15px;line-height:1.6;"><strong style="color:#f8fafc;">The Skeptic's Guide</strong> — The bank math behind travel hacking, written for Texas flyers.</td>
+                  <td width="24" style="vertical-align:top; padding-top:4px;">
+                    <div style="width:8px; height:8px; background:#f5c842; border-radius:50%;"></div>
+                  </td>
+                  <td style="padding-bottom:16px;">
+                    <strong style="color:#ffffff; font-size:15px; display:block; margin-bottom:4px;">Total Control</strong>
+                    <p style="margin:0; color:#94a3b8; font-size:14px; line-height:1.5;">You control the volume. Mute specific airports or regions anytime with one click from your private dashboard.</p>
+                  </td>
                 </tr>
               </table>
 
-              <p style="margin:0;color:#64748b;font-size:13px;line-height:1.6;">
-                In the meantime, you can customize your tracking preferences right now in your <a href="https://texascheapflights.com/manage-subscription?token=${token ?? ''}" style="color:#0ea5e9;text-decoration:none;font-weight:600;">One-Click Dashboard</a>.
-              </p>
+              <!-- CTA -->
+              <div style="text-align:center;">
+                <a href="${manageLink}" style="display:inline-block; background:linear-gradient(135deg, #f5c842 0%, #d4a843 100%); color:#050a14; padding:18px 40px; border-radius:15px; text-decoration:none; font-weight:900; font-size:14px; text-transform:uppercase; letter-spacing:0.1em; box-shadow: 0 10px 30px rgba(245,200,66,0.2);">Manage My Dashboard</a>
+                <p style="margin:16px 0 0; font-size:12px; color:#475569;">No commitment. Unsubscribe or adjust settings anytime.</p>
+              </div>
+
             </td>
           </tr>
 
           <!-- Footer -->
           <tr>
-            <td style="background:#050a14;border:1px solid rgba(255,255,255,0.05);border-radius:0 0 32px 32px;padding:28px 48px;text-align:center;">
-              <p style="margin:0 0 8px;color:#334155;font-size:11px;">© 2026 Texas Cheap Flights. No spam, ever.</p>
-              <p style="margin:0;color:#334155;font-size:11px;">
-                <a href="https://texascheapflights.com/manage-subscription?token=${token ?? ''}" style="color:#475569;text-decoration:none;">Manage Preferences</a> ·
-                <a href="https://texascheapflights.com/skeptics-guide" style="color:#475569;text-decoration:none;">Skeptic's Guide</a>
+            <td style="padding:32px 48px; background:rgba(0,0,0,0.2); text-align:center; border-top:1px solid rgba(255,255,255,0.05);">
+              <p style="margin:0 0 12px; color:#475569; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.2em;">Texas Cheap Flights · Operations</p>
+              <p style="margin:0; color:#334155; font-size:11px; line-height:1.5;">
+                You are receiving this because you joined the Founding Member list for ${airportName}.<br/>
+                <a href="${manageLink}" style="color:#475569; text-decoration:underline;">Unsubscribe</a> · 
+                <a href="https://texascheapflights.com/skeptics-guide" style="color:#475569; text-decoration:underline;">Skeptic's Guide</a>
               </p>
             </td>
           </tr>
