@@ -168,7 +168,7 @@ function timeAgo(dateStr: string) {
                 <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Score</th>
                 <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Status</th>
                 <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider hidden lg:table-cell">Source</th>
-                <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Found</th>
+                <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Time Found</th>
                 <th class="text-right px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Action</th>
               </tr>
             </thead>
@@ -197,15 +197,18 @@ function timeAgo(dateStr: string) {
                     )}
                   </td>
                   <td class="px-4 py-3 text-slate-500 text-xs hidden lg:table-cell max-w-[150px] truncate">{deal.source ?? '—'}</td>
-                  <td class="px-4 py-3 text-slate-500 text-xs whitespace-nowrap">{timeAgo(deal.created_at)}</td>
+                  <td class="px-4 py-3 text-slate-500 text-xs whitespace-nowrap">
+                    <div>{timeAgo(deal.created_at)}</div>
+                    <div class="text-[10px] text-slate-600 font-mono mt-0.5">{new Date(deal.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                  </td>
                   <td class="px-4 py-3 text-right">
                     <button
                       class="post-social-btn text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all hover:scale-105"
-                      style="background: var(--tcf-gold); color: #050a14;"
+                      style={`background: ${deal.posted_to_social ? '#22c55e' : '#fbbf24'}; color: #050a14;`}
                       data-deal-id={deal.id}
                       data-posted={deal.posted_to_social ? 'true' : 'false'}
                     >
-                      {deal.posted_to_social ? '✓ Posted' : '🚀 Post'}
+                      {deal.posted_to_social ? '✓ POSTED' : '🚀 POST'}
                     </button>
                   </td>
                 </tr>
@@ -443,18 +446,22 @@ function timeAgo(dateStr: string) {
         });
         
         if (res.ok) {
-          el.innerHTML = '✓ Posted';
-          el.style.opacity = '0.7';
+          el.innerHTML = '✓ POSTED';
+          el.style.backgroundColor = '#22c55e'; // Green
+          el.style.opacity = '1';
           el.dataset.posted = 'true';
         } else {
           const errData = await res.json().catch(() => ({ details: 'Unknown 500 Error' }));
-          el.innerHTML = 'Error';
-          el.style.backgroundColor = '#ef4444';
+          el.innerHTML = 'ERROR';
+          el.style.backgroundColor = '#ef4444'; // Red
+          el.style.opacity = '1';
           alert('API Error: ' + (errData.details || errData.error || 'Check server logs'));
         }
       } catch (err: any) {
         alert('Browser exception connecting to social-post API: ' + err.message);
-        el.innerHTML = 'Failed';
+        el.innerHTML = 'FAILED';
+        el.style.backgroundColor = '#ef4444'; // Red
+        el.style.opacity = '1';
       } finally {
         el.style.pointerEvents = 'auto';
       }
