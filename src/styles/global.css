@@ -95,7 +95,7 @@ h3,
 
 /* Branded Components */
 .btn-primary {
-    @apply relative inline-flex items-center justify-center px-8 py-4 font-bold text-navy-950 transition-all duration-300 rounded-full overflow-hidden;
+    @apply relative inline-flex items-center justify-center px-8 py-4 font-bold text-tcf-navy-deep transition-all duration-300 rounded-full overflow-hidden;
     background: linear-gradient(135deg, #f5c842 0%, #d4a843 100%);
     box-shadow: 0 4px 20px rgba(212, 168, 67, 0.2);
 }
