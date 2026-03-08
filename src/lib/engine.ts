@@ -2,6 +2,30 @@ import { Resend } from 'resend';
 import { parseEmailToDeal, type ParsedDeal } from './gemini';
 import { supabase } from './supabase';
 
+interface RegionalCluster {
+  [key: string]: string[];
+}
+
+const REGIONAL_CLUSTERS: RegionalCluster = {
+  'RGV': ['MFE', 'HRL', 'BRO', 'CRP'],
+  'CENTRAL': ['SAT', 'AUS', 'LRD', 'GRK', 'ABI'],
+  'HOUSTON': ['IAH', 'HOU', 'CRP'],
+  'DALLAS': ['DFW', 'DAL', 'TYR', 'GGG'],
+  'WEST': ['ELP', 'MAF', 'LBB', 'AMA']
+};
+
+/**
+ * Returns a list of airports that should be considered "nearby" for a given origin.
+ * This powers the 'Regional' alert scope.
+ */
+function getClusterAirports(origin: string): string[] {
+  const originUpper = origin.toUpperCase();
+  const clusters = Object.values(REGIONAL_CLUSTERS).filter(c => c.includes(originUpper));
+  // Flatten and unique
+  const nearby = Array.from(new Set(clusters.flat()));
+  return nearby.length > 0 ? nearby : [originUpper];
+}
+
 export async function processDeal(title: string, content: string, source: string) {
   console.log(`🤖 Processing deal from ${source}: ${title}`);
 
@@ -199,6 +223,11 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string): Promise
       const audiences = await resend.audiences.list();
       const audienceId = audiences.data?.data?.[0]?.id;
 
+      // 1-Click preference management link (Magical Token)
+      // Since this is a BROADCAST, we use Resend's personalization tags.
+      // We'll use the 'magical_token' we synced to contact metadata.
+      const manageLink = `https://texascheapflights.com/manage-subscription?token={{contact.magical_token}}`;
+
       if (audienceId) {
         const draft = await resend.broadcasts.create({
           audienceId,
@@ -289,8 +318,13 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string): Promise
 
               <!-- Footer -->
               <div style="background-color: #f8fafc; padding: 24px 32px; text-align: center; border-top: 1px solid #e2e8f0;">
-                <p style="margin: 0 0 4px 0; font-size: 12px; color: #94a3b8;">You're receiving this as an early member of Texas Cheap Flights.</p>
-                <p style="margin: 0; font-size: 11px; color: #cbd5e1;">We only alert you when we find something genuinely worth your attention.</p>
+                <p style="margin: 0 0 12px 0; font-size: 12px; color: #94a3b8;">You're receiving this as a founding member of Texas Cheap Flights.</p>
+                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; display: inline-block;">
+                    <p style="margin: 0; font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">
+                        <a href="${manageLink}" style="color: #0ea5e9; text-decoration: none;">Manage Preferences &nbsp;•&nbsp; One-Click Access</a>
+                    </p>
+                </div>
+                <p style="margin: 16px 0 0 0; font-size: 10px; color: #cbd5e1;">We only alert you when we find something genuinely worth your attention in Texas.</p>
               </div>
 
             </div>
@@ -305,13 +339,27 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string): Promise
 
     if (discordWebhookUrl) {
       let message = "";
+      let clusterCountInfo = "";
+
+      // Calculate targeting count
+      if (dealData.originAirport !== "SYSTEM" && dealData.originAirport !== "SUPPORT") {
+        const cluster = getClusterAirports(dealData.originAirport);
+        const { count } = await supabase
+          .from('subscribers')
+          .select('*', { count: 'exact', head: true })
+          .eq('active', true)
+          .or(`alert_scope.eq.statewide,and(alert_scope.eq.regional,home_airport.in.(${cluster.join(',')})),and(alert_scope.eq.local,home_airport.eq.${dealData.originAirport.toUpperCase()})`)
+          .lte('max_price', dealData.price || 9999);
+
+        clusterCountInfo = `\n👥 **Targeting:** ${count ?? 0} eligible subscribers in the ${dealData.originAirport} region.`;
+      }
 
       if (dealData.originAirport === "SYSTEM") {
         message = `🛠️ **SYSTEM ALERT / ADMIN MESSAGE** 🛠️\n\n**Subject:** ${dealData.explanation}\n\n**Content Snippet:**\n\`\`\`${rawContent?.substring(0, 1500)}\`\`\``;
       } else if (dealData.originAirport === "SUPPORT") {
         message = `👤 **CUSTOMER SUPPORT INQUIRY** 👤\n\n**From:** (Check Resend/Email)\n**Subject:** ${dealData.explanation}\n\n**Message:**\n\`\`\`${rawContent?.substring(0, 1500)}\`\`\``;
       } else {
-        message = `🚨 **NEW DEAL FOUND (Score: ${dealData.totalScore}/10)** 🚨\n\n**Route:** ${dealData.originAirport} ➔ ${dealData.destination}\n**Price:** $${dealData.price} on ${dealData.airline}\n${datesText ? `**Dates:** ${datesText}\n` : ''}**Analysis:** ${dealData.explanation}\n\n🔗 **Verify:** [Check Google Flights](${bookLink})\n📝 **Draft Created:** [Review & Send in Resend](${draftLink})`;
+        message = `🚨 **NEW DEAL FOUND (Score: ${dealData.totalScore}/10)** 🚨\n\n**Route:** ${dealData.originAirport} ➔ ${dealData.destination}\n**Price:** $${dealData.price} on ${dealData.airline}\n${datesText ? `**Dates:** ${datesText}\n` : ''}**Analysis:** ${dealData.explanation}${clusterCountInfo}\n\n🔗 **Verify:** [Check Google Flights](${bookLink})\n📝 **Draft Created:** [Review & Send in Resend](${draftLink})`;
       }
 
       await fetch(discordWebhookUrl, {

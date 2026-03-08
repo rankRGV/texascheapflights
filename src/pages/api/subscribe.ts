@@ -39,35 +39,52 @@ export const POST: APIRoute = async ({ request }) => {
 
     console.log(`Attempting signup for: ${email} from ${airport}`);
 
-    // 1. Add contact to Resend Audience
+    // 1. Sync to Supabase Subscribers Table FIRST to get/generate the magical_token
+    let magicalToken = '';
+    try {
+      const { data: syncData, error: dbError } = await supabase.from('subscribers').upsert({
+        email: email.toLowerCase(),
+        home_airport: airport.toUpperCase(),
+        active: true,
+        source: 'waitlist'
+      }, { onConflict: 'email' }).select('magical_token').single();
+
+      if (dbError) throw dbError;
+      magicalToken = syncData?.magical_token || '';
+      console.log(`Contact synced to Supabase database. Token: ${magicalToken ? 'YES' : 'NO'}`);
+    } catch (dbErr: any) {
+      console.error('Supabase subscriber sync failed:', dbErr.message || dbErr);
+    }
+
+    // 2. Add/Update contact in Resend Audience with the token
     if (audienceId) {
       try {
         await resend.contacts.create({
           email: email,
           audienceId: audienceId,
           unsubscribed: false,
-          // Removed firstName and lastName empty strings as Resend API rejects them
-        });
-        console.log(`Contact added to audience ${audienceId}`);
+          metadata: {
+            magical_token: magicalToken,
+            home_airport: airport.toUpperCase()
+          }
+        } as any);
+        console.log(`Contact added to audience with token metadata`);
       } catch (contactErr: any) {
-        console.warn('Failed to add contact (user might exist or invalid payload):', contactErr.message || contactErr);
+        // If they exist, update them instead
+        try {
+          await resend.contacts.update({
+            email: email,
+            audienceId: audienceId,
+            metadata: {
+              magical_token: magicalToken,
+              home_airport: airport.toUpperCase()
+            }
+          } as any);
+          console.log(`Contact updated in audience with token metadata`);
+        } catch (updateErr: any) {
+          console.warn('Failed to sync contact metadata to Resend:', updateErr.message);
+        }
       }
-    }
-
-    // 2. Sync to Supabase Subscribers Table
-    try {
-      const { error: dbError } = await supabase.from('subscribers').upsert({
-        email: email.toLowerCase(),
-        home_airport: airport.toUpperCase(),
-        active: true,
-        source: 'waitlist'
-      }, { onConflict: 'email' });
-
-      if (dbError) throw dbError;
-      console.log(`Contact synced to Supabase database`);
-    } catch (dbErr: any) {
-      console.error('Supabase subscriber sync failed:', dbErr.message || dbErr);
-      // Non-blocking: we still want to send the email even if DB sync fails
     }
 
     // 3. Send welcome email
@@ -76,7 +93,7 @@ export const POST: APIRoute = async ({ request }) => {
         from: 'Texas Cheap Flights <waitlist@texascheapflights.com>',
         to: email,
         subject: "✈️ You're on the list, Texas traveler.",
-        html: buildWelcomeEmail({ airport }),
+        html: buildWelcomeEmail({ airport, token: magicalToken }),
       });
 
       if (error) {
@@ -112,7 +129,7 @@ export const POST: APIRoute = async ({ request }) => {
   }
 };
 
-function buildWelcomeEmail({ airport }: { airport: string }): string {
+function buildWelcomeEmail({ airport, token }: { airport: string; token?: string }): string {
   const airportLabel: Record<string, string> = {
     MFE: 'McAllen–Miller International (MFE)',
     LRD: 'Laredo International (LRD)',
@@ -180,7 +197,7 @@ function buildWelcomeEmail({ airport }: { airport: string }): string {
               </table>
 
               <p style="margin:0;color:#64748b;font-size:13px;line-height:1.6;">
-                In the meantime, read the <a href="https://texascheapflights.co/skeptics-guide" style="color:#0ea5e9;text-decoration:none;font-weight:600;">Skeptic's Guide</a> — the best crash course on why Texas flyers have an edge nobody is talking about.
+                In the meantime, you can customize your tracking preferences right now in your <a href="https://texascheapflights.com/manage-subscription?token=${token ?? ''}" style="color:#0ea5e9;text-decoration:none;font-weight:600;">One-Click Dashboard</a>.
               </p>
             </td>
           </tr>
@@ -190,8 +207,8 @@ function buildWelcomeEmail({ airport }: { airport: string }): string {
             <td style="background:#050a14;border:1px solid rgba(255,255,255,0.05);border-radius:0 0 32px 32px;padding:28px 48px;text-align:center;">
               <p style="margin:0 0 8px;color:#334155;font-size:11px;">© 2026 Texas Cheap Flights. No spam, ever.</p>
               <p style="margin:0;color:#334155;font-size:11px;">
-                <a href="https://resend.com/unsubscribe" style="color:#475569;text-decoration:none;">Unsubscribe</a> ·
-                <a href="https://texascheapflights.co/skeptics-guide" style="color:#475569;text-decoration:none;">Skeptic's Guide</a>
+                <a href="https://texascheapflights.com/manage-subscription?token=${token ?? ''}" style="color:#475569;text-decoration:none;">Manage Preferences</a> ·
+                <a href="https://texascheapflights.com/skeptics-guide" style="color:#475569;text-decoration:none;">Skeptic's Guide</a>
               </p>
             </td>
           </tr>

@@ -1,0 +1,337 @@
+---
+import { supabase } from '../lib/supabase';
+
+const token = Astro.url.searchParams.get('token');
+let subscriber = null;
+let error = null;
+
+if (token) {
+  const { data, error: fetchError } = await supabase
+    .from('subscribers')
+    .select('*')
+    .eq('magical_token', token)
+    .single();
+  
+  if (fetchError || !data) {
+    error = "Invalid or expired access token. Please check your latest alert email for a fresh link.";
+  } else {
+    subscriber = data;
+  }
+}
+
+const VALID_AIRPORTS = ['MFE', 'HRL', 'BRO', 'LRD', 'CRP', 'SAT', 'AUS', 'IAH', 'HOU', 'DFW', 'DAL', 'ELP', 'LBB', 'AMA', 'MAF', 'GRK', 'TYR', 'GGG', 'ABI'];
+
+const AIRPORT_NAMES: Record<string, string> = {
+  MFE: 'McAllen', HRL: 'Harlingen', BRO: 'Brownsville', LRD: 'Laredo', CRP: 'Corpus Christi',
+  SAT: 'San Antonio', AUS: 'Austin', IAH: 'Houston (IAH)', HOU: 'Houston (Hobby)',
+  DFW: 'Dallas (DFW)', DAL: 'Dallas (Love)', ELP: 'El Paso', LBB: 'Lubbock',
+  AMA: 'Amarillo', MAF: 'Midland', GRK: 'Killeen', TYR: 'Tyler', GGG: 'Longview', ABI: 'Abilene'
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Subscription | Texas Cheap Flights</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --tcf-gold: #d4a843;
+      --tcf-bg: #050a14;
+      --tcf-card: #0d1832;
+    }
+    body {
+      background-color: var(--tcf-bg);
+      color: #f8fafc;
+      font-family: 'Outfit', sans-serif;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 500px;
+      width: 100%;
+      background: var(--tcf-card);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    .header { text-align: center; margin-bottom: 32px; }
+    .logo { color: var(--tcf-gold); font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; font-size: 12px; margin-bottom: 8px; }
+    h1 { font-size: 28px; font-weight: 800; margin: 0; }
+    .email-display { color: #94a3b8; font-size: 14px; margin-top: 4px; }
+    
+    .form-group { margin-bottom: 24px; }
+    label { display: block; font-size: 14px; font-weight: 600; color: #94a3b8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+    
+    select, input {
+      width: 100%;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: white;
+      font-family: inherit;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    
+    .radio-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    .radio-option {
+      position: relative;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 12px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .radio-option:hover { border-color: rgba(212, 168, 67, 0.4); }
+    .radio-option.active { background: rgba(212, 168, 67, 0.1); border-color: var(--tcf-gold); color: var(--tcf-gold); }
+    .radio-option input { position: absolute; opacity: 0; cursor: pointer; }
+    .radio-label { font-size: 13px; font-weight: 600; display: block; }
+    .radio-sub { font-size: 9px; opacity: 0.6; margin-top: 2px; }
+
+    .btn {
+      width: 100%;
+      background: var(--tcf-gold);
+      color: var(--tcf-bg);
+      border: none;
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+    .btn:active { transform: translateY(0); }
+    
+    .error-card { text-align: center; }
+    .error-msg { color: #f87171; margin-bottom: 24px; line-height: 1.6; }
+    
+    .price-display { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .price-value { color: var(--tcf-gold); font-weight: 800; font-size: 18px; }
+
+    #save-status { text-align: center; margin-top: 16px; font-size: 14px; height: 20px; }
+    .success { color: #4ade80; }
+    .loading { color: #94a3b8; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">Texas Cheap Flights</div>
+      {subscriber ? (
+        <>
+          <h1>Hedge Settings</h1>
+          <div class="email-display">{subscriber.email}</div>
+        </>
+      ) : (
+        <>
+          <h1>Manage Alerts</h1>
+          <p style="color: #94a3b8; font-size: 14px; margin-top: 8px;">Enter your email to receive a secure access link.</p>
+        </>
+      )}
+    </div>
+
+    {!subscriber && !error ? (
+      <form id="request-access-form">
+        <div class="form-group">
+          <label for="request-email">Email Address</label>
+          <input type="email" id="request-email" name="email" placeholder="you@example.com" required />
+        </div>
+        <button type="submit" class="btn" id="request-btn">Send Access Link</button>
+        <div id="request-status" style="text-align: center; margin-top: 16px; font-size: 14px;"></div>
+      </form>
+    ) : error ? (
+      <div class="error-card">
+        <p class="error-msg">{error}</p>
+        <button onclick="window.location.href='/manage-subscription'" class="btn">Try Another Email</button>
+      </div>
+    ) : subscriber ? (
+      <form id="preferences-form">
+        <input type="hidden" name="token" value={token} />
+        
+        <div class="form-group">
+          <label>Alert Scope</label>
+          <div class="radio-group" id="scope-selector">
+            <label class={`radio-option ${subscriber.alert_scope === 'local' ? 'active' : ''}`}>
+              <input type="radio" name="alert_scope" value="local" checked={subscriber.alert_scope === 'local'} />
+              <span class="radio-label">Local</span>
+              <span class="radio-sub">Only Home</span>
+            </label>
+            <label class={`radio-option ${subscriber.alert_scope === 'regional' ? 'active' : ''}`}>
+              <input type="radio" name="alert_scope" value="regional" checked={subscriber.alert_scope === 'regional'} />
+              <span class="radio-label">Regional</span>
+              <span class="radio-sub">+ Proximity</span>
+            </label>
+            <label class={`radio-option ${subscriber.alert_scope === 'statewide' ? 'active' : ''}`}>
+              <input type="radio" name="alert_scope" value="statewide" checked={subscriber.alert_scope === 'statewide'} />
+              <span class="radio-label">Statewide</span>
+              <span class="radio-sub">All Texas</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="home_airport">Home Airport</label>
+          <select name="home_airport" id="home_airport">
+            {VALID_AIRPORTS.map(code => (
+              <option value={code} selected={subscriber.home_airport === code}>
+                {code} - {AIRPORT_NAMES[code] || code}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <div class="price-display">
+            <label>Max Deal Price</label>
+            <span class="price-value" id="price-label">${subscriber.max_price ?? 1000}</span>
+          </div>
+          <input type="range" name="max_price" id="max_price" min="50" max="2000" step="50" value={subscriber.max_price ?? 1000} />
+          <div style="display: flex; justify-content: space-between; font-size: 10px; color: #64748b; margin-top: 6px;">
+            <span>$50</span>
+            <span>$2000</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn" id="submit-btn">Update Preferences</button>
+        <div id="save-status"></div>
+      </form>
+      
+      <div style="margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 24px; text-align: center;">
+        <button id="unsubscribe-btn" style="background: transparent; border: none; color: #475569; font-size: 12px; cursor: pointer; text-decoration: underline;">Pause all alerts</button>
+      </div>
+    ) : null}
+  </div>
+
+  <script>
+    const form = document.getElementById('preferences-form');
+    const requestForm = document.getElementById('request-access-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const requestBtn = document.getElementById('request-btn') as HTMLButtonElement;
+    const statusDiv = document.getElementById('save-status');
+    const requestStatus = document.getElementById('request-status');
+    const priceInput = document.getElementById('max_price') as HTMLInputElement;
+    const priceLabel = document.getElementById('price-label');
+
+    // Handle Request Access Flow
+    requestForm?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!requestStatus || !requestBtn) return;
+
+        requestStatus.textContent = 'Sending link...';
+        requestStatus.style.color = '#94a3b8';
+        requestBtn.disabled = true;
+        requestBtn.style.opacity = '0.5';
+
+        const email = (document.getElementById('request-email') as HTMLInputElement).value;
+        try {
+            const res = await fetch('/api/request-access', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                requestStatus.textContent = data.message;
+                requestStatus.style.color = '#4ade80';
+                requestForm.innerHTML = `<p style="text-align:center; color:#4ade80; margin-top:20px;">${data.message}</p>`;
+            } else {
+                requestStatus.textContent = data.error || 'Failed to send.';
+                requestStatus.style.color = '#f87171';
+                requestBtn.disabled = false;
+                requestBtn.style.opacity = '1';
+            }
+        } catch (err) {
+            requestStatus.textContent = 'Network error.';
+            requestBtn.disabled = false;
+            requestBtn.style.opacity = '1';
+        }
+    });
+
+    // UI Feedback for range input
+    priceInput?.addEventListener('input', (e) => {
+      if (priceLabel) priceLabel.textContent = `$${(e.target as HTMLInputElement).value}`;
+    });
+
+    // Handle Radio appearance
+    const options = document.querySelectorAll('.radio-option');
+    options.forEach(opt => {
+      opt.addEventListener('click', () => {
+        options.forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+      });
+    });
+
+    // Submit handler
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!statusDiv || !submitBtn) return;
+
+      statusDiv.textContent = 'Saving changes...';
+      statusDiv.className = 'loading';
+      submitBtn.setAttribute('disabled', 'true');
+      submitBtn.style.opacity = '0.5';
+
+      const formData = new FormData(form as HTMLFormElement);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const res = await fetch('/api/update-preferences', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
+          statusDiv.textContent = '✓ Preferences updated successfully!';
+          statusDiv.className = 'success';
+          setTimeout(() => { statusDiv.textContent = ''; }, 3000);
+        } else {
+          statusDiv.textContent = '❌ Failed to save. Try again later.';
+          statusDiv.className = 'error-msg';
+        }
+      } catch (err) {
+        statusDiv.textContent = '❌ Network error.';
+      } finally {
+        submitBtn.removeAttribute('disabled');
+        submitBtn.style.opacity = '1';
+      }
+    });
+
+    // Unsubscribe handler
+    document.getElementById('unsubscribe-btn')?.addEventListener('click', async () => {
+        if (!confirm('Are you sure you want to pause all alerts? You can re-activate them here anytime.')) return;
+        
+        const token = (document.querySelector('input[name="token"]') as HTMLInputElement).value;
+        try {
+            const res = await fetch('/api/update-preferences', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token, active: false })
+            });
+            if (res.ok) {
+                alert('Alerts paused. We will stop sending you deal emails until you turn them back on.');
+                window.location.reload();
+            }
+        } catch (err) {
+            alert('Failed to pause alerts.');
+        }
+    });
+  </script>
+</body>
+</html>
