@@ -72,8 +72,8 @@ const HOW_IT_WORKS = [
   { 
     step: '01', 
     icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`, 
-    title: 'Tell us your Texas airport', 
-    desc: 'From MFE to DFW, we know the best routes and partner awards specific to your airport — not generic advice built for JFK flyers.' 
+    title: 'Tell us your Texas airport',
+    desc: 'From MFE to DFW, AI Scout monitors error fares and award sweet spots specific to your airport — not generic deals built for JFK flyers.'
   },
   { 
     step: '02', 
@@ -183,13 +183,13 @@ const FEATURED_DEALS = [
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#050a14" />
-  <title>Texas Cheap Flights — Travel Hacking Built for Texans</title>
-  <meta name="description" content="The first travel hacking platform built specifically for Texas travelers. Move beyond generic advice and learn to hedge your travel like a pro." />
+  <title>Texas Cheap Flights — Error Fares & Deal Alerts for Every Texas Airport</title>
+  <meta name="description" content="AI-powered flight deal alerts built for Texas. We monitor error fares and award sweet spots from every Texas airport — MFE, LRD, IAH, DFW, AUS, and 14 more. Get the alert before the window closes." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://texascheapflights.com/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Texas Cheap Flights — Travel Hacking Built for Texans" />
-  <meta name="twitter:description" content="Enter your Texas airport. Get your personalized plan to fly anywhere for less." />
+  <meta name="twitter:title" content="Texas Cheap Flights — Error Fares & Deal Alerts for Every Texas Airport" />
+  <meta name="twitter:description" content="AI Scout monitors error fares and award sweet spots from every Texas airport. Get the alert before the window closes." />
   <meta name="twitter:image" content="https://texascheapflights.com/og-image.png" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>" />
   <link rel="canonical" href="https://texascheapflights.com/" />
@@ -344,7 +344,7 @@ const FEATURED_DEALS = [
             </div>
 
             <button type="submit" id="submit-btn" class="btn-primary w-full mt-2 text-lg">
-              Get My Texas Plan
+              Alert Me When Deals Drop
             </button>
 
             <div class="flex items-center justify-center gap-4 text-xs text-slate-500">
@@ -365,8 +365,8 @@ const FEATURED_DEALS = [
             <div class="w-20 h-20 bg-tcf-success/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-tcf-success/20">
               <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check"><path d="M20 6 9 17l-5-5"/></svg>
             </div>
-            <h3 class="text-3xl font-black text-white mb-3">Plan Initialized.</h3>
-            <p class="text-slate-400 mb-8 max-w-sm mx-auto leading-relaxed">We're crawling the sweet spots for your airport. Check your inbox for the "Texas Sweet Spot" report.</p>
+            <h3 class="text-3xl font-black text-white mb-3">Scout Activated.</h3>
+            <p class="text-slate-400 mb-8 max-w-sm mx-auto leading-relaxed">AI Scout is now watching for error fares and award sweet spots from your airport. When one surfaces, you'll be the first to know.</p>
 
             <div class="p-6 rounded-3xl bg-tcf-aviation-blue/5 border border-tcf-aviation-blue/20 text-left">
               <p class="font-black text-tcf-aviation-blue mb-2 uppercase tracking-widest text-[10px]">🚀 Fast-Track Access</p>
@@ -427,13 +427,13 @@ const FEATURED_DEALS = [
         <div class="grid lg:grid-cols-2 gap-20 items-center">
           <div class="stack-y-md">
             <span class="label text-tcf-caution uppercase tracking-[0.3em] font-bold text-xs mb-2 inline-block">The Skeptic's Check</span>
-            <h2 class="text-4xl md:text-5xl mb-6 text-white leading-tight">Wait... isn't this<br/><span class="text-gold italic">just a credit card trap?</span></h2>
+            <h2 class="text-4xl md:text-5xl mb-6 text-white leading-tight">Wait... is any of this<br/><span class="text-gold italic">actually real?</span></h2>
             <p class="text-lg text-slate-400 mb-8 leading-relaxed font-body max-w-lg">
-              Travel hacking has a reputation for being risky, complicated, or only for people in New York. We built this platform to prove that for Texans, it's the only logical way to fly.
+              Fair question. Error fares sound too good. Alerts sound too slow. Points sound too complicated. Here's the honest breakdown — no gurus, no pitch.
             </p>
             <div class="pt-4">
               <a href="/skeptics-guide" class="text-tcf-aviation-blue font-bold flex items-center gap-2 group/link no-underline text-lg">
-                Read the full Skeptic's Guide to Texas Points
+                Read the full Skeptic's Guide
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover/link:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </a>
             </div>
@@ -442,14 +442,14 @@ const FEATURED_DEALS = [
           <div class="grid gap-6">
             {[
               {
-                title: 'Objection: "It ruins your credit"',
-                response: 'Actually, it protects it. We use a built-in velocity engine to ensure you only apply for cards you qualify for, keeping your score as healthy as your travel stash.',
-                icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-alert"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>`
+                title: 'Objection: "The alert will arrive too late."',
+                response: 'We run our own monitoring bot — no human editorial step, no virality lag. The anomaly fires the alert in the same automated pass. Error fare windows average 2–24 hours. You get it at the front of that window, not the tail.',
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`
               },
               {
-                title: 'Objection: "I don\'t spend enough"',
-                response: 'This isn\'t about spending more. It\'s about making the $800 you already spend on groceries work like $8,000 in travel value through optimized multipliers.',
-                icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wallet"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14c0 1.1.9 2 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>`
+                title: 'Objection: "I don\'t know anything about points."',
+                response: 'You don\'t need to. About half our alerts are straight cash fares — a $1,200 flight at $200 due to an airline pricing glitch. No miles, no strategy. Just a real ticket at a real price.',
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-credit-card"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>`
               }
             ].map(item => (
               <div class="p-8 rounded-3xl bg-white/5 border border-white/5 hover:border-white/20 transition-all duration-300">
@@ -475,7 +475,7 @@ const FEATURED_DEALS = [
     <div class="max-w-6xl mx-auto px-6 w-full flex flex-col items-center relative z-10">
       <div class="text-center mb-24 anim-fade-up">
         <span class="label text-gold uppercase tracking-[0.3em] font-bold text-xs mb-4 inline-block">The Reality</span>
-        <h2 class="text-4xl md:text-6xl mb-8 text-white">Travel hacking doesn't<br/><span class="text-slate-500 italic">work the same in Texas.</span></h2>
+        <h2 class="text-4xl md:text-6xl mb-8 text-white">Generic flight deals<br/><span class="text-slate-500 italic">weren't built for Texas.</span></h2>
       </div>
 
       <div class="grid md:grid-cols-3 gap-8 w-full">
@@ -725,7 +725,7 @@ const FEATURED_DEALS = [
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tcf-gold)_0%,_transparent_15%)] opacity-5"></div>
     <div class="max-w-4xl mx-auto px-6 w-full flex flex-col items-center relative z-10">
       <span class="label text-gold uppercase tracking-[0.3em] font-bold text-xs mb-6">Texas Coverage</span>
-      <h2 class="text-4xl md:text-6xl mb-10 text-white font-black">We monitor <span class="text-gold">15 unique TX hubs.</span></h2>
+      <h2 class="text-4xl md:text-6xl mb-10 text-white font-black">We monitor <span class="text-gold">19 Texas airports.</span></h2>
       <p class="text-lg text-slate-400 mb-16 max-w-2xl leading-relaxed font-body">
         From the Valley to the Panhandle. We track award availability and cash parity for every regional airport in the state.
       </p>

@@ -5,33 +5,33 @@ import GlobalNav from '../components/GlobalNav.astro';
 
 const OBJECTIONS = [
   {
-    id: 'credit',
-    q: "Won't opening new cards trash my credit score?",
-    a: "Short term: a 5-10 point dip from the inquiry — it's real, and we won't pretend it isn't. Long term: your score usually climbs. More accounts = higher total credit limit = lower utilization ratio. We teach you to pace applications so you never trigger a velocity flag. Most of our users see their score go up within 90 days.",
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><path d="M17 6h6v6"/></svg>`
+    id: 'real',
+    q: "Are these deals actually real? I've seen too many bait-and-switch 'deal alerts.'",
+    a: "Every deal we've ever sent is published at texascheapflights.com/past-deals — real routes, real prices, real airlines. No cherry-picking, no expired listings dressed up as wins. AI Scout scores every opportunity on a composite model: price deviation from the 30-day baseline, available seats, and whether it's actually bookable from a Texas airport. Below a 7, it doesn't go out. Most days, nothing goes out. That's a feature, not a bug.",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>`
   },
   {
-    id: 'debt',
-    q: "I don't want to get into debt chasing points.",
-    a: "You shouldn't. Carrying a balance wipes out every dollar of value from rewards in days. Our spend pacing tool keeps you inside your existing budget — we never recommend spending more than you already do. No balance. No interest. If you can't pay it off monthly, we'll tell you to wait.",
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`
+    id: 'speed',
+    q: "By the time the alert hits my inbox, the price is already back to normal.",
+    a: "That's the most legitimate objection to any deal alert service — and the reason we built our own monitoring bot instead of scraping deal blogs or following Twitter threads. The bot flags the anomaly and fires the alert in the same automated pass. No human editorial step, no virality delay, no 'we saw it on Reddit six hours ago.' Error fare windows typically last 2–24 hours. We can't promise every deal survives your morning coffee, but we can promise we're faster than any manually-curated list.",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`
   },
   {
-    id: 'spend',
-    q: "I don't spend thousands a month. Can I even hit these bonuses?",
-    a: "$1,000/month on groceries, gas, and insurance gets you most starter bonuses. We show you how to time your application around expenses you already have — car insurance renewal, back-to-school, holiday shopping — so you hit the goal without spending a single extra dollar. You already earn these points. You just aren't collecting them.",
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>`
+    id: 'spam',
+    q: "I've tried 'cheap flight' services before. I just got spammed with mediocre sales.",
+    a: "Most services define a deal as anything cheaper than last week. We don't. An error fare scores high because the deviation from the 30-day average is extreme — a $1,200 roundtrip at $180 is a 9.5. A fare that's $15 off normal is not a deal and it doesn't go out. Our average alert represents 55–80% off the baseline. Your inbox should contain opportunities, not noise you have to filter yourself.",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>`
   },
   {
-    id: 'complex',
-    q: "This sounds incredibly complicated. I don't have time to learn all of this.",
-    a: "The learning curve is why we exist. Our Dream Trip Engine gives you one checklist: your airport, your destination, which card, when to apply, how to book. You follow the steps. We did the research. The average user goes from zero to a booked award itinerary without reading a single points blog.",
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>`
+    id: 'points',
+    q: "Do I need to know about credit cards and points to use this?",
+    a: "No. About half of what we send are straight cash fares — error fares where an airline's algorithm misfired and sold a $1,400 roundtrip for $250. No points, no card strategy, no rewards math. Just book it like any other ticket. If you want to layer in the award side — zone-based redemptions, partner sweet spots where your miles go 3x further — we cover that too. But it's never a requirement to get value here.",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>`
   },
   {
     id: 'regional',
-    q: "I fly out of McAllen or Laredo. Deals are only for DFW, right?",
-    a: "This is the biggest myth in travel hacking — and it costs Texas regional flyers thousands every year. Award prices are often zone-based, not distance-based. A flight from MFE to London can cost the same points as one from DFW. We track these arbitrage windows specifically. Regional hubs are an advantage, not a limitation.",
+    q: "I fly out of McAllen or Laredo. The good deals are all for DFW, right?",
+    a: "The most expensive myth in Texas travel. For cash error fares, airlines propagate the glitch price across airports — that $180 fare from DFW often shows up at MFE, LRD, and HRL at the same price. For award travel, programs price by zone, not mileage — a flight from Laredo to London can redeem for the same points as one from Dallas. We specifically monitor regional TX airports because the arbitrage is bigger there, not smaller. Regional is an advantage.",
     icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`
   }
 ];
@@ -42,10 +42,63 @@ const OBJECTIONS = [
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Skeptic's Guide to Texas Travel Hacking</title>
-  <meta name="description" content="The honest truth about error fares, flight deal alerts, and travel hacking. What's real, what's hype, and how Texas Cheap Flights works." />
+  <title>The Skeptic's Guide to Texas Cheap Flights</title>
+  <meta name="description" content="Are error fares real? Will the alert be too late? Do you need to know about points? Honest answers to every skeptic's question about Texas Cheap Flights." />
   <link rel="canonical" href="https://texascheapflights.com/skeptics-guide" />
+  <meta property="og:title" content="The Skeptic's Guide to Texas Cheap Flights" />
+  <meta property="og:description" content="Are error fares real? Will the alert be too late? Do you need to know about points? Honest answers — no hype." />
+  <meta property="og:image" content="https://texascheapflights.com/og-image.png" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Are flight deal alerts actually real, or is it bait-and-switch?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Every deal Texas Cheap Flights has ever sent is published publicly at texascheapflights.com/past-deals — real routes, real prices, real airlines. AI Scout scores every opportunity and only sends alerts that score 7 or above on a composite model including price deviation, seat availability, and Texas airport accessibility."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "By the time the alert reaches me, is the deal already gone?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Texas Cheap Flights runs its own monitoring bot that fires alerts in the same automated pass as the anomaly detection — no human editorial step or virality delay. Error fare windows typically last 2–24 hours. While no service can guarantee a deal survives, direct bot-to-inbox delivery is significantly faster than manually curated lists."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need to know about points and credit cards to use Texas Cheap Flights?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. About half of the alerts are straight cash error fares — when an airline's pricing algorithm misfires and sells a $1,400 roundtrip for $250. No points, no credit card strategy required. Award sweet spots are also tracked for subscribers who want to use miles, but it's entirely optional."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is an error fare?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "An error fare is when an airline's pricing algorithm makes a mistake — sometimes pricing an international roundtrip at 70–90% below its normal rate. Airlines are generally required to honor tickets once issued under DOT rules. These windows typically close within hours once discovered, which is why immediate alerts matter."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you find deals from regional Texas airports like McAllen, Laredo, or Harlingen?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes — and regional airports often have better opportunities. Cash error fares propagate across airports at the same glitch price. For award travel, programs price by geographic zone, not distance — meaning a flight from Laredo can redeem for the same miles as one from Dallas. Texas Cheap Flights monitors all 19 Texas airports specifically because regional hubs are an advantage, not a limitation."
+        }
+      }
+    ]
+  }
+  </script>
+
   <!-- Fonts (async — non-blocking) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -72,23 +125,24 @@ const OBJECTIONS = [
 
   <main class="pt-32 pb-20 px-6">
     <div class="max-w-4xl mx-auto">
+
       <!-- Hero -->
       <header class="text-center mb-20 anim-fade-up">
         <span class="label text-gold uppercase tracking-[0.3em] font-bold text-xs mb-6 inline-block">The Honest Breakdown</span>
         <h1 class="text-5xl md:text-7xl mb-8 text-white font-black leading-tight">
-          The Skeptic's Guide to <span class="text-gold">Texas Points</span>
+          The Skeptic's Guide to <span class="text-gold">Texas Cheap Flights</span>
         </h1>
         <p class="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-          You've probably heard this is complicated, risky, or only for big spenders.<br/><span class="text-white font-bold">It's not.</span> Here's the math — no gurus, no hype, no hidden catch.
+          Are these deals real? Will alerts arrive in time? Do you need to know about points?<br/><span class="text-white font-bold">Straight answers. No gurus. No pitch.</span>
         </p>
         <p class="text-center text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-8">
           Last updated: <time datetime="2026-03-08">March 8, 2026</time>
         </p>
       </header>
 
-      <!-- Objections List — front-loaded -->
+      <!-- Objections List -->
       <section class="space-y-12 mb-32">
-        <h2 class="text-3xl font-black text-center text-white mb-16">Common Objections, Answered.</h2>
+        <h2 class="text-3xl font-black text-center text-white mb-16">Five objections. Five honest answers.</h2>
         <div class="grid gap-8">
           {OBJECTIONS.map(obj => (
             <div id={obj.id} class="liquid-glass p-8 md:p-12 rounded-[2.5rem] border-white/5 hover:border-white/20 transition-all duration-300">
@@ -104,50 +158,61 @@ const OBJECTIONS = [
         </div>
       </section>
 
-      <!-- The Math Section -->
+      <!-- Rule #1: Error Fares Are Legal -->
       <section class="mb-32">
         <div class="liquid-glass p-10 md:p-16 rounded-[3rem] relative overflow-hidden">
           <div class="absolute -top-20 -left-20 w-64 h-64 bg-tcf-aviation-blue/10 blur-[120px] rounded-full"></div>
 
-          <h2 class="text-3xl font-black mb-10 text-white">Rule #1: This is not "Free."</h2>
+          <h2 class="text-3xl font-black mb-6 text-white">Rule #1: Error fares are legal — and airlines do honor them.</h2>
           <p class="text-slate-400 mb-8 leading-relaxed text-lg font-body">
-            Good. Now here's why this actually works — and why the banks designed it this way. You aren't getting anything for free. You are performing a service for the banks.
+            An error fare happens when a carrier's pricing system misfires — a currency conversion glitch, a misplaced decimal, a data feed error — and publishes a fare at a fraction of its intended price. They're not a loophole or a hack. They're a pricing mistake.
           </p>
           <div class="grid md:grid-cols-2 gap-10">
             <div class="space-y-4">
               <h3 class="text-white font-bold flex items-center gap-2">
                 <span class="w-6 h-6 rounded-full bg-tcf-aviation-blue/20 flex items-center justify-center text-[10px] text-tcf-aviation-blue">1</span>
-                Customer Acquisition
+                Are they required to honor it?
               </h3>
               <p class="text-sm text-slate-500 leading-relaxed font-body">
-                Banks spend billions to find reliable customers. They would rather give YOU 60,000 points (worth ~$900) than spend $900 on a generic TV ad. You are just a high-value customer being 'acquired.'
+                Under U.S. DOT rules, airlines must honor tickets once issued. They have a window — usually 24 hours — to identify and cancel error fare bookings before the ticket is confirmed. After that, the vast majority of error fares fly. The documented honor rate is above 90%.
               </p>
             </div>
             <div class="space-y-4">
               <h3 class="text-white font-bold flex items-center gap-2">
                 <span class="w-6 h-6 rounded-full bg-tcf-aviation-blue/20 flex items-center justify-center text-[10px] text-tcf-aviation-blue">2</span>
-                Interchange Fees
+                What's the worst case?
               </h3>
               <p class="text-sm text-slate-500 leading-relaxed font-body">
-                Every time you buy a taco in San Antonio, the merchant pays a 2-3% fee. The bank keeps most of that — but when you use the right card, they give half of it back to you as points.
+                On rare occasions, an airline cancels an error fare booking and refunds the full amount. You're out nothing except the time it took to book. We flag the risk level of each deal — high-confidence fares score higher and go out faster. Low-confidence glitches get held.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Rule #2: Cash Glitches -->
+      <!-- Rule #2: The Two Types -->
       <section class="mb-32">
         <div class="liquid-glass p-10 md:p-16 rounded-[3rem] relative overflow-hidden border border-red-500/10">
           <div class="absolute -top-20 -right-20 w-64 h-64 bg-red-500/5 blur-[120px] rounded-full"></div>
           <div class="relative z-10">
             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-[9px] font-black uppercase tracking-widest text-red-400 mb-8 inline-block">
-              ⚡ Algorithm Glitch
+              ⚡ Two Types, One Service
             </span>
-            <h2 class="text-3xl font-black mb-6 text-white">Rule #2: Cash Glitches Don't Care About Your Credit Score.</h2>
-            <p class="text-slate-400 leading-relaxed text-lg font-body">
-              Not ready for the credit card strategy yet? Fine. We also scan for cash pricing errors — when an airline's algorithm misfires and sells a $1,200 roundtrip from Texas for $350. These windows are real, they happen every week, and they close fast. By the time it hits a deal blog, it's already patched. We send the alert the moment the bot goes rogue.
-            </p>
+            <h2 class="text-3xl font-black mb-6 text-white">Rule #2: There are two types of deals. You benefit from both.</h2>
+            <div class="grid md:grid-cols-2 gap-10">
+              <div>
+                <p class="text-xs font-black text-red-400 uppercase tracking-widest mb-3">Cash Error Fares</p>
+                <p class="text-slate-400 leading-relaxed font-body">
+                  When an airline's algorithm misfires and publishes a $1,200 roundtrip for $180. No points. No cards. Buy it like any normal ticket. These glitch windows are real, they happen weekly, and they close within hours. By the time it surfaces on a deal blog, it's usually patched. We send the alert the moment the bot catches it.
+                </p>
+              </div>
+              <div>
+                <p class="text-xs font-black text-tcf-aviation-blue uppercase tracking-widest mb-3">Award Sweet Spots</p>
+                <p class="text-slate-400 leading-relaxed font-body">
+                  When an airline's award chart prices a route by geographic zone instead of distance — meaning a flight from McAllen to London can cost the same miles as DFW to London. These aren't errors. They're structural advantages baked into the program that most Texans don't know about.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -156,18 +221,18 @@ const OBJECTIONS = [
       <section class="mb-32 text-center">
         <div class="p-12 md:p-20 rounded-[4rem] bg-tcf-gold/5 border border-tcf-gold/10 relative overflow-hidden">
           <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tcf-gold)_0%,_transparent_20%)] opacity-10"></div>
-          <h2 class="text-4xl md:text-5xl font-black text-white mb-8">The Texas Sweet Spot Nobody Talks About</h2>
+          <h2 class="text-4xl md:text-5xl font-black text-white mb-8">Still not convinced? See every deal we've actually sent.</h2>
           <p class="text-xl text-slate-400 max-w-2xl mx-auto mb-8 font-body">
-            Being landlocked in the middle of the country sounds like a disadvantage. It isn't. Award programs price routes by zone — not by how close you are to a hub. Texas regional flyers get access to the same international sweet spots as DFW, at the same point cost, with less competition for seats. We track every one of these windows from <span class="text-tcf-gold font-bold">MFE, LRD, BRO, and CRP</span>.
+            Real routes. Real prices. Real airlines. Every deal AI Scout has found and sent to Texas subscribers — publicly archived and never edited. From <span class="text-tcf-gold font-bold">MFE, LRD, BRO, CRP, HRL</span> and every major TX hub.
           </p>
-          <p class="text-lg text-white font-bold mb-10">Still not convinced? See every deal we've actually found and sent — real routes, real prices, no cherry-picking.</p>
+          <p class="text-lg text-white font-bold mb-10">No cherry-picking. No expired deals dressed up as wins. Just the actual record.</p>
           <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a href="/past-deals" class="btn-primary px-8 py-4 inline-flex items-center gap-2 no-underline">
               See Real Past Deals
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </a>
             <a href="/#waitlist" class="text-tcf-gold font-bold text-sm hover:text-white transition-colors no-underline">
-              Or join the waitlist →
+              Or get alerts when the next one drops →
             </a>
           </div>
         </div>
@@ -183,7 +248,6 @@ const OBJECTIONS = [
   </footer>
 
   <script>
-    // Observe fade-up
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -191,7 +255,6 @@ const OBJECTIONS = [
         }
       });
     }, { threshold: 0.1 });
-
     document.querySelectorAll('.anim-fade-up, .liquid-glass').forEach(el => observer.observe(el));
   </script>
 </body>
