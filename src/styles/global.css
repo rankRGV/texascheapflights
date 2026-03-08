@@ -95,14 +95,14 @@ h3,
 
 /* Branded Components */
 .btn-primary {
-    @apply relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 rounded-full overflow-hidden;
-    background: linear-gradient(135deg, var(--tcf-aviation-blue) 0%, #0369a1 100%);
-    box-shadow: 0 4px 20px rgba(14, 165, 233, 0.3);
+    @apply relative inline-flex items-center justify-center px-8 py-4 font-bold text-navy-950 transition-all duration-300 rounded-full overflow-hidden;
+    background: linear-gradient(135deg, #f5c842 0%, #d4a843 100%);
+    box-shadow: 0 4px 20px rgba(212, 168, 67, 0.2);
 }
 
 .btn-primary:hover {
     @apply -translate-y-0.5;
-    box-shadow: 0 8px 30px rgba(14, 165, 233, 0.5);
+    box-shadow: 0 8px 30px rgba(212, 168, 67, 0.4);
 }
 
 .btn-secondary {
