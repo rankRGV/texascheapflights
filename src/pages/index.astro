@@ -4,18 +4,19 @@ import GlobalNav from '../components/GlobalNav.astro';
 import { supabase } from '../lib/supabase';
 
 // Fetch recent deals from Supabase for the live ticker
-let RECENT_TICKER: { text: string; type: string }[] = [];
+let RECENT_TICKER: { id: string; text: string; type: string }[] = [];
 try {
   const { data: dbDeals } = await supabase
     .from('deals')
-    .select('origin, destination, price, airline, sent_at, deal_type, score')
-    .not('sent_at', 'is', null)
-    .order('sent_at', { ascending: false })
+    .select('id, origin, destination, price, airline, sent_at, created_at, deal_type, score')
+    .gte('score', 7)
+    .order('created_at', { ascending: false })
     .limit(10);
 
   if (dbDeals && dbDeals.length > 0) {
     RECENT_TICKER = dbDeals.map(d => {
-      const daysAgo = Math.floor((Date.now() - new Date(d.sent_at).getTime()) / (1000 * 60 * 60 * 24));
+      const dealDate = d.sent_at || d.created_at;
+      const daysAgo = Math.floor((Date.now() - new Date(dealDate).getTime()) / (1000 * 60 * 60 * 24));
       const age = daysAgo === 0 ? 'Today' : daysAgo === 1 ? '1d ago' : `${daysAgo}d ago`;
       const type = (d.deal_type === 'error_fare' || d.score >= 9) ? 'glitch' : 'sweetspot';
       const priceText = d.price ? `$${d.price}` : 'Points Deal';
