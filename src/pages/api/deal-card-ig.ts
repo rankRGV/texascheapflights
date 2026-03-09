@@ -3,6 +3,9 @@ import { ImageResponse } from '@vercel/og';
 import fs from 'node:fs';
 import path from 'node:path';
 
+// Instagram feed card — 1080×1080px square
+// Design philosophy: "Velocity & Value" — price is the hero, route is context.
+// No CTA button (IG images aren't clickable). Domain replaces it.
 export const GET: APIRoute = async ({ url }) => {
     const p = url.searchParams;
 
@@ -21,20 +24,17 @@ export const GET: APIRoute = async ({ url }) => {
     const airline = p.get('airline') ?? 'Frontier';
     const dealType = p.get('type') ?? 'sale';
     const rawDates = p.get('dates') ?? '';
-
-    // Null-safe date handling
     const dates = (rawDates === 'null' || !rawDates) ? 'Flexible Dates' : rawDates;
-
     const theme = p.get('theme') ?? 'dark';
 
-    // Load logo as base64 for reliable rendering in Vercel OG
+    // Load logo as base64
     let logoData = '';
     try {
         const logoPath = path.resolve('./public/logo.png');
         const logoBuffer = fs.readFileSync(logoPath);
         logoData = `data:image/png;base64,${logoBuffer.toString('base64')}`;
     } catch (e) {
-        console.error('Failed to load logo for deal card:', e);
+        console.error('Failed to load logo for IG deal card:', e);
     }
 
     // Load Satoshi font if available — drop Satoshi-Black.ttf into /public/fonts/ to activate
@@ -53,18 +53,17 @@ export const GET: APIRoute = async ({ url }) => {
     const navyDeep = '#050a14';
     const slate400 = '#94a3b8';
 
-    // Font scaling — synced so origin and destination always render at the same size
+    // Font scaling — tighter thresholds for square canvas
     const scaledFontSize = (text: string) => {
         const len = text.length;
-        if (len <= 3) return '115px';
-        if (len <= 6) return '90px';
-        if (len <= 10) return '72px';
-        if (len <= 16) return '58px';
-        return '48px';
+        if (len <= 3) return '90px';
+        if (len <= 6) return '72px';
+        if (len <= 10) return '58px';
+        if (len <= 16) return '46px';
+        return '38px';
     };
     const originSize = scaledFontSize(origin);
     const destSize = scaledFontSize(destination);
-    // Use the smaller of the two — prevents lopsided pairs like MFE (115px) vs Fort Lauderdale (58px)
     const routeSize = parseInt(originSize) < parseInt(destSize) ? originSize : destSize;
 
     const dealLabel =
@@ -76,8 +75,8 @@ export const GET: APIRoute = async ({ url }) => {
     const displayLabel = price ? 'roundtrip' : 'one-way';
 
     const bgGradient = theme === 'light'
-        ? 'radial-gradient(circle at 75% 25%, #f1f5f9 0%, #e2e8f0 100%)'
-        : 'radial-gradient(circle at 75% 25%, #0a1628 0%, #050a14 100%)';
+        ? 'radial-gradient(circle at 70% 30%, #f1f5f9 0%, #e2e8f0 100%)'
+        : 'radial-gradient(circle at 70% 30%, #0a1628 0%, #050a14 100%)';
 
     const dotColor = theme === 'light'
         ? 'rgba(0,0,0,0.04)'
@@ -88,8 +87,8 @@ export const GET: APIRoute = async ({ url }) => {
             type: 'div',
             props: {
                 style: {
-                    width: '1200px',
-                    height: '630px',
+                    width: '1080px',
+                    height: '1080px',
                     background: bgGradient,
                     display: 'flex',
                     flexDirection: 'column',
@@ -99,7 +98,7 @@ export const GET: APIRoute = async ({ url }) => {
                     padding: '60px',
                 },
                 children: [
-                    // Atmosphere: subtle dot grid over the background
+                    // Atmosphere: subtle dot grid
                     {
                         type: 'div',
                         props: {
@@ -112,7 +111,7 @@ export const GET: APIRoute = async ({ url }) => {
                         },
                     },
 
-                    // 1. Top Left Badge
+                    // Badge top-left
                     {
                         type: 'div',
                         props: {
@@ -136,49 +135,49 @@ export const GET: APIRoute = async ({ url }) => {
                         },
                     },
 
-                    // 2. Top Right Logo — top: 60px aligns with badge
+                    // Logo top-right
                     logoData ? {
                         type: 'img',
                         props: {
                             src: logoData,
                             style: {
                                 position: 'absolute', top: '60px', right: '60px',
-                                height: '70px',
+                                height: '60px',
                                 objectFit: 'contain',
                                 filter: theme === 'light' ? 'invert(1) brightness(0.2)' : 'none',
                             },
                         },
                     } : null,
 
-                    // 3. Center Route — marginTop: 90px (was 120) recenters in the card
+                    // Route — vertically centered in the card (marginTop accounts for top bar)
                     {
                         type: 'div',
                         props: {
                             style: {
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                marginTop: '90px',
-                                gap: '60px',
+                                marginTop: '200px',
+                                gap: '50px',
                             },
                             children: [
                                 // Origin
                                 {
                                     type: 'div',
                                     props: {
-                                        style: { display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '400px' },
+                                        style: { display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '340px' },
                                         children: [
                                             { type: 'div', props: { style: { fontSize: routeSize, fontWeight: 900, lineHeight: 1, textAlign: 'center' }, children: origin } },
-                                            { type: 'div', props: { style: { fontSize: '22px', color: slate400, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', marginTop: '10px' }, children: 'FROM' } },
+                                            { type: 'div', props: { style: { fontSize: '18px', color: slate400, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', marginTop: '10px' }, children: 'FROM' } },
                                         ],
                                     },
                                 },
-                                // Plane Separator
+                                // Plane separator
                                 {
                                     type: 'div',
                                     props: {
-                                        style: { display: 'flex', alignItems: 'center', position: 'relative', width: '200px', height: '130px' },
+                                        style: { display: 'flex', alignItems: 'center', position: 'relative', width: '160px', height: '100px' },
                                         children: [
                                             { type: 'div', props: { style: { width: '100%', height: '2px', background: `linear-gradient(90deg, transparent, ${gold}66, transparent)` } } },
-                                            { type: 'div', props: { style: { position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: '36px', color: '#38bdf8' }, children: '✈' } },
+                                            { type: 'div', props: { style: { position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: '28px', color: '#38bdf8' }, children: '✈' } },
                                         ],
                                     },
                                 },
@@ -186,10 +185,10 @@ export const GET: APIRoute = async ({ url }) => {
                                 {
                                     type: 'div',
                                     props: {
-                                        style: { display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '400px' },
+                                        style: { display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '340px' },
                                         children: [
                                             { type: 'div', props: { style: { fontSize: routeSize, fontWeight: 900, lineHeight: 1, textAlign: 'center' }, children: destination } },
-                                            { type: 'div', props: { style: { fontSize: '22px', color: slate400, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', marginTop: '10px' }, children: 'TO' } },
+                                            { type: 'div', props: { style: { fontSize: '18px', color: slate400, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', marginTop: '10px' }, children: 'TO' } },
                                         ],
                                     },
                                 },
@@ -197,70 +196,44 @@ export const GET: APIRoute = async ({ url }) => {
                         },
                     },
 
-                    // 4. Bottom Row — unified flex container keeps price and CTA on the same baseline
+                    // Bottom block — price as the visual hero
                     {
                         type: 'div',
                         props: {
                             style: {
-                                position: 'absolute', bottom: '60px', left: '60px', right: '60px',
-                                display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
+                                position: 'absolute', bottom: '60px', left: '60px',
+                                display: 'flex', flexDirection: 'column',
                             },
                             children: [
-                                // Left: Price & Airline
+                                // Price (140px — dominant element)
                                 {
                                     type: 'div',
                                     props: {
-                                        style: { display: 'flex', flexDirection: 'column' },
+                                        style: { display: 'flex', alignItems: 'baseline', gap: '14px' },
                                         children: [
-                                            {
-                                                type: 'div',
-                                                props: {
-                                                    style: { display: 'flex', alignItems: 'baseline', gap: '12px' },
-                                                    children: [
-                                                        { type: 'div', props: { style: { fontSize: '110px', fontWeight: 900, color: gold, lineHeight: 0.9 }, children: displayValue } },
-                                                        { type: 'div', props: { style: { fontSize: '28px', fontWeight: 700, color: slate400 }, children: displayLabel } },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                type: 'div',
-                                                props: {
-                                                    style: { fontSize: '24px', fontWeight: 600, color: slate400, marginTop: '20px', display: 'flex', gap: '12px', alignItems: 'center' },
-                                                    children: [
-                                                        { type: 'span', props: { children: airline } },
-                                                        dates ? { type: 'span', props: { style: { color: slate400, opacity: 0.5 }, children: '•' } } : null,
-                                                        dates ? { type: 'span', props: { children: dates } } : null,
-                                                    ],
-                                                },
-                                            },
+                                            { type: 'div', props: { style: { fontSize: '140px', fontWeight: 900, color: gold, lineHeight: 0.9 }, children: displayValue } },
+                                            { type: 'div', props: { style: { fontSize: '30px', fontWeight: 700, color: slate400 }, children: displayLabel } },
                                         ],
                                     },
                                 },
-                                // Right: CTA
+                                // Airline + dates
                                 {
                                     type: 'div',
                                     props: {
-                                        style: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' },
+                                        style: { fontSize: '26px', fontWeight: 600, color: slate400, marginTop: '18px', display: 'flex', gap: '12px', alignItems: 'center' },
                                         children: [
-                                            {
-                                                type: 'div',
-                                                props: {
-                                                    style: {
-                                                        background: gold, color: navyDeep,
-                                                        borderRadius: '20px', padding: '24px 48px',
-                                                        fontSize: '22px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em',
-                                                    },
-                                                    children: 'Get the Next Deal',
-                                                },
-                                            },
-                                            {
-                                                type: 'div',
-                                                props: {
-                                                    style: { fontSize: '18px', fontWeight: 600, color: slate400 },
-                                                    children: 'texascheapflights.com',
-                                                },
-                                            },
+                                            { type: 'span', props: { children: airline } },
+                                            dates ? { type: 'span', props: { style: { opacity: 0.5 }, children: '•' } } : null,
+                                            dates ? { type: 'span', props: { children: dates } } : null,
                                         ],
+                                    },
+                                },
+                                // Domain — replaces the CTA button (IG images aren't clickable)
+                                {
+                                    type: 'div',
+                                    props: {
+                                        style: { fontSize: '22px', fontWeight: 600, color: gold, opacity: 0.7, marginTop: '14px' },
+                                        children: 'texascheapflights.com',
                                     },
                                 },
                             ],
@@ -270,8 +243,8 @@ export const GET: APIRoute = async ({ url }) => {
             },
         },
         {
-            width: 1200,
-            height: 630,
+            width: 1080,
+            height: 1080,
             ...(satoshiFontData ? {
                 fonts: [{
                     name: 'Satoshi',
