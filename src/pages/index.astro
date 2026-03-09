@@ -76,20 +76,20 @@ const HOW_IT_WORKS = [
   { 
     step: '01', 
     icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`, 
-    title: 'Tell us your Texas airport',
-    desc: 'From MFE to DFW, AI Scout monitors error fares and award sweet spots specific to your airport — not generic deals built for JFK flyers.'
+    title: 'Pick your Texas airport',
+    desc: 'From MFE to DFW, AI Scout monitors for pricing failures and "fat-finger" errors specific to your airport — not generic deals built for JFK flyers.'
   },
   { 
     step: '02', 
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-compass"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>`, 
-    title: 'Pick your dream destination',
-    desc: 'Tokyo, London, Cancun. We track both award sweet spots (points priced by zone, not distance) and cash glitch windows (algorithm errors that slash fares for hours). You get alerted on both.'
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`, 
+    title: 'Catch price anomalies',
+    desc: 'We track cash glitch windows (algorithm errors that slash fares for hours) and award sweet spots (points priced by zone, not distance). You get the alert the second they surface.'
   },
   { 
     step: '03', 
     icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>`, 
-    title: 'Fly smart. Never get burned.', 
-    desc: 'We show you how to hedge with refundable awards and backup routes — so price spikes and flight changes never ruin your plans again.' 
+    title: 'Book first. Ask later.', 
+    desc: 'Price glitches close fast. We provide instant booking instructions and backup "hedge" routes using points — so you never pay full price again.' 
   },
 ];
 
@@ -142,26 +142,24 @@ const ETHICS = [
 
 const FEATURED_DEALS = [
   {
-    type: 'award_sweet_spot',
+    type: 'cash_glitch',
     origin: 'MFE',
-    dest: 'London',
-    points: '60,000',
-    cash: '$1,450',
-    airline: 'Virgin Atlantic',
-    alliance: 'SkyTeam',
-    tags: ['Business Class Possible', 'Low Surcharge'],
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9l4-6z"/><path d="M12 22 4.5 9"/><path d="M12 22 19.5 9"/><path d="M2 9h20"/><path d="M10 3 4.5 9"/><path d="M14 3 19.5 9"/></svg>`
+    dest: 'Orlando',
+    glitch_price: '$95',
+    normal_price: '$450',
+    airline: 'American',
+    lifespan: '4h',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`
   },
   {
-    type: 'award_sweet_spot',
+    type: 'cash_glitch',
     origin: 'SAT',
-    dest: 'Tokyo',
-    points: '70,000',
-    cash: '$1,820',
-    airline: 'ANA',
-    alliance: 'Star Alliance',
-    tags: ['The "Virgin Loop"', 'Direct from Hub'],
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>`
+    dest: 'London',
+    glitch_price: '$420',
+    normal_price: '$1,200',
+    airline: 'British Airways',
+    lifespan: '12h',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`
   },
   {
     type: 'award_sweet_spot',
@@ -324,7 +322,7 @@ const FEATURED_DEALS = [
 
       <!-- Subheadline -->
       <p class="anim-fade-up delay-3 max-w-2xl text-xl mb-12 text-slate-400 leading-relaxed font-body">
-        Two types of mistakes, both worth money: award seats priced the same from McAllen as Dallas, and cash fares the algorithm fat-fingered down to half price. <span class="text-white font-semibold">Both close within hours. We track both for every Texas airport.</span>
+        Two types of anomalies, both worth money: <span class="text-white font-semibold">Cash glitches</span> where the algorithm fat-fingers a fare down to half price, and <span class="text-white font-semibold">award sweet spots</span> where points go further from Texas. We track every second for every Texas airport.
       </p>
 
       <!-- WAITLIST FORM -->
@@ -460,7 +458,7 @@ const FEATURED_DEALS = [
               },
               {
                 title: 'Objection: "I don\'t know anything about points."',
-                response: 'You don\'t need to. About half our alerts are straight cash fares — a $1,200 flight at $200 due to an airline pricing glitch. No miles, no strategy. Just a real ticket at a real price.',
+                response: 'You don\'t need to. Most of our high-impact alerts are straight cash fares — a $1,200 flight accidentally priced at $350. Points are just our secondary "hedge" tool to ensure you never pay full price if you miss the cash glitch.',
                 icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-credit-card"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>`
               }
             ].map(item => (
