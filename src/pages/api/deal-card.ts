@@ -37,6 +37,17 @@ export const GET: APIRoute = async ({ url }) => {
     const navyDeep = '#050a14';
     const slate400 = '#94a3b8';
 
+    const scaledFontSize = (text: string) => {
+        const len = text.length;
+        if (len <= 3)  return '130px';
+        if (len <= 6)  return '95px';
+        if (len <= 10) return '68px';
+        if (len <= 14) return '52px';
+        return '42px';
+    };
+    const originSize = scaledFontSize(origin);
+    const destSize   = scaledFontSize(destination);
+
     const dealLabel =
         dealType === 'error_fare' ? '⚡ ERROR FARE'
             : dealType === 'sweetspot' ? '🎯 SWEET SPOT'
@@ -115,9 +126,9 @@ export const GET: APIRoute = async ({ url }) => {
                                 {
                                     type: 'div',
                                     props: {
-                                        style: { display: 'flex', flexDirection: 'column', alignItems: 'center' },
+                                        style: { display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '400px' },
                                         children: [
-                                            { type: 'div', props: { style: { fontSize: '130px', fontWeight: 900, lineHeight: 1 }, children: origin } },
+                                            { type: 'div', props: { style: { fontSize: originSize, fontWeight: 900, lineHeight: 1, textAlign: 'center' }, children: origin } },
                                             { type: 'div', props: { style: { fontSize: '22px', color: slate400, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', marginTop: '10px' }, children: 'FROM' } },
                                         ],
                                     },
@@ -137,9 +148,9 @@ export const GET: APIRoute = async ({ url }) => {
                                 {
                                     type: 'div',
                                     props: {
-                                        style: { display: 'flex', flexDirection: 'column', alignItems: 'center' },
+                                        style: { display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '400px' },
                                         children: [
-                                            { type: 'div', props: { style: { fontSize: '130px', fontWeight: 900, lineHeight: 1 }, children: destination } },
+                                            { type: 'div', props: { style: { fontSize: destSize, fontWeight: 900, lineHeight: 1, textAlign: 'center' }, children: destination } },
                                             { type: 'div', props: { style: { fontSize: '22px', color: slate400, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', marginTop: '10px' }, children: 'TO' } },
                                         ],
                                     },
