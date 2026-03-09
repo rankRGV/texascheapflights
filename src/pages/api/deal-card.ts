@@ -14,13 +14,17 @@ export const GET: APIRoute = async ({ url }) => {
     }
 
     // Deal data
-    const origin = p.get('origin') ?? 'MFE';
+    const origin = (p.get('origin') ?? 'MFE').toUpperCase();
     const destination = p.get('destination') ?? 'CUN';
     const price = p.get('price');
     const points = p.get('points');
     const airline = p.get('airline') ?? 'Frontier';
     const dealType = p.get('type') ?? 'sale';
-    const dates = p.get('dates') ?? '';
+    const rawDates = p.get('dates') ?? '';
+
+    // Null-safe date handling
+    const dates = (rawDates === 'null' || !rawDates) ? 'Flexible Dates' : rawDates;
+
     const theme = p.get('theme') ?? 'dark';
 
     // Load logo as base64 for reliable rendering in Vercel OG
@@ -37,16 +41,17 @@ export const GET: APIRoute = async ({ url }) => {
     const navyDeep = '#050a14';
     const slate400 = '#94a3b8';
 
+    // Refined font scaling to be less aggressive / better balanced
     const scaledFontSize = (text: string) => {
         const len = text.length;
-        if (len <= 3)  return '130px';
-        if (len <= 6)  return '95px';
-        if (len <= 10) return '68px';
-        if (len <= 14) return '52px';
-        return '42px';
+        if (len <= 3) return '115px'; // Slightly smaller for 3-letter codes to match better
+        if (len <= 6) return '90px';
+        if (len <= 10) return '72px';
+        if (len <= 16) return '58px';
+        return '48px';
     };
     const originSize = scaledFontSize(origin);
-    const destSize   = scaledFontSize(destination);
+    const destSize = scaledFontSize(destination);
 
     const dealLabel =
         dealType === 'error_fare' ? '⚡ ERROR FARE'
