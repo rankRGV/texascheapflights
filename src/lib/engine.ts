@@ -91,15 +91,15 @@ export async function processDeal(title: string, content: string, source: string
       if (isScoutTest) console.log(`   🚀 Bypassing Score Threshold for Test Scout Deal`);
       else console.log(`   🎉 HIGH SCORE - SENDING ALERTS...`);
 
+      // Determine if we should auto-post to social (Score 9 or 10)
+      const isAutoPost = dealData.totalScore >= 9;
+
       // 1. Log to DB first to get the unique ID for internal linking
       const dealId = await logDealToDb(dealData, title, content, source, true, 'Prepared');
 
-      // 2. Trigger alerts with the internal ID
-      const sent = await triggerAlerts(dealData, content, dealId);
-
-      // 3. Update sent status if needed (optional since we set wasSent=true in logDealToDb above, 
-      // but if triggerAlerts fails entirely we might want to log that. 
-      // For now, tracking "Prepared" is enough as we assume Resend handles delivery).
+      // 2. Trigger alerts with the internal ID and auto-post flag
+      // Note: we are NOT auto-sending emails anymore per user request.
+      const sent = await triggerAlerts(dealData, content, dealId, isAutoPost);
 
       return { success: sent, score: dealData.totalScore };
     } else {
@@ -205,14 +205,13 @@ async function logDealToDb(deal: ParsedDeal, title: string, content: string, sou
   }
 }
 
-async function triggerAlerts(dealData: ParsedDeal, rawContent?: string, dealId?: string): Promise<boolean> {
+async function triggerAlerts(dealData: ParsedDeal, rawContent?: string, dealId?: string, autoPost: boolean = false): Promise<boolean> {
   try {
     const resendApiKey = import.meta.env.RESEND_API_KEY || process.env.RESEND_API_KEY;
     const discordWebhookUrl = import.meta.env.DISCORD_WEBHOOK_URL || process.env.DISCORD_WEBHOOK_URL;
+    const n8nWebhookUrl = import.meta.env.N8N_WEBHOOK_URL || 'https://jarvis-ens.app.n8n.cloud/webhook/433eb27d-eee4-4eaa-92fa-bba533544d43';
 
     let draftLink = "https://resend.com/broadcasts";
-
-    // Only create drafts for REAL deals (not system or support alerts)
 
     let bookLink = `https://www.google.com/travel/flights?q=Flights+to+${encodeURIComponent(dealData.destination)}+from+${encodeURIComponent(dealData.originAirport)}`;
     let datesText = "";
@@ -227,22 +226,42 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string, dealId?:
       }
     }
 
+    // 1. Social Automation (Trigger n8n if score is 9+)
+    if (autoPost && n8nWebhookUrl) {
+      try {
+        // Fetch full deal from DB to ensure n8n has everything
+        const { data: deal } = await supabase.from('deals').select('*').eq('id', dealId).single();
+        if (deal) {
+          await fetch(n8nWebhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              deal,
+              image_secret_key: import.meta.env.ADMIN_PASSWORD ?? 'tcf-admin-2026'
+            })
+          });
+          console.log(`   🚀 n8n Social Webhook triggered for auto-posting`);
+        }
+      } catch (err) {
+        console.warn("   ⚠️ n8n trigger failed:", err);
+      }
+    }
+
+    // 2. Email Draft (Resend) - ALWAYS creates a draft now, no auto-send.
     if (resendApiKey && dealData.originAirport !== "SYSTEM" && dealData.originAirport !== "SUPPORT") {
       const resend = new Resend(resendApiKey);
       const audiences = await resend.audiences.list();
       const audienceId = audiences.data?.data?.[0]?.id;
 
-      // 1-Click preference management link (Magical Token)
-      // Since this is a BROADCAST, we use Resend's personalization tags.
-      // We'll use the 'magical_token' we synced to contact metadata.
       const manageLink = `https://texascheapflights.com/manage-subscription?token={{contact.magical_token}}`;
 
       if (audienceId) {
-        const draft = await resend.broadcasts.create({
+        const broadcastPayload = {
           audienceId,
           from: 'Texas Cheap Flights <waitlist@texascheapflights.com>',
           subject: `✈️ ALERT: ${dealData.originAirport} ➔ ${dealData.destination} for $${dealData.price}!`,
           name: `Deal: ${dealData.originAirport} to ${dealData.destination}`,
+          send: false, // Ensure we only create drafts per user request
           html: `
             <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; color: #1e293b; overflow: hidden; border: 1px solid #e2e8f0;">
 
@@ -338,7 +357,9 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string, dealId?:
 
             </div>
           `
-        });
+        };
+
+        const draft = await resend.broadcasts.create(broadcastPayload as any);
         if (draft.data?.id) {
           draftLink = `https://resend.com/broadcasts/${draft.data.id}`;
         }
@@ -346,11 +367,11 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string, dealId?:
       }
     }
 
+    // 3. Discord Sync
     if (discordWebhookUrl) {
       let message = "";
       let clusterCountInfo = "";
 
-      // Calculate targeting count
       if (dealData.originAirport !== "SYSTEM" && dealData.originAirport !== "SUPPORT") {
         const cluster = getClusterAirports(dealData.originAirport);
         const { count } = await supabase
@@ -369,7 +390,8 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string, dealId?:
         message = `👤 **CUSTOMER SUPPORT INQUIRY** 👤\n\n**From:** (Check Resend/Email)\n**Subject:** ${dealData.explanation}\n\n**Message:**\n\`\`\`${rawContent?.substring(0, 1500)}\`\`\``;
       } else {
         const internalLink = dealId ? `\n🔗 **Site Details:** https://texascheapflights.com/deal/${dealId}` : "";
-        message = `🚨 **NEW DEAL FOUND (Score: ${dealData.totalScore}/10)** 🚨\n\n**Route:** ${dealData.originAirport} ➔ ${dealData.destination}\n**Price:** $${dealData.price} on ${dealData.airline}\n${datesText ? `**Dates:** ${datesText}\n` : ''}**Analysis:** ${dealData.explanation}${clusterCountInfo}\n\n🔗 **Verify:** [Check Google Flights](${bookLink})${internalLink}\n📝 **Draft Created:** [Review & Send in Resend](${draftLink})`;
+        const alertStatus = autoPost ? "🚀 **AUTO-POSTED TO SOCIALS**" : "📝 **DRAFT CREATED (Review Required)**";
+        message = `🚨 **NEW DEAL FOUND (Score: ${dealData.totalScore}/10)** 🚨\n\n**Status:** ${alertStatus}\n**Route:** ${dealData.originAirport} ➔ ${dealData.destination}\n**Price:** $${dealData.price} on ${dealData.airline}\n${datesText ? `**Dates:** ${datesText}\n` : ''}**Analysis:** ${dealData.explanation}${clusterCountInfo}\n\n🔗 **Verify:** [Check Google Flights](${bookLink})${internalLink}\n📝 **Review:** [Review in Resend](${draftLink})`;
       }
 
       await fetch(discordWebhookUrl, {

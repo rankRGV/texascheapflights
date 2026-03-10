@@ -1,0 +1,108 @@
+---
+import '../../styles/global.css';
+import GlobalNav from '../../components/GlobalNav.astro';
+import AirportGuide from '../../components/AirportGuide.astro';
+
+const airportCode = "MFE";
+const city = "McAllen";
+const airportName = "McAllen–Miller International";
+
+const sweetSpots = [
+  { 
+    destination: "Orlando (MCO)", 
+    reason: "Frontier and Allegiant glitches often drop this to $38-$54 roundtrip. Best value for RGV families." 
+  },
+  { 
+    destination: "Las Vegas (LAS)", 
+    reason: "Low-cost carrier competition makes this a prime target for $90 roundtrip sales." 
+  },
+  { 
+    destination: "Mexico City (MEX)", 
+    reason: "Aeromexico and Volaris connections from local border airports create award sweet spots as low as 7.5k miles." 
+  }
+];
+
+const description = `McAllen–Miller International (MFE) is the premier gateway for the Rio Grande Valley. While it's often more expensive than flying out of San Antonio or Houston for long-haul routes, it is a goldmine for 'Cash Glitches' to Florida and the West Coast. Our AI Scout monitors MFE 24/7 for algorithm slips on American and United, which often match low-cost carrier pricing while providing better service.`;
+
+const parkingTips = "The economy lot at MFE is one of the easiest in Texas. Pro-tip: The short-term lot is free for the first 15 minutes, perfect for quick drop-offs. For long trips, the economy lot's flat rate often beats the cost of a round-trip Uber from North McAllen.";
+
+const tsaWaitStatus = "Generally extremely fast. Even on Monday mornings, wait times rarely exceed 15 minutes. However, give yourself a 45-minute buffer during 'Semana Santa' or major holiday weekends due to cross-border traffic surges.";
+
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cheap Flights from McAllen (MFE) | Regional Travel Intelligence</title>
+  <meta name="description" content={`The ultimate travel hacking guide for McAllen (MFE) travelers. Discover parking secrets, TSA tips, and the best flight "Sweet Spots" from the RGV.`} />
+  <link rel="canonical" href="https://texascheapflights.com/guides/mfe" />
+</head>
+<body class="bg-navy-deep text-white selection:bg-gold/30">
+  <GlobalNav />
+
+  <main class="max-w-7xl mx-auto px-6 pt-32 pb-24">
+    <div class="mb-12">
+      <a href="/past-deals" class="text-slate-500 hover:text-gold text-sm font-bold flex items-center gap-2 transition-colors mb-4">
+        &larr; Back to Deal Archive
+      </a>
+      <h2 class="text-sm font-black text-gold uppercase tracking-[0.3em] mb-2">Regional Intelligence</h2>
+      <p class="text-slate-400 max-w-2xl">
+        Most travel guides focus on DFW or IAH. We believe the RGV deserves better. This guide is built specifically for MFE flyers who want to stop overpaying.
+      </p>
+    </div>
+
+    <AirportGuide 
+      airportCode={airportCode}
+      airportName={airportName}
+      city={city}
+      description={description}
+      sweetSpots={sweetSpots}
+      parkingTips={parkingTips}
+      tsaWaitStatus={tsaWaitStatus}
+    />
+
+    <!-- SEO Content Section -->
+    <section class="mt-24 max-w-3xl mx-auto">
+      <article class="prose prose-invert lg:prose-xl">
+        <h2 class="text-3xl font-black text-white italic">Why MFE is a "Travel Hacking" Moat</h2>
+        <p class="text-slate-400">
+          Flight pricing algorithms often overlook regional airports like McAllen. This "oversight" creates windows where legacy carriers like American or United drop their prices to compete with ultra-low-cost carriers (ULCCs) in nearby markets like Harlingen. 
+        </p>
+        <p class="text-slate-400">
+          By monitoring <strong>MFE</strong> specifically, we can catch these "matching errors" before they are corrected. If you see a price to Orlando for under $100 from McAllen, it's almost certainly a glitch — book it immediately.
+        </p>
+        
+        <div class="my-12 p-8 bg-gold/5 border-l-4 border-gold rounded-r-2xl italic text-lg text-gold/80 leading-relaxed">
+          "The best way to travel from McAllen isn't just about finding the cheapest flight; it's about knowing when the algorithm is broken in your favor."
+        </div>
+
+        <h3 class="text-2xl font-black text-white">How to Get MFE Alerts</h3>
+        <p class="text-slate-400">
+          You don't need to search every day. Our AI Scout handles the heavy lifting. We monitor thousands of routes from McAllen every hour. When a price falls into the "Unicorn" category (9/10 or higher), we'll send it straight to your inbox.
+        </p>
+      </article>
+    </section>
+
+    <!-- Footer CTA -->
+    <section class="mt-24 p-12 bg-gradient-to-br from-navy-mid to-navy-deep border border-white/10 rounded-[2.5rem] text-center">
+      <h2 class="text-3xl font-black text-white mb-4">Ready to find your next MFE glitch?</h2>
+      <p class="text-slate-400 mb-8 max-w-xl mx-auto">
+        Join the 500+ McAllen travelers who get alert before the algorithms catch up.
+      </p>
+      <a href="/" class="inline-block bg-gold text-navy-deep px-10 py-5 rounded-2xl font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_20px_40px_rgba(212,168,67,0.2)]">
+        Join the waitlist
+      </a>
+    </section>
+  </main>
+
+  <footer class="py-12 border-t border-white/5 text-center">
+    <p class="text-slate-600 text-sm">
+      &copy; 2026 Texas Cheap Flights. All rights reserved. <br/>
+      Built for Texans, by Texans.
+    </p>
+  </footer>
+
+</body>
+</html>
