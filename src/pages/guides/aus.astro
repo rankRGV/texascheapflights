@@ -1,0 +1,108 @@
+---
+import '../../styles/global.css';
+import GlobalNav from '../../components/GlobalNav.astro';
+import AirportGuide from '../../components/AirportGuide.astro';
+
+const airportCode = "AUS";
+const city = "Austin";
+const airportName = "Austin-Bergstrom International";
+
+const sweetSpots = [
+  { 
+    destination: "London (LHR)", 
+    reason: "Virgin Atlantic and British Airways' direct service from AUS often triggers 'Premium Slips' where upper class seats drop into the 120k-150k point range." 
+  },
+  { 
+    destination: "San Jose (SJC)", 
+    reason: "The tech-corridor link often sees 'Business Gaps' where weekend fares drop to $120 roundtrip to compete with Alaska Airlines." 
+  },
+  { 
+    destination: "Cancun (CUN)", 
+    reason: "High competition from Southwest and ultra-low-cost carriers makes this a target for sub-$180 roundtrip sales year-round." 
+  }
+];
+
+const description = `Austin-Bergstrom International (AUS) is the fastest-growing airport in Texas, reflecting the city’s tech-driven boom. Because it is highly domestic but expanding its global footprint, price wars are common. Our AI Scout focuses on the 'Expansion Errors' — moments where new routes or increased frequency on existing legs trigger a matching response from legacy carriers that leads to temporary value windows.`;
+
+const parkingTips = "AUS parking can be a bottleneck during major events like SXSW or ACL. The Blue garage is the closest and most convenient. For the best value, use the economy lots or the 'Park & Zoom' facility. Pro-tip: Always check the 'live parking availability' on the AUS website before you leave home to avoid circling the full garages.";
+
+const tsaWaitStatus = "AUS is notorious for unpredictable wait times during festival seasons and 'Monday Morning Tech Rushes.' Even with PreCheck, allow 45 minutes for security during peak periods. Without it, 90 minutes is safer during major event weekends.";
+
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cheap Flights from Austin (AUS) | Regional Travel Intelligence</title>
+  <meta name="description" content={`The ultimate travel hacking guide for Austin (AUS) travelers. Discover parking secrets, TSA tips, and the best flight "Sweet Spots" from the Live Music Capital of the World.`} />
+  <link rel="canonical" href="https://texascheapflights.com/guides/aus" />
+</head>
+<body class="bg-navy-deep text-white selection:bg-gold/30">
+  <GlobalNav />
+
+  <main class="max-w-7xl mx-auto px-6 pt-32 pb-24">
+    <div class="mb-12">
+      <a href="/past-deals" class="text-slate-500 hover:text-gold text-sm font-bold flex items-center gap-2 transition-colors mb-4">
+        &larr; Back to Deal Archive
+      </a>
+      <h2 class="text-sm font-black text-gold uppercase tracking-[0.3em] mb-2">Regional Intelligence</h2>
+      <p class="text-slate-400 max-w-2xl">
+        In the Live Music Capital, flight prices can be as volatile as a festival lineup. This guide shows you how to find the 'Unicorn' deals that keep your travel budget in the green.
+      </p>
+    </div>
+
+    <AirportGuide 
+      airportCode={airportCode}
+      airportName={airportName}
+      city={city}
+      description={description}
+      sweetSpots={sweetSpots}
+      parkingTips={parkingTips}
+      tsaWaitStatus={tsaWaitStatus}
+    />
+
+    <!-- SEO Content Section -->
+    <section class="mt-24 max-w-3xl mx-auto">
+      <article class="prose prose-invert lg:prose-xl">
+        <h2 class="text-3xl font-black text-white italic">The Austin "Expansion Error" Strategy</h2>
+        <p class="text-slate-400">
+          Flight pricing at <strong>AUS</strong> is driven by rapid growth. Our AI Scout specializes in catching the <strong>'Expansion Errors'</strong> — windows where new direct routes (like those to Europe or the West Coast) trigger a pricing mismatch as legacy carriers try to protect their market share against the new competition.
+        </p>
+        <p class="text-slate-400">
+          By monitoring <strong>AUS</strong> specifically, we catch the unadvertised sales that make Austin the true 'Deal Hub' for tech and creative travelers in Central Texas.
+        </p>
+        
+        <div class="my-12 p-8 bg-gold/5 border-l-4 border-gold rounded-r-2xl italic text-lg text-gold/80 leading-relaxed">
+          "The best way to save in Austin isn't just about Southwest; it's about catching the legacy carriers when they're scared of the city's growth."
+        </div>
+
+        <h3 class="text-2xl font-black text-white">Get AUS Alerts</h3>
+        <p class="text-slate-400">
+          Subscribe to our AUS-specific alert list. We monitor كل Southwest, American, and Delta route from Austin every hour. When a price hits the "Unicorn" threshold, you'll be the first to know.
+        </p>
+      </article>
+    </section>
+
+    <!-- Footer CTA -->
+    <section class="mt-24 p-12 bg-gradient-to-br from-navy-mid to-navy-deep border border-white/10 rounded-[2.5rem] text-center">
+      <h2 class="text-3xl font-black text-white mb-4">Ready to find an Austin glitch?</h2>
+      <p class="text-slate-400 mb-8 max-w-xl mx-auto">
+        Join the 2,000+ Austin travelers who get alert before the algorithms catch up.
+      </p>
+      <a href="/" class="inline-block bg-gold text-navy-deep px-10 py-5 rounded-2xl font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_20px_40px_rgba(212,168,67,0.2)]">
+        Join the waitlist
+      </a>
+    </section>
+  </main>
+
+  <footer class="py-12 border-t border-white/5 text-center">
+    <p class="text-slate-600 text-sm">
+      &copy; 2026 Texas Cheap Flights. All rights reserved. <br/>
+      Built for Texans, by Texans.
+    </p>
+  </footer>
+
+</body>
+</html>

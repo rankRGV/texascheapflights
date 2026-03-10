@@ -1,0 +1,108 @@
+---
+import '../../styles/global.css';
+import GlobalNav from '../../components/GlobalNav.astro';
+import AirportGuide from '../../components/AirportGuide.astro';
+
+const airportCode = "DAL";
+const city = "Dallas";
+const airportName = "Dallas Love Field";
+
+const sweetSpots = [
+  { 
+    destination: "Austin (AUS)", 
+    reason: "The intra-Texas shuttle route is a Southwest staple. We catch 'Short-Hop Slips' where pricing drops to $69 roundtrip or 4.5k points." 
+  },
+  { 
+    destination: "Denver (DEN)", 
+    reason: "Heavy competition between Southwest and United (connecting) often triggers roundtrip deals in the sub-$140 range from Love Field." 
+  },
+  { 
+    destination: "New York (LGA)", 
+    reason: "The high-volume business corridor between Dallas and NYC often sees weekend 'Inventory Dumping' where prices hit sub-$180 roundtrip." 
+  }
+];
+
+const description = `Dallas Love Field (DAL) is the legendary home of Southwest Airlines and the favorite airport for Dallas locals. Because of its urban location and Southwest's dominance, Love Field is built for point-to-point efficiency. Our AI Scout specializes in the 'Locker-Stock Overflows' — windows where Southwest or its competitor Delta (the only legacy carrier at DAL) mismatch pricing against the behemoth DFW hub, creating temporary value windows for savvy travelers.`;
+
+const parkingTips = "Love Field parking is highly efficient but can fill up fast during holidays. Parking Garages A and B are the most convenient. For the best value, use the Wright Lot (valet or self-park) which is just a short shuttle ride away. Pro-tip: Arriving 45 minutes before departure is usually plenty of time at DAL, but check the garage status on the DAL website before you lock in your plan.";
+
+const tsaWaitStatus = "Typically very quick, usually between 10-20 minutes. However, give yourself a 30-minute buffer on Monday mornings and Thursday afternoons when the 'Business Traveler Bank' hits the terminal.";
+
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cheap Flights from Dallas Love Field (DAL) | Regional Travel Intelligence</title>
+  <meta name="description" content={`The ultimate travel hacking guide for Dallas Love Field (DAL) travelers. Discover parking secrets, TSA tips, and the best flight "Sweet Spots" from Dallas' favorite airport.`} />
+  <link rel="canonical" href="https://texascheapflights.com/guides/dal" />
+</head>
+<body class="bg-navy-deep text-white selection:bg-gold/30">
+  <GlobalNav />
+
+  <main class="max-w-7xl mx-auto px-6 pt-32 pb-24">
+    <div class="mb-12">
+      <a href="/past-deals" class="text-slate-500 hover:text-gold text-sm font-bold flex items-center gap-2 transition-colors mb-4">
+        &larr; Back to Deal Archive
+      </a>
+      <h2 class="text-sm font-black text-gold uppercase tracking-[0.3em] mb-2">Regional Intelligence</h2>
+      <p class="text-slate-400 max-w-2xl">
+        At Love Field, the Southwest 'Wanna Get Away' fares are the law of the land. This guide shows you how to find the 'Hub Mismatches' that keep your travel budget in the green.
+      </p>
+    </div>
+
+    <AirportGuide 
+      airportCode={airportCode}
+      airportName={airportName}
+      city={city}
+      description={description}
+      sweetSpots={sweetSpots}
+      parkingTips={parkingTips}
+      tsaWaitStatus={tsaWaitStatus}
+    />
+
+    <!-- SEO Content Section -->
+    <section class="mt-24 max-w-3xl mx-auto">
+      <article class="prose prose-invert lg:prose-xl">
+        <h2 class="text-3xl font-black text-white italic">The DAL "Hub Mismatch" Strategy</h2>
+        <p class="text-slate-400">
+          Flight pricing at <strong>DAL</strong> is derived from Southwest's point-to-point network. Our AI Scout specializes in catching the <strong>'Hub Mismatches'</strong> — moments where the pricing at Love Field loses its alignment with the massive DFW hub nearby, creating a window where a savvy traveler can fly for significantly less than their neighbor flying out of DFW.
+        </p>
+        <p class="text-slate-400">
+          By monitoring <strong>DAL</strong> specifically, we catch the unadvertised sales that make Love Field the true 'Local Favorite' for domestic and regional travel in North Texas.
+        </p>
+        
+        <div class="my-12 p-8 bg-gold/5 border-l-4 border-gold rounded-r-2xl italic text-lg text-gold/80 leading-relaxed">
+          "The best way to save at Love Field isn't just about Southwest; it's about flying Southwest when the DFW algorithms aren't paying attention."
+        </div>
+
+        <h3 class="text-2xl font-black text-white">Get DAL Alerts</h3>
+        <p class="text-slate-400">
+          Subscribe to our DAL-specific alert list. We monitor كل Southwest departure for algorithm slips. When a price hits the "Unicorn" threshold for a domestic or short-haul international trip, we'll send it straight to your inbox.
+        </p>
+      </article>
+    </section>
+
+    <!-- Footer CTA -->
+    <section class="mt-24 p-12 bg-gradient-to-br from-navy-mid to-navy-deep border border-white/10 rounded-[2.5rem] text-center">
+      <h2 class="text-3xl font-black text-white mb-4">Ready to find a Love Field glitch?</h2>
+      <p class="text-slate-400 mb-8 max-w-xl mx-auto">
+        Join the 1,000+ Dallas travelers who get alert before the domestic algorithms catch up.
+      </p>
+      <a href="/" class="inline-block bg-gold text-navy-deep px-10 py-5 rounded-2xl font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_20px_40px_rgba(212,168,67,0.2)]">
+        Join the waitlist
+      </a>
+    </section>
+  </main>
+
+  <footer class="py-12 border-t border-white/5 text-center">
+    <p class="text-slate-600 text-sm">
+      &copy; 2026 Texas Cheap Flights. All rights reserved. <br/>
+      Built for Texans, by Texans.
+    </p>
+  </footer>
+
+</body>
+</html>

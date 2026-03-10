@@ -1,0 +1,108 @@
+---
+import '../../styles/global.css';
+import GlobalNav from '../../components/GlobalNav.astro';
+import AirportGuide from '../../components/AirportGuide.astro';
+
+const airportCode = "HOU";
+const city = "Houston";
+const airportName = "William P. Hobby Airport";
+
+const sweetSpots = [
+  { 
+    destination: "New Orleans (MSY)", 
+    reason: "A Southwest classic. We catch the 'Wanna Get Away' glitches that drop into the $49-$69 range for short-notice weekend trips." 
+  },
+  { 
+    destination: "Chicago (MDW)", 
+    reason: "Midway to Hobby is a high-volume corridor. We frequently see award sweet spots as low as 6k-8k points roundtrip." 
+  },
+  { 
+    destination: "Belize City (BZE)", 
+    reason: "Southwest's direct service from HOU is the primary target for seasonal sub-$300 roundtrip sales that beat IAH pricing every time." 
+  }
+];
+
+const description = `William P. Hobby Airport (HOU) is the Southwest Airlines stronghold of Houston. Unlike the sprawling IAH, Hobby is built for speed and efficiency. Because it is dominated by Southwest's point-to-point network, pricing is extremely dynamic. Our AI Scout specializes in the 'Wanna Get Away Overflows' — windows where Southwest dumps unsold inventory at massive discounts, often triggering matching responses from legacy carriers trying to protect their Houston market share.`;
+
+const parkingTips = "Hobby offers excellent parking options. The Red and Blue garages are directly connected to the terminal. For the best value, use the ecopark lot, which is just a short shuttle ride away. Pro-tip: Southwest flyers can often find parking and be at their gate in under 15 minutes, making HOU the favorite for domestic efficiency.";
+
+const tsaWaitStatus = "Typically very efficient, usually between 10-15 minutes. However, give yourself a 30-minute buffer on Friday afternoons and Sunday evenings when the weekend leisure traffic hits its peak.";
+
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cheap Flights from Houston Hobby (HOU) | Regional Travel Intelligence</title>
+  <meta name="description" content={`The ultimate travel hacking guide for Houston Hobby (HOU) travelers. Discover parking secrets, TSA tips, and the best flight "Sweet Spots" from Houston's domestic favorite.`} />
+  <link rel="canonical" href="https://texascheapflights.com/guides/hou" />
+</head>
+<body class="bg-navy-deep text-white selection:bg-gold/30">
+  <GlobalNav />
+
+  <main class="max-w-7xl mx-auto px-6 pt-32 pb-24">
+    <div class="mb-12">
+      <a href="/past-deals" class="text-slate-500 hover:text-gold text-sm font-bold flex items-center gap-2 transition-colors mb-4">
+        &larr; Back to Deal Archive
+      </a>
+      <h2 class="text-sm font-black text-gold uppercase tracking-[0.3em] mb-2">Regional Intelligence</h2>
+      <p class="text-slate-400 max-w-2xl">
+        At Hobby, the Southwest 'Wanna Get Away' fares are king. This guide shows you how to find the 'Inventory Slips' that keep your travel budget in the black.
+      </p>
+    </div>
+
+    <AirportGuide 
+      airportCode={airportCode}
+      airportName={airportName}
+      city={city}
+      description={description}
+      sweetSpots={sweetSpots}
+      parkingTips={parkingTips}
+      tsaWaitStatus={tsaWaitStatus}
+    />
+
+    <!-- SEO Content Section -->
+    <section class="mt-24 max-w-3xl mx-auto">
+      <article class="prose prose-invert lg:prose-xl">
+        <h2 class="text-3xl font-black text-white italic">The HOU "Southwest Overflow" Strategy</h2>
+        <p class="text-slate-400">
+          Flight pricing at <strong>HOU</strong> is driven by Southwest's point-to-point dominance. Our AI Scout specializes in catching the <strong>'Wanna Get Away Overflows'</strong> — moments where Southwest has excess inventory on specific routes and must dump it to the public, often triggering a price match from competitors at IAH trying to capture the Houston leisure traveler.
+        </p>
+        <p class="text-slate-400">
+          By monitoring <strong>HOU</strong> specifically, we catch the unadvertised sales that make Hobby the true 'Value Hub' for domestic and regional international travel.
+        </p>
+        
+        <div class="my-12 p-8 bg-gold/5 border-l-4 border-gold rounded-r-2xl italic text-lg text-gold/80 leading-relaxed">
+          "The secret to Hobby isn't just about flying Southwest; it's about flying Southwest when their algorithm is desperate to fill a seat."
+        </div>
+
+        <h3 class="text-2xl font-black text-white">Get HOU Alerts</h3>
+        <p class="text-slate-400">
+          Subscribe to our HOU-specific alert list. We monitor كل Southwest departure for algorithm slips. When a price hits the "Unicorn" threshold for a domestic or Caribbean trip, we'll send it straight to your inbox.
+        </p>
+      </article>
+    </section>
+
+    <!-- Footer CTA -->
+    <section class="mt-24 p-12 bg-gradient-to-br from-navy-mid to-navy-deep border border-white/10 rounded-[2.5rem] text-center">
+      <h2 class="text-3xl font-black text-white mb-4">Ready to find a Hobby glitch?</h2>
+      <p class="text-slate-400 mb-8 max-w-xl mx-auto">
+        Join the 1,000+ Houston travelers who get alert before the domestic algorithms catch up.
+      </p>
+      <a href="/" class="inline-block bg-gold text-navy-deep px-10 py-5 rounded-2xl font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_20px_40px_rgba(212,168,67,0.2)]">
+        Join the waitlist
+      </a>
+    </section>
+  </main>
+
+  <footer class="py-12 border-t border-white/5 text-center">
+    <p class="text-slate-600 text-sm">
+      &copy; 2026 Texas Cheap Flights. All rights reserved. <br/>
+      Built for Texans, by Texans.
+    </p>
+  </footer>
+
+</body>
+</html>

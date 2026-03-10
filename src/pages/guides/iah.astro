@@ -1,0 +1,108 @@
+---
+import '../../styles/global.css';
+import GlobalNav from '../../components/GlobalNav.astro';
+import AirportGuide from '../../components/AirportGuide.astro';
+
+const airportCode = "IAH";
+const city = "Houston";
+const airportName = "George Bush Intercontinental";
+
+const sweetSpots = [
+  { 
+    destination: "Cozumel (CZM)", 
+    reason: "United’s dominance at IAH often yields unadvertised 'Matching Slips' when Southwest sales hit HOU. We catch roundtrips for sub-$250 cash or 12k miles." 
+  },
+  { 
+    destination: "Paris (CDG)", 
+    reason: "As a primary European gateway, IAH sees massive competitive drops on Air France and United, often hitting the $450-$550 roundtrip range." 
+  },
+  { 
+    destination: "Bogota (BOG)", 
+    reason: "The deep connection to South America creates frequent award sweet spots where LifeMiles can be leveraged for 5-star value." 
+  }
+];
+
+const description = `George Bush Intercontinental (IAH) is the international soul of Houston and the primary fortress hub for United Airlines. Because it handles the majority of Houston's global traffic, the competition for international seats is fierce. Our AI Scout specializes in the 'Gateway Gaps' — windows where United or its Star Alliance partners drop prices to match mid-market competition or to fill long-haul cabins during off-peak trade windows.`;
+
+const parkingTips = "IAH has a complicated parking layout across five terminals. The terminal garages are convenient but pricey. For the best value, use the ecopark or ecopark2 lots, which involve a short shuttle but offer massive savings. Pro-tip: Booking online at least 48 hours in advance can save you significant money compared to drive-up rates.";
+
+const tsaWaitStatus = "Expect longer wait times at Terminals C and E. IAH is a massive hub for connecting travelers, so security lines can surge suddenly between 8 AM - 10 AM and 4 PM - 6 PM. Give yourself at least 60 minutes if you don't have PreCheck or CLEAR.";
+
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cheap Flights from Houston (IAH) | Regional Travel Intelligence</title>
+  <meta name="description" content={`The ultimate travel hacking guide for Houston (IAH) travelers. Discover parking secrets, TSA tips, and the best flight "Sweet Spots" from Texas' global gateway.`} />
+  <link rel="canonical" href="https://texascheapflights.com/guides/iah" />
+</head>
+<body class="bg-navy-deep text-white selection:bg-gold/30">
+  <GlobalNav />
+
+  <main class="max-w-7xl mx-auto px-6 pt-32 pb-24">
+    <div class="mb-12">
+      <a href="/past-deals" class="text-slate-500 hover:text-gold text-sm font-bold flex items-center gap-2 transition-colors mb-4">
+        &larr; Back to Deal Archive
+      </a>
+      <h2 class="text-sm font-black text-gold uppercase tracking-[0.3em] mb-2">Regional Intelligence</h2>
+      <p class="text-slate-400 max-w-2xl">
+        At IAH, the world is at your doorstep, but so is the 'Hub Tax.' This guide shows you how to bypass the high prices and find the global glitches that only the pros know.
+      </p>
+    </div>
+
+    <AirportGuide 
+      airportCode={airportCode}
+      airportName={airportName}
+      city={city}
+      description={description}
+      sweetSpots={sweetSpots}
+      parkingTips={parkingTips}
+      tsaWaitStatus={tsaWaitStatus}
+    />
+
+    <!-- SEO Content Section -->
+    <section class="mt-24 max-w-3xl mx-auto">
+      <article class="prose prose-invert lg:prose-xl">
+        <h2 class="text-3xl font-black text-white italic">The IAH "Gateway Gap" Strategy</h2>
+        <p class="text-slate-400">
+          Flight pricing at <strong>IAH</strong> is anchored by United's global network. Our AI Scout focuses on the <strong>'Gateway Gaps'</strong> — windows where the pricing algorithms for international flights mismatch against regional competition or when a partner airline dumps inventory into the Houston market.
+        </p>
+        <p class="text-slate-400">
+          By monitoring <strong>IAH</strong> specifically, we catch the award sweet spots to South America and Europe that stay hidden from standard travel aggregators.
+        </p>
+        
+        <div class="my-12 p-8 bg-gold/5 border-l-4 border-gold rounded-r-2xl italic text-lg text-gold/80 leading-relaxed">
+          "The secret to IAH isn't just about flying United; it's about flying United when they're scared of someone else's price."
+        </div>
+
+        <h3 class="text-2xl font-black text-white">Get IAH Alerts</h3>
+        <p class="text-slate-400">
+          Subscribe to our IAH-specific alert list. We monitor every international departure for algorithm slips. When a price hits the "Unicorn" threshold for a global destination, you'll be the first to know.
+        </p>
+      </article>
+    </section>
+
+    <!-- Footer CTA -->
+    <section class="mt-24 p-12 bg-gradient-to-br from-navy-mid to-navy-deep border border-white/10 rounded-[2.5rem] text-center">
+      <h2 class="text-3xl font-black text-white mb-4">Ready to find an IAH glitch?</h2>
+      <p class="text-slate-400 mb-8 max-w-xl mx-auto">
+        Join the 1,500+ Houston travelers who get alert before the global algorithms catch up.
+      </p>
+      <a href="/" class="inline-block bg-gold text-navy-deep px-10 py-5 rounded-2xl font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_20px_40px_rgba(212,168,67,0.2)]">
+        Join the waitlist
+      </a>
+    </section>
+  </main>
+
+  <footer class="py-12 border-t border-white/5 text-center">
+    <p class="text-slate-600 text-sm">
+      &copy; 2026 Texas Cheap Flights. All rights reserved. <br/>
+      Built for Texans, by Texans.
+    </p>
+  </footer>
+
+</body>
+</html>

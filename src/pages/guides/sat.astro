@@ -1,0 +1,108 @@
+---
+import '../../styles/global.css';
+import GlobalNav from '../../components/GlobalNav.astro';
+import AirportGuide from '../../components/AirportGuide.astro';
+
+const airportCode = "SAT";
+const city = "San Antonio";
+const airportName = "San Antonio International";
+
+const sweetSpots = [
+  { 
+    destination: "Mexico City (MEX)", 
+    reason: "SAT is a primary gateway to Mexico. We catch 'Cross-Border Slips' where Aeromexico and Volaris drop roundtrip prices to sub-$200 ranges." 
+  },
+  { 
+    destination: "Las Vegas (LAS)", 
+    reason: "Heavy competition between Southwest and Allegiant makes SAT a target for sub-$100 roundtrip sales that stay open for 48+ hours." 
+  },
+  { 
+    destination: "Orlando (MCO)", 
+    reason: "Frequent ultra-low-cost carrier presence triggers matching errors from Southwest and American, creating sub-$120 roundtrip windows." 
+  }
+];
+
+const description = `San Antonio International (SAT) is the historical and cultural gateway to South Texas. Because it serves a large military and tourism-heavy population, flight pricing is driven by peak weekend demand. Our AI Scout specializes in the 'Military Mismatches' — windows where legacy carriers like American and Delta drop prices to fill mid-week seats that don't fit the 'Friday-to-Sunday' tourist cycle.`;
+
+const parkingTips = "SAT has two main terminal garages and several economy lots. The Long-Term Garage is right across from Terminal A. For the best value, use the economy lots (Green and Red) which offer a reliable shuttle service. Pro-tip: If you're a frequent flyer, the SAT Guaranteed Parking program can save you the stress of finding a spot during busy holiday weekends.";
+
+const tsaWaitStatus = "Generally manageable, usually between 15-25 minutes. However, give yourself a 45-minute buffer during 'Fiesta' season or major military graduation weekends (typically Thursdays and Fridays) when the terminal volume can surge exponentially.";
+
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cheap Flights from San Antonio (SAT) | Regional Travel Intelligence</title>
+  <meta name="description" content={`The ultimate travel hacking guide for San Antonio (SAT) travelers. Discover parking secrets, TSA tips, and the best flight "Sweet Spots" from the Alamo City.`} />
+  <link rel="canonical" href="https://texascheapflights.com/guides/sat" />
+</head>
+<body class="bg-navy-deep text-white selection:bg-gold/30">
+  <GlobalNav />
+
+  <main class="max-w-7xl mx-auto px-6 pt-32 pb-24">
+    <div class="mb-12">
+      <a href="/past-deals" class="text-slate-500 hover:text-gold text-sm font-bold flex items-center gap-2 transition-colors mb-4">
+        &larr; Back to Deal Archive
+      </a>
+      <h2 class="text-sm font-black text-gold uppercase tracking-[0.3em] mb-2">Regional Intelligence</h2>
+      <p class="text-slate-400 max-w-2xl">
+        In the Alamo City, finding a deal shouldn't be a battle. This guide shows you how to bypass the 'Tourist Tax' and find the 'Military Mismatches' that save you hundreds.
+      </p>
+    </div>
+
+    <AirportGuide 
+      airportCode={airportCode}
+      airportName={airportName}
+      city={city}
+      description={description}
+      sweetSpots={sweetSpots}
+      parkingTips={parkingTips}
+      tsaWaitStatus={tsaWaitStatus}
+    />
+
+    <!-- SEO Content Section -->
+    <section class="mt-24 max-w-3xl mx-auto">
+      <article class="prose prose-invert lg:prose-xl">
+        <h2 class="text-3xl font-black text-white italic">The San Antonio "Military Mismatch" Strategy</h2>
+        <p class="text-slate-400">
+          Flight pricing at <strong>SAT</strong> is heavily influenced by the tourism and military cycle. Our AI Scout focuses on the <strong>'Military Mismatches'</strong> — windows where airlines over-index for weekend leisure travel but under-price mid-week flights to fill capacity that isn't captured by the 'Friday-to-Sunday' crowd.
+        </p>
+        <p class="text-slate-400">
+          By monitoring <strong>SAT</strong> specifically, we catch the unadvertised sales that make San Antonio a hidden gem for travelers who can fly outside the standard weekend bank.
+        </p>
+        
+        <div class="my-12 p-8 bg-gold/5 border-l-4 border-gold rounded-r-2xl italic text-lg text-gold/80 leading-relaxed">
+          "The best way to save in San Antonio isn't just about picking the right flight; it's about flying when everyone else is still at work."
+        </div>
+
+        <h3 class="text-2xl font-black text-white">Get SAT Alerts</h3>
+        <p class="text-slate-400">
+          Subscribe to our SAT-specific alert list. We monitor كل Southwest, American, and Delta route from San Antonio every hour. When a price hits the "Unicorn" threshold, you'll be the first to know.
+        </p>
+      </article>
+    </section>
+
+    <!-- Footer CTA -->
+    <section class="mt-24 p-12 bg-gradient-to-br from-navy-mid to-navy-deep border border-white/10 rounded-[2.5rem] text-center">
+      <h2 class="text-3xl font-black text-white mb-4">Ready to find a San Antonio glitch?</h2>
+      <p class="text-slate-400 mb-8 max-w-xl mx-auto">
+        Join the 1,000+ San Antonio travelers who get alert before the algorithms catch up.
+      </p>
+      <a href="/" class="inline-block bg-gold text-navy-deep px-10 py-5 rounded-2xl font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_20px_40px_rgba(212,168,67,0.2)]">
+        Join the waitlist
+      </a>
+    </section>
+  </main>
+
+  <footer class="py-12 border-t border-white/5 text-center">
+    <p class="text-slate-600 text-sm">
+      &copy; 2026 Texas Cheap Flights. All rights reserved. <br/>
+      Built for Texans, by Texans.
+    </p>
+  </footer>
+
+</body>
+</html>

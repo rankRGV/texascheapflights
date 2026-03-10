@@ -1,0 +1,108 @@
+---
+import '../../styles/global.css';
+import GlobalNav from '../../components/GlobalNav.astro';
+import AirportGuide from '../../components/AirportGuide.astro';
+
+const airportCode = "DFW";
+const city = "Dallas";
+const airportName = "Dallas/Fort Worth International";
+
+const sweetSpots = [
+  { 
+    destination: "London (LHR)", 
+    reason: "As an American Airlines mega-hub, DFW sees frequent award sweet spots (30k-45k miles) and premium economy glitches that drop below $900 roundtrip." 
+  },
+  { 
+    destination: "Cancun (CUN)", 
+    reason: "Hyper-competition between American, United, and Spirit creates constant sub-$200 roundtrip cash deals from DFW." 
+  },
+  { 
+    destination: "Tokyo (NRT/HND)", 
+    reason: "DFW is a major gateway to Asia. We catch the unadvertised sales where JAL and American drop prices to $600-$750 roundtrip." 
+  }
+];
+
+const description = `Dallas/Fort Worth International (DFW) is one of the world's most connected airports. While it is the fortress hub for American Airlines, this massive volume actually creates unique opportunities. Our AI Scout focuses on the 'Hub Overflow' — windows where American slashes prices to match competition from Dallas Love Field or to fill surplus capacity on long-haul international routes.`;
+
+const parkingTips = "DFW is massive, so parking choice is critical. The Terminal Parking is the fastest but most expensive. For the best value, use the DFW Remote South or North lots with the pre-book discount. Pro-tip: Download the DFW Airport app to save up to 50% on parking by booking at least 24 hours in advance.";
+
+const tsaWaitStatus = "Varies significantly by terminal. Terminal D (International) and Terminal A tend to be the busiest. DFW is a prime candidate for TSA PreCheck or CLEAR. Without them, give yourself at least 45-60 minutes for security during peak morning and afternoon banks.";
+
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cheap Flights from Dallas (DFW) | Regional Travel Intelligence</title>
+  <meta name="description" content={`The ultimate travel hacking guide for Dallas (DFW) travelers. Discover parking secrets, TSA tips, and the best flight "Sweet Spots" from the world's third busiest airport.`} />
+  <link rel="canonical" href="https://texascheapflights.com/guides/dfw" />
+</head>
+<body class="bg-navy-deep text-white selection:bg-gold/30">
+  <GlobalNav />
+
+  <main class="max-w-7xl mx-auto px-6 pt-32 pb-24">
+    <div class="mb-12">
+      <a href="/past-deals" class="text-slate-500 hover:text-gold text-sm font-bold flex items-center gap-2 transition-colors mb-4">
+        &larr; Back to Deal Archive
+      </a>
+      <h2 class="text-sm font-black text-gold uppercase tracking-[0.3em] mb-2">Regional Intelligence</h2>
+      <p class="text-slate-400 max-w-2xl">
+        In a hub as big as DFW, the best deals aren't found in the sales—they're found in the gaps. This guide shows you how to navigate the fortress hub like a pro.
+      </p>
+    </div>
+
+    <AirportGuide 
+      airportCode={airportCode}
+      airportName={airportName}
+      city={city}
+      description={description}
+      sweetSpots={sweetSpots}
+      parkingTips={parkingTips}
+      tsaWaitStatus={tsaWaitStatus}
+    />
+
+    <!-- SEO Content Section -->
+    <section class="mt-24 max-w-3xl mx-auto">
+      <article class="prose prose-invert lg:prose-xl">
+        <h2 class="text-3xl font-black text-white italic">The DFW "Hub Overflow" Strategy</h2>
+        <p class="text-slate-400">
+          Flight pricing at <strong>DFW</strong> is dominated by American Airlines' hub-and-spoke model. Our AI Scout specializes in catching the <strong>'Hub Overflow'</strong> — moments where American has excess inventory on a massive scale and must dump it to the public, often triggering a price match from United at IAH or Delta at ATL.
+        </p>
+        <p class="text-slate-400">
+          By monitoring <strong>DFW</strong> specifically, we catch the unadvertised international sales that make Dallas one of the best value-per-mile starting points in the world.
+        </p>
+        
+        <div class="my-12 p-8 bg-gold/5 border-l-4 border-gold rounded-r-2xl italic text-lg text-gold/80 leading-relaxed">
+          "At DFW, you aren't just looking for a ticket; you're looking for the seat the airline couldn't sell to a corporate traveler."
+        </div>
+
+        <h3 class="text-2xl font-black text-white">Get DFW Alerts</h3>
+        <p class="text-slate-400">
+          Subscribe to our DFW-specific alert list. We monitor every gate in all five terminals for algorithm slips. When a price hits the "Unicorn" threshold for a trip to Europe, Asia, or beyond, we'll send it straight to your inbox.
+        </p>
+      </article>
+    </section>
+
+    <!-- Footer CTA -->
+    <section class="mt-24 p-12 bg-gradient-to-br from-navy-mid to-navy-deep border border-white/10 rounded-[2.5rem] text-center">
+      <h2 class="text-3xl font-black text-white mb-4">Ready to find a DFW glitch?</h2>
+      <p class="text-slate-400 mb-8 max-w-xl mx-auto">
+        Join the 1,200+ Dallas travelers who get alert before the algorithms catch up.
+      </p>
+      <a href="/" class="inline-block bg-gold text-navy-deep px-10 py-5 rounded-2xl font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_20px_40px_rgba(212,168,67,0.2)]">
+        Join the waitlist
+      </a>
+    </section>
+  </main>
+
+  <footer class="py-12 border-t border-white/5 text-center">
+    <p class="text-slate-600 text-sm">
+      &copy; 2026 Texas Cheap Flights. All rights reserved. <br/>
+      Built for Texans, by Texans.
+    </p>
+  </footer>
+
+</body>
+</html>
