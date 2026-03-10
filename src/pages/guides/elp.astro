@@ -1,0 +1,108 @@
+---
+import '../../styles/global.css';
+import GlobalNav from '../../components/GlobalNav.astro';
+import AirportGuide from '../../components/AirportGuide.astro';
+
+const airportCode = "ELP";
+const city = "El Paso";
+const airportName = "El Paso International";
+
+const sweetSpots = [
+  { 
+    destination: "Los Angeles (LAX)", 
+    reason: "Southwest and American compete heavily on this route. We catch 'Price Matches' where legacy carriers drop to $98 roundtrip to beat Southwest's sale prices." 
+  },
+  { 
+    destination: "Dallas (DFW/DAL)", 
+    reason: "The high-frequency shuttle nature of this route leads to frequent 'Short-Haul Slips' where pricing drops to $80-$110 roundtrip for weekend travelers." 
+  },
+  { 
+    destination: "Austin (AUS)", 
+    reason: "As ELP-AUS becomes a major tech and government corridor, we catch the award sweet spots where 5k Southwest points can cover a $250 cash ticket." 
+  }
+];
+
+const description = `El Paso International (ELP) is the gateway to West Texas and Northern Mexico. Because of its isolated position, it operates like a hub for the entire border region. This unique status means airlines often 'experiment' with pricing here during the off-season. Our AI Scout monitors these experiments the moment they go live, capturing the value before the rest of the market catches on.`;
+
+const parkingTips = "ELP has excellent parking infrastructure. The short-term and long-term lots are very close to the terminal. Pro-tip: Check for regional shuttles from Las Cruces or Juárez that often bypass the need for long-term parking fees altogether.";
+
+const tsaWaitStatus = "Generally efficient, usually between 10-20 minutes. However, give yourself a 20-minute buffer during holiday peaks or when cross-border traffic from Juárez is unusually high, as terminal volume can spike quickly.";
+
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cheap Flights from El Paso (ELP) | Regional Travel Intelligence</title>
+  <meta name="description" content={`The ultimate travel hacking guide for El Paso (ELP) travelers. Discover parking secrets, TSA tips, and the best flight "Sweet Spots" from the Sun City.`} />
+  <link rel="canonical" href="https://texascheapflights.com/guides/elp" />
+</head>
+<body class="bg-navy-deep text-white selection:bg-gold/30">
+  <GlobalNav />
+
+  <main class="max-w-7xl mx-auto px-6 pt-32 pb-24">
+    <div class="mb-12">
+      <a href="/past-deals" class="text-slate-500 hover:text-gold text-sm font-bold flex items-center gap-2 transition-colors mb-4">
+        &larr; Back to Deal Archive
+      </a>
+      <h2 class="text-sm font-black text-gold uppercase tracking-[0.3em] mb-2">Regional Intelligence</h2>
+      <p class="text-slate-400 max-w-2xl">
+        El Paso flyers are often stuck between expensive legacy flights and driving to New Mexico. This guide shows you how to find the 'Unicorn' deals that keep you flying straight from ELP for less.
+      </p>
+    </div>
+
+    <AirportGuide 
+      airportCode={airportCode}
+      airportName={airportName}
+      city={city}
+      description={description}
+      sweetSpots={sweetSpots}
+      parkingTips={parkingTips}
+      tsaWaitStatus={tsaWaitStatus}
+    />
+
+    <!-- SEO Content Section -->
+    <section class="mt-24 max-w-3xl mx-auto">
+      <article class="prose prose-invert lg:prose-xl">
+        <h2 class="text-3xl font-black text-white italic">The El Paso "Sun City" Pricing Strategy</h2>
+        <p class="text-slate-400">
+          Flight pricing at <strong>ELP</strong> is unique because it must compete with the Albuquerque (ABQ) market for regional dominance. Our AI Scout leverages this <strong>'Regional Rivalry'</strong> — windows where airlines slash ELP prices to prevent travelers from driving north for cheaper fares.
+        </p>
+        <p class="text-slate-400">
+          By monitoring <strong>ELP</strong> specifically, we catch the moments when American, United, and Delta drop 'Defensive Fares' to protect their El Paso market share.
+        </p>
+        
+        <div class="my-12 p-8 bg-gold/5 border-l-4 border-gold rounded-r-2xl italic text-lg text-gold/80 leading-relaxed">
+          "The best way to save in El Paso isn't just about timing; it's about catching the legacy carriers when they're fighting to keep you from driving to New Mexico."
+        </div>
+
+        <h3 class="text-2xl font-black text-white">Get ELP Alerts</h3>
+        <p class="text-slate-400">
+          Subscribe to our ELP-specific alert list. We monitor every Southwest and American route from El Paso for algorithm glitches. When a price falls into the "Unicorn" category, we'll send it straight to your inbox.
+        </p>
+      </article>
+    </section>
+
+    <!-- Footer CTA -->
+    <section class="mt-24 p-12 bg-gradient-to-br from-navy-mid to-navy-deep border border-white/10 rounded-[2.5rem] text-center">
+      <h2 class="text-3xl font-black text-white mb-4">Ready to find an El Paso glitch?</h2>
+      <p class="text-slate-400 mb-8 max-w-xl mx-auto">
+        Join the 400+ El Paso travelers who get alert before the prices go back up.
+      </p>
+      <a href="/" class="inline-block bg-gold text-navy-deep px-10 py-5 rounded-2xl font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_20px_40px_rgba(212,168,67,0.2)]">
+        Join the waitlist
+      </a>
+    </section>
+  </main>
+
+  <footer class="py-12 border-t border-white/5 text-center">
+    <p class="text-slate-600 text-sm">
+      &copy; 2026 Texas Cheap Flights. All rights reserved. <br/>
+      Built for Texans, by Texans.
+    </p>
+  </footer>
+
+</body>
+</html>

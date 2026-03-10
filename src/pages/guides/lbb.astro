@@ -1,0 +1,108 @@
+---
+import '../../styles/global.css';
+import GlobalNav from '../../components/GlobalNav.astro';
+import AirportGuide from '../../components/AirportGuide.astro';
+
+const airportCode = "LBB";
+const city = "Lubbock";
+const airportName = "Lubbock Preston Smith International";
+
+const sweetSpots = [
+  { 
+    destination: "Dallas (DAL/DFW)", 
+    reason: "LBB is a key link for Texas Tech travel. We catch the windows where Southwest and American dump inventory, dropping prices to $89 roundtrip or 5k points." 
+  },
+  { 
+    destination: "Las Vegas (LAS)", 
+    reason: "Direct seasonal service from LBB often triggers 'Matching Errors' on connecting legacy carriers, dropping sub-$100 roundtrip deals into our lap." 
+  },
+  { 
+    destination: "Austin (AUS)", 
+    reason: "The tech-edu corridor between LBB and AUS often goes on sale for $110 roundtrip during off-peak campus weeks." 
+  }
+];
+
+const description = `Lubbock Preston Smith International (LBB) is the air gateway for the South Plains and Texas Tech University. Because of the heavy university traffic, LBB pricing follows the academic calendar. Our AI Scout specializes in catching the 'Campus Gaps' — windows where flights are undersold because students are on break or mid-terms are in session, leaving empty seats at a fraction of the cost.`;
+
+const parkingTips = "Parking at LBB is straightforward and affordable compared to larger Texas hubs. The main lot is very close to the terminal entrance. Pro-tip: Check for university-related travel discounts or parking vouchers that are sometimes available for Tech-affiliated travelers.";
+
+const tsaWaitStatus = "Typically very quick, rarely exceeding 10 minutes. However, give yourself a 45-minute buffer during 'Move-in/Move-out' weekends or major Red Raider game days when the terminal volume can skyrocket.";
+
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cheap Flights from Lubbock (LBB) | Regional Travel Intelligence</title>
+  <meta name="description" content={`The ultimate travel hacking guide for Lubbock (LBB) travelers. Discover parking secrets, TSA tips, and the best flight "Sweet Spots" from the Hub City.`} />
+  <link rel="canonical" href="https://texascheapflights.com/guides/lbb" />
+</head>
+<body class="bg-navy-deep text-white selection:bg-gold/30">
+  <GlobalNav />
+
+  <main class="max-w-7xl mx-auto px-6 pt-32 pb-24">
+    <div class="mb-12">
+      <a href="/past-deals" class="text-slate-500 hover:text-gold text-sm font-bold flex items-center gap-2 transition-colors mb-4">
+        &larr; Back to Deal Archive
+      </a>
+      <h2 class="text-sm font-black text-gold uppercase tracking-[0.3em] mb-2">Regional Intelligence</h2>
+      <p class="text-slate-400 max-w-2xl">
+        Lubbock travelers shouldn't have to drive 5 hours to DFW to save on airfare. This guide shows you how to catch the algorithms when they slip in your favor at LBB.
+      </p>
+    </div>
+
+    <AirportGuide 
+      airportCode={airportCode}
+      airportName={airportName}
+      city={city}
+      description={description}
+      sweetSpots={sweetSpots}
+      parkingTips={parkingTips}
+      tsaWaitStatus={tsaWaitStatus}
+    />
+
+    <!-- SEO Content Section -->
+    <section class="mt-24 max-w-3xl mx-auto">
+      <article class="prose prose-invert lg:prose-xl">
+        <h2 class="text-3xl font-black text-white italic">The Lubbock "Campus Gap" Strategy</h2>
+        <p class="text-slate-400">
+          Flight pricing at <strong>LBB</strong> is heavily influenced by the Texas Tech academic cycle. Our AI Scout focuses on the <strong>'Academic Arbitrage'</strong> — windows where airlines over-index for student travel dates but under-price the 'quiet' weeks when the campus is settled.
+        </p>
+        <p class="text-slate-400">
+          By monitoring <strong>LBB</strong> specifically, we catch the moments when Southwest and American drop 'Inventory Slips' to fill those mid-semester seats.
+        </p>
+        
+        <div class="my-12 p-8 bg-gold/5 border-l-4 border-gold rounded-r-2xl italic text-lg text-gold/80 leading-relaxed">
+          "The best way to save in Lubbock isn't just about picking the right airline; it's about knowing when the students aren't flying."
+        </div>
+
+        <h3 class="text-2xl font-black text-white">Get LBB Alerts</h3>
+        <p class="text-slate-400">
+          Subscribe to our LBB-specific alert list. We monitor كل Southwest, American and United route from Lubbock every hour. When a price falls into the "Unicorn" category, we'll send it straight to your inbox.
+        </p>
+      </article>
+    </section>
+
+    <!-- Footer CTA -->
+    <section class="mt-24 p-12 bg-gradient-to-br from-navy-mid to-navy-deep border border-white/10 rounded-[2.5rem] text-center">
+      <h2 class="text-3xl font-black text-white mb-4">Ready to find a Lubbock glitch?</h2>
+      <p class="text-slate-400 mb-8 max-w-xl mx-auto">
+        Join the 400+ Lubbock travelers who get alert before the prices go back up.
+      </p>
+      <a href="/" class="inline-block bg-gold text-navy-deep px-10 py-5 rounded-2xl font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_20px_40px_rgba(212,168,67,0.2)]">
+        Join the waitlist
+      </a>
+    </section>
+  </main>
+
+  <footer class="py-12 border-t border-white/5 text-center">
+    <p class="text-slate-600 text-sm">
+      &copy; 2026 Texas Cheap Flights. All rights reserved. <br/>
+      Built for Texans, by Texans.
+    </p>
+  </footer>
+
+</body>
+</html>

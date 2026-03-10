@@ -24,6 +24,11 @@ export async function GET() {
     '/guides/lrd',
     '/guides/crp',
     '/guides/grk',
+    '/guides/elp',
+    '/guides/hrl',
+    '/guides/ama',
+    '/guides/lbb',
+    '/guides/maf',
   ];
 
   // Hub pages (one per TX airport)
