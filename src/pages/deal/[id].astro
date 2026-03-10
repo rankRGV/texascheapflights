@@ -25,24 +25,44 @@ const title = `${priceDisplay} Flight from ${deal.origin} to ${deal.destination}
 const description = `Scouted from ${deal.origin}: ${deal.airline ? deal.airline + ' flight to ' : ''}${deal.destination} for ${priceDisplay}. ${deal.travel_dates ? 'Travel dates: ' + deal.travel_dates : ''}. Exclusive Texas deal alert.`;
 
 // Structured Data (JSON-LD)
+const dealSentAt = new Date(deal.sent_at || deal.created_at);
+const priceValidUntil = new Date(dealSentAt.getTime() + 48 * 60 * 60 * 1000).toISOString();
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "Product",
+      "@type": "TouristTrip",
       "@id": `${Astro.url.href}#deal`,
       "name": `${priceDisplay} Flight: ${deal.origin} to ${deal.destination}`,
       "description": description,
       "image": `https://texascheapflights.com/api/deal-card?origin=${deal.origin}&destination=${deal.destination}&price=${deal.price || ''}&airline=${encodeURIComponent(deal.airline || '')}&savings=${deal.score ? deal.score * 10 : ''}&type=${deal.deal_type || 'sale'}&dates=${encodeURIComponent(deal.travel_dates || '')}`,
-      "brand": {
-        "@type": "Brand",
-        "name": "Texas Cheap Flights"
+      "provider": {
+        "@type": "Organization",
+        "name": "Texas Cheap Flights",
+        "url": "https://texascheapflights.com"
+      },
+      "itinerary": {
+        "@type": "ItemList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "item": { "@type": "Airport", "name": deal.origin, "iataCode": deal.origin }
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "item": { "@type": "Airport", "name": deal.destination, "iataCode": deal.destination }
+          }
+        ]
       },
       "offers": {
         "@type": "Offer",
         "price": deal.price || "0",
         "priceCurrency": "USD",
-        "availability": "https://schema.org/InStock",
+        "availability": "https://schema.org/OutOfStock",
+        "priceValidUntil": priceValidUntil,
         "url": Astro.url.href,
         "validFrom": deal.sent_at || deal.created_at
       }
