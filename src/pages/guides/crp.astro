@@ -1,0 +1,108 @@
+---
+import '../../styles/global.css';
+import GlobalNav from '../../components/GlobalNav.astro';
+import AirportGuide from '../../components/AirportGuide.astro';
+
+const airportCode = "CRP";
+const city = "Corpus Christi";
+const airportName = "Corpus Christi International";
+
+const sweetSpots = [
+  { 
+    destination: "Houston (HOU)", 
+    reason: "Southwest's massive presence at HOU makes this a 'Wanna Get Away' goldmine. We frequently see $89 roundtrip glitches that stay open for 48+ hours." 
+  },
+  { 
+    destination: "Dallas (DFW)", 
+    reason: "American Airlines hub-spoke pricing often fails here. We catch deals to Dallas that are cheaper than driving once you factor in gas and time." 
+  },
+  { 
+    destination: "Denver (DEN)", 
+    reason: "Seasonal United glithces often drop the coastal-to-mountain routes to sub-$150 roundtrip." 
+  }
+];
+
+const description = `Corpus Christi International (CRP) is the gateway to the Gulf Coast. While it's a coastal hub, its flight pricing is surprisingly volatile. Because it competes directly with Southwest's dominance in nearby markets, legacy carriers like American and United often drop 'Price Matches' that are never advertised. Our AI Scout catches these hidden value windows before they disappear.`;
+
+const parkingTips = "Parking at CRP is easy and relatively inexpensive. The terminal lot is convenient, but the long-term lot offers the best daily rates for extended stays. Pro-tip: CRP is a small enough airport that arriving 60 minutes before departure is usually plenty of time to park, clear security, and grab a coffee.";
+
+const tsaWaitStatus = "Generally very fast, rarely exceeding 15 minutes. However, give yourself extra time on Friday afternoons and Sunday evenings when the coastal tourist traffic tends to peak.";
+
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cheap Flights from Corpus Christi (CRP) | Regional Travel Intelligence</title>
+  <meta name="description" content={`The ultimate travel hacking guide for Corpus Christi (CRP) travelers. Discover parking secrets, TSA tips, and the best flight "Sweet Spots" from the Sparkling City by the Sea.`} />
+  <link rel="canonical" href="https://texascheapflights.com/guides/crp" />
+</head>
+<body class="bg-navy-deep text-white selection:bg-gold/30">
+  <GlobalNav />
+
+  <main class="max-w-7xl mx-auto px-6 pt-32 pb-24">
+    <div class="mb-12">
+      <a href="/past-deals" class="text-slate-500 hover:text-gold text-sm font-bold flex items-center gap-2 transition-colors mb-4">
+        &larr; Back to Deal Archive
+      </a>
+      <h2 class="text-sm font-black text-gold uppercase tracking-[0.3em] mb-2">Regional Intelligence</h2>
+      <p class="text-slate-400 max-w-2xl">
+        Corpus Christi flyers often feel the 'Coastal Tax' on flight prices. We're here to show you how to use the Southwest/United price wars to fly for half what your neighbors are paying.
+      </p>
+    </div>
+
+    <AirportGuide 
+      airportCode={airportCode}
+      airportName={airportName}
+      city={city}
+      description={description}
+      sweetSpots={sweetSpots}
+      parkingTips={parkingTips}
+      tsaWaitStatus={tsaWaitStatus}
+    />
+
+    <!-- SEO Content Section -->
+    <section class="mt-24 max-w-3xl mx-auto">
+      <article class="prose prose-invert lg:prose-xl">
+        <h2 class="text-3xl font-black text-white italic">The Corpus Christi "Southwest Arbitrage"</h2>
+        <p class="text-slate-400">
+          Corpus Christi (CRP) is in a unique position where Southwest's pricing at Hobby (HOU) forces United and American to stay competitive in the Coastal Bend. Our AI Scout focuses on this <strong>'Southwest Arbitrage'</strong> — windows where the legacy carriers drop their prices to match Southwest's unadvertised 'Wanna Get Away' glitches.
+        </p>
+        <p class="text-slate-400">
+          By monitoring <strong>CRP</strong> specifically, we can alert you to these price matches the moment they hit the system, often before the carriers even realize they've triggered a price war.
+        </p>
+        
+        <div class="my-12 p-8 bg-gold/5 border-l-4 border-gold rounded-r-2xl italic text-lg text-gold/80 leading-relaxed">
+          "The best way to save at CRP isn't just about picking the cheapest airline; it's about catching the legacy carriers when they're scared of Southwest."
+        </div>
+
+        <h3 class="text-2xl font-black text-white">Get Coastal Alerts</h3>
+        <p class="text-slate-400">
+          Subscribe to our CRP-specific alert list. We monitor every route from Corpus Christi for algorithm slips. When a price falls into the "Unicorn" category, we'll send it straight to you.
+        </p>
+      </article>
+    </section>
+
+    <!-- Footer CTA -->
+    <section class="mt-24 p-12 bg-gradient-to-br from-navy-mid to-navy-deep border border-white/10 rounded-[2.5rem] text-center">
+      <h2 class="text-3xl font-black text-white mb-4">Ready to find a glitch in the Sparkling City?</h2>
+      <p class="text-slate-400 mb-8 max-w-xl mx-auto">
+        Join the 300+ Corpus Christi travelers who get alert before the prices go back up.
+      </p>
+      <a href="/" class="inline-block bg-gold text-navy-deep px-10 py-5 rounded-2xl font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_20px_40px_rgba(212,168,67,0.2)]">
+        Join the waitlist
+      </a>
+    </section>
+  </main>
+
+  <footer class="py-12 border-t border-white/5 text-center">
+    <p class="text-slate-600 text-sm">
+      &copy; 2026 Texas Cheap Flights. All rights reserved. <br/>
+      Built for Texans, by Texans.
+    </p>
+  </footer>
+
+</body>
+</html>

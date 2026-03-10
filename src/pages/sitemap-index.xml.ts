@@ -17,9 +17,13 @@ export async function GET() {
     '/terms',
   ];
 
-  // Regional Guides (starting with MFE)
+  // Regional Guides
   const guidePages = [
-    '/guides/mfe'
+    '/guides/mfe',
+    '/guides/bro',
+    '/guides/lrd',
+    '/guides/crp',
+    '/guides/grk',
   ];
 
   // Hub pages (one per TX airport)

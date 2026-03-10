@@ -1,0 +1,108 @@
+---
+import '../../styles/global.css';
+import GlobalNav from '../../components/GlobalNav.astro';
+import AirportGuide from '../../components/AirportGuide.astro';
+
+const airportCode = "BRO";
+const city = "Brownsville";
+const airportName = "Brownsville South Padre Island International";
+
+const sweetSpots = [
+  { 
+    destination: "Houston (IAH/HOU)", 
+    reason: "United and Southwest often engage in price wars that drop this short hop to $88 roundtrip. Perfect for weekend getaways." 
+  },
+  { 
+    destination: "Las Vegas (LAS)", 
+    reason: "Seasonal Allegiant routes from BRO are the primary target for $70-$90 roundtrip glitches." 
+  },
+  { 
+    destination: "Orlando (MCO)", 
+    reason: "Low-cost carrier competition makes this a prime target for sub-$100 roundtrip sales." 
+  }
+];
+
+const description = `Brownsville South Padre Island International (BRO) is the southernmost commercial airport in Texas. Located just minutes from the SpaceX Starbase and the beaches of South Padre Island, BRO is a high-demand regional hub. Because of its unique position, airlines often 'test' lower prices here to attract Starbase travelers, creating temporary value windows our AI Scout captures instantly.`;
+
+const parkingTips = "BRO offers some of the most convenient parking in South Texas. The main lot is just steps from the terminal. For the best value, look for the designated long-term areas which offer a significant discount over the daily rate. Pro-tip: If you're picking up a traveler, use the cell phone waiting area to avoid circling.";
+
+const tsaWaitStatus = "Typically very quick. Expect wait times under 10 minutes most days. However, with the surge in SpaceX-related travel, it's wise to arrive 90 minutes early during major launch windows or holiday weekends when the terminal can get unexpectedly busy.";
+
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cheap Flights from Brownsville (BRO) | Regional Travel Intelligence</title>
+  <meta name="description" content={`The ultimate travel hacking guide for Brownsville (BRO) travelers. Discover parking secrets, TSA tips, and the best flight "Sweet Spots" from the southernmost tip of Texas.`} />
+  <link rel="canonical" href="https://texascheapflights.com/guides/bro" />
+</head>
+<body class="bg-navy-deep text-white selection:bg-gold/30">
+  <GlobalNav />
+
+  <main class="max-w-7xl mx-auto px-6 pt-32 pb-24">
+    <div class="mb-12">
+      <a href="/past-deals" class="text-slate-500 hover:text-gold text-sm font-bold flex items-center gap-2 transition-colors mb-4">
+        &larr; Back to Deal Archive
+      </a>
+      <h2 class="text-sm font-black text-gold uppercase tracking-[0.3em] mb-2">Regional Intelligence</h2>
+      <p class="text-slate-400 max-w-2xl">
+        Brownsville flyers often feel forced to drive to McAllen or Harlingen for better prices. This guide shows you how to find the 'Unicorn' deals that make flying straight out of BRO the smartest move.
+      </p>
+    </div>
+
+    <AirportGuide 
+      airportCode={airportCode}
+      airportName={airportName}
+      city={city}
+      description={description}
+      sweetSpots={sweetSpots}
+      parkingTips={parkingTips}
+      tsaWaitStatus={tsaWaitStatus}
+    />
+
+    <!-- SEO Content Section -->
+    <section class="mt-24 max-w-3xl mx-auto">
+      <article class="prose prose-invert lg:prose-xl">
+        <h2 class="text-3xl font-black text-white italic">Why BRO is an SEO Moat</h2>
+        <p class="text-slate-400">
+          Most travel sites focus on the big city hubs. By focusing on <strong>BRO</strong>, we tap into a market that is underserved by traditional deal sites. The surge in SpaceX activity has put more flights on the schedule, which means more opportunities for 'Algorithm Oversights' where empty seats are dumped at a fraction of the cost.
+        </p>
+        <p class="text-slate-400">
+          Our AI specifically looks for the 'Starbase Surge' — windows where airlines over-index for business travel but leave the weekend slots wide open for savvy leisure travelers.
+        </p>
+        
+        <div class="my-12 p-8 bg-gold/5 border-l-4 border-gold rounded-r-2xl italic text-lg text-gold/80 leading-relaxed">
+          "The smartest travelers in Brownsville don't just look for cheap tickets; they look for the pricing errors that the big algorithms missed because they were too focused on DFW."
+        </div>
+
+        <h3 class="text-2xl font-black text-white">Capture the BRO Advantage</h3>
+        <p class="text-slate-400">
+          Subscribe to our BRO-specific alerts. We filter out the noise and only send you the high-signal deals that scoring 9/10 or higher. Whether it's a glitch on United to Houston or a seasonal drop to Vegas, you'll be the first to know.
+        </p>
+      </article>
+    </section>
+
+    <!-- Footer CTA -->
+    <section class="mt-24 p-12 bg-gradient-to-br from-navy-mid to-navy-deep border border-white/10 rounded-[2.5rem] text-center">
+      <h2 class="text-3xl font-black text-white mb-4">Never miss a Brownsville deal again.</h2>
+      <p class="text-slate-400 mb-8 max-w-xl mx-auto">
+        Join the growing community of BRO travelers who fly for half the price.
+      </p>
+      <a href="/" class="inline-block bg-gold text-navy-deep px-10 py-5 rounded-2xl font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_20px_40px_rgba(212,168,67,0.2)]">
+        Join the waitlist
+      </a>
+    </section>
+  </main>
+
+  <footer class="py-12 border-t border-white/5 text-center">
+    <p class="text-slate-600 text-sm">
+      &copy; 2026 Texas Cheap Flights. All rights reserved. <br/>
+      Built for Texans, by Texans.
+    </p>
+  </footer>
+
+</body>
+</html>

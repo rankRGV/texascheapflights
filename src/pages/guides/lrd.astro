@@ -1,0 +1,108 @@
+---
+import '../../styles/global.css';
+import GlobalNav from '../../components/GlobalNav.astro';
+import AirportGuide from '../../components/AirportGuide.astro';
+
+const airportCode = "LRD";
+const city = "Laredo";
+const airportName = "Laredo International";
+
+const sweetSpots = [
+  { 
+    destination: "Dallas (DFW)", 
+    reason: "American Airlines maintains a stronghold here. We catch the windows where they open up 'Web Special' awards for 5k-7.5k miles, or cash glitch drops to $119 roundtrip." 
+  },
+  { 
+    destination: "Las Vegas (LAS)", 
+    reason: "Allegiant's direct service from LRD is the primary source of $60-$80 roundtrip deals. Our AI Scout catches these the second they load into the GDS." 
+  },
+  { 
+    destination: "Mexico City (MEX)", 
+    reason: "Cross-border logistics often make LRD a prime secondary airport for MEX connections. Award sweet spots are common during off-peak trade seasons." 
+  }
+];
+
+const description = `Laredo International (LRD) is the heartbeat of North American trade. While it is a massive cargo hub, its passenger service is a hidden gem for travel hackers. Because LRD is dominated by business travel, weekend flights are often significantly undersold. Our AI Scout monitors these 'Business Gaps' to find premium legacy carrier seats for ultra-low-cost prices.`;
+
+const parkingTips = "Parking at LRD is refreshingly simple. The terminal lot is affordable and rarely full. For the best value, use the long-term parking area. Pro-tip: LRD is one of the few airports where you can truly park and be at your gate in under 10 minutes, making it a favorite for speed-conscious travelers.";
+
+const tsaWaitStatus = "Generally very short, typically under 10 minutes. However, because of Laredo's status as a major trade port, always check for local traffic surges near the airport which can be affected by international bridge congestion.";
+
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cheap Flights from Laredo (LRD) | Regional Travel Intelligence</title>
+  <meta name="description" content={`The ultimate travel hacking guide for Laredo (LRD) travelers. Discover parking secrets, TSA tips, and the best flight "Sweet Spots" from the Gateway City.`} />
+  <link rel="canonical" href="https://texascheapflights.com/guides/lrd" />
+</head>
+<body class="bg-navy-deep text-white selection:bg-gold/30">
+  <GlobalNav />
+
+  <main class="max-w-7xl mx-auto px-6 pt-32 pb-24">
+    <div class="mb-12">
+      <a href="/past-deals" class="text-slate-500 hover:text-gold text-sm font-bold flex items-center gap-2 transition-colors mb-4">
+        &larr; Back to Deal Archive
+      </a>
+      <h2 class="text-sm font-black text-gold uppercase tracking-[0.3em] mb-2">Regional Intelligence</h2>
+      <p class="text-slate-400 max-w-2xl">
+        Laredo travelers shouldn't have to drive 2.5 hours to San Antonio to find a deal. We bring the 'San Antonio Prices' directly to LRD by catching the algorithms when they slip.
+      </p>
+    </div>
+
+    <AirportGuide 
+      airportCode={airportCode}
+      airportName={airportName}
+      city={city}
+      description={description}
+      sweetSpots={sweetSpots}
+      parkingTips={parkingTips}
+      tsaWaitStatus={tsaWaitStatus}
+    />
+
+    <!-- SEO Content Section -->
+    <section class="mt-24 max-w-3xl mx-auto">
+      <article class="prose prose-invert lg:prose-xl">
+        <h2 class="text-3xl font-black text-white italic">The Laredo "Trade Gap" Strategy</h2>
+        <p class="text-slate-400">
+          The secret to Laredo deals lies in its trade-heavy schedule. Airlines like American and United prioritize business travelers during the week. Our AI Scout focuses on the <strong>'Weekend Trade Gap'</strong> — the period from Friday to Monday where business demand drops, forcing the algorithms to slash prices to fill seats.
+        </p>
+        <p class="text-slate-400">
+          By focusing on <strong>LRD</strong>, we find deals that the 'Big City' websites miss because they are too distracted by the high-volume noise of SAT and DFW.
+        </p>
+        
+        <div class="my-12 p-8 bg-gold/5 border-l-4 border-gold rounded-r-2xl italic text-lg text-gold/80 leading-relaxed">
+          "In Laredo, the best deals aren't found by searching more often, but by knowing exactly when the business travelers go home."
+        </div>
+
+        <h3 class="text-2xl font-black text-white">Get LRD Intelligence</h3>
+        <p class="text-slate-400">
+          Sign up for our LRD-specific alert list. We monitor كل American and Allegiant routes from Laredo every hour. When a price hits the "Great Deal" or "Unicorn" threshold, you'll be the first to know.
+        </p>
+      </article>
+    </section>
+
+    <!-- Footer CTA -->
+    <section class="mt-24 p-12 bg-gradient-to-br from-navy-mid to-navy-deep border border-white/10 rounded-[2.5rem] text-center">
+      <h2 class="text-3xl font-black text-white mb-4">Stop overpaying for Laredo flights.</h2>
+      <p class="text-slate-400 mb-8 max-w-xl mx-auto">
+        Join the savvy Laredo travelers who are flying for 40% less.
+      </p>
+      <a href="/" class="inline-block bg-gold text-navy-deep px-10 py-5 rounded-2xl font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_20px_40px_rgba(212,168,67,0.2)]">
+        Join the waitlist
+      </a>
+    </section>
+  </main>
+
+  <footer class="py-12 border-t border-white/5 text-center">
+    <p class="text-slate-600 text-sm">
+      &copy; 2026 Texas Cheap Flights. All rights reserved. <br/>
+      Built for Texans, by Texans.
+    </p>
+  </footer>
+
+</body>
+</html>
