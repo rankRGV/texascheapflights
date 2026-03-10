@@ -2,6 +2,7 @@
 export const prerender = false;
 import '../styles/global.css';
 import GlobalNav from '../components/GlobalNav.astro';
+import GlobalFooter from '../components/GlobalFooter.astro';
 import deals from '../data/deals.json';
 
 // We'll use icons based on the deal icon string
@@ -214,16 +215,12 @@ const AIRPORT_LABELS: Record<string, string> = {
                 </div>
             </div>
           </div>
-
-          <div class="liquid-glass p-8 rounded-3xl border border-white/5">
-              <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-6">Your Founding Team</h3>
-              <p class="text-xs text-slate-400 leading-relaxed mb-6">Have a question about your airport's best routes or which card to start with? Reach out directly — you get a real person, not a bot.</p>
-              <a href="mailto:waitlist@texascheapflights.com" class="text-gold text-xs font-black uppercase tracking-widest hover:text-white transition-colors">Contact Founder</a>
-          </div>
         </div>
       </div>
     </div>
   </main>
+
+  <GlobalFooter />
 
   <script>
     function initializeDashboard() {

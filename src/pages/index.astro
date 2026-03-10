@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import GlobalNav from '../components/GlobalNav.astro';
+import GlobalFooter from '../components/GlobalFooter.astro';
 import { supabase } from '../lib/supabase';
 
 // Fetch recent deals from Supabase for the live ticker
@@ -935,43 +936,7 @@ const FEATURED_DEALS = [
 
   </main>
 
-  <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
-  <footer class="pt-16 pb-8 bg-tcf-navy-deep border-t border-white/5 relative">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="flex flex-col md:flex-row items-center justify-between gap-16 text-center md:text-left">
-        <div class="flex items-center gap-4 justify-center md:justify-start group cursor-pointer">
-          <div class="p-2 rounded-lg bg-white/5 border border-white/10 group-hover:border-tcf-aviation-blue/30 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500 group-hover:text-tcf-aviation-blue transition-colors"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
-          </div>
-          <div class="flex flex-col text-left leading-tight">
-            <span class="text-[9px] font-black uppercase tracking-[0.4em] text-gold mb-0.5">Texas</span>
-            <span class="font-black text-sm uppercase tracking-tight text-white">Cheap Flights</span>
-          </div>
-        </div>
-        
-        <div class="flex flex-wrap justify-center gap-10 text-slate-400 text-[10px] font-black uppercase tracking-[0.3em]">
-          <a href="#" class="hover:text-tcf-aviation-blue transition-colors">Privacy</a>
-          <a href="#" class="hover:text-tcf-aviation-blue transition-colors">Terms</a>
-          <a href="#" class="hover:text-tcf-aviation-blue transition-colors">Affiliate Policy</a>
-        </div>
-
-        <div class="flex flex-col items-center md:items-end gap-3">
-          <p class="text-slate-400 text-[9px] font-bold uppercase tracking-widest m-0">
-            © 2026 Texas Cheap Flights. Travel Responsibly.
-          </p>
-          <div class="flex gap-4">
-            <div class="w-1.5 h-1.5 rounded-full bg-tcf-success"></div>
-            <div class="w-1.5 h-1.5 rounded-full bg-tcf-aviation-blue"></div>
-            <div class="w-1.5 h-1.5 rounded-full bg-white/20"></div>
-          </div>
-        </div>
-      </div>
-      <div class="mt-10 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-center gap-2 md:gap-3">
-        <span class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-600">Built with precision by</span>
-        <a href="https://rankrgv.com" target="_blank" rel="noopener noreferrer" class="text-[10px] font-black uppercase tracking-tight text-slate-400 hover:text-tcf-gold transition-colors no-underline">Rank RGV</a>
-      </div>
-    </div>
-  </footer>
+  <GlobalFooter />
 
   <script>
     const form = document.getElementById('waitlist-form') as HTMLFormElement | null;

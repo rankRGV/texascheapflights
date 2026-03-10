@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import GlobalNav from '../components/GlobalNav.astro';
+import GlobalFooter from '../components/GlobalFooter.astro';
 
 export const prerender = true;
 
@@ -60,9 +61,7 @@ const title = "Terms of Service | Texas Cheap Flights";
     </div>
   </main>
 
-  <footer class="py-10 border-t border-white/5 text-center text-xs text-slate-600">
-    <p>© 2026 Texas Cheap Flights · <a href="/" class="text-slate-500 hover:text-white transition-colors no-underline">Home</a></p>
-  </footer>
+  <GlobalFooter />
 
 </body>
 </html>

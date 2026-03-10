@@ -26,6 +26,15 @@ The system utilizes **LLM-based unstructured data extraction** to bypass the "in
 
 ---
 
+## 🏰 The "Regional Moat" (Network Expansion)
+A strategic content and distribution layer designed to capture 100% of Texas regional search intent.
+*   **16-Airport Intelligence Network**: Created 16 dedicated airport guides covering Tier 1 (Majors), Tier 2 (Regional Hubs), and Tier 3 (Local Connectors).
+*   **Regional Hub (`/guides`)**: A centralized data repository and user portal that dynamically maps the entire Texas aviation landscape.
+*   **Megamenu Navigation**: Implemented a sophisticated desktop dropdown system providing instant access to regional intelligence from any page.
+*   **Standardized Branding**: Achieved site-wide UI/UX consistency through a global layout system (`GlobalNav`, `GlobalFooter`) and "Texas Gold" CTA standardization.
+
+---
+
 ## 🦅 The "Regional Scout" (Core Innovation)
 A proprietary scanning script that proactively hunts for deals where aggregators fail.
 *   **Direct-to-Source Scanning**: Bypasses traditional affiliate feeds by polling Google's internal travel explore engine directly for regional "ghost hubs" like MFE, LRD, BRO, and HRL.
@@ -43,7 +52,8 @@ A proprietary scanning script that proactively hunts for deals where aggregators
 
 ## 💼 Resume-Ready Bullet Points
 *   **Architected a serverless flight deal discovery engine** using Astro and TypeScript, reducing the time-to-alert for regional users by bypasssing standard affiliate aggregation delays.
+*   **Implemented a "Regional Moat" strategy** by developing 16 comprehensive airport guides with tailored SEO content, capturing long-tail search traffic for underserved Texas cities.
+*   **Engineered a premium brand experience** incorporating a custom-built "Liquid Glass" design system, a global navigation framework with megamenu support, and standardized "Texas Gold" CTA assets.
 *   **Integrated Google Gemini (LLM)** to automate the parsing and scoring of unstructured travel data from inbound email newsletters, identifying high-ROI deals with a custom heuristic scoring model.
 *   **Developed a proprietary "Regional Scout" script** using SerpApi to scrap live airline data from 20+ underserved Texas airports, implemented with recursive batching to stay within strict API usage quotas.
-*   **Engineered a premium brand experience** incorporating a custom-built "Liquid Glass" design system and responsive HTML email templates, resulting in a high-fidelity "Aviation Luxury" user experience.
 *   **Configured automated Cron jobs and Master Orchestrators** on Vercel to handle daily statewide scans and RSS polling, ensuring 100% system uptime on zero-cost infrastructure.

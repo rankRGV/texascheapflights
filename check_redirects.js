@@ -1,0 +1,1 @@
+async function check() { try { const r1 = await fetch('https://www.texascheapflights.com', { redirect: 'manual' }); console.log('WWW:', r1.status, r1.headers.get('location')); const r2 = await fetch('https://texascheapflights.com', { redirect: 'manual' }); console.log('ROOT:', r2.status, r2.headers.get('location')); } catch (e) { console.log('Error:', e.message); } } check();

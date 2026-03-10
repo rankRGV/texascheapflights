@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import GlobalNav from '../components/GlobalNav.astro';
+import GlobalFooter from '../components/GlobalFooter.astro';
 import { supabase } from '../lib/supabase';
 
 // Fetch real deals from Supabase at build time
@@ -207,8 +208,8 @@ function getDealTypeLabel(type: string, score: number) {
             Our AI is scanning Texas airports right now. The first deals will appear here the moment we find something worth sending.
             <strong class="text-white block mt-3">Don't be the person who finds out about it too late.</strong>
           </p>
-          <a href="/#signup" class="inline-block bg-tcf-gold text-tcf-navy-deep font-black text-sm uppercase tracking-[0.2em] px-8 py-4 rounded-xl hover:bg-tcf-gold/90 transition-colors no-underline">
-            Get on the list first →
+          <a href="/#waitlist" class="btn-primary">
+            Get on the list first &rarr;
           </a>
         </div>
       )}
@@ -228,18 +229,15 @@ function getDealTypeLabel(type: string, score: number) {
           Error fares close in hours. The subscribers who got these deals didn't find them by searching Kayak.
           They got an alert the moment we did.
         </p>
-        <a href="/#signup" class="inline-block bg-tcf-gold text-tcf-navy-deep font-black text-sm uppercase tracking-[0.2em] px-10 py-5 rounded-xl hover:bg-tcf-gold/90 transition-all duration-200 hover:scale-[1.02] no-underline shadow-lg shadow-tcf-gold/20">
-          Alert Me When the Next Deal Drops →
+        <a href="/#waitlist" class="btn-primary">
+          Alert Me When the Next Deal Drops &rarr;
         </a>
         <p class="text-xs text-slate-500 mt-4 font-body">Free. No credit card. Unsubscribe anytime.</p>
       </div>
     </div>
   </section>
 
-  <!-- ══ FOOTER ══ -->
-  <footer class="border-t border-white/5 px-6 py-10 text-center text-xs text-slate-600">
-    <p>© 2026 Texas Cheap Flights · <a href="/skeptics-guide" class="text-slate-500 hover:text-white transition-colors no-underline">Skeptic's Guide</a> · <a href="/" class="text-slate-500 hover:text-white transition-colors no-underline">Home</a></p>
-  </footer>
+  <GlobalFooter />
 
 </body>
 </html>

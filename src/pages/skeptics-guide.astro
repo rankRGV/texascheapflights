@@ -2,6 +2,7 @@
 export const prerender = true;
 import '../styles/global.css';
 import GlobalNav from '../components/GlobalNav.astro';
+import GlobalFooter from '../components/GlobalFooter.astro';
 
 const OBJECTIONS = [
   {
@@ -226,18 +227,16 @@ const OBJECTIONS = [
             Real routes. Real prices. Real airlines. Every deal AI Scout has found and sent to Texas subscribers — publicly archived and never edited. From <span class="text-tcf-gold font-bold">MFE, LRD, BRO, CRP, HRL</span> and every major TX hub.
           </p>
           <p class="text-lg text-white font-bold mb-10">No cherry-picking. No expired deals dressed up as wins. Just the actual record.</p>
-          <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="/past-deals" class="btn-primary px-8 py-4 inline-flex items-center gap-2 no-underline">
-              See Real Past Deals
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-            </a>
-            <a href="/#waitlist" class="text-tcf-gold font-bold text-sm hover:text-white transition-colors no-underline">
-              Or get alerts when the next one drops →
-            </a>
-          </div>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-6 w-full">
+          <a href="/#waitlist" class="btn-primary w-full sm:w-auto px-16 py-6 text-xl">
+            Secure My Early Access
+          </a>
         </div>
-      </section>
-    </div>
+        <p class="mt-8 text-slate-500 text-xs font-black uppercase tracking-[0.2em]">
+          Free to join · Unsubscribe anytime
+        </p>
+      </div>
+    </section>
   </main>
 
   <!-- Footer -->

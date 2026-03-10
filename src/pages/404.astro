@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import GlobalNav from '../components/GlobalNav.astro';
+import GlobalFooter from '../components/GlobalFooter.astro';
 
 export const prerender = true;
 
@@ -41,9 +42,7 @@ const title = "404 - Pilot Error | Texas Cheap Flights";
     </div>
   </main>
 
-  <footer class="absolute bottom-10 left-0 right-0 text-center text-xs text-slate-600">
-    <p>© 2026 Texas Cheap Flights · Built for Texans</p>
-  </footer>
+  <GlobalFooter />
 
   <script>
     // Simple float animation simulation

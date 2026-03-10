@@ -26,7 +26,7 @@ The following skills are available globally and should be loaded before doing an
 
 ## Project Overview
 
-Texas Cheap Flights (`texascheapflights.co`) — An AI-powered deal alert system for Texas travelers. Monitors RSS feeds, Google Flights (SerpAPI), and email webhooks for error fares and award sweet spots departing from Texas airports.
+Texas Cheap Flights (`texascheapflights.com`) — An AI-powered deal alert system for Texas travelers. Monitors RSS feeds, Google Flights (SerpAPI), and email webhooks for error fares and award sweet spots departing from Texas airports. Features a "Regional Moat" strategy with 16 dedicated airport guides and a centralized intelligence hub.
 
 ## Tech Stack
 
@@ -46,6 +46,9 @@ Texas Cheap Flights (`texascheapflights.co`) — An AI-powered deal alert system
 - `src/pages/api/scout.ts` — SerpAPI price monitoring
 - `src/pages/api/ingest.ts` — Email webhook handler
 - `src/pages/api/subscribe.ts` — Waitlist signup
+- `src/components/GlobalNav.astro` — Global navigation with Regional Hub dropdown
+- `src/components/GlobalFooter.astro` — Standardized site-wide footer
+- `src/pages/guides/index.astro` — Regional Intelligence Hub
 
 ## Design System
 
@@ -54,6 +57,7 @@ Dark "Aviation Tech Luxury" theme:
 - Texas Gold: `#d4a843`
 - Aviation Blue: `#0ea5e9`
 - Fonts: Satoshi (headings), Outfit (body)
+- Components: `GlobalNav`, `GlobalFooter`, `AirportGuide`
 
 ## Agent Reminders
 

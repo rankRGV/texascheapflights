@@ -1,12 +1,31 @@
 ---
 interface Props {
-  activePage?: 'home' | 'past-deals' | 'skeptics-guide' | 'welcome' | 'admin';
+  activePage?: 'home' | 'past-deals' | 'skeptics-guide' | 'welcome' | 'admin' | 'guides';
 }
 const { activePage } = Astro.props;
 
+const REGIONAL_AIRPORTS = [
+  { code: 'MFE', city: 'McAllen' },
+  { code: 'BRO', city: 'Brownsville' },
+  { code: 'HRL', city: 'Harlingen' },
+  { code: 'LRD', city: 'Laredo' },
+  { code: 'CRP', city: 'Corpus Christi' },
+  { code: 'SAT', city: 'San Antonio' },
+  { code: 'AUS', city: 'Austin' },
+  { code: 'IAH', city: 'Houston Intl' },
+  { code: 'HOU', city: 'Houston Hobby' },
+  { code: 'DFW', city: 'Dallas/FW' },
+  { code: 'DAL', city: 'Dallas Love' },
+  { code: 'ELP', city: 'El Paso' },
+  { code: 'AMA', city: 'Amarillo' },
+  { code: 'LBB', city: 'Lubbock' },
+  { code: 'MAF', city: 'Midland' },
+  { code: 'GRK', city: 'Killeen' },
+].sort((a, b) => a.city.localeCompare(b.city));
+
 const NAV_LINKS = [
   { label: 'The Strategy', href: '/#how-it-works' },
-  { label: 'Regional Guides', href: '/guides/mfe' },
+  { label: 'Regional Guides', href: '/guides', dropdown: true },
   { label: "Skeptic's Guide", href: '/skeptics-guide' },
   { label: 'Past Deals', href: '/past-deals' },
 ];
@@ -28,17 +47,49 @@ const NAV_LINKS = [
     <!-- Desktop Nav Links -->
     <div class="hidden lg:flex items-center gap-10">
       {NAV_LINKS.map(link => (
-        <a
-          href={link.href}
-          class={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors no-underline ${
-            (activePage === 'past-deals' && link.href === '/past-deals') ||
-            (activePage === 'skeptics-guide' && link.href === '/skeptics-guide')
-              ? 'text-tcf-gold border-b border-tcf-gold/50 pb-0.5'
-              : 'text-slate-400 hover:text-white'
-          }`}
-        >
-          {link.label}
-        </a>
+        link.dropdown ? (
+          <div class="relative group h-full flex items-center">
+            <a
+              href={link.href}
+              class={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors no-underline flex items-center gap-1 ${
+                activePage === 'guides' ? 'text-tcf-gold border-b border-tcf-gold/50 pb-0.5' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              {link.label}
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="opacity-40 group-hover:rotate-180 transition-transform duration-300"><path d="m6 9 6 6 6-6"/></svg>
+            </a>
+            
+            <!-- Megamenu Dropdown -->
+            <div class="absolute top-[calc(100%+14px)] left-1/2 -translate-x-1/2 w-[480px] opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300">
+              <div class="bg-navy-mid/95 backdrop-blur-2xl border border-white/10 rounded-2xl p-6 shadow-2xl grid grid-cols-2 gap-x-8 gap-y-2">
+                <div class="col-span-2 mb-4 pb-2 border-b border-white/5">
+                  <span class="text-[9px] font-black text-gold uppercase tracking-[0.3em]">Intelligence Moat</span>
+                </div>
+                {REGIONAL_AIRPORTS.map(airport => (
+                  <a href={`/guides/${airport.code.toLowerCase()}`} class="text-[11px] font-bold text-slate-400 hover:text-white py-1.5 transition-colors no-underline flex items-center gap-2 group/item">
+                    <span class="text-gold opacity-40 group-hover/item:opacity-100 transition-opacity">{airport.code}</span>
+                    {airport.city}
+                  </a>
+                ))}
+                <a href="/guides" class="col-span-2 mt-4 pt-4 border-t border-white/5 text-[10px] font-black text-center text-gold uppercase tracking-widest hover:brightness-125 no-underline">
+                  View All Hubs &rarr;
+                </a>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <a
+            href={link.href}
+            class={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors no-underline ${
+              (activePage === 'past-deals' && link.href === '/past-deals') ||
+              (activePage === 'skeptics-guide' && link.href === '/skeptics-guide')
+                ? 'text-tcf-gold border-b border-tcf-gold/50 pb-0.5'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            {link.label}
+          </a>
+        )
       ))}
     </div>
 
@@ -72,6 +123,7 @@ const NAV_LINKS = [
       href="/#waitlist" 
       class="btn-primary w-full flex items-center justify-center gap-2 shadow-[0_20px_40px_rgba(212,168,67,0.3)]"
       style="padding: 1.1rem; font-size: 0.9rem;"
+    >
       <span>Get Early Access</span>
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
     </a>
@@ -88,13 +140,27 @@ const NAV_LINKS = [
   <div class="absolute inset-0" style="background: rgba(5, 10, 20, 0.96); backdrop-filter: blur(20px);"></div>
 
   <!-- Menu Content -->
-  <div class="relative z-10 flex flex-col items-center justify-center gap-8 h-full text-center px-8">
-    <a href="/" class="text-3xl font-black text-white uppercase tracking-tight hover:text-tcf-gold transition-colors no-underline">Home</a>
-    {NAV_LINKS.map(link => (
-      <a href={link.href} class="text-3xl font-black text-slate-300 uppercase tracking-tight hover:text-tcf-gold transition-colors no-underline mobile-nav-link">
-        {link.label}
-      </a>
-    ))}
+  <div class="relative z-10 flex flex-col items-center pt-32 pb-40 h-full overflow-y-auto px-8">
+    <a href="/" class="text-2xl font-black text-white uppercase tracking-tight hover:text-tcf-gold transition-colors no-underline mb-8">Home</a>
+    
+    <div class="w-full flex flex-col items-center gap-6">
+      <div class="w-full h-px bg-white/10"></div>
+      
+      <a href="/guides" class="text-xl font-black text-gold uppercase tracking-widest no-underline">Regional Moat</a>
+      <div class="grid grid-cols-2 gap-x-8 gap-y-4 w-full">
+        {REGIONAL_AIRPORTS.map(airport => (
+          <a href={`/guides/${airport.code.toLowerCase()}`} class="text-sm font-bold text-slate-400 hover:text-white transition-colors no-underline flex items-center justify-center gap-2 mobile-nav-link">
+            <span class="text-gold/50">{airport.code}</span>
+            {airport.city}
+          </a>
+        ))}
+      </div>
+
+      <div class="w-full h-px bg-white/10"></div>
+
+      <a href="/skeptics-guide" class="text-2xl font-black text-slate-300 uppercase tracking-tight hover:text-tcf-gold transition-colors no-underline mobile-nav-link">Skeptic's Guide</a>
+      <a href="/past-deals" class="text-2xl font-black text-slate-300 uppercase tracking-tight hover:text-tcf-gold transition-colors no-underline mobile-nav-link">Past Deals</a>
+    </div>
   </div>
 </div>
 
