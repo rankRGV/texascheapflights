@@ -71,11 +71,16 @@ export async function processDeal(title: string, content: string, source: string
     }
 
     // --- SUPABASE GUARD: Fatigue/Duplicate Check ---
-    const isDupe = await checkFatigue(dealData);
-    const isHighPriority = dealData.totalScore >= 9; // Always send unicorns even if dupes
+    const isHighPriority = dealData.totalScore >= 9;
+    const fatigueWindow = isHighPriority
+      ? 48 * 60 * 60 * 1000        // 48h cooldown for auto-post unicorns
+      : 7 * 24 * 60 * 60 * 1000;  // 7-day window for standard deals
 
-    if (isDupe && !isHighPriority) {
-      console.log(`   💤 FATIGUE: Already sent ${dealData.originAirport} ➔ ${dealData.destination} recently. Skipping.`);
+    const isDupe = await checkFatigue(dealData, fatigueWindow);
+
+    if (isDupe) {
+      const windowLabel = isHighPriority ? '48h' : '7d';
+      console.log(`   💤 FATIGUE (${windowLabel}): Already sent ${dealData.originAirport} ➔ ${dealData.destination} recently. Skipping.`);
       await logDealToDb(dealData, title, content, source, false, 'Fatigue/Duplicate');
       return { success: false, reason: 'Fatigue/Duplicate' };
     }
@@ -152,9 +157,9 @@ async function checkBlocklist(deal: ParsedDeal): Promise<boolean> {
   }
 }
 
-async function checkFatigue(deal: ParsedDeal): Promise<boolean> {
+async function checkFatigue(deal: ParsedDeal, windowMs: number = 7 * 24 * 60 * 60 * 1000): Promise<boolean> {
   try {
-    const SEVEN_DAYS_AGO = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    const windowStart = new Date(Date.now() - windowMs).toISOString();
 
     const { data } = await supabase
       .from('deals')
@@ -162,7 +167,7 @@ async function checkFatigue(deal: ParsedDeal): Promise<boolean> {
       .eq('origin', deal.originAirport)
       .eq('destination', deal.destination)
       .not('sent_at', 'is', null)
-      .gt('sent_at', SEVEN_DAYS_AGO)
+      .gt('sent_at', windowStart)
       .limit(1);
 
     return !!(data && data.length > 0);
@@ -227,6 +232,25 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string, dealId?:
     }
 
     // 1. Social Automation (Trigger n8n if score is 9+)
+    // Rate-limit: only one auto-post per 30 minutes to avoid webhook throttling
+    let isRateLimited = false;
+    if (autoPost && dealId) {
+      const THIRTY_MIN_AGO = new Date(Date.now() - 30 * 60 * 1000).toISOString();
+      const { data: recentPost } = await supabase
+        .from('deals')
+        .select('id')
+        .eq('deal_type', 'error_fare')
+        .not('sent_at', 'is', null)
+        .gt('sent_at', THIRTY_MIN_AGO)
+        .neq('id', dealId)
+        .limit(1);
+      if (recentPost && recentPost.length > 0) {
+        console.log(`   ⏳ RATE LIMIT: Auto-post skipped — another deal posted within 30 min. Discord draft created.`);
+        autoPost = false;
+        isRateLimited = true;
+      }
+    }
+
     if (autoPost && n8nWebhookUrl) {
       try {
         // Fetch full deal from DB to ensure n8n has everything
@@ -390,7 +414,11 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string, dealId?:
         message = `👤 **CUSTOMER SUPPORT INQUIRY** 👤\n\n**From:** (Check Resend/Email)\n**Subject:** ${dealData.explanation}\n\n**Message:**\n\`\`\`${rawContent?.substring(0, 1500)}\`\`\``;
       } else {
         const internalLink = dealId ? `\n🔗 **Site Details:** https://texascheapflights.com/deal/${dealId}` : "";
-        const alertStatus = autoPost ? "🚀 **AUTO-POSTED TO SOCIALS**" : "📝 **DRAFT CREATED (Review Required)**";
+        const alertStatus = autoPost
+          ? "🚀 **AUTO-POSTED TO SOCIALS**"
+          : isRateLimited
+            ? "⏳ **RATE LIMITED — Post manually in ~30 min** (another 9/10 was just auto-posted)"
+            : "📝 **DRAFT CREATED (Review Required)**";
         message = `🚨 **NEW DEAL FOUND (Score: ${dealData.totalScore}/10)** 🚨\n\n**Status:** ${alertStatus}\n**Route:** ${dealData.originAirport} ➔ ${dealData.destination}\n**Price:** $${dealData.price} on ${dealData.airline}\n${datesText ? `**Dates:** ${datesText}\n` : ''}**Analysis:** ${dealData.explanation}${clusterCountInfo}\n\n🔗 **Verify:** [Check Google Flights](${bookLink})${internalLink}\n📝 **Review:** [Review in Resend](${draftLink})`;
       }
 

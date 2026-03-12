@@ -12,6 +12,7 @@ export const GET: APIRoute = async ({ request }) => {
         const urlParams = new URL(request.url).searchParams;
         const isTest = urlParams.get('test') === 'true';
         const priceLimit = isTest ? 1000 : 350;
+        const premiumFloor = isTest ? 5000 : 2000; // Capture potential business/premium deals
 
         // Check for a secret to prevent random people from triggering this
         const cronSecret = import.meta.env.CRON_SECRET || process.env.CRON_SECRET;
@@ -54,8 +55,10 @@ export const GET: APIRoute = async ({ request }) => {
             const data = await res.json();
 
             if (data.destinations && data.destinations.length > 0) {
-                // Filter for glitches under our dynamic limit
-                const deals = data.destinations.filter((d: any) => d.flight_price <= priceLimit);
+                // Filter for economy deals under limit OR premium deals above floor
+                const deals = data.destinations.filter((d: any) =>
+                    d.flight_price <= priceLimit || d.flight_price >= premiumFloor
+                );
 
                 deals.forEach((deal: any) => {
                     allDealsFound.push({
@@ -72,12 +75,22 @@ export const GET: APIRoute = async ({ request }) => {
         }
 
         if (allDealsFound.length === 0) {
-            console.log(`   ❌ Scout found no anomalous deals under $${priceLimit} today.`);
+            console.log(`   ❌ Scout found no deals under $${priceLimit} or over $${premiumFloor} today.`);
             return new Response(JSON.stringify({ message: "No deals found." }), { status: 200, headers: { 'Content-Type': 'application/json' } });
         }
 
-        // Only run top 3 through the Engine to avoid Discord/Resend spam and Gemini API limits
-        const topDeals = allDealsFound.sort((a, b) => a.price - b.price).slice(0, 3);
+        // Split into economy and premium buckets to ensure premium deals get a slot
+        const economyDeals = allDealsFound
+            .filter(d => d.price <= priceLimit)
+            .sort((a, b) => a.price - b.price)
+            .slice(0, 2); // Top 2 cheapest economy
+
+        const premiumDeals = allDealsFound
+            .filter(d => d.price >= premiumFloor)
+            .sort((a, b) => a.price - b.price)
+            .slice(0, 1); // Top 1 cheapest premium
+
+        const topDeals = [...economyDeals, ...premiumDeals];
 
         let processedCount = 0;
 
@@ -86,9 +99,11 @@ export const GET: APIRoute = async ({ request }) => {
 
             const title = `✈️ ${isTest ? '[TEST] ' : ''}SCOUT FIND: ${flight.origin} to ${flight.destination} for $${flight.price}`;
 
-            // Generate a synthetic "Typical" price based on the current price to activate the Price Insight widget
-            const typicalLow = flight.price + 120;
-            const typicalHigh = flight.price + 280;
+            // Generate a synthetic "Typical" price to activate the Price Insight widget
+            // Premium deals scale by multiplier; economy deals use a flat offset
+            const isPremium = flight.price >= premiumFloor;
+            const typicalLow = isPremium ? Math.round(flight.price * 2.2) : flight.price + 120;
+            const typicalHigh = isPremium ? Math.round(flight.price * 3.5) : flight.price + 280;
 
             const content = `
                 The Regional Scout found a Flight Anomaly!

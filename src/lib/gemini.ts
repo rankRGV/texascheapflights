@@ -33,7 +33,7 @@ Analyze the email text and return a JSON object with the following structure:
   "destination": string, // City/Country/Location
   "price": number, // Extract the lowest deal price as a number
   "airline": string, // Airline(s) mentioned
-  "priceStrengthScore": number, // 1 to 5 (5=Insane error fare <$400 to Europe, 3=Very strong <$600 to Europe, 1=Good sale)
+  "priceStrengthScore": number, // 1 to 5. Economy: 5=Error fare under $400 to Europe/Asia, 3=Strong under $600, 1=Modest sale. Premium/Business: 5=70%+ off retail (e.g. $1500 TX->Europe business, typical $5000+), 3=40-60% off, 1=under 30% off. Use the "Typical" price in the content to gauge discount depth.
   "hedgeValueScore": number, // 1 to 5 (5=Massive Hedge >70% off, 3=Solid Hedge 40-60% off, 1=Minimal Hedge <30% off)
   "totalScore": number, // sum of priceStrengthScore and hedgeValueScore (max 10)
   "explanation": string // 1 sentence explaining the scores

@@ -159,7 +159,8 @@ function timeAgo(dateStr: string) {
           </div>
         </div>
         <div class="rounded-2xl border border-white/10 overflow-hidden">
-          <table class="w-full text-sm">
+          <div class="overflow-x-auto">
+          <table class="w-full text-sm min-w-[700px]">
             <thead>
               <tr class="border-b border-white/10 bg-white/5">
                 <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Route</th>
@@ -222,6 +223,7 @@ function timeAgo(dateStr: string) {
               <p class="text-sm font-bold">No deals found yet. The Scout is warming up.</p>
             </div>
           )}
+          </div>
         </div>
       </div>
 
