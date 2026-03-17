@@ -60,10 +60,10 @@ const NAV_LINKS = [
             </a>
             
             <!-- Megamenu Dropdown -->
-            <div class="absolute top-[calc(100%+14px)] left-1/2 -translate-x-1/2 w-[480px] opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300">
-              <div class="bg-navy-mid/95 backdrop-blur-2xl border border-white/10 rounded-2xl p-6 shadow-2xl grid grid-cols-2 gap-x-8 gap-y-2">
+            <div class="absolute top-full left-1/2 -translate-x-1/2 w-[480px] opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 pt-[14px]">
+              <div class="bg-tcf-navy-mid/98 backdrop-blur-2xl border border-white/10 rounded-2xl p-6 shadow-2xl grid grid-cols-2 gap-x-8 gap-y-2">
                 <div class="col-span-2 mb-4 pb-2 border-b border-white/5">
-                  <span class="text-[9px] font-black text-gold uppercase tracking-[0.3em]">Intelligence Moat</span>
+                  <span class="text-[9px] font-black text-gold uppercase tracking-[0.3em]">Live Texas Scanner</span>
                 </div>
                 {REGIONAL_AIRPORTS.map(airport => (
                   <a href={`/guides/${airport.code.toLowerCase()}`} class="text-[11px] font-bold text-slate-400 hover:text-white py-1.5 transition-colors no-underline flex items-center gap-2 group/item">
@@ -146,7 +146,7 @@ const NAV_LINKS = [
     <div class="w-full flex flex-col items-center gap-6">
       <div class="w-full h-px bg-white/10"></div>
       
-      <a href="/guides" class="text-xl font-black text-gold uppercase tracking-widest no-underline">Regional Moat</a>
+      <a href="/guides" class="text-xl font-black text-gold uppercase tracking-widest no-underline">Live Texas Scanner</a>
       <div class="grid grid-cols-2 gap-x-8 gap-y-4 w-full">
         {REGIONAL_AIRPORTS.map(airport => (
           <a href={`/guides/${airport.code.toLowerCase()}`} class="text-sm font-bold text-slate-400 hover:text-white transition-colors no-underline flex items-center justify-center gap-2 mobile-nav-link">

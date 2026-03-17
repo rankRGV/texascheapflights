@@ -414,12 +414,15 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string, dealId?:
         message = `👤 **CUSTOMER SUPPORT INQUIRY** 👤\n\n**From:** (Check Resend/Email)\n**Subject:** ${dealData.explanation}\n\n**Message:**\n\`\`\`${rawContent?.substring(0, 1500)}\`\`\``;
       } else {
         const internalLink = dealId ? `\n🔗 **Site Details:** https://texascheapflights.com/deal/${dealId}` : "";
+        const socialLink = dealId ? `\n📲 **Socials:** [Post to Socials](https://texascheapflights.com/api/admin/discord-social?dealId=${dealId}&token=${import.meta.env.ADMIN_PASSWORD ?? 'tcf-admin-2026'})` : "";
+        
         const alertStatus = autoPost
           ? "🚀 **AUTO-POSTED TO SOCIALS**"
           : isRateLimited
             ? "⏳ **RATE LIMITED — Post manually in ~30 min** (another 9/10 was just auto-posted)"
             : "📝 **DRAFT CREATED (Review Required)**";
-        message = `🚨 **NEW DEAL FOUND (Score: ${dealData.totalScore}/10)** 🚨\n\n**Status:** ${alertStatus}\n**Route:** ${dealData.originAirport} ➔ ${dealData.destination}\n**Price:** $${dealData.price} on ${dealData.airline}\n${datesText ? `**Dates:** ${datesText}\n` : ''}**Analysis:** ${dealData.explanation}${clusterCountInfo}\n\n🔗 **Verify:** [Check Google Flights](${bookLink})${internalLink}\n📝 **Review:** [Review in Resend](${draftLink})`;
+            
+        message = `🚨 **NEW DEAL FOUND (Score: ${dealData.totalScore}/10)** 🚨\n\n**Status:** ${alertStatus}\n**Route:** ${dealData.originAirport} ➔ ${dealData.destination}\n**Price:** $${dealData.price} on ${dealData.airline}\n${datesText ? `**Dates:** ${datesText}\n` : ''}**Analysis:** ${dealData.explanation}${clusterCountInfo}\n\n🔗 **Verify:** [Check Google Flights](${bookLink})${internalLink}\n📝 **Review:** [Review in Resend](${draftLink})${socialLink}`;
       }
 
       await fetch(discordWebhookUrl, {
