@@ -96,8 +96,8 @@ export async function processDeal(title: string, content: string, source: string
       if (isScoutTest) console.log(`   🚀 Bypassing Score Threshold for Test Scout Deal`);
       else console.log(`   🎉 HIGH SCORE - SENDING ALERTS...`);
 
-      // Determine if we should auto-post to social (Score 9 or 10)
-      const isAutoPost = dealData.totalScore >= 9;
+      // We no longer auto-post high scores to social. All deals go to Discord for manual approval.
+      const isAutoPost = false;
 
       // 1. Log to DB first to get the unique ID for internal linking
       const dealId = await logDealToDb(dealData, title, content, source, true, 'Prepared');
