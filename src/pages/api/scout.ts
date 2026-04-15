@@ -1,5 +1,184 @@
 import type { APIRoute } from 'astro';
 import { processDeal } from '../../lib/engine';
+import { getCarrierTier, normalizeAirlineName } from '../../lib/airlines';
+
+type OriginGroup = 'regional' | 'major';
+
+type ScoutCandidate = {
+    origin: string;
+    destination: string;
+    price: number;
+    airline: string;
+    link: string;
+    start_date?: string;
+    end_date?: string;
+    originGroup: OriginGroup;
+    lane: 'regional-legacy' | 'regional-value' | 'major-legacy' | 'major-value' | 'premium';
+    benchmarkLow: number;
+    benchmarkHigh: number;
+    estimatedDiscountPct: number;
+    valueScore: number;
+};
+
+function rotateOrigins(origins: string[], count: number, slot: number): string[] {
+    if (origins.length === 0 || count <= 0) return [];
+
+    const start = slot % origins.length;
+    const selected: string[] = [];
+    for (let index = 0; index < Math.min(count, origins.length); index++) {
+        selected.push(origins[(start + index) % origins.length]);
+    }
+
+    return selected;
+}
+
+function percentile(sortedValues: number[], point: number): number {
+    if (sortedValues.length === 0) return 0;
+
+    const index = (sortedValues.length - 1) * point;
+    const lowerIndex = Math.floor(index);
+    const upperIndex = Math.ceil(index);
+
+    if (lowerIndex === upperIndex) return sortedValues[lowerIndex];
+
+    const weight = index - lowerIndex;
+    return sortedValues[lowerIndex] + (sortedValues[upperIndex] - sortedValues[lowerIndex]) * weight;
+}
+
+function estimateBenchmark(price: number, airline: string, originGroup: OriginGroup, priceStats: { median: number; p75: number }) {
+    const tier = getCarrierTier(airline);
+    const multiplier = {
+        premium: 1.9,
+        legacy: 1.55,
+        hybrid: 1.45,
+        regional: 1.4,
+        unknown: 1.35,
+        ulcc: 1.2,
+    }[tier];
+    const originFloor = originGroup === 'major' ? 220 : 140;
+    const floor = Math.max(originFloor, Math.round(price * multiplier), Math.round(priceStats.median));
+    const ceilingBase = Math.max(priceStats.p75, floor);
+    const ceilingMultiplier = tier === 'premium' ? 1.45 : originGroup === 'major' ? 1.3 : 1.22;
+    const benchmarkLow = Math.max(price + 35, floor);
+    const benchmarkHigh = Math.max(benchmarkLow + 80, Math.round(ceilingBase * ceilingMultiplier));
+
+    return { benchmarkLow, benchmarkHigh };
+}
+
+function getLane(originGroup: OriginGroup, airline: string, price: number): ScoutCandidate['lane'] {
+    const tier = getCarrierTier(airline);
+
+    if (price >= 1200 || tier === 'premium') return 'premium';
+    if (originGroup === 'major' && tier !== 'ulcc') return 'major-legacy';
+    if (originGroup === 'regional' && tier !== 'ulcc') return 'regional-legacy';
+    return originGroup === 'major' ? 'major-value' : 'regional-value';
+}
+
+function buildCandidates(origin: string, originGroup: OriginGroup, destinations: any[]): ScoutCandidate[] {
+    const prices = destinations
+        .map((destination) => Number(destination.flight_price))
+        .filter((price) => Number.isFinite(price) && price > 0)
+        .sort((a, b) => a - b);
+
+    if (prices.length === 0) return [];
+
+    const priceStats = {
+        median: percentile(prices, 0.5),
+        p75: percentile(prices, 0.75),
+    };
+
+    return destinations
+        .map((destination) => {
+            const price = Number(destination.flight_price);
+            if (!Number.isFinite(price) || price <= 0) return null;
+
+            const airline = normalizeAirlineName(destination.airline || 'Multiple Airlines');
+            const lane = getLane(originGroup, airline, price);
+            const { benchmarkLow, benchmarkHigh } = estimateBenchmark(price, airline, originGroup, priceStats);
+            const benchmarkMid = Math.round((benchmarkLow + benchmarkHigh) / 2);
+            const estimatedDiscountPct = Math.max(0, Math.round(((benchmarkMid - price) / benchmarkMid) * 100));
+            const carrierBonus = {
+                premium: 18,
+                legacy: 14,
+                hybrid: 10,
+                regional: 8,
+                unknown: 4,
+                ulcc: 0,
+            }[getCarrierTier(airline)];
+            const laneBonus = {
+                premium: 16,
+                'major-legacy': 14,
+                'regional-legacy': 12,
+                'major-value': 8,
+                'regional-value': 6,
+            }[lane];
+            const valueScore = estimatedDiscountPct + carrierBonus + laneBonus;
+
+            return {
+                origin,
+                destination: destination.name,
+                price,
+                airline,
+                link: destination.share_flights_url || destination.link || `https://www.google.com/travel/flights?q=Flights%20from%20${origin}%20to%20${destination.name}`,
+                start_date: destination.start_date,
+                end_date: destination.end_date,
+                originGroup,
+                lane,
+                benchmarkLow,
+                benchmarkHigh,
+                estimatedDiscountPct,
+                valueScore,
+            } satisfies ScoutCandidate;
+        })
+        .filter((candidate): candidate is ScoutCandidate => candidate !== null)
+        .filter((candidate) => {
+            if (candidate.lane === 'premium') return candidate.estimatedDiscountPct >= 15 || candidate.price <= 2400;
+            if (candidate.lane === 'major-legacy' || candidate.lane === 'regional-legacy') return candidate.estimatedDiscountPct >= 22;
+            return candidate.estimatedDiscountPct >= 18;
+        });
+}
+
+function selectTopDeals(candidates: ScoutCandidate[]): ScoutCandidate[] {
+    const laneLimits: Array<{ lane: ScoutCandidate['lane']; limit: number }> = [
+        { lane: 'regional-legacy', limit: 1 },
+        { lane: 'major-legacy', limit: 2 },
+        { lane: 'regional-value', limit: 1 },
+        { lane: 'major-value', limit: 1 },
+        { lane: 'premium', limit: 1 },
+    ];
+    const selected: ScoutCandidate[] = [];
+    const seenAirlines = new Set<string>();
+    const seenRoutes = new Set<string>();
+    const sorted = [...candidates].sort((a, b) => b.valueScore - a.valueScore || a.price - b.price);
+
+    const tryAddCandidate = (candidate: ScoutCandidate) => {
+        const airlineKey = normalizeAirlineName(candidate.airline).toLowerCase();
+        const routeKey = `${candidate.origin}-${candidate.destination.toLowerCase()}-${airlineKey}`;
+        if (seenAirlines.has(airlineKey) || seenRoutes.has(routeKey)) return false;
+
+        selected.push(candidate);
+        seenAirlines.add(airlineKey);
+        seenRoutes.add(routeKey);
+        return true;
+    };
+
+    for (const { lane, limit } of laneLimits) {
+        const laneCandidates = sorted.filter((candidate) => candidate.lane === lane).slice(0, 8);
+        let laneCount = 0;
+
+        for (const candidate of laneCandidates) {
+            if (laneCount >= limit) break;
+            if (tryAddCandidate(candidate)) laneCount++;
+        }
+    }
+
+    for (const candidate of sorted) {
+        if (selected.length >= 5) break;
+        tryAddCandidate(candidate);
+    }
+
+    return selected;
+}
 
 export const GET: APIRoute = async ({ request }) => {
     try {
@@ -11,8 +190,6 @@ export const GET: APIRoute = async ({ request }) => {
 
         const urlParams = new URL(request.url).searchParams;
         const isTest = urlParams.get('test') === 'true';
-        const priceLimit = isTest ? 1000 : 350;
-        const premiumFloor = isTest ? 5000 : 2000; // Capture potential business/premium deals
 
         // Check for a secret to prevent random people from triggering this
         const cronSecret = import.meta.env.CRON_SECRET || process.env.CRON_SECRET;
@@ -22,23 +199,23 @@ export const GET: APIRoute = async ({ request }) => {
             return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
         }
 
-        // Our comprehensive list of Texas regional airports (excluding DFW, IAH, HOU, DAL)
-        const origins = [
-            "MFE", "HRL", "LRD", "BRO", "CRP", "SAT", "AUS", // South/Central/Valley
-            "ELP", "LBB", "MAF", "AMA", "SJT",             // West/Panhandle
-            "BPT", "GRK", "TYR", "GGG", "ABI", "TXK",      // East/Central Minor
-            "VCT", "ACT"                                   // Coast/Central Minor
+        const originPools = {
+            regional: [
+                "MFE", "HRL", "LRD", "BRO", "CRP", "ELP", "LBB", "MAF", "AMA", "SJT",
+                "BPT", "GRK", "TYR", "GGG", "ABI", "TXK", "VCT", "ACT"
+            ],
+            major: ["DFW", "IAH", "AUS", "SAT", "HOU", "DAL"]
+        };
+        const scanSlot = Math.floor(Date.now() / (12 * 60 * 60 * 1000));
+        const scoutList = [
+            ...rotateOrigins(originPools.regional, 2, scanSlot * 2),
+            ...rotateOrigins(originPools.major, 2, scanSlot)
         ];
 
-        console.log(`🦅 Regional Scout scanning Google Flights (via SerpApi)... Limit: $${priceLimit}`);
-        let allDealsFound: any[] = [];
+        console.log(`🦅 Regional Scout scanning Google Flights (via SerpApi) across balanced Texas lanes...`);
+        let allDealsFound: ScoutCandidate[] = [];
 
-        // To stay under the free 250 searches/month limit, we randomly select a batch of 3 airports per run.
-        // If we run this twice a day, it's 6 searches/day. 6 * 30 days = 180 searches/month.
-        const shuffledOrigins = origins.sort(() => 0.5 - Math.random());
-        const scoutList = shuffledOrigins.slice(0, 3);
-
-        console.log(`   📍 Randomly selected batch for this sweep: ${scoutList.join(', ')}`);
+        console.log(`   📍 Selected batch for this sweep: ${scoutList.join(', ')}`);
 
         for (const origin of scoutList) {
             const params = new URLSearchParams({
@@ -55,42 +232,17 @@ export const GET: APIRoute = async ({ request }) => {
             const data = await res.json();
 
             if (data.destinations && data.destinations.length > 0) {
-                // Filter for economy deals under limit OR premium deals above floor
-                const deals = data.destinations.filter((d: any) =>
-                    d.flight_price <= priceLimit || d.flight_price >= premiumFloor
-                );
-
-                deals.forEach((deal: any) => {
-                    allDealsFound.push({
-                        origin: origin,
-                        destination: deal.name,
-                        price: deal.flight_price,
-                        airline: deal.airline || "Multiple",
-                        link: deal.share_flights_url || deal.link || `https://www.google.com/travel/flights?q=Flights%20from%20${origin}%20to%20${deal.name}`,
-                        start_date: deal.start_date,
-                        end_date: deal.end_date
-                    });
-                });
+                const originGroup: OriginGroup = originPools.major.includes(origin) ? 'major' : 'regional';
+                allDealsFound.push(...buildCandidates(origin, originGroup, data.destinations));
             }
         }
 
         if (allDealsFound.length === 0) {
-            console.log(`   ❌ Scout found no deals under $${priceLimit} or over $${premiumFloor} today.`);
+            console.log(`   ❌ Scout found no candidates that cleared the value thresholds today.`);
             return new Response(JSON.stringify({ message: "No deals found." }), { status: 200, headers: { 'Content-Type': 'application/json' } });
         }
 
-        // Split into economy and premium buckets to ensure premium deals get a slot
-        const economyDeals = allDealsFound
-            .filter(d => d.price <= priceLimit)
-            .sort((a, b) => a.price - b.price)
-            .slice(0, 2); // Top 2 cheapest economy
-
-        const premiumDeals = allDealsFound
-            .filter(d => d.price >= premiumFloor)
-            .sort((a, b) => a.price - b.price)
-            .slice(0, 1); // Top 1 cheapest premium
-
-        const topDeals = [...economyDeals, ...premiumDeals];
+        const topDeals = selectTopDeals(allDealsFound);
 
         let processedCount = 0;
 
@@ -99,12 +251,6 @@ export const GET: APIRoute = async ({ request }) => {
 
             const title = `✈️ ${isTest ? '[TEST] ' : ''}SCOUT FIND: ${flight.origin} to ${flight.destination} for $${flight.price}`;
 
-            // Generate a synthetic "Typical" price to activate the Price Insight widget
-            // Premium deals scale by multiplier; economy deals use a flat offset
-            const isPremium = flight.price >= premiumFloor;
-            const typicalLow = isPremium ? Math.round(flight.price * 2.2) : flight.price + 120;
-            const typicalHigh = isPremium ? Math.round(flight.price * 3.5) : flight.price + 280;
-
             const content = `
                 The Regional Scout found a Flight Anomaly!
                 Route: ${flight.origin} to ${flight.destination}
@@ -112,8 +258,10 @@ export const GET: APIRoute = async ({ request }) => {
                 Price: $${flight.price}
                 Airline: ${flight.airline}
                 
-                Typical: $${typicalLow} - $${typicalHigh}
-                Cheaper: $${typicalLow - flight.price}
+                Typical: $${flight.benchmarkLow} - $${flight.benchmarkHigh}
+                Cheaper: $${Math.max(0, flight.benchmarkLow - flight.price)}
+                Estimated Discount: ${flight.estimatedDiscountPct}%
+                Scout Lane: ${flight.lane}
                 
                 Book Link: ${flight.link}
             `;

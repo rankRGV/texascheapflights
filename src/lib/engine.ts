@@ -1,6 +1,7 @@
 import { Resend } from 'resend';
 import { parseEmailToDeal, type ParsedDeal } from './gemini';
 import { supabase } from './supabase';
+import { normalizeAirlineName } from './airlines';
 
 interface RegionalCluster {
   [key: string]: string[];
@@ -160,17 +161,30 @@ async function checkBlocklist(deal: ParsedDeal): Promise<boolean> {
 async function checkFatigue(deal: ParsedDeal, windowMs: number = 7 * 24 * 60 * 60 * 1000): Promise<boolean> {
   try {
     const windowStart = new Date(Date.now() - windowMs).toISOString();
+    const incomingAirline = normalizeAirlineName(deal.airline);
 
     const { data } = await supabase
       .from('deals')
-      .select('id')
+      .select('id, airline, price')
       .eq('origin', deal.originAirport)
       .eq('destination', deal.destination)
       .not('sent_at', 'is', null)
       .gt('sent_at', windowStart)
-      .limit(1);
+      .limit(10);
 
-    return !!(data && data.length > 0);
+    if (!data || data.length === 0) return false;
+
+    return data.some((existingDeal) => {
+      const existingAirline = normalizeAirlineName(existingDeal.airline);
+      const sameAirline = existingAirline === incomingAirline;
+
+      if (!sameAirline) return false;
+      if (typeof existingDeal.price === 'number' && typeof deal.price === 'number' && deal.price <= existingDeal.price * 0.85) {
+        return false;
+      }
+
+      return true;
+    });
   } catch (err) {
     console.warn("   ⚠️ Fatigue check failed:", err);
     return false;
@@ -313,11 +327,16 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string, dealId?:
               if (rawContent) {
                 const typicalMatch = rawContent.match(/Typical:\s*\$?(\d+)\s*[-to]+\s*\$?(\d+)/i);
                 const cheaperMatch = rawContent.match(/Cheaper:\s*\$?(\d+)/i);
+                const discountMatch = rawContent.match(/Estimated Discount:\s*(\d+)%/i);
 
                 if (typicalMatch) {
                   const lowTyp = typicalMatch[1];
                   const highTyp = typicalMatch[2];
-                  const cheaperText = cheaperMatch ? `$${cheaperMatch[1]} cheaper than usual` : `well below the typical range`;
+                  const cheaperText = discountMatch
+                    ? `about ${discountMatch[1]}% below our scout benchmark`
+                    : cheaperMatch
+                      ? `$${cheaperMatch[1]} below our scout benchmark`
+                      : `well below our scout benchmark`;
 
                   return `
                                 <!-- Price Insight Widget -->
@@ -326,7 +345,7 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string, dealId?:
                                         Prices are currently <span style="color: #15803d; font-weight: 800;">low</span> — ${cheaperText}
                                     </p>
                                     <p style="margin: 0; font-size: 13px; color: #166534; opacity: 0.9; line-height: 1.5;">
-                                        The least expensive flights for similar trips usually cost between <strong>$${lowTyp}–$${highTyp}</strong>.
+                                        Our scout benchmark for comparable trips sits around <strong>$${lowTyp}–$${highTyp}</strong>.
                                     </p>
                                 </div>
                             `;

@@ -3,20 +3,39 @@ import '../styles/global.css';
 import GlobalNav from '../components/GlobalNav.astro';
 import GlobalFooter from '../components/GlobalFooter.astro';
 import { supabase } from '../lib/supabase';
+import { normalizeAirlineName } from '../lib/airlines';
 
 // Fetch real deals from Supabase at build time
 let deals: any[] = [];
 let stats = { totalScouted: 0, avgPrice: 0, bestDeal: null as number | null, topDestination: '' };
+let availableOrigins: string[] = [];
+let availableAirlines: string[] = [];
+let lastUpdated = '';
+
+const originFilter = Astro.url.searchParams.get('origin')?.toUpperCase() ?? 'all';
+const airlineFilter = Astro.url.searchParams.get('airline') ?? 'all';
+const typeFilter = Astro.url.searchParams.get('type') ?? 'all';
 
 try {
-  const { data: scoutedDeals } = await supabase
+  const { data: sentDeals } = await supabase
     .from('deals')
     .select('id, created_at, origin, destination, price, airline, score, deal_type, travel_dates, sent_at')
+    .not('sent_at', 'is', null)
     .gte('score', 7)
-    .order('created_at', { ascending: false })
-    .limit(50);
+    .order('sent_at', { ascending: false })
+    .limit(150);
 
-  deals = scoutedDeals ?? [];
+  const allDeals = sentDeals ?? [];
+  availableOrigins = Array.from(new Set(allDeals.map(d => d.origin))).sort();
+  availableAirlines = Array.from(new Set(allDeals.map(d => normalizeAirlineName(d.airline)).filter(Boolean))).sort();
+  lastUpdated = allDeals[0]?.sent_at ? new Date(allDeals[0].sent_at).toISOString() : '';
+
+  deals = allDeals.filter((deal) => {
+    const matchesOrigin = originFilter === 'all' || deal.origin === originFilter;
+    const matchesAirline = airlineFilter === 'all' || normalizeAirlineName(deal.airline) === airlineFilter;
+    const matchesType = typeFilter === 'all' || deal.deal_type === typeFilter;
+    return matchesOrigin && matchesAirline && matchesType;
+  });
 
   if (deals.length > 0) {
     const priced = deals.filter(d => d.price);
@@ -88,11 +107,48 @@ function getDealTypeLabel(type: string, score: number) {
         These aren't cherry-picked. This is the unfiltered feed.
       </p>
       <p class="text-xs text-slate-500 font-bold uppercase tracking-[0.2em] mt-8">
-        Last updated: <time datetime="2026-03-08">March 8, 2026</time>
+        Last updated: <time datetime={lastUpdated || new Date().toISOString()}>{lastUpdated ? new Date(lastUpdated).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Live'}</time>
       </p>
       <p class="text-sm text-slate-500 font-body">
         Error fares typically vanish within <strong class="text-slate-300">12–24 hours</strong>. The only way not to miss the next one is to be on the list.
       </p>
+    </div>
+  </section>
+
+  <section class="px-6 pb-10">
+    <div class="max-w-4xl mx-auto rounded-3xl border border-white/10 bg-white/5 p-6 md:p-8">
+      <form method="GET" class="grid gap-4 md:grid-cols-[1fr,1fr,1fr,auto] md:items-end">
+        <label class="block">
+          <span class="block text-[10px] font-black uppercase tracking-[0.25em] text-slate-500 mb-2">Origin</span>
+          <select name="origin" class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white focus:outline-none focus:border-tcf-gold/40">
+            <option value="all" selected={originFilter === 'all'}>All airports</option>
+            {availableOrigins.map((origin) => (
+              <option value={origin} selected={originFilter === origin}>{origin}</option>
+            ))}
+          </select>
+        </label>
+        <label class="block">
+          <span class="block text-[10px] font-black uppercase tracking-[0.25em] text-slate-500 mb-2">Airline</span>
+          <select name="airline" class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white focus:outline-none focus:border-tcf-gold/40">
+            <option value="all" selected={airlineFilter === 'all'}>All airlines</option>
+            {availableAirlines.map((airline) => (
+              <option value={airline} selected={airlineFilter === airline}>{airline}</option>
+            ))}
+          </select>
+        </label>
+        <label class="block">
+          <span class="block text-[10px] font-black uppercase tracking-[0.25em] text-slate-500 mb-2">Deal type</span>
+          <select name="type" class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white focus:outline-none focus:border-tcf-gold/40">
+            <option value="all" selected={typeFilter === 'all'}>All sent deals</option>
+            <option value="error_fare" selected={typeFilter === 'error_fare'}>Error fares</option>
+            <option value="sale" selected={typeFilter === 'sale'}>Sales / sweet spots</option>
+          </select>
+        </label>
+        <div class="flex gap-3">
+          <button type="submit" class="btn-primary whitespace-nowrap">Apply Filters</button>
+          <a href="/past-deals" class="inline-flex items-center justify-center rounded-2xl border border-white/10 px-5 py-3 text-xs font-black uppercase tracking-[0.2em] text-slate-400 no-underline hover:text-white hover:border-white/20 transition-colors">Reset</a>
+        </div>
+      </form>
     </div>
   </section>
 
@@ -155,7 +211,7 @@ function getDealTypeLabel(type: string, score: number) {
                       <a href={`/deal/${deal.id}`} class="no-underline text-inherit">{deal.origin} <span class="text-slate-500 font-normal">→</span> {deal.destination}</a>
                     </h3>
                     <p class="text-sm text-slate-400">
-                      {deal.airline && <span class="text-slate-300 font-medium">{deal.airline}</span>}
+                      {deal.airline && <span class="text-slate-300 font-medium">{normalizeAirlineName(deal.airline)}</span>}
                       {deal.travel_dates && <span class="text-slate-500"> · {deal.travel_dates}</span>}
                     </p>
                   </div>

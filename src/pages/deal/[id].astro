@@ -2,6 +2,7 @@
 import '../../styles/global.css';
 import GlobalNav from '../../components/GlobalNav.astro';
 import { supabase } from '../../lib/supabase';
+import { normalizeAirlineName } from '../../lib/airlines';
 
 const { id } = Astro.params;
 
@@ -14,6 +15,7 @@ const { data: deal, error } = await supabase
   .from('deals')
   .select('*')
   .eq('id', id)
+  .not('sent_at', 'is', null)
   .single();
 
 if (error || !deal) {
@@ -21,8 +23,9 @@ if (error || !deal) {
 }
 
 const priceDisplay = deal.price ? `$${deal.price}` : 'Points Deal';
-const title = `${priceDisplay} Flight from ${deal.origin} to ${deal.destination} on ${deal.airline || 'Major Airline'} | Texas Cheap Flights`;
-const description = `Scouted from ${deal.origin}: ${deal.airline ? deal.airline + ' flight to ' : ''}${deal.destination} for ${priceDisplay}. ${deal.travel_dates ? 'Travel dates: ' + deal.travel_dates : ''}. Exclusive Texas deal alert.`;
+const normalizedAirline = normalizeAirlineName(deal.airline);
+const title = `${priceDisplay} Flight from ${deal.origin} to ${deal.destination} on ${normalizedAirline || 'Major Airline'} | Texas Cheap Flights`;
+const description = `Scouted from ${deal.origin}: ${normalizedAirline ? normalizedAirline + ' flight to ' : ''}${deal.destination} for ${priceDisplay}. ${deal.travel_dates ? 'Travel dates: ' + deal.travel_dates : ''}. Exclusive Texas deal alert.`;
 
 // Structured Data (JSON-LD)
 const dealSentAt = new Date(deal.sent_at || deal.created_at);
@@ -102,7 +105,7 @@ const { data: relatedDeals } = await supabase
   .eq('origin', deal.origin)
   .neq('id', id)
   .not('sent_at', 'is', null)
-  .order('created_at', { ascending: false })
+  .order('sent_at', { ascending: false })
   .limit(3);
 ---
 
@@ -159,7 +162,7 @@ const { data: relatedDeals } = await supabase
                         {deal.origin} <span class="text-slate-500 font-normal">→</span> {deal.destination}
                     </h1>
                     <p class="text-xl text-slate-400 font-body">
-                        {deal.airline} · {deal.travel_dates}
+                        {normalizedAirline} · {deal.travel_dates}
                     </p>
                 </div>
                 <div class="text-left md:text-right">
@@ -195,7 +198,7 @@ const { data: relatedDeals } = await supabase
                     <p class="text-sm text-slate-300 mb-4 leading-relaxed">
                         Deals like this appear and disappear in hours. To get alerted the second our scout finds the next one:
                     </p>
-                    <a href="/#signup" class="btn-primary w-full py-4 text-center text-sm no-underline font-black uppercase tracking-widest" style="background: var(--tcf-gold); color: #050a14;">
+                    <a href="/#waitlist" class="btn-primary w-full py-4 text-center text-sm no-underline font-black uppercase tracking-widest" style="background: var(--tcf-gold); color: #050a14;">
                         Join the Scout List
                     </a>
                 </div>
@@ -205,7 +208,7 @@ const { data: relatedDeals } = await supabase
                 <h2 class="text-xl font-black text-white uppercase tracking-wider mb-6">Deal Breakdown</h2>
                 <div class="space-y-6 text-slate-300 font-body leading-relaxed">
                     <p>
-                        This alert was triggered because the price for <strong class="text-white" data-ai-key="destination">{deal.destination}</strong> dropped significantly below the 30-day average for departures from <strong class="text-white" data-ai-key="origin">{deal.origin}</strong>.
+                        This alert was triggered because the price for <strong class="text-white" data-ai-key="destination">{deal.destination}</strong> stood out against our live scout thresholds for departures from <strong class="text-white" data-ai-key="origin">{deal.origin}</strong> and cleared the send threshold for Texas subscribers.
                     </p>
                     <div class="grid gap-4">
                         <div class="p-6 rounded-2xl bg-white/5 border border-white/5 flex gap-4 items-start">
@@ -214,7 +217,7 @@ const { data: relatedDeals } = await supabase
                             </div>
                             <div>
                                 <p class="text-sm font-bold text-white mb-1 uppercase tracking-tight">Verified Route</p>
-                                <p class="text-xs text-slate-500">Operated by <span data-ai-key="airline" class="text-slate-300">{deal.airline || 'Major Carrier'}</span>. This route typically costs 2-3x more during peak periods.</p>
+                                <p class="text-xs text-slate-500">Operated by <span data-ai-key="airline" class="text-slate-300">{normalizedAirline || 'Major Carrier'}</span>. It made the feed because it cleared our current value and route-quality thresholds, not just because it was cheap in raw dollars.</p>
                             </div>
                         </div>
                         <div class="p-6 rounded-2xl bg-white/5 border border-white/5 flex gap-4 items-start">
@@ -251,7 +254,7 @@ const { data: relatedDeals } = await supabase
             <a href={`/deal/${r.id}`} class="flex justify-between items-center p-4 rounded-2xl liquid-glass border border-white/5 hover:border-tcf-gold/30 transition-all no-underline group">
               <div>
                 <span class="text-sm font-black text-white group-hover:text-tcf-gold transition-colors">{r.origin} → {r.destination}</span>
-                <span class="text-xs text-slate-500 ml-3">{r.airline}</span>
+                <span class="text-xs text-slate-500 ml-3">{normalizeAirlineName(r.airline)}</span>
               </div>
               <span class="text-sm font-black text-tcf-gold">{r.price ? `$${r.price}` : 'Points'}</span>
             </a>

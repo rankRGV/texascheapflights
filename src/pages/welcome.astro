@@ -3,7 +3,9 @@ export const prerender = false;
 import '../styles/global.css';
 import GlobalNav from '../components/GlobalNav.astro';
 import GlobalFooter from '../components/GlobalFooter.astro';
-import deals from '../data/deals.json';
+import dealsFallback from '../data/deals.json';
+import { supabase } from '../lib/supabase';
+import { curateShowcaseDeals, mapDealToShowcaseCard } from '../lib/deal-showcase';
 
 // We'll use icons based on the deal icon string
 const ICON_MAP: Record<string, string> = {
@@ -13,7 +15,24 @@ const ICON_MAP: Record<string, string> = {
   zap: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`
 };
 
-const typedDeals = deals as any[];
+let typedDeals = [];
+try {
+  const { data: featuredData } = await supabase
+    .from('deals')
+    .select('id, origin, destination, price, airline, deal_type, score')
+    .not('sent_at', 'is', null)
+    .gte('score', 7)
+    .order('sent_at', { ascending: false })
+    .limit(40);
+
+  if (featuredData && featuredData.length > 0) {
+    typedDeals = curateShowcaseDeals(featuredData, { limit: 4, maxPerAirline: 1, maxPerOrigin: 1 }).map(mapDealToShowcaseCard);
+  }
+} catch (_) {}
+
+if (typedDeals.length === 0) {
+  typedDeals = dealsFallback as any[];
+}
 
 const AIRPORT_LABELS: Record<string, string> = {
   MFE: 'McAllen (MFE)',

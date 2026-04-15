@@ -8,7 +8,7 @@ const OBJECTIONS = [
   {
     id: 'real',
     q: "Are these deals actually real? I've seen too many bait-and-switch 'deal alerts.'",
-    a: "Every deal we've ever sent is published at texascheapflights.com/past-deals — real routes, real prices, real airlines. No cherry-picking, no expired listings dressed up as wins. AI Scout scores every opportunity on a composite model: price deviation from the 30-day baseline, available seats, and whether it's actually bookable from a Texas airport. Below a 7, it doesn't go out. Most days, nothing goes out. That's a feature, not a bug.",
+    a: "Every deal we've ever sent is published at texascheapflights.com/past-deals — real routes, real prices, real airlines. No cherry-picking, no expired listings dressed up as wins. AI Scout scores every opportunity on a composite model: relative value for the route, live market context, and whether it's actually bookable from a Texas airport. Below a 7, it doesn't go out. Most days, nothing goes out. That's a feature, not a bug.",
     icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>`
   },
   {
@@ -20,7 +20,7 @@ const OBJECTIONS = [
   {
     id: 'spam',
     q: "I've tried 'cheap flight' services before. I just got spammed with mediocre sales.",
-    a: "Most services define a deal as anything cheaper than last week. We don't. An error fare scores high because the deviation from the 30-day average is extreme — a $1,200 roundtrip at $180 is a 9.5. A fare that's $15 off normal is not a deal and it doesn't go out. Our average alert represents 55–80% off the baseline. Your inbox should contain opportunities, not noise you have to filter yourself.",
+    a: "Most services define a deal as anything cheaper than last week. We don't. A true deal scores high because the relative value is extreme — think a strong legacy-carrier fare or a major route dropping far below what similar trips are clearing for in the current market. A fare that's only a little off normal is not a deal and it doesn't go out. Your inbox should contain opportunities, not noise you have to filter yourself.",
     icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>`
   },
   {
@@ -61,7 +61,7 @@ const OBJECTIONS = [
         "name": "Are flight deal alerts actually real, or is it bait-and-switch?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Every deal Texas Cheap Flights has ever sent is published publicly at texascheapflights.com/past-deals — real routes, real prices, real airlines. AI Scout scores every opportunity and only sends alerts that score 7 or above on a composite model including price deviation, seat availability, and Texas airport accessibility."
+          "text": "Every deal Texas Cheap Flights has ever sent is published publicly at texascheapflights.com/past-deals — real routes, real prices, real airlines. AI Scout scores every opportunity and only sends alerts that score 7 or above on a composite model including relative route value, live market context, and Texas airport accessibility."
         }
       },
       {
