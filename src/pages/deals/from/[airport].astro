@@ -126,12 +126,12 @@ const AIRPORT_CONTENT: Record<string, {
       },
       {
         q: "What is an error fare and how common are they at DFW?",
-        a: "An error fare is a pricing glitch — a missing fuel surcharge, currency conversion error, or data feed mistake that creates a ticket price far below market rate. Because DFW operates 900+ daily flights through AA's complex pricing system, error fares surface roughly 2–4 times per month. Most last 2–4 hours before the airline corrects them and are legal to book.",
+        a: "An error fare is a pricing glitch — a missing fuel surcharge, currency conversion issue, or data feed mistake that creates a ticket price far below market rate. Because DFW operates through a large hub pricing system, these windows can appear and disappear quickly. They are legal to book, but airlines can cancel and refund mistaken fares in some cases.",
       },
     ],
   },
   SAT: {
-    intro: "San Antonio International (SAT) is Texas' fourth-busiest airport and quietly one of the best for Mexico deals. Southwest, American, Delta, United, Spirit, and three Mexican carriers all compete here. SAT's position as a Mexico gateway — and its overlap with Austin's flight market just 1.5 hours north — makes it a dual-hub opportunity for Bexar County travelers.",
+    intro: "San Antonio International (SAT) is Texas' fourth-busiest airport and quietly one of the best for Mexico deals. Southwest, American, Delta, United, Spirit, and three Mexican carriers all compete here. SAT's position as a Mexico gateway — and its overlap with Austin's flight market just 1.5 hours north — makes it a dual-airport opportunity for Bexar County travelers.",
     stats: [
       { label: "Annual passengers", value: "10M+" },
       { label: "Nonstop destinations", value: "55+" },
@@ -147,7 +147,7 @@ const AIRPORT_CONTENT: Record<string, {
     tips: [
       "SAT is large enough for real competition but small enough that fewer deal hunters are watching — giving you more time to book before an error fare closes.",
       "San Antonio to Mexico via Aeromexico, Volaris, and Vivaaerobus creates a competitive Mexico corridor with frequent flash windows.",
-      "Fiesta (April), summer weekends, and holiday periods push SAT fares sharply higher — error fares booked outside these windows are almost always honored.",
+      "Fiesta (April), summer weekends, and holiday periods push SAT fares sharply higher — error fares outside these windows can be useful, but always wait for ticket confirmation before making non-refundable plans.",
       "Monitoring both SAT and AUS (1.5 hrs north) doubles your error fare coverage for South-Central Texas travelers.",
     ],
     faqs: [
@@ -633,7 +633,7 @@ const AIRPORT_CONTENT: Record<string, {
       },
       {
         q: "Is MFE or HRL better for Rio Grande Valley travelers?",
-        a: "MFE has more carriers and more competition, often producing better pricing on Mexico and major hub routes. HRL is 45 minutes east and is a stronger Southwest hub for domestic deals. Valley residents benefit from monitoring both.",
+        a: "MFE has more carriers and more competition, often producing better pricing on Mexico and major connection routes. HRL is 45 minutes east and is stronger for Southwest domestic deals. Valley residents benefit from monitoring both.",
       },
       {
         q: "When is the cheapest time to fly from McAllen (MFE)?",
@@ -642,7 +642,7 @@ const AIRPORT_CONTENT: Record<string, {
     ],
   },
   HRL: {
-    intro: "Valley International Airport (HRL) in Harlingen is the Rio Grande Valley's Southwest Airlines hub and gateway. While smaller than nearby MFE, HRL's Southwest focus creates consistent Wanna Get Away fare deals and 72-hour sales for Valley residents. HRL's strategic position between McAllen and Brownsville makes it the hub for the Valley's middle corridor.",
+    intro: "Valley International Airport (HRL) in Harlingen is a Southwest-focused Rio Grande Valley gateway. While smaller than nearby MFE, HRL's Southwest focus creates consistent Wanna Get Away fare deals and 72-hour sales for Valley residents. HRL's strategic position between McAllen and Brownsville makes it a practical airport for the Valley's middle corridor.",
     stats: [
       { label: "Annual passengers", value: "1.5M+" },
       { label: "Nonstop destinations", value: "10+" },
@@ -804,7 +804,7 @@ const airportContent = AIRPORT_CONTENT[airportData.code] ?? null;
 const title = `Cheapest Flights from ${airportData.city} (${airportData.code}) | Texas Cheap Flights`;
 const description = `Find cheap flights from ${airportData.city}. We monitor error fares, award sweet spots, and airline glitches departing from ${airportData.code} — and alert you the moment one drops.`;
 
-// JSON-LD for the Hub Page
+// JSON-LD for the airport page
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -876,7 +876,7 @@ const jsonLd = {
     <div class="max-w-4xl mx-auto">
       
       <header class="mb-16">
-        <span class="text-tcf-gold font-bold text-xs uppercase tracking-[0.3em] mb-4 inline-block">Regional Scout Hub</span>
+        <span class="text-tcf-gold font-bold text-xs uppercase tracking-[0.3em] mb-4 inline-block">Regional Airport Scout</span>
         <h1 class="text-4xl md:text-6xl font-black mb-6 leading-tight">
           Cheap Flights from <br/><span class="text-gold italic">{airportData.city} ({airportData.code})</span>
         </h1>
@@ -932,7 +932,7 @@ const jsonLd = {
           <div class="grid md:grid-cols-3 gap-4">
             <div class="p-6 rounded-2xl bg-white/5 border border-white/5">
               <p class="text-xs font-black text-tcf-gold uppercase tracking-widest mb-3">Error Fares</p>
-              <p class="text-sm text-slate-400 leading-relaxed font-body">Airline pricing glitches that slip through for hours before the carrier pulls them. Legal to book — most are honored.</p>
+              <p class="text-sm text-slate-400 leading-relaxed font-body">Airline pricing glitches that can slip through for hours before the carrier pulls them. Legal to book, often honored, but never guaranteed.</p>
             </div>
             <div class="p-6 rounded-2xl bg-white/5 border border-white/5">
               <p class="text-xs font-black text-tcf-aviation-blue uppercase tracking-widest mb-3">Zone Awards</p>
@@ -1033,7 +1033,7 @@ const jsonLd = {
             <article class="prose prose-invert prose-sm max-w-none">
               <h3 class="text-white font-black text-lg mb-4">Why monitor {airportData.city}?</h3>
               <p class="text-slate-400 leading-relaxed">
-                Departing from {airportData.code} often means you're limited to regional connections or high-priced hub jumps. However, award programs often price {airportData.code} to international destinations the same as DFW or IAH. This creates arbitrage windows where you can fly from your backyard for the same price as a major hub.
+                Departing from {airportData.code} often means you're limited to regional connections or high-priced positioning flights. However, award programs often price {airportData.code} to international destinations the same as DFW or IAH. This creates arbitrage windows where you can fly from your backyard for the same price as a major airport.
               </p>
             </article>
             <article class="prose prose-invert prose-sm max-w-none">

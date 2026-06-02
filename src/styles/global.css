@@ -25,6 +25,10 @@
     --tcf-success: #10b981;
     --tcf-caution: #f59e0b;
     --tcf-danger: #ef4444;
+    --tcf-ink: #102033;
+    --tcf-paper: #fffdf7;
+    --tcf-surface: #f6f8f5;
+    --tcf-sky-soft: #d9ecff;
 
     /* Text */
     --tcf-text-primary: #f8fafc;
@@ -225,6 +229,77 @@ select.input option {
 .glass-success {
     background: rgba(16, 185, 129, 0.05);
     border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.light-section {
+    background:
+        linear-gradient(180deg, rgba(255, 253, 247, 0.96), rgba(246, 248, 245, 0.98)),
+        radial-gradient(circle at 15% 0%, rgba(14, 165, 233, 0.14), transparent 34%),
+        radial-gradient(circle at 90% 20%, rgba(212, 168, 67, 0.16), transparent 30%);
+    color: var(--tcf-ink);
+    border-color: rgba(16, 32, 51, 0.1);
+}
+
+.light-section .liquid-glass {
+    background: rgba(255, 255, 255, 0.76);
+    border-color: rgba(16, 32, 51, 0.1);
+    box-shadow: 0 18px 48px rgba(16, 32, 51, 0.08);
+}
+
+.light-section .liquid-glass:hover {
+    background: rgba(255, 255, 255, 0.92);
+    border-color: rgba(16, 32, 51, 0.16);
+    box-shadow: 0 24px 60px rgba(16, 32, 51, 0.12);
+}
+
+.light-section .text-white,
+.light-section .text-white\/90 {
+    color: var(--tcf-ink);
+}
+
+.light-section .text-slate-300,
+.light-section .text-slate-400,
+.light-section .text-slate-500 {
+    color: #5c6b7c;
+}
+
+.light-section .text-slate-600 {
+    color: #465568;
+}
+
+.light-section .border-white\/5,
+.light-section .border-white\/10,
+.light-section .border-white\/20 {
+    border-color: rgba(16, 32, 51, 0.1);
+}
+
+.light-section .bg-white\/5,
+.light-section .bg-white\/10,
+.light-section .bg-black\/30,
+.light-section .bg-black\/40,
+.light-section .bg-black\/50 {
+    background-color: rgba(16, 32, 51, 0.045);
+}
+
+.light-section .bg-tcf-navy-mid,
+.light-section .bg-tcf-navy-mid\/40 {
+    background-color: rgba(255, 255, 255, 0.78);
+}
+
+.light-section .bg-tcf-navy-deep {
+    background-color: var(--tcf-ink);
+}
+
+.light-section .bg-deep {
+    background-color: transparent;
+}
+
+.light-section .line-through {
+    color: #778393;
+}
+
+.light-section .shadow-2xl {
+    box-shadow: 0 20px 55px rgba(16, 32, 51, 0.11);
 }
 
 /* Rhythmic Utilities */

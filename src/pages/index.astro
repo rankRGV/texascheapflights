@@ -92,8 +92,8 @@ const HOW_IT_WORKS = [
   { 
     step: '03', 
     icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>`, 
-    title: 'Book first. Ask later.', 
-    desc: 'Price glitches close fast. We provide instant booking instructions and backup "hedge" routes using points — so you never pay full price again.' 
+    title: 'Verify, then move fast.', 
+    desc: 'Price glitches close fast, but every alert is routed through manual review before it reaches the list. You get the route, price context, and booking link in one place.' 
   },
 ];
 
@@ -203,6 +203,28 @@ const FEATURED_DEALS = DB_FEATURED_DEALS.length > 0 ? DB_FEATURED_DEALS : [
   }
 ];
 
+let subscriberCount: number | null = null;
+let archivedAlertCount: number | null = null;
+try {
+  const [subscriberRes, dealRes] = await Promise.all([
+    supabase
+      .from('subscribers')
+      .select('*', { count: 'exact', head: true })
+      .eq('active', true),
+    supabase
+      .from('deals')
+      .select('*', { count: 'exact', head: true })
+      .not('sent_at', 'is', null)
+      .gte('score', 7),
+  ]);
+  subscriberCount = subscriberRes.count ?? null;
+  archivedAlertCount = dealRes.count ?? null;
+} catch (_) {}
+
+const proofLine = subscriberCount !== null && archivedAlertCount !== null
+  ? `${subscriberCount} founding subscribers · ${archivedAlertCount} archived alerts`
+  : 'Founding subscriber list · Public deal archive';
+
 // (Ticker data is now fetched live from Supabase above — see TICKER_ITEMS)
 ---
 
@@ -213,12 +235,12 @@ const FEATURED_DEALS = DB_FEATURED_DEALS.length > 0 ? DB_FEATURED_DEALS : [
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#050a14" />
   <title>Texas Cheap Flights — Error Fares & Deal Alerts for Every Texas Airport</title>
-  <meta name="description" content="AI-powered flight deal alerts built for Texas. We monitor error fares and award sweet spots from every Texas airport — MFE, LRD, IAH, DFW, AUS, and 14 more. Get the alert before the window closes." />
+  <meta name="description" content="AI-powered flight deal alerts built for Texas. We monitor error fares and award sweet spots from 19 Texas airports — MFE, LRD, IAH, DFW, AUS, and more. Get the alert before the window closes." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://texascheapflights.com/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Texas Cheap Flights — Error Fares & Deal Alerts for Every Texas Airport" />
-  <meta name="twitter:description" content="AI Scout monitors error fares and award sweet spots from every Texas airport. Get the alert before the window closes." />
+  <meta name="twitter:description" content="AI Scout monitors error fares and award sweet spots from 19 Texas airports. Get the alert before the window closes." />
   <meta name="twitter:image" content="https://texascheapflights.com/og-image.png" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>" />
   <link rel="canonical" href="https://texascheapflights.com/" />
@@ -272,7 +294,7 @@ const FEATURED_DEALS = DB_FEATURED_DEALS.length > 0 ? DB_FEATURED_DEALS : [
             "name": "Do I need to live in a major city like Dallas or Houston?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. In fact, we built this because regional Texas airports are often overlooked. We monitor 15+ Texas airports including MFE, LRD, BRO, CRP, and ELP."
+              "text": "No. In fact, we built this because regional Texas airports are often overlooked. We monitor 19 Texas airports including MFE, LRD, BRO, CRP, and ELP."
             }
           },
           {
@@ -330,7 +352,7 @@ const FEATURED_DEALS = DB_FEATURED_DEALS.length > 0 ? DB_FEATURED_DEALS : [
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tcf-gold opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2 w-2 bg-tcf-gold"></span>
         </span>
-        Live scanning Dallas, Houston, & EVERY regional TX airport
+        Live scanning Dallas, Houston, and 17 more Texas airports
       </div>
 
       <!-- Hero headline -->
@@ -341,7 +363,7 @@ const FEATURED_DEALS = DB_FEATURED_DEALS.length > 0 ? DB_FEATURED_DEALS : [
 
       <!-- Subheadline -->
       <p class="anim-fade-up delay-3 max-w-2xl text-xl mb-12 text-slate-400 leading-relaxed font-body">
-        Two types of anomalies, both worth money: <span class="text-white font-semibold">Cash glitches</span> where the algorithm fat-fingers a fare down to half price, and <span class="text-white font-semibold">award sweet spots</span> where points go further from Texas. We track every second for every Texas airport.
+        Two types of anomalies, both worth money: <span class="text-white font-semibold">Cash glitches</span> where fares briefly fall far below normal, and <span class="text-white font-semibold">award sweet spots</span> where points go further from Texas. We monitor 19 Texas airports and route the best finds through manual review.
       </p>
 
       <!-- WAITLIST FORM -->
@@ -353,7 +375,7 @@ const FEATURED_DEALS = DB_FEATURED_DEALS.length > 0 ? DB_FEATURED_DEALS : [
             <div class="flex flex-col gap-2.5 text-left">
               <label for="airport" class="text-slate-400 text-xs font-bold uppercase tracking-widest pl-1">Home Airport</label>
               <select id="airport" name="airport" required class="input appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20class%3D%22lucide%20lucide-chevron-down%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25em] bg-[right_1.25rem_center] bg-no-repeat">
-                <option value="" disabled selected>Select nearest Texas hub...</option>
+                <option value="" disabled selected>Select your departure airport...</option>
                 {TX_AIRPORTS.map(a => (
                   <option value={a.code}>{a.city} ({a.code})</option>
                 ))}
@@ -420,7 +442,7 @@ const FEATURED_DEALS = DB_FEATURED_DEALS.length > 0 ? DB_FEATURED_DEALS : [
                 </div>
               ))}
             </div>
-            <p class="m-0 text-slate-400">Trusted by <span class="text-white">247 Texans</span> this week</p>
+            <p class="m-0 text-slate-400"><span class="text-white">{proofLine}</span></p>
           </div>
         </div>
       </div>
@@ -447,6 +469,34 @@ const FEATURED_DEALS = DB_FEATURED_DEALS.length > 0 ? DB_FEATURED_DEALS : [
     </div>
   </div>
 
+  <!-- ═══════════════════════════ PROOF / VERIFICATION ═══════════════════════════ -->
+  <section class="section-padding bg-slate-100 text-slate-900 relative overflow-hidden">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid lg:grid-cols-[0.9fr,1.1fr] gap-12 items-center">
+        <div>
+          <span class="label uppercase tracking-[0.3em] font-bold text-xs mb-4 inline-block text-slate-500">How Alerts Are Checked</span>
+          <h2 class="text-4xl md:text-5xl font-black mb-6 text-slate-950">Fast alerts still need a sanity check.</h2>
+          <p class="text-lg leading-relaxed font-body text-slate-600">
+            The scanner finds candidates automatically, but the live list stays human-reviewed. We check route, price context, airline, available dates, and whether the find is actually useful for Texas travelers before an email draft goes out.
+          </p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-4">
+          {[
+            { label: '1', title: 'Scout', text: 'SerpAPI watches the 19-airport Texas network for unusually low cash fares and award-style opportunities.' },
+            { label: '2', title: 'Validate', text: 'Promising routes are checked against price benchmarks and, in dry-runs, fli date searches across 3-14 day trips.' },
+            { label: '3', title: 'Review', text: 'Nothing auto-sends. A Discord/Resend draft is created for manual review before subscribers see it.' },
+          ].map(item => (
+            <div class="rounded-2xl bg-white border border-slate-200 p-6 shadow-sm">
+              <div class="w-10 h-10 rounded-xl bg-slate-950 text-tcf-gold flex items-center justify-center font-black mb-5">{item.label}</div>
+              <h3 class="text-lg font-black text-slate-950 mb-3">{item.title}</h3>
+              <p class="text-sm text-slate-600 leading-relaxed font-body">{item.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ═══════════════════════════ INOCULATION (SKEPTIC CHECK) ═══════════════════════════ -->
   <section class="section-padding relative overflow-hidden flex flex-col items-center">
     <div class="max-w-6xl mx-auto px-6 w-full relative z-10">
@@ -472,12 +522,12 @@ const FEATURED_DEALS = DB_FEATURED_DEALS.length > 0 ? DB_FEATURED_DEALS : [
             {[
               {
                 title: 'Objection: "The alert will arrive too late."',
-                response: 'We run our own monitoring bot — no human editorial step, no virality lag. The anomaly fires the alert in the same automated pass. Error fare windows average 2–24 hours. You get it at the front of that window, not the tail.',
+                response: 'We run our own monitoring bot, then review the strongest candidates before they become email drafts. Error fare windows can be short, so speed matters, but we still avoid sending unverified noise.',
                 icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`
               },
               {
                 title: 'Objection: "I don\'t know anything about points."',
-                response: 'You don\'t need to. Most of our high-impact alerts are straight cash fares — a $1,200 flight accidentally priced at $350. Points are just our secondary "hedge" tool to ensure you never pay full price if you miss the cash glitch.',
+                response: 'You don\'t need to. Many high-impact alerts are straight cash fares. Points are a secondary hedge tool for travelers who already have them, not a requirement to get value.',
                 icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-credit-card"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>`
               }
             ].map(item => (
@@ -499,7 +549,7 @@ const FEATURED_DEALS = DB_FEATURED_DEALS.length > 0 ? DB_FEATURED_DEALS : [
 
 
   <!-- ═══════════════════════════ PAIN ═══════════════════════════ -->
-  <section id="pain" class="section-padding bg-black/30 relative border-y border-white/5 flex flex-col items-center overflow-hidden">
+  <section id="pain" class="section-padding light-section relative border-y flex flex-col items-center overflow-hidden">
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_var(--tcf-aviation-blue)_0%,_transparent_20%)] opacity-5"></div>
     <div class="max-w-6xl mx-auto px-6 w-full flex flex-col items-center relative z-10">
       <div class="text-center mb-24 anim-fade-up">
@@ -519,7 +569,7 @@ const FEATURED_DEALS = DB_FEATURED_DEALS.length > 0 ? DB_FEATURED_DEALS : [
   </section>
 
   <!-- ═══════════════════════════ HOW IT WORKS ═══════════════════════════ -->
-  <section id="how-it-works" class="section-padding relative flex flex-col items-center">
+  <section id="how-it-works" class="section-padding light-section relative flex flex-col items-center">
     <div class="max-w-6xl mx-auto px-6 w-full flex flex-col items-center">
       <div class="text-center mb-20">
         <span class="label text-tcf-aviation-blue uppercase tracking-[0.3em] font-bold text-xs">The Strategy</span>
@@ -551,7 +601,7 @@ const FEATURED_DEALS = DB_FEATURED_DEALS.length > 0 ? DB_FEATURED_DEALS : [
             Start <span class="text-gold">Hedging.</span>
           </h2>
           <p class="text-lg text-slate-400 mb-10 leading-relaxed font-body max-w-xl">
-            Cash prices swing. Award charts stay stable. We teach you how to book refundable "hedge flights" using points you already have, so you <span class="text-white font-semibold">NEVER pay a last-minute price spike</span> again.
+            Cash prices swing. Award charts can stay steadier. We teach you how to use refundable award holds and backup routes where they make sense, so you have more options when cash fares spike.
           </p>
           
           <div class="grid sm:grid-cols-2 gap-8 w-full max-w-2xl">
@@ -635,7 +685,7 @@ const FEATURED_DEALS = DB_FEATURED_DEALS.length > 0 ? DB_FEATURED_DEALS : [
   </section>
 
   <!-- ═══════════════════════════ FEATURED DEALS ═══════════════════════════ -->
-  <section id="featured-deals" class="section-padding relative overflow-hidden bg-black/50">
+  <section id="featured-deals" class="section-padding light-section relative overflow-hidden">
     <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
     <div class="max-w-7xl mx-auto px-6 relative z-10">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20 anim-fade-up">
@@ -643,7 +693,7 @@ const FEATURED_DEALS = DB_FEATURED_DEALS.length > 0 ? DB_FEATURED_DEALS : [
           <span class="label text-tcf-aviation-blue uppercase tracking-[0.3em] font-bold text-xs mb-4 inline-block">Live Anomaly Tracker</span>
           <h2 class="text-4xl md:text-5xl text-white font-black mb-6">Recent <span class="text-tcf-aviation-blue">Texas Anomaly Alerts.</span></h2>
           <p class="text-slate-400 font-body leading-relaxed">
-            Award seats priced far below cash. Cash fares the algorithm fat-fingered. Both are real. Both close fast. Here's what we caught last week.
+            Award seats priced far below cash. Cash fares that briefly drop under normal market rates. Both can be real. Both can close fast. Here's what the archive has caught.
           </p>
         </div>
         <div class="flex items-center gap-4 text-xs font-black uppercase tracking-widest text-slate-500">
@@ -749,7 +799,7 @@ const FEATURED_DEALS = DB_FEATURED_DEALS.length > 0 ? DB_FEATURED_DEALS : [
   <!-- End Featured Deals -->
 
   <!-- ═══════════════════════════ AIRPORTS ═══════════════════════════ -->
-  <section class="section-padding bg-deep border-y border-white/5 text-center flex flex-col items-center relative overflow-hidden">
+  <section class="section-padding light-section border-y text-center flex flex-col items-center relative overflow-hidden">
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tcf-gold)_0%,_transparent_15%)] opacity-5"></div>
     <div class="max-w-4xl mx-auto px-6 w-full flex flex-col items-center relative z-10">
       <span class="label text-gold uppercase tracking-[0.3em] font-bold text-xs mb-6">Texas Coverage</span>
@@ -772,48 +822,43 @@ const FEATURED_DEALS = DB_FEATURED_DEALS.length > 0 ? DB_FEATURED_DEALS : [
   </section>
 
   <!-- ═══════════════════════════ TESTIMONIALS ═══════════════════════════ -->
-  <section class="section-padding relative overflow-hidden" style="background: radial-gradient(circle at 50% 0%, rgba(212,168,67,0.05) 0%, transparent 60%)">
+  <section class="section-padding light-section relative overflow-hidden">
     <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-tcf-gold/20 to-transparent"></div>
     <div class="max-w-6xl mx-auto px-6 relative z-10">
       <div class="text-center mb-20 anim-fade-up">
-        <span class="label text-gold uppercase tracking-[0.3em] font-bold text-xs mb-4 inline-block">Early Members</span>
-        <h2 class="text-4xl md:text-5xl text-white font-black mb-6">Texas travelers are <span class="text-gold">already winning.</span></h2>
+        <span class="label text-gold uppercase tracking-[0.3em] font-bold text-xs mb-4 inline-block">Traveler Scenarios</span>
+        <h2 class="text-4xl md:text-5xl text-white font-black mb-6">What this helps <span class="text-gold">Texans avoid.</span></h2>
         <p class="text-slate-400 font-body max-w-xl mx-auto leading-relaxed">
-          Real stories from early members. No travel guru required — just the right alert at the right time.
+          Example situations based on the routes and problems Texas travelers run into. The live archive is the proof record.
         </p>
       </div>
 
       <div class="grid md:grid-cols-3 gap-8">
         {[
           {
-            quote: "I flew my family to Cancun for $47 total in taxes. I never thought this was possible from McAllen. We booked four seats.",
-            name: "Maria G.",
+            quote: "A family traveler out of McAllen needs school-break options without paying big-hub prices or driving hours to Dallas.",
+            name: "Scenario",
             tag: "Family Traveler · MFE",
-            initial: "M"
+            initial: "1"
           },
           {
-            quote: "I had no idea my Chase points were worth 3x what I thought. Seeing the Award Cost breakdown on a real route made it click instantly.",
-            name: "James R.",
-            tag: "Beginner · AUS",
-            initial: "J"
+            quote: "A points beginner in Austin has transferable points but needs plain-English math before using them on a real route.",
+            name: "Scenario",
+            tag: "Points Beginner · AUS",
+            initial: "2"
           },
           {
-            quote: "The $290 fare alert from Harlingen hit my inbox before anyone else heard about it. Booked it within the hour. Trip was incredible.",
-            name: "Sandra M.",
-            tag: "Early Member · HRL",
-            initial: "S"
+            quote: "A Harlingen traveler sees a short-lived Mexico fare and needs enough context to decide whether the price is actually unusual.",
+            name: "Scenario",
+            tag: "Regional Flyer · HRL",
+            initial: "3"
           }
         ].map(t => (
           <div class="liquid-glass p-8 rounded-[2.5rem] border border-tcf-gold/10 hover:border-tcf-gold/25 flex flex-col gap-6 transition-all duration-300">
-            <!-- Stars -->
-            <div class="flex gap-1">
-              {[1,2,3,4,5].map(() => (
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="var(--tcf-gold)" stroke="var(--tcf-gold)" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              ))}
+            <div class="inline-flex w-fit items-center gap-2 rounded-full bg-tcf-gold/10 border border-tcf-gold/20 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-tcf-gold">
+              Use Case
             </div>
-            <!-- Quote -->
             <p class="text-white text-base leading-relaxed font-body italic flex-1">"{t.quote}"</p>
-            <!-- Person -->
             <div class="flex items-center gap-4 pt-4 border-t border-white/5">
               <div class="w-10 h-10 rounded-full bg-tcf-gold/10 border border-tcf-gold/20 flex items-center justify-center text-sm font-black text-gold flex-shrink-0">
                 {t.initial}
@@ -830,7 +875,7 @@ const FEATURED_DEALS = DB_FEATURED_DEALS.length > 0 ? DB_FEATURED_DEALS : [
   </section>
 
   <!-- ═══════════════════════════ ETHICS ═══════════════════════════ -->
-  <section class="py-16 relative border-y border-white/5 text-center">
+  <section class="py-16 light-section relative border-y text-center">
     <div class="max-w-7xl mx-auto px-6">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
         {ETHICS.map(item => (
@@ -844,7 +889,7 @@ const FEATURED_DEALS = DB_FEATURED_DEALS.length > 0 ? DB_FEATURED_DEALS : [
   </section>
 
   <!-- ═══════════════════════════ FOUNDER ═══════════════════════════ -->
-  <section class="section-padding relative overflow-hidden border-y border-white/5">
+  <section class="section-padding light-section relative overflow-hidden border-y">
     <div class="absolute top-0 left-0 w-[500px] h-[500px] bg-tcf-aviation-blue/5 blur-[120px] rounded-full"></div>
     <div class="max-w-5xl mx-auto px-6 relative z-10">
       <div class="liquid-glass p-10 md:p-16 rounded-[3rem] relative overflow-hidden">
@@ -890,7 +935,7 @@ const FEATURED_DEALS = DB_FEATURED_DEALS.length > 0 ? DB_FEATURED_DEALS : [
   </section>
 
   <!-- ═══════════════════════════ FAQ ═══════════════════════════ -->
-  <section id="faq" class="section-padding relative overflow-hidden">
+  <section id="faq" class="section-padding light-section relative overflow-hidden">
     <div class="max-w-4xl mx-auto px-6 relative z-10">
       <div class="text-center mb-16">
         <span class="label text-tcf-aviation-blue uppercase tracking-[0.3em] font-bold text-xs mb-4 inline-block">Questions?</span>
@@ -909,7 +954,7 @@ const FEATURED_DEALS = DB_FEATURED_DEALS.length > 0 ? DB_FEATURED_DEALS : [
           },
           {
             q: "Does this work for regional airports?",
-            a: "Yes. That is our primary mission. We monitor 15+ Texas airports. We specifically look for 'Zone-Based' awards where flying from Laredo costs the same as flying from Dallas."
+            a: "Yes. That is our primary mission. We monitor 19 Texas airports. We specifically look for regional routes and zone-based award opportunities that generic big-hub alerts tend to miss."
           },
           {
             q: "Is it really free?",

@@ -1,12 +1,14 @@
 import type { APIRoute } from 'astro';
 import { processDeal } from '../../lib/engine';
 import { getCarrierTier, normalizeAirlineName } from '../../lib/airlines';
+import { validateWithFli } from '../../lib/fli-validator';
 
 type OriginGroup = 'regional' | 'major';
 
 type ScoutCandidate = {
     origin: string;
     destination: string;
+    destinationCode?: string;
     price: number;
     airline: string;
     link: string;
@@ -19,6 +21,11 @@ type ScoutCandidate = {
     estimatedDiscountPct: number;
     valueScore: number;
 };
+
+const PRIMARY_TX_AIRPORTS = [
+    "MFE", "HRL", "LRD", "BRO", "CRP", "ELP", "LBB", "MAF", "AMA",
+    "GRK", "TYR", "GGG", "ABI", "DFW", "IAH", "AUS", "SAT", "HOU", "DAL"
+];
 
 function rotateOrigins(origins: string[], count: number, slot: number): string[] {
     if (origins.length === 0 || count <= 0) return [];
@@ -74,6 +81,26 @@ function getLane(originGroup: OriginGroup, airline: string, price: number): Scou
     return originGroup === 'major' ? 'major-value' : 'regional-value';
 }
 
+function extractDestinationCode(destination: any): string | undefined {
+    const possibleCodes = [
+        destination?.destination_id,
+        destination?.id,
+        destination?.iata_code,
+        destination?.airport_code,
+        destination?.airport?.id,
+        destination?.airport?.iata_code,
+        destination?.airports?.[0]?.id,
+        destination?.airports?.[0]?.iata_code,
+        destination?.name,
+    ];
+
+    const code = possibleCodes
+        .map((value) => typeof value === 'string' ? value.toUpperCase().trim() : '')
+        .find((value) => /^[A-Z]{3}$/.test(value));
+
+    return code || undefined;
+}
+
 function buildCandidates(origin: string, originGroup: OriginGroup, destinations: any[]): ScoutCandidate[] {
     const prices = destinations
         .map((destination) => Number(destination.flight_price))
@@ -117,6 +144,7 @@ function buildCandidates(origin: string, originGroup: OriginGroup, destinations:
             return {
                 origin,
                 destination: destination.name,
+                destinationCode: extractDestinationCode(destination),
                 price,
                 airline,
                 link: destination.share_flights_url || destination.link || `https://www.google.com/travel/flights?q=Flights%20from%20${origin}%20to%20${destination.name}`,
@@ -190,6 +218,9 @@ export const GET: APIRoute = async ({ request }) => {
 
         const urlParams = new URL(request.url).searchParams;
         const isTest = urlParams.get('test') === 'true';
+        const isDryRun = urlParams.get('dryRun') === 'true';
+        const shouldValidateWithFli = urlParams.get('validate') === 'fli';
+        const originOverride = urlParams.get('origin')?.toUpperCase();
 
         // Check for a secret to prevent random people from triggering this
         const cronSecret = import.meta.env.CRON_SECRET || process.env.CRON_SECRET;
@@ -201,16 +232,18 @@ export const GET: APIRoute = async ({ request }) => {
 
         const originPools = {
             regional: [
-                "MFE", "HRL", "LRD", "BRO", "CRP", "ELP", "LBB", "MAF", "AMA", "SJT",
-                "BPT", "GRK", "TYR", "GGG", "ABI", "TXK", "VCT", "ACT"
+                "MFE", "HRL", "LRD", "BRO", "CRP", "ELP", "LBB", "MAF", "AMA",
+                "GRK", "TYR", "GGG", "ABI"
             ],
             major: ["DFW", "IAH", "AUS", "SAT", "HOU", "DAL"]
         };
         const scanSlot = Math.floor(Date.now() / (12 * 60 * 60 * 1000));
-        const scoutList = [
-            ...rotateOrigins(originPools.regional, 2, scanSlot * 2),
-            ...rotateOrigins(originPools.major, 2, scanSlot)
-        ];
+        const scoutList = originOverride && PRIMARY_TX_AIRPORTS.includes(originOverride)
+            ? [originOverride]
+            : [
+                ...rotateOrigins(originPools.regional, 2, scanSlot * 2),
+                ...rotateOrigins(originPools.major, 2, scanSlot)
+            ];
 
         console.log(`🦅 Regional Scout scanning Google Flights (via SerpApi) across balanced Texas lanes...`);
         let allDealsFound: ScoutCandidate[] = [];
@@ -243,6 +276,38 @@ export const GET: APIRoute = async ({ request }) => {
         }
 
         const topDeals = selectTopDeals(allDealsFound);
+
+        if (isDryRun) {
+            const validatedDeals = shouldValidateWithFli
+                ? await Promise.all(topDeals.map(async (flight) => ({
+                    ...flight,
+                    validation: await validateWithFli({
+                        origin: flight.origin,
+                        destination: flight.destinationCode || flight.destination,
+                        scoutPrice: flight.price,
+                        startDate: flight.start_date,
+                        endDate: flight.end_date,
+                        cabin: flight.lane === 'premium' ? 'BUSINESS' : 'ECONOMY',
+                    }),
+                })))
+                : topDeals;
+
+            return new Response(JSON.stringify({
+                success: true,
+                dryRun: true,
+                validation: shouldValidateWithFli ? 'fli' : 'none',
+                selectedOrigins: scoutList,
+                dealsFound: allDealsFound.length,
+                topDeals: validatedDeals,
+                sideEffects: {
+                    processDealCalled: false,
+                    supabaseWrites: false,
+                    discordAlerts: false,
+                    resendDrafts: false,
+                    socialPosts: false,
+                }
+            }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        }
 
         let processedCount = 0;
 

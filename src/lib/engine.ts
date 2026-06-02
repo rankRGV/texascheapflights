@@ -375,7 +375,7 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string, dealId?:
                 </div>
 
                 <!-- Body Copy -->
-                <p style="margin: 0 0 32px 0; font-size: 16px; color: #334155; line-height: 1.75;">This is your window. Error fares like this disappear fast — airlines fix them the moment someone notices. The <strong>24-hour cancellation rule</strong> is your safety net: book it right now and sort out the details later. PTO not approved yet? Book it anyway.</p>
+                <p style="margin: 0 0 32px 0; font-size: 16px; color: #334155; line-height: 1.75;">This is your window. Error fares like this can disappear fast once airlines correct the price. Verify the fare, check cancellation terms, and book only if the trip makes sense for you.</p>
 
                 <!-- CTA -->
                 <div style="text-align: center; margin-bottom: 14px;">
@@ -383,7 +383,7 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string, dealId?:
                 </div>
 
                 <!-- Trust Line Under CTA -->
-                <p style="margin: 0; text-align: center; font-size: 13px; color: #64748b; line-height: 1.5;">&#10003; Most airlines offer <strong>free cancellation within 24 hours</strong> of booking.</p>
+                <p style="margin: 0; text-align: center; font-size: 13px; color: #64748b; line-height: 1.5;">&#10003; Many U.S. itineraries include a <strong>24-hour cancellation window</strong>, but always confirm the airline's rules before booking.</p>
 
               </div>
 
