@@ -29,6 +29,85 @@ const AIRPORTS: Record<string, { city: string, code: string }> = {
   ABI: { city: 'Abilene', code: 'ABI' },
 };
 
+const AIRPORT_META: Record<string, { title: string; description: string }> = {
+  MFE: {
+    title: 'MFE Cheap Flights: Live RGV Deals',
+    description: 'See live and archived McAllen flight deals from MFE, including Florida, Vegas, and regional fare drops for Rio Grande Valley travelers.',
+  },
+  HRL: {
+    title: 'HRL Cheap Flights: Live RGV Deals',
+    description: 'Track Harlingen flight deals from HRL, including Southwest fare drops, Valley airport comparisons, and low-cost routes from South Texas.',
+  },
+  BRO: {
+    title: 'BRO Cheap Flights: South Padre Deals',
+    description: 'Watch Brownsville flight deals from BRO for South Padre, Starbase-area travel, and regional Texas fare drops before they disappear.',
+  },
+  LRD: {
+    title: 'LRD Cheap Flights: Border Deal Alerts',
+    description: 'Find live Laredo flight deals from LRD, including DFW and Houston connections, business-travel gaps, and border market fare drops.',
+  },
+  CRP: {
+    title: 'CRP Cheap Flights: Gulf Coast Deals',
+    description: 'Track Corpus Christi flight deals from CRP for Gulf Coast travelers, including legacy carrier price matches and regional fare drops.',
+  },
+  MAF: {
+    title: 'MAF Cheap Flights: Permian Deals',
+    description: 'See Midland/Odessa flight deals from MAF, including Permian Basin business-travel gaps, weekend fares, and regional Texas alerts.',
+  },
+  SAT: {
+    title: 'SAT Cheap Flights: San Antonio Deals',
+    description: 'Watch San Antonio flight deals from SAT, including Mexico routes, family trip fares, Southwest points opportunities, and Texas alerts.',
+  },
+  AUS: {
+    title: 'AUS Cheap Flights: Austin Deal Alerts',
+    description: 'Track Austin flight deals from AUS, including Mexico fare drops, tech-market demand shifts, new routes, and Texas flight alerts.',
+  },
+  IAH: {
+    title: 'IAH Cheap Flights: United Hub Deals',
+    description: 'Find Houston IAH flight deals, including United hub pricing, Latin America fare drops, international alerts, and archived deals.',
+  },
+  HOU: {
+    title: 'HOU Cheap Flights: Southwest Deals',
+    description: 'Track Houston Hobby flight deals from HOU, including Southwest flash sales, domestic fare drops, Mexico routes, and live alerts.',
+  },
+  DFW: {
+    title: 'DFW Cheap Flights: American Hub Deals',
+    description: 'See DFW flight deals, including American hub overflow, international fare drops, Europe and Asia alerts, and archived Dallas deals.',
+  },
+  DAL: {
+    title: 'DAL Cheap Flights: Southwest Deals',
+    description: 'Track Dallas Love Field flight deals from DAL, including Southwest domestic fare drops, Dallas-area alerts, and archived deals.',
+  },
+  ELP: {
+    title: 'ELP Cheap Flights: Borderplex Deals',
+    description: 'Find El Paso flight deals from ELP, including Phoenix, Denver, Dallas connections, border market pricing, and West Texas alerts.',
+  },
+  LBB: {
+    title: 'LBB Cheap Flights: South Plains Deals',
+    description: 'Watch Lubbock flight deals from LBB, including Texas Tech calendar demand, South Plains fare gaps, and regional Texas alerts.',
+  },
+  AMA: {
+    title: 'AMA Cheap Flights: Panhandle Deals',
+    description: 'Track Amarillo flight deals from AMA, including Panhandle business-travel gaps, weekend fares, and regional Texas alerts.',
+  },
+  GRK: {
+    title: 'GRK Cheap Flights: Fort Cavazos Deals',
+    description: 'Find Killeen flight deals from GRK, including Fort Cavazos travel patterns, weekend fare gaps, and Central Texas alerts.',
+  },
+  TYR: {
+    title: 'TYR Cheap Flights: East Texas Deals',
+    description: 'See Tyler flight deals from TYR, including East Texas connections, DFW routing opportunities, and regional fare alerts.',
+  },
+  GGG: {
+    title: 'GGG Cheap Flights: East Texas Deals',
+    description: 'Track Longview flight deals from GGG, including East Texas feeder routes, DFW connections, and regional fare alerts.',
+  },
+  ABI: {
+    title: 'ABI Cheap Flights: West-Central TX Deals',
+    description: 'Find Abilene flight deals from ABI, including DFW connections, university and military travel patterns, and regional fare alerts.',
+  },
+};
+
 const airportData = AIRPORTS[airport?.toUpperCase() || ''];
 
 if (!airportData) {
@@ -801,8 +880,12 @@ const AIRPORT_CONTENT: Record<string, {
 
 const airportContent = AIRPORT_CONTENT[airportData.code] ?? null;
 
-const title = `Cheapest Flights from ${airportData.city} (${airportData.code}) | Texas Cheap Flights`;
-const description = `Find cheap flights from ${airportData.city}. We monitor error fares, award sweet spots, and airline glitches departing from ${airportData.code} — and alert you the moment one drops.`;
+const airportMeta = AIRPORT_META[airportData.code] ?? {
+  title: `${airportData.code} Cheap Flights: Live Deals`,
+  description: `Find live and archived flight deals from ${airportData.city}, including route-specific fare drops and Texas airport alerts from ${airportData.code}.`,
+};
+const title = `${airportMeta.title} | TCF`;
+const description = airportMeta.description;
 
 // JSON-LD for the airport page
 const jsonLd = {
