@@ -1,5 +1,5 @@
 import { supabase } from '../lib/supabase';
-import { blogPosts } from '../data/blog';
+import { publishedBlogPosts } from '../data/blog';
 
 const TX_AIRPORT_CODES = [
   'MFE', 'HRL', 'BRO', 'LRD', 'CRP', 'SAT', 'AUS', 'IAH', 'HOU',
@@ -41,7 +41,7 @@ export async function GET() {
 
   // Hub pages (one per TX airport)
   const hubPages = TX_AIRPORT_CODES.map(code => `/deals/from/${code.toLowerCase()}`);
-  const blogPages = blogPosts.map(post => ({
+  const blogPages = publishedBlogPosts.map(post => ({
     url: `/blog/${post.slug}`,
     lastmod: post.updatedAt || post.publishedAt
   }));

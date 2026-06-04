@@ -2,7 +2,7 @@
 import '../../styles/global.css';
 import GlobalNav from '../../components/GlobalNav.astro';
 import GlobalFooter from '../../components/GlobalFooter.astro';
-import { blogPosts, postsBySlug } from '../../data/blog';
+import { blogPosts, postsBySlug, publishedBlogPosts } from '../../data/blog';
 
 export const prerender = true;
 
@@ -21,9 +21,11 @@ if (!post) {
 }
 
 const canonicalUrl = `https://texascheapflights.com/blog/${post.slug}`;
-const relatedPosts = blogPosts.filter((item) => item.slug !== post.slug).slice(0, 2);
+const isDraft = post.status === 'draft';
+const pageTitle = post.metaTitle || post.title;
+const relatedPosts = publishedBlogPosts.filter((item) => item.slug !== post.slug).slice(0, 2);
 
-const jsonLd = {
+const blogPostingJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
   headline: post.title,
@@ -45,6 +47,21 @@ const jsonLd = {
   mainEntityOfPage: canonicalUrl,
   image: 'https://texascheapflights.com/og-image.png',
 };
+
+const faqJsonLd = post.faqs ? {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: post.faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer,
+    },
+  })),
+} : null;
+
+const jsonLd = faqJsonLd ? [blogPostingJsonLd, faqJsonLd] : blogPostingJsonLd;
 ---
 
 <!DOCTYPE html>
@@ -52,11 +69,12 @@ const jsonLd = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{post.title} | Texas Cheap Flights</title>
+  <title>{pageTitle} | Texas Cheap Flights</title>
   <meta name="description" content={post.description} />
+  {isDraft && <meta name="robots" content="noindex, nofollow" />}
   <link rel="canonical" href={canonicalUrl} />
   <meta property="og:type" content="article" />
-  <meta property="og:title" content={post.title} />
+  <meta property="og:title" content={pageTitle} />
   <meta property="og:description" content={post.description} />
   <meta property="og:url" content={canonicalUrl} />
   <meta property="og:image" content="https://texascheapflights.com/og-image.png" />
@@ -78,6 +96,7 @@ const jsonLd = {
           <a href="/blog" class="text-xs font-black uppercase tracking-[0.25em] text-slate-500 hover:text-tcf-gold transition-colors no-underline">Back to blog</a>
           <div class="flex flex-wrap items-center gap-3 mt-8 mb-6">
             <span class="badge-gold">{post.category}</span>
+            {isDraft && <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Draft preview</span>}
             <span class="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">{post.readingMinutes} min read</span>
             <time datetime={post.publishedAt} class="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">
               {new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
@@ -85,6 +104,19 @@ const jsonLd = {
           </div>
           <h1 class="text-4xl md:text-6xl font-black tracking-tight leading-[1.04] mb-6">{post.title}</h1>
           <p class="text-lg md:text-xl text-slate-400 font-body leading-relaxed">{post.description}</p>
+          {post.tldr && (
+            <div class="mt-8 rounded-2xl border border-tcf-gold/20 bg-tcf-gold/5 p-6">
+              <h2 class="text-sm font-black uppercase tracking-[0.25em] text-tcf-gold mb-4">Quick answer</h2>
+              <ul class="space-y-3">
+                {post.tldr.map((item) => (
+                  <li class="flex gap-3 text-sm md:text-base text-slate-300 font-body leading-7">
+                    <span class="mt-2 h-2 w-2 shrink-0 rounded-full bg-tcf-gold"></span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <div class="mt-8 flex flex-wrap gap-2">
             {post.primaryAirportCodes.map((code) => (
               <a href={`/deals/from/${code.toLowerCase()}`} class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-black text-slate-300 no-underline hover:border-tcf-gold/40 hover:text-tcf-gold transition-colors">{code}</a>
@@ -114,8 +146,48 @@ const jsonLd = {
                     ))}
                   </ul>
                 )}
+                {section.table && (
+                  <div class="mt-7 overflow-hidden rounded-2xl border border-white/10">
+                    <table class="w-full border-collapse text-left text-sm font-body">
+                      <thead class="bg-white/5 text-xs uppercase tracking-[0.18em] text-slate-500">
+                        <tr>
+                          {section.table.headers.map((header) => (
+                            <th class="px-4 py-4 font-black">{header}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {section.table.rows.map((row) => (
+                          <tr class="border-t border-white/10">
+                            {row.map((cell) => (
+                              <td class="px-4 py-4 text-slate-300">{cell}</td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+                {section.note && (
+                  <p class="mt-5 rounded-2xl border border-dashed border-tcf-gold/30 bg-tcf-gold/5 p-4 text-sm font-body leading-6 text-slate-400">
+                    {section.note}
+                  </p>
+                )}
               </section>
             ))}
+            {post.faqs && (
+              <section class="mt-14 border-t border-white/10 pt-12">
+                <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight mb-7">Common Questions</h2>
+                <div class="space-y-5">
+                  {post.faqs.map((faq) => (
+                    <section class="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+                      <h3 class="text-lg font-black text-white mb-3">{faq.question}</h3>
+                      <p class="text-slate-300 font-body leading-8">{faq.answer}</p>
+                    </section>
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
 
           <aside class="lg:sticky lg:top-28 space-y-5">

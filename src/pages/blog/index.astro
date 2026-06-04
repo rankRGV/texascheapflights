@@ -2,14 +2,14 @@
 import '../../styles/global.css';
 import GlobalNav from '../../components/GlobalNav.astro';
 import GlobalFooter from '../../components/GlobalFooter.astro';
-import { blogPosts } from '../../data/blog';
+import { publishedBlogPosts } from '../../data/blog';
 
 export const prerender = true;
 
 const title = 'Texas Cheap Flights Blog — Flight Deal Strategy for Texas Travelers';
 const description = 'Texas-specific flight deal guides for regional airports, Google Flights verification, and practical travel hedging from Texas Cheap Flights.';
-const featuredPost = blogPosts[0];
-const secondaryPosts = blogPosts.slice(1);
+const featuredPost = publishedBlogPosts[0];
+const secondaryPosts = publishedBlogPosts.slice(1);
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -26,7 +26,7 @@ const jsonLd = {
       url: 'https://texascheapflights.com/logo-light.png',
     },
   },
-  blogPost: blogPosts.map((post) => ({
+  blogPost: publishedBlogPosts.map((post) => ({
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.description,

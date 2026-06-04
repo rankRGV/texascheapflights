@@ -1,22 +1,224 @@
 export type BlogPost = {
   slug: string;
   title: string;
+  metaTitle?: string;
   description: string;
   publishedAt: string;
   updatedAt?: string;
+  status?: 'published' | 'draft';
   category: string;
   readingMinutes: number;
   heroLabel: string;
+  tldr?: string[];
   primaryAirportCodes: string[];
   relatedLinks: Array<{ label: string; href: string }>;
   sections: Array<{
     heading: string;
     body: string[];
     bullets?: string[];
+    table?: {
+      headers: string[];
+      rows: string[][];
+    };
+    note?: string;
+  }>;
+  faqs?: Array<{
+    question: string;
+    answer: string;
   }>;
 };
 
 export const blogPosts: BlogPost[] = [
+  {
+    slug: 'cheap-flights-to-hawaii-from-texas-southwest-points',
+    title: 'How We Found Cheap Flights to Hawaii From Texas With Southwest Points',
+    metaTitle: 'How We Flew 4 Adults From San Antonio to Kauai for $44.80 in Taxes',
+    description: 'A real Texas Cheap Flights case study showing how we used a Southwest points offer, a planned Airbnb payment, and timing to fly 4 adults from San Antonio to Kauai.',
+    publishedAt: '2026-06-04',
+    status: 'draft',
+    category: 'Points Strategy',
+    readingMinutes: 9,
+    heroLabel: 'Hawaii case study',
+    tldr: [
+      'We flew four adults from San Antonio (SAT) to Kauai (LIH) for $44.80 in taxes by timing a Southwest credit card bonus with a planned Airbnb payment.',
+      'The Southwest flights cost 104,000 Rapid Rewards points total, compared with similar cash fares around $520 per person.',
+      'We did not manufacture spending. The Airbnb was already in the trip budget, and the strategy was putting that planned expense on the right card at the right time.',
+      'The rule that makes this work is paying the card in full. Carrying interest can erase the value of the points quickly.',
+      'The bigger lesson for Texas travelers: the best deal is not always the lowest fare. Sometimes it is the right route, the right card offer, and the right timing.',
+    ],
+    primaryAirportCodes: ['SAT', 'AUS', 'DFW', 'IAH'],
+    relatedLinks: [
+      { label: 'San Antonio airport guide', href: '/guides/sat' },
+      { label: 'Deals from San Antonio', href: '/deals/from/sat' },
+      { label: 'Past Texas flight deals', href: '/past-deals' },
+      { label: 'Google Flights checklist', href: '/blog/google-flights-checklist-for-texas-deals' },
+    ],
+    sections: [
+      {
+        heading: 'Can You Really Find Cheap Flights to Hawaii From Texas?',
+        body: [
+          'Yes, but sometimes the cheapest flights to Hawaii are not the lowest cash fare on Google Flights. Sometimes the best deal is matching the right points offer with money you were already planning to spend.',
+          'That is what happened for us.',
+          'This started as a 10-year anniversary trip. My wife and I had been to Hawaii before, and we always talked about how special it would be to take our parents one day. But when we started looking at flights from San Antonio to Hawaii, the numbers got uncomfortable fast.',
+          'Similar flights were around $520 per person. For four adults, that put airfare alone at roughly $2,080 before lodging, food, rental car, or anything else.',
+          'That is when my wife started doing the math.',
+        ],
+      },
+      {
+        heading: 'How Much Did Our San Antonio to Kauai Flights Cost?',
+        body: [
+          'Our Southwest flights from San Antonio to Lihue, Kauai cost 104,000 Southwest Rapid Rewards points plus $44.80 in taxes for four adults.',
+          'Here is the simple breakdown:',
+        ],
+        table: {
+          headers: ['Detail', 'Cost'],
+          rows: [
+            ['Route', 'SAT to LIH round trip'],
+            ['Travelers', '4 adults'],
+            ['Points per adult', '26,000 points'],
+            ['Total points used', '104,000 points'],
+            ['Taxes per adult', '$11.20'],
+            ['Total taxes paid', '$44.80'],
+            ['Similar cash fare', 'About $520 per person'],
+            ['Estimated cash value', 'About $2,080'],
+          ],
+        },
+        note: 'Insert screenshot: Southwest past flight details showing SAT to LIH, 26,000 points, and $11.20 taxes.',
+      },
+      {
+        heading: 'How Many Southwest Points Do You Need to Fly to Hawaii?',
+        body: [
+          'The number of Southwest points you need to fly to Hawaii depends on the cash price, route, dates, demand, and fare type. Southwest does not use a fixed award chart where Hawaii always costs the same number of points.',
+          'For our San Antonio to Kauai flights, the price was 26,000 points per adult round trip.',
+          'That means four adults required 104,000 points total.',
+          'This is why timing matters. When cash prices move, Southwest point prices can move too. We did not just need points. We needed the points to post while the flights were still pricing well.',
+        ],
+      },
+      {
+        heading: 'How Did We Earn Enough Southwest Points for 4 Adults?',
+        body: [
+          'We earned enough Southwest points by using a limited-time Southwest Rapid Rewards Plus Credit Card offer that gave my wife 100,000 points after meeting the minimum spend.',
+          'The offer she received was:',
+        ],
+        table: {
+          headers: ['Card detail', 'Our offer'],
+          rows: [
+            ['Card', 'Southwest Rapid Rewards Plus Credit Card'],
+            ['Bonus', '100,000 points'],
+            ['Minimum spend', '$3,000 in 3 months'],
+            ['Annual fee', '$99'],
+            ['Points timing', 'Posted after the statement/payment cycle'],
+          ],
+        },
+      },
+      {
+        heading: 'Why Did the Airbnb Payment Matter?',
+        body: [
+          'The Airbnb payment mattered because it turned money we were already going to spend into the points that paid for the flights.',
+          'That is the real strategy.',
+          'Not "spend more money to earn points."',
+          'Not "open a credit card and hope it works out."',
+          'The strategy was simple: we already wanted to take the trip, we already needed to pay for lodging, a Southwest offer lined up with that expense, we paid the card in full, and the points covered the flights.',
+          'That is the difference between responsible travel rewards and reckless points chasing.',
+        ],
+      },
+      {
+        heading: 'Was This Actually Free Travel?',
+        body: [
+          'No, and we should be honest about that.',
+          'We still paid for the Airbnb. We still paid the card annual fee. We still paid required taxes and fees on the flights.',
+          'What changed was the airfare.',
+          'Instead of paying roughly $2,080 in cash for four adult tickets, we used 104,000 Southwest points and paid $44.80 in required taxes.',
+          'So the better way to say it is this: we did not take a free Hawaii trip. We turned a planned vacation expense into enough Southwest points to remove the biggest airfare cost.',
+          'That is more honest, and more useful.',
+        ],
+      },
+      {
+        heading: 'Is Opening a Travel Credit Card Worth It for a Family Trip?',
+        body: [
+          'A travel credit card can be worth it for a family trip only if the bonus lines up with spending you already planned and you can pay the balance in full.',
+          'This is the non-negotiable rule.',
+          'If you carry a balance, interest can wipe out the value of the points fast. A 100,000-point bonus is not worth turning a family vacation into credit card debt.',
+          'The safer question is not "Can I hit the minimum spend?" The safer question is "Do I already have a real expense coming up that I can pay off immediately?"',
+          'For us, the answer was yes because of the Airbnb.',
+        ],
+      },
+      {
+        heading: 'Do You Have to Fly From Dallas or Houston to Get Cheap Hawaii Flights?',
+        body: [
+          'No. You do not always have to fly from Dallas or Houston to get cheap Hawaii flights from Texas.',
+          'Our trip started in San Antonio.',
+          'That matters because a lot of Texas travelers assume Hawaii deals only work from major hubs like DFW or IAH. Sometimes those airports will have the best cash fares. But not every good Hawaii strategy requires repositioning.',
+          'In our case, Southwest let us book from SAT to LIH on points. We did not need to drive to another city or book separate flights.',
+          'That is exactly why Texas-specific flight strategy matters. A national flight deal site might talk about Hawaii fares from Los Angeles or Seattle. Texans need to know what works from San Antonio, Austin, Houston, Dallas, McAllen, Harlingen, Laredo, El Paso, and the airports we actually use.',
+        ],
+      },
+      {
+        heading: 'What Would We Do Differently Next Time?',
+        body: [
+          'Next time, we would check for extra stacking opportunities before paying for the Airbnb.',
+          'We paid directly through Airbnb, and it worked. But if we had spent a few more minutes checking portals, we might have found another layer of value.',
+          'That is the next level: same expense, better routing.',
+        ],
+        table: {
+          headers: ['Option', 'Why check it?'],
+          rows: [
+            ['Southwest Vacations', 'Possible package value'],
+            ['Chase Travel', 'Possible portal value'],
+            ['Shopping portals', 'Extra points on the same purchase'],
+            ['Temporary card offers', 'Better timing or higher bonus'],
+            ['Category bonuses', 'More points on travel spend'],
+          ],
+        },
+      },
+      {
+        heading: 'What Should Texas Travelers Take Away From This?',
+        body: [
+          'The main takeaway is simple: the cheapest travel strategy is not always finding one magic fare. It is timing the right offer around money you were already going to spend.',
+          'The point is not to spend more. The point is to make your existing spending work harder.',
+          'That is the kind of strategy we care about at Texas Cheap Flights: practical ways to make travel feel possible for Texans without pretending everyone has unlimited money or unlimited time.',
+          'Sometimes that means an error fare. Sometimes it means a cheap Google Flights drop. Sometimes it means Southwest points from San Antonio to Hawaii because your Airbnb payment lined up perfectly with a limited-time card offer.',
+          'The deal was not just the flight. The deal was the timing.',
+        ],
+        table: {
+          headers: ['Planned expense', 'Possible travel strategy'],
+          rows: [
+            ['Vacation rental', 'Meet a card bonus'],
+            ['Wedding travel', 'Earn points from unavoidable costs'],
+            ['Insurance renewal', 'Time a signup offer'],
+            ['Home project', 'Use a large planned payment'],
+            ['Family trip', 'Turn lodging spend into flights'],
+          ],
+        },
+      },
+    ],
+    faqs: [
+      {
+        question: 'What is the cheapest way to fly to Hawaii from Texas?',
+        answer: 'The cheapest way to fly to Hawaii from Texas is usually either a short-lived cash fare sale or a points redemption that lines up with a strong credit card bonus. In our case, Southwest points were better than paying cash because four adult tickets from San Antonio to Kauai would have cost roughly $2,080.',
+      },
+      {
+        question: 'Can you use Southwest points to fly to Hawaii?',
+        answer: 'Yes. Southwest Rapid Rewards points can be used to book Southwest flights to Hawaii. You are still responsible for required taxes, fees, and government or airport-imposed charges when booking reward travel.',
+      },
+      {
+        question: 'How many Southwest points did we use for Hawaii?',
+        answer: 'We used 104,000 Southwest Rapid Rewards points for four adult round-trip tickets from San Antonio to Lihue, Kauai. Each adult ticket cost 26,000 points plus $11.20 in taxes.',
+      },
+      {
+        question: 'Was the Hawaii trip free?',
+        answer: 'No. The flights were covered with points except for $44.80 in taxes. We still paid for the Airbnb, rental car, card annual fee, food, and other trip costs. The better takeaway is that points removed about $2,000 in airfare from the trip budget.',
+      },
+      {
+        question: 'Is this strategy risky?',
+        answer: 'It is risky if you spend money you were not already planning to spend or carry a balance on the card. It is much safer when the minimum spend is met with a planned expense and the statement is paid in full.',
+      },
+      {
+        question: 'Do you need to fly from Dallas or Houston to get Hawaii deals?',
+        answer: 'Not always. Our Hawaii award booking started in San Antonio. Dallas and Houston can have strong Hawaii fares, but Texas travelers should also check their actual home airport and nearby regional options.',
+      },
+    ],
+  },
   {
     slug: 'cheap-flights-from-texas-regional-airports',
     title: 'How to Find Cheap Flights from Texas Regional Airports',
@@ -177,4 +379,5 @@ export const blogPosts: BlogPost[] = [
   },
 ];
 
+export const publishedBlogPosts = blogPosts.filter((post) => post.status !== 'draft');
 export const postsBySlug = new Map(blogPosts.map((post) => [post.slug, post]));
