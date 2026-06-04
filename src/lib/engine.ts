@@ -2,6 +2,7 @@ import { Resend } from 'resend';
 import { parseEmailToDeal, type ParsedDeal } from './gemini';
 import { supabase } from './supabase';
 import { normalizeAirlineName } from './airlines';
+import { buildSocialWebhookPayload } from './social-payload';
 
 interface RegionalCluster {
   [key: string]: string[];
@@ -273,10 +274,7 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string, dealId?:
           await fetch(n8nWebhookUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              deal,
-              image_secret_key: import.meta.env.ADMIN_PASSWORD ?? 'tcf-admin-2026'
-            })
+            body: JSON.stringify(buildSocialWebhookPayload(deal, import.meta.env.ADMIN_PASSWORD ?? 'tcf-admin-2026'))
           });
           console.log(`   🚀 n8n Social Webhook triggered for auto-posting`);
         }

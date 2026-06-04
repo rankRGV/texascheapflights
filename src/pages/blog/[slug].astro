@@ -1,0 +1,158 @@
+---
+import '../../styles/global.css';
+import GlobalNav from '../../components/GlobalNav.astro';
+import GlobalFooter from '../../components/GlobalFooter.astro';
+import { blogPosts, postsBySlug } from '../../data/blog';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return blogPosts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { slug } = Astro.params;
+const post = Astro.props.post ?? postsBySlug.get(slug ?? '');
+
+if (!post) {
+  return Astro.redirect('/blog');
+}
+
+const canonicalUrl = `https://texascheapflights.com/blog/${post.slug}`;
+const relatedPosts = blogPosts.filter((item) => item.slug !== post.slug).slice(0, 2);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.title,
+  description: post.description,
+  datePublished: post.publishedAt,
+  dateModified: post.updatedAt || post.publishedAt,
+  author: {
+    '@type': 'Organization',
+    name: 'Texas Cheap Flights',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Texas Cheap Flights',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://texascheapflights.com/logo-light.png',
+    },
+  },
+  mainEntityOfPage: canonicalUrl,
+  image: 'https://texascheapflights.com/og-image.png',
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{post.title} | Texas Cheap Flights</title>
+  <meta name="description" content={post.description} />
+  <link rel="canonical" href={canonicalUrl} />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content={post.title} />
+  <meta property="og:description" content={post.description} />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta property="og:image" content="https://texascheapflights.com/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;900&family=Outfit:wght@400;500;700&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-tcf-navy-deep text-white min-h-screen">
+  <GlobalNav activePage="blog" />
+
+  <main>
+    <article>
+      <header class="relative overflow-hidden px-6 pt-36 pb-14">
+        <div class="absolute inset-0 hero-gradient pointer-events-none"></div>
+        <div class="absolute inset-0 starfield"></div>
+        <div class="relative z-10 max-w-4xl mx-auto">
+          <a href="/blog" class="text-xs font-black uppercase tracking-[0.25em] text-slate-500 hover:text-tcf-gold transition-colors no-underline">Back to blog</a>
+          <div class="flex flex-wrap items-center gap-3 mt-8 mb-6">
+            <span class="badge-gold">{post.category}</span>
+            <span class="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">{post.readingMinutes} min read</span>
+            <time datetime={post.publishedAt} class="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">
+              {new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+            </time>
+          </div>
+          <h1 class="text-4xl md:text-6xl font-black tracking-tight leading-[1.04] mb-6">{post.title}</h1>
+          <p class="text-lg md:text-xl text-slate-400 font-body leading-relaxed">{post.description}</p>
+          <div class="mt-8 flex flex-wrap gap-2">
+            {post.primaryAirportCodes.map((code) => (
+              <a href={`/deals/from/${code.toLowerCase()}`} class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-black text-slate-300 no-underline hover:border-tcf-gold/40 hover:text-tcf-gold transition-colors">{code}</a>
+            ))}
+          </div>
+        </div>
+      </header>
+
+      <section class="px-6 pb-20">
+        <div class="max-w-4xl mx-auto grid lg:grid-cols-[1fr,260px] gap-10 items-start">
+          <div class="rounded-[2rem] border border-white/10 bg-white/[0.03] p-7 md:p-10">
+            {post.sections.map((section) => (
+              <section class="mb-12 last:mb-0">
+                <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight mb-5">{section.heading}</h2>
+                <div class="space-y-5">
+                  {section.body.map((paragraph) => (
+                    <p class="text-slate-300 font-body leading-8">{paragraph}</p>
+                  ))}
+                </div>
+                {section.bullets && (
+                  <ul class="mt-6 space-y-3">
+                    {section.bullets.map((bullet) => (
+                      <li class="flex gap-3 text-slate-300 font-body leading-7">
+                        <span class="mt-2 h-2 w-2 shrink-0 rounded-full bg-tcf-gold"></span>
+                        <span>{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            ))}
+          </div>
+
+          <aside class="lg:sticky lg:top-28 space-y-5">
+            <div class="rounded-2xl border border-tcf-gold/20 bg-tcf-gold/5 p-6">
+              <h2 class="text-sm font-black uppercase tracking-[0.25em] text-tcf-gold mb-4">Next move</h2>
+              <p class="text-sm text-slate-400 font-body leading-6 mb-5">Get airport-specific alerts when Texas fares move below normal pricing.</p>
+              <a href="/#waitlist" class="btn-primary w-full text-sm no-underline">Join the Scout List</a>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+              <h2 class="text-sm font-black uppercase tracking-[0.25em] text-slate-500 mb-4">Related</h2>
+              <div class="grid gap-3">
+                {post.relatedLinks.map((link) => (
+                  <a href={link.href} class="text-sm font-bold text-slate-300 no-underline hover:text-tcf-gold transition-colors">{link.label}</a>
+                ))}
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </article>
+
+    <section class="light-section px-6 py-20">
+      <div class="max-w-4xl mx-auto">
+        <p class="text-[10px] font-black uppercase tracking-[0.3em] text-tcf-gold mb-5">Keep reading</p>
+        <div class="grid md:grid-cols-2 gap-5">
+          {relatedPosts.map((item) => (
+            <a href={`/blog/${item.slug}`} class="rounded-2xl border border-slate-200 bg-white p-6 no-underline transition-all duration-300 hover:border-slate-300 hover:-translate-y-0.5">
+              <p class="text-[10px] font-black uppercase tracking-[0.25em] text-tcf-gold mb-3">{item.category}</p>
+              <h2 class="text-xl font-black text-slate-950 mb-3">{item.title}</h2>
+              <p class="text-sm text-slate-600 font-body leading-6">{item.description}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <GlobalFooter />
+</body>
+</html>

@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { blogPosts } from '../data/blog';
 
 const TX_AIRPORT_CODES = [
   'MFE', 'HRL', 'BRO', 'LRD', 'CRP', 'SAT', 'AUS', 'IAH', 'HOU',
@@ -12,6 +13,7 @@ export async function GET() {
   const staticPages = [
     '',
     '/past-deals',
+    '/blog',
     '/skeptics-guide',
     '/privacy',
     '/terms',
@@ -39,6 +41,10 @@ export async function GET() {
 
   // Hub pages (one per TX airport)
   const hubPages = TX_AIRPORT_CODES.map(code => `/deals/from/${code.toLowerCase()}`);
+  const blogPages = blogPosts.map(post => ({
+    url: `/blog/${post.slug}`,
+    lastmod: post.updatedAt || post.publishedAt
+  }));
 
   // Fetch deal IDs from Supabase
   const { data: deals } = await supabase
@@ -64,6 +70,13 @@ export async function GET() {
     <loc>${siteUrl}${page}</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
+  </url>`).join('')}
+  ${blogPages.map(page => `
+  <url>
+    <loc>${siteUrl}${page.url}</loc>
+    <lastmod>${new Date(page.lastmod).toISOString()}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
   </url>`).join('')}
   ${guidePages.map(page => `
   <url>

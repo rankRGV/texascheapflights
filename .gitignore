@@ -34,3 +34,6 @@ out.txt
 test-price-insights.js
 test-trigger-email.js
 *.log
+
+# Local n8n workflow backups can contain live API tokens
+n8n-tcf-social-*.json

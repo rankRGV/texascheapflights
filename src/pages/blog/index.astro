@@ -1,0 +1,139 @@
+---
+import '../../styles/global.css';
+import GlobalNav from '../../components/GlobalNav.astro';
+import GlobalFooter from '../../components/GlobalFooter.astro';
+import { blogPosts } from '../../data/blog';
+
+export const prerender = true;
+
+const title = 'Texas Cheap Flights Blog — Flight Deal Strategy for Texas Travelers';
+const description = 'Texas-specific flight deal guides for regional airports, Google Flights verification, and practical travel hedging from Texas Cheap Flights.';
+const featuredPost = blogPosts[0];
+const secondaryPosts = blogPosts.slice(1);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: 'Texas Cheap Flights Blog',
+  url: 'https://texascheapflights.com/blog',
+  description,
+  publisher: {
+    '@type': 'Organization',
+    name: 'Texas Cheap Flights',
+    url: 'https://texascheapflights.com',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://texascheapflights.com/logo-light.png',
+    },
+  },
+  blogPost: blogPosts.map((post) => ({
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.description,
+    url: `https://texascheapflights.com/blog/${post.slug}`,
+    datePublished: post.publishedAt,
+    dateModified: post.updatedAt || post.publishedAt,
+  })),
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href="https://texascheapflights.com/blog" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content="https://texascheapflights.com/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;900&family=Outfit:wght@400;500;700&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-tcf-navy-deep text-white min-h-screen">
+  <GlobalNav activePage="blog" />
+
+  <main>
+    <section class="relative overflow-hidden px-6 pt-36 pb-16">
+      <div class="absolute inset-0 hero-gradient opacity-80 pointer-events-none"></div>
+      <div class="absolute inset-0 starfield"></div>
+      <div class="relative z-10 max-w-6xl mx-auto">
+        <div class="max-w-3xl">
+          <p class="badge-gold mb-6 inline-flex">Texas flight intelligence</p>
+          <h1 class="text-5xl md:text-7xl font-black tracking-tight leading-[1.02] mb-6">
+            Practical cheap flight strategy for Texas travelers.
+          </h1>
+          <p class="text-lg md:text-xl text-slate-400 font-body leading-relaxed">
+            Airport-specific guides, Google Flights verification steps, and deal hunting playbooks built around how Texans actually fly.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="px-6 pb-24">
+      <div class="max-w-6xl mx-auto grid lg:grid-cols-[1.2fr,0.8fr] gap-6">
+        <a href={`/blog/${featuredPost.slug}`} class="group rounded-[2rem] border border-tcf-gold/20 bg-tcf-gold/5 p-7 md:p-10 no-underline transition-all duration-300 hover:border-tcf-gold/50 hover:bg-tcf-gold/10">
+          <div class="flex flex-wrap items-center gap-3 mb-8">
+            <span class="text-[10px] font-black uppercase tracking-[0.25em] text-tcf-gold">{featuredPost.heroLabel}</span>
+            <span class="h-1 w-1 rounded-full bg-slate-600"></span>
+            <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">{featuredPost.readingMinutes} min read</span>
+          </div>
+          <h2 class="text-4xl md:text-5xl font-black text-white tracking-tight mb-5 group-hover:text-tcf-gold transition-colors">
+            {featuredPost.title}
+          </h2>
+          <p class="text-slate-400 font-body leading-relaxed max-w-2xl mb-8">{featuredPost.description}</p>
+          <div class="flex flex-wrap gap-2">
+            {featuredPost.primaryAirportCodes.map((code) => (
+              <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-black text-slate-300">{code}</span>
+            ))}
+          </div>
+        </a>
+
+        <div class="grid gap-6">
+          {secondaryPosts.map((post) => (
+            <a href={`/blog/${post.slug}`} class="group rounded-[2rem] border border-white/10 bg-white/5 p-7 no-underline transition-all duration-300 hover:border-white/20 hover:bg-white/8">
+              <div class="flex items-center justify-between gap-4 mb-5">
+                <span class="text-[10px] font-black uppercase tracking-[0.25em] text-tcf-gold">{post.category}</span>
+                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-600">{post.readingMinutes} min</span>
+              </div>
+              <h2 class="text-2xl font-black text-white mb-3 group-hover:text-tcf-gold transition-colors">{post.title}</h2>
+              <p class="text-sm text-slate-400 font-body leading-relaxed">{post.description}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="light-section px-6 py-20">
+      <div class="max-w-6xl mx-auto grid md:grid-cols-[0.75fr,1.25fr] gap-10 items-start">
+        <div>
+          <p class="text-[10px] font-black uppercase tracking-[0.3em] text-tcf-gold mb-4">Content roadmap</p>
+          <h2 class="text-3xl md:text-4xl font-black mb-4">The blog should reinforce the airport moat.</h2>
+          <p class="font-body text-slate-600 leading-relaxed">
+            Best next posts are not generic destination listicles. They should answer Texas-origin search intent and route readers into the airport guides, deal archive, and waitlist.
+          </p>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          {[
+            'Cheap flights from McAllen: when MFE beats bigger airports',
+            'Harlingen vs Brownsville vs McAllen for cheap flights',
+            'Best months to find cheap flights from Texas to Cancun',
+            'DFW vs IAH for international flight deals',
+          ].map((topic) => (
+            <div class="rounded-2xl border border-slate-200 bg-white p-5">
+              <p class="text-sm font-black text-slate-900 leading-snug">{topic}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <GlobalFooter />
+</body>
+</html>

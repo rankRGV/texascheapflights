@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { supabase } from '../../../lib/supabase';
+import { buildSocialWebhookPayload } from '../../../lib/social-payload';
 
 export const POST: APIRoute = async ({ request, cookies }) => {
     // 1. Verify Authentication
@@ -39,10 +40,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         // 4. Send payload to n8n Webhook
         // Including the Deal Card Secret so n8n can fetch the image securely
         const DEAL_CARD_SECRET = import.meta.env.DEAL_CARD_SECRET ?? ADMIN_PASSWORD;
-        const n8nPayload = {
-            deal: deal,
-            image_secret_key: DEAL_CARD_SECRET
-        };
+        const n8nPayload = buildSocialWebhookPayload(deal, DEAL_CARD_SECRET);
 
         const n8nResponse = await fetch(n8nWebhookUrl, {
             method: 'POST',

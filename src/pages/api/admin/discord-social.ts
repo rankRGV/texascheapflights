@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { supabase } from '../../../lib/supabase';
+import { buildSocialWebhookPayload } from '../../../lib/social-payload';
 
 // GET renders a confirmation page to prevent Discord unfurler from auto-triggering
 export const GET: APIRoute = async ({ url }) => {
@@ -100,10 +101,7 @@ export const POST: APIRoute = async ({ request }) => {
         }
 
         const DEAL_CARD_SECRET = import.meta.env.DEAL_CARD_SECRET ?? ADMIN_PASSWORD;
-        const n8nPayload = {
-            deal: deal,
-            image_secret_key: DEAL_CARD_SECRET
-        };
+        const n8nPayload = buildSocialWebhookPayload(deal, DEAL_CARD_SECRET);
 
         const n8nResponse = await fetch(n8nWebhookUrl, {
             method: 'POST',

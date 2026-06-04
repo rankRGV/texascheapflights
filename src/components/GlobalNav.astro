@@ -1,6 +1,6 @@
 ---
 interface Props {
-  activePage?: 'home' | 'past-deals' | 'skeptics-guide' | 'welcome' | 'admin' | 'guides';
+  activePage?: 'home' | 'past-deals' | 'skeptics-guide' | 'welcome' | 'admin' | 'guides' | 'blog';
 }
 const { activePage } = Astro.props;
 
@@ -26,6 +26,7 @@ const REGIONAL_AIRPORTS = [
 const NAV_LINKS = [
   { label: 'The Strategy', href: '/#how-it-works' },
   { label: 'Regional Guides', href: '/guides', dropdown: true },
+  { label: 'Blog', href: '/blog' },
   { label: "Skeptic's Guide", href: '/skeptics-guide' },
   { label: 'Past Deals', href: '/past-deals' },
 ];
@@ -82,7 +83,8 @@ const NAV_LINKS = [
             href={link.href}
             class={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors no-underline ${
               (activePage === 'past-deals' && link.href === '/past-deals') ||
-              (activePage === 'skeptics-guide' && link.href === '/skeptics-guide')
+              (activePage === 'skeptics-guide' && link.href === '/skeptics-guide') ||
+              (activePage === 'blog' && link.href === '/blog')
                 ? 'text-tcf-gold border-b border-tcf-gold/50 pb-0.5'
                 : 'text-slate-400 hover:text-white'
             }`}
@@ -159,6 +161,7 @@ const NAV_LINKS = [
       <div class="w-full h-px bg-white/10"></div>
 
       <a href="/skeptics-guide" class="text-2xl font-black text-slate-300 uppercase tracking-tight hover:text-tcf-gold transition-colors no-underline mobile-nav-link">Skeptic's Guide</a>
+      <a href="/blog" class="text-2xl font-black text-slate-300 uppercase tracking-tight hover:text-tcf-gold transition-colors no-underline mobile-nav-link">Blog</a>
       <a href="/past-deals" class="text-2xl font-black text-slate-300 uppercase tracking-tight hover:text-tcf-gold transition-colors no-underline mobile-nav-link">Past Deals</a>
     </div>
   </div>
