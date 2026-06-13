@@ -162,6 +162,7 @@ export const blogPosts: BlogPost[] = [
           'The safer question is not "Can I hit the minimum spend?" The safer question is "Do I already have a real expense coming up that I can pay off immediately?"',
           'For us, the answer was yes because of the Airbnb.',
         ],
+        note: 'Want to try this yourself? My wife used a Southwest Rapid Rewards Plus Credit Card offer for our trip. If a Southwest card makes sense for an upcoming trip, you can <a href="https://www.referyourchasecard.com/226y/HTI3JD694I" target="_blank" rel="nofollow sponsored noopener">compare current Southwest Rapid Rewards Card offers here</a> and pick the one that fits your spending and annual fee comfort level. Bonus amounts change often and may be higher or lower than what we used. <em>Disclosure: this is a personal referral link &mdash; if you are approved, we may both receive bonus points.</em>',
       },
       {
         heading: 'Do You Have to Fly From Dallas or Houston to Get Cheap Hawaii Flights?',

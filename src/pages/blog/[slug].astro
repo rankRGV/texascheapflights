@@ -207,7 +207,7 @@ const jsonLd = faqJsonLd ? [blogPostingJsonLd, faqJsonLd] : blogPostingJsonLd;
                   </figure>
                 )}
                 {section.note && (
-                  <p class="article-note">{section.note}</p>
+                  <p class="article-note" set:html={section.note} />
                 )}
               </section>
             ))}
