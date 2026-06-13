@@ -45,7 +45,8 @@ A proprietary scanning script that proactively hunts for deals where aggregators
 
 ## 📊 Performance & Efficiency Metrics
 *   **Zero-Cost Infrastructure**: Engineered to operate 100% on free-tier limits (Vercel, SerpApi, Resend) through master-cron consolidation and request batching.
-*   **High-Conversion UI**: Applied psychological conversion principles (Aviation Tech Luxury aesthetic) to the welcome flow and referral systems.
+*   **High-Conversion UI & Dynamic Social Proof**: Applied psychological conversion principles (Aviation Tech Luxury aesthetic) and integrated live Supabase queries to showcase authentic, recent deal anomalies directly on the landing pages.
+*   **User Preference Center**: Built a secure, token-authenticated preference tracking dashboard where users can instantly customize their Alert Scope (Local, Regional, Statewide) and Price Thresholds to combat email fatigue.
 *   **Resiliency**: Implemented robust error handling for incomplete webhook payloads and "Human-Support" fallbacks for non-deal inbound messages.
 
 ---
@@ -56,4 +57,5 @@ A proprietary scanning script that proactively hunts for deals where aggregators
 *   **Engineered a premium brand experience** incorporating a custom-built "Liquid Glass" design system, a global navigation framework with megamenu support, and standardized "Texas Gold" CTA assets.
 *   **Integrated Google Gemini (LLM)** to automate the parsing and scoring of unstructured travel data from inbound email newsletters, identifying high-ROI deals with a custom heuristic scoring model.
 *   **Developed a proprietary "Regional Scout" script** using SerpApi to scrap live airline data from 20+ underserved Texas airports, implemented with recursive batching to stay within strict API usage quotas.
+*   **Built a dynamic, token-authenticated User Preference Center** bridging a Supabase backend with an Astro frontend, allowing users to customize alert scoping and combat notification fatigue.
 *   **Configured automated Cron jobs and Master Orchestrators** on Vercel to handle daily statewide scans and RSS polling, ensuring 100% system uptime on zero-cost infrastructure.

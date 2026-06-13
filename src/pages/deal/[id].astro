@@ -26,6 +26,7 @@ const priceDisplay = deal.price ? `$${deal.price}` : 'Points Deal';
 const normalizedAirline = normalizeAirlineName(deal.airline);
 const title = `${priceDisplay} Flight from ${deal.origin} to ${deal.destination} on ${normalizedAirline || 'Major Airline'} | Texas Cheap Flights`;
 const description = `Scouted from ${deal.origin}: ${normalizedAirline ? normalizedAirline + ' flight to ' : ''}${deal.destination} for ${priceDisplay}. ${deal.travel_dates ? 'Travel dates: ' + deal.travel_dates : ''}. Exclusive Texas deal alert.`;
+const ogImage = 'https://texascheapflights.com/og-image.png';
 
 // Structured Data (JSON-LD)
 const dealSentAt = new Date(deal.sent_at || deal.created_at);
@@ -39,7 +40,7 @@ const jsonLd = {
       "@id": `${Astro.url.href}#deal`,
       "name": `${priceDisplay} Flight: ${deal.origin} to ${deal.destination}`,
       "description": description,
-      "image": `https://texascheapflights.com/api/deal-card?origin=${deal.origin}&destination=${deal.destination}&price=${deal.price || ''}&airline=${encodeURIComponent(deal.airline || '')}&savings=${deal.score ? deal.score * 10 : ''}&type=${deal.deal_type || 'sale'}&dates=${encodeURIComponent(deal.travel_dates || '')}`,
+      "image": ogImage,
       "provider": {
         "@type": "Organization",
         "name": "Texas Cheap Flights",
@@ -95,8 +96,6 @@ const jsonLd = {
     }
   ]
 };
-
-const ogImage = `https://texascheapflights.com/api/deal-card?origin=${deal.origin}&destination=${deal.destination}&price=${deal.price || ''}&airline=${encodeURIComponent(deal.airline || '')}&savings=${deal.score ? deal.score * 10 : ''}&type=${deal.deal_type || 'sale'}&dates=${encodeURIComponent(deal.travel_dates || '')}`;
 
 // Related deals from same origin
 const { data: relatedDeals } = await supabase

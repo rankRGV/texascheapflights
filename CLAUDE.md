@@ -46,6 +46,8 @@ Texas Cheap Flights (`texascheapflights.com`) — An AI-powered deal alert syste
 - `src/pages/api/scout.ts` — SerpAPI price monitoring
 - `src/pages/api/ingest.ts` — Email webhook handler
 - `src/pages/api/subscribe.ts` — Waitlist signup
+- `src/pages/api/update-preferences.ts` — User preferences backend API
+- `src/pages/manage-subscription.astro` — Token-gated User Preference Center
 - `src/components/GlobalNav.astro` — Global navigation with Regional Hub dropdown
 - `src/components/GlobalFooter.astro` — Standardized site-wide footer
 - `src/pages/guides/index.astro` — Regional Intelligence Hub

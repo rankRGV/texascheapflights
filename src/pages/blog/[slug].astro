@@ -23,6 +23,9 @@ if (!post) {
 const canonicalUrl = `https://texascheapflights.com/blog/${post.slug}`;
 const isDraft = post.status === 'draft';
 const pageTitle = post.metaTitle || post.title;
+const socialImage = post.heroImage?.src
+  ? `https://texascheapflights.com${post.heroImage.src}`
+  : 'https://texascheapflights.com/og-image.png';
 const relatedPosts = publishedBlogPosts.filter((item) => item.slug !== post.slug).slice(0, 2);
 const slugify = (value: string) => value
   .toLowerCase()
@@ -62,7 +65,7 @@ const blogPostingJsonLd = {
     },
   },
   mainEntityOfPage: canonicalUrl,
-  image: 'https://texascheapflights.com/og-image.png',
+  image: socialImage,
 };
 
 const faqJsonLd = post.faqs ? {
@@ -94,7 +97,7 @@ const jsonLd = faqJsonLd ? [blogPostingJsonLd, faqJsonLd] : blogPostingJsonLd;
   <meta property="og:title" content={pageTitle} />
   <meta property="og:description" content={post.description} />
   <meta property="og:url" content={canonicalUrl} />
-  <meta property="og:image" content="https://texascheapflights.com/og-image.png" />
+  <meta property="og:image" content={socialImage} />
   <meta name="twitter:card" content="summary_large_image" />
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -124,6 +127,12 @@ const jsonLd = faqJsonLd ? [blogPostingJsonLd, faqJsonLd] : blogPostingJsonLd;
             ))}
           </div>
         </div>
+        {post.heroImage && (
+          <figure class="article-hero-media">
+            <img src={post.heroImage.src} alt={post.heroImage.alt} loading="eager" decoding="async" />
+            {post.heroImage.caption && <figcaption>{post.heroImage.caption}</figcaption>}
+          </figure>
+        )}
       </header>
 
       <section class="article-shell">
@@ -190,6 +199,12 @@ const jsonLd = faqJsonLd ? [blogPostingJsonLd, faqJsonLd] : blogPostingJsonLd;
                       </tbody>
                     </table>
                   </div>
+                )}
+                {section.image && (
+                  <figure class="article-media">
+                    <img src={section.image.src} alt={section.image.alt} loading="lazy" decoding="async" />
+                    {section.image.caption && <figcaption>{section.image.caption}</figcaption>}
+                  </figure>
                 )}
                 {section.note && (
                   <p class="article-note">{section.note}</p>
@@ -370,6 +385,42 @@ const jsonLd = faqJsonLd ? [blogPostingJsonLd, faqJsonLd] : blogPostingJsonLd;
     text-decoration: none;
     font-size: 0.78rem;
     font-weight: 900;
+  }
+
+  .article-hero-media {
+    position: relative;
+    z-index: 1;
+    max-width: 70rem;
+    margin: 2rem auto 0;
+    border: 1px solid rgba(16, 32, 51, 0.12);
+    border-radius: 1.4rem;
+    overflow: hidden;
+    background: #102033;
+    box-shadow: 0 28px 70px rgba(16, 32, 51, 0.18);
+  }
+
+  .article-hero-media img,
+  .article-media img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .article-hero-media img {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  .article-hero-media figcaption,
+  .article-media figcaption {
+    margin: 0;
+    color: #526174;
+    background: rgba(255, 255, 255, 0.92);
+    border-top: 1px solid rgba(16, 32, 51, 0.08);
+    padding: 0.8rem 1rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.5;
   }
 
   .article-shell {
@@ -585,6 +636,15 @@ const jsonLd = faqJsonLd ? [blogPostingJsonLd, faqJsonLd] : blogPostingJsonLd;
     border-bottom: 0;
   }
 
+  .article-media {
+    margin: 1.6rem 0 0;
+    border: 1px solid rgba(16, 32, 51, 0.1);
+    border-radius: 1.1rem;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 18px 40px rgba(16, 32, 51, 0.08);
+  }
+
   .article-note {
     border: 1px dashed rgba(212, 168, 67, 0.45);
     background: rgba(212, 168, 67, 0.09);
@@ -775,6 +835,16 @@ const jsonLd = faqJsonLd ? [blogPostingJsonLd, faqJsonLd] : blogPostingJsonLd;
 
     .article-hero p {
       font-size: 1.08rem;
+    }
+
+    .article-hero-media {
+      margin-top: 1.35rem;
+      border-radius: 1rem;
+    }
+
+    .article-hero-media figcaption,
+    .article-media figcaption {
+      font-size: 0.84rem;
     }
 
     .article-answer,

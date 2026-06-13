@@ -9,6 +9,11 @@ export type BlogPost = {
   category: string;
   readingMinutes: number;
   heroLabel: string;
+  heroImage?: {
+    src: string;
+    alt: string;
+    caption?: string;
+  };
   tldr?: string[];
   primaryAirportCodes: string[];
   relatedLinks: Array<{ label: string; href: string }>;
@@ -19,6 +24,11 @@ export type BlogPost = {
     table?: {
       headers: string[];
       rows: string[][];
+    };
+    image?: {
+      src: string;
+      alt: string;
+      caption?: string;
     };
     note?: string;
   }>;
@@ -31,18 +41,23 @@ export type BlogPost = {
 export const blogPosts: BlogPost[] = [
   {
     slug: 'cheap-flights-to-hawaii-from-texas-southwest-points',
-    title: 'How We Found Cheap Flights to Hawaii From Texas With Southwest Points',
-    metaTitle: 'How We Flew 4 Adults From San Antonio to Kauai for $44.80 in Taxes',
-    description: 'A real Texas Cheap Flights case study showing how we used a Southwest points offer, a planned Airbnb payment, and timing to fly 4 adults from San Antonio to Kauai.',
-    publishedAt: '2026-06-04',
-    status: 'draft',
+    title: 'Cheap Flights to Hawaii From Texas: How We Flew SAT to Kauai With Southwest Points',
+    metaTitle: 'Cheap Flights to Hawaii From Texas With Southwest Points',
+    description: 'A real Texas Cheap Flights case study showing how a Southwest points offer, a planned Airbnb payment, and Companion Pass know-how helped our family cover Hawaii airfare from San Antonio.',
+    publishedAt: '2026-06-13',
     category: 'Points Strategy',
     readingMinutes: 9,
     heroLabel: 'Hawaii case study',
+    heroImage: {
+      src: '/blog/hawaii-southwest/hawaii-rainbow-hero.webp',
+      alt: 'Rainbow over palm trees in Kauai, Hawaii',
+      caption: 'Kauai was the trip goal. The points strategy made the family airfare workable.',
+    },
     tldr: [
-      'We flew four adults from San Antonio (SAT) to Kauai (LIH) for $44.80 in taxes by timing a Southwest credit card bonus with a planned Airbnb payment.',
+      'We booked four adult round-trip tickets from San Antonio (SAT) to Kauai (LIH) for 104,000 Southwest points plus $44.80 in taxes by timing a Southwest credit card bonus with a planned Airbnb payment.',
       'The Southwest flights cost 104,000 Rapid Rewards points total, compared with similar cash fares around $520 per person.',
-      'We did not manufacture spending. The Airbnb was already in the trip budget, and the strategy was putting that planned expense on the right card at the right time.',
+      'The full family trip also used Southwest Companion Pass strategy, but this case study focuses on the four adult tickets charged to my wife\'s Rapid Rewards account.',
+      'We did not spend extra money just to earn points. The Airbnb was already part of the trip budget; we were intentional about which card we used and when we paid for it.',
       'The rule that makes this work is paying the card in full. Carrying interest can erase the value of the points quickly.',
       'The bigger lesson for Texas travelers: the best deal is not always the lowest fare. Sometimes it is the right route, the right card offer, and the right timing.',
     ],
@@ -61,20 +76,21 @@ export const blogPosts: BlogPost[] = [
           'That is what happened for us.',
           'This started as a 10-year anniversary trip. My wife and I had been to Hawaii before, and we always talked about how special it would be to take our parents one day. But when we started looking at flights from San Antonio to Hawaii, the numbers got uncomfortable fast.',
           'Similar flights were around $520 per person. For four adults, that put airfare alone at roughly $2,080 before lodging, food, rental car, or anything else.',
+          'The broader trip included more than those four tickets, and we used Southwest Companion Pass strategy for part of that. But the cleanest case study is the four adult award tickets booked from my wife\'s Rapid Rewards account.',
           'That is when my wife started doing the math.',
         ],
       },
       {
         heading: 'How Much Did Our San Antonio to Kauai Flights Cost?',
         body: [
-          'Our Southwest flights from San Antonio to Lihue, Kauai cost 104,000 Southwest Rapid Rewards points plus $44.80 in taxes for four adults.',
+          'The four adult Southwest tickets booked from my wife\'s Rapid Rewards account cost 104,000 Southwest points plus $44.80 in taxes.',
           'Here is the simple breakdown:',
         ],
         table: {
           headers: ['Detail', 'Cost'],
           rows: [
             ['Route', 'SAT to LIH round trip'],
-            ['Travelers', '4 adults'],
+            ['Tickets covered in this case study', '4 adult round trips'],
             ['Points per adult', '26,000 points'],
             ['Total points used', '104,000 points'],
             ['Taxes per adult', '$11.20'],
@@ -83,19 +99,23 @@ export const blogPosts: BlogPost[] = [
             ['Estimated cash value', 'About $2,080'],
           ],
         },
-        note: 'Insert screenshot: Southwest past flight details showing SAT to LIH, 26,000 points, and $11.20 taxes.',
+        image: {
+          src: '/blog/hawaii-southwest/sat-lih-receipt.png',
+          alt: 'Redacted Southwest past flight details for a San Antonio to Lihue award booking showing 26,000 points and $11.20 in taxes',
+          caption: 'A redacted Southwest receipt for one adult round trip from San Antonio to Lihue: 26,000 points plus $11.20 in taxes.',
+        },
       },
       {
         heading: 'How Many Southwest Points Do You Need to Fly to Hawaii?',
         body: [
           'The number of Southwest points you need to fly to Hawaii depends on the cash price, route, dates, demand, and fare type. Southwest does not use a fixed award chart where Hawaii always costs the same number of points.',
           'For our San Antonio to Kauai flights, the price was 26,000 points per adult round trip.',
-          'That means four adults required 104,000 points total.',
+          'That means the four adult tickets booked from my wife\'s account required 104,000 points total.',
           'This is why timing matters. When cash prices move, Southwest point prices can move too. We did not just need points. We needed the points to post while the flights were still pricing well.',
         ],
       },
       {
-        heading: 'How Did We Earn Enough Southwest Points for 4 Adults?',
+        heading: 'How Did We Earn Enough Southwest Points for Four Adult Tickets?',
         body: [
           'We earned enough Southwest points by using a limited-time Southwest Rapid Rewards Plus Credit Card offer that gave my wife 100,000 points after meeting the minimum spend.',
           'The offer she received was:',
@@ -128,7 +148,7 @@ export const blogPosts: BlogPost[] = [
           'No, and we should be honest about that.',
           'We still paid for the Airbnb. We still paid the card annual fee. We still paid required taxes and fees on the flights.',
           'What changed was the airfare.',
-          'Instead of paying roughly $2,080 in cash for four adult tickets, we used 104,000 Southwest points and paid $44.80 in required taxes.',
+          'Instead of paying roughly $2,080 in cash for the four adult tickets on my wife\'s account, we used 104,000 Southwest points and paid $44.80 in required taxes.',
           'So the better way to say it is this: we did not take a free Hawaii trip. We turned a planned vacation expense into enough Southwest points to remove the biggest airfare cost.',
           'That is more honest, and more useful.',
         ],
@@ -195,7 +215,7 @@ export const blogPosts: BlogPost[] = [
     faqs: [
       {
         question: 'What is the cheapest way to fly to Hawaii from Texas?',
-        answer: 'The cheapest way to fly to Hawaii from Texas is usually either a short-lived cash fare sale or a points redemption that lines up with a strong credit card bonus. In our case, Southwest points were better than paying cash because four adult tickets from San Antonio to Kauai would have cost roughly $2,080.',
+        answer: 'The cheapest way to fly to Hawaii from Texas is usually either a short-lived cash fare sale or a points redemption that lines up with a strong credit card bonus. In our case, Southwest points were better than paying cash because the four adult tickets booked from my wife\'s account would have cost roughly $2,080.',
       },
       {
         question: 'Can you use Southwest points to fly to Hawaii?',
@@ -203,7 +223,7 @@ export const blogPosts: BlogPost[] = [
       },
       {
         question: 'How many Southwest points did we use for Hawaii?',
-        answer: 'We used 104,000 Southwest Rapid Rewards points for four adult round-trip tickets from San Antonio to Lihue, Kauai. Each adult ticket cost 26,000 points plus $11.20 in taxes.',
+        answer: 'We used 104,000 Southwest Rapid Rewards points for the four adult round-trip tickets booked from my wife\'s account from San Antonio to Lihue, Kauai. Each adult ticket cost 26,000 points plus $11.20 in taxes.',
       },
       {
         question: 'Was the Hawaii trip free?',
