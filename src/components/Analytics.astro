@@ -1,0 +1,100 @@
+---
+const measurementId = 'G-XSTNVD0CLC';
+---
+
+<script is:inline define:vars={{ measurementId }}>
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', measurementId, { send_page_view: false });
+  window.gtag('event', 'page_view', {
+    page_title: document.title,
+    page_location: window.location.href,
+    page_referrer: document.referrer || undefined,
+  });
+
+  window.tcfTrack = function (eventName, parameters = {}) {
+    window.gtag('event', eventName, {
+      ...parameters,
+      page_path: window.location.pathname,
+      page_title: document.title,
+    });
+  };
+
+  const initializeTcfTracking = () => {
+  document.querySelectorAll('[data-tcf-event]').forEach((element) => {
+    element.addEventListener('click', () => {
+      const eventName = element.getAttribute('data-tcf-event');
+      if (!eventName) return;
+      window.tcfTrack(eventName, {
+        location: element.getAttribute('data-tcf-location') || undefined,
+        label: element.getAttribute('data-tcf-label') || element.textContent?.trim().slice(0, 80),
+        airport: element.getAttribute('data-airport') || undefined,
+        destination: element.getAttribute('data-destination') || undefined,
+      });
+    });
+  });
+
+  document.querySelectorAll('[data-tcf-airport], #airport, #home_airport').forEach((element) => {
+    element.addEventListener('change', () => {
+      window.tcfTrack('airport_selected', {
+        airport: element.value || element.getAttribute('data-airport'),
+        location: element.getAttribute('data-tcf-location') || 'form',
+      });
+    });
+  });
+
+  document.querySelectorAll('[data-tcf-form]').forEach((form) => {
+    form.addEventListener('submit', () => {
+      window.tcfTrack('signup_submit', {
+        form_name: form.getAttribute('data-tcf-form'),
+        airport: form.querySelector('[name="airport"]')?.value || undefined,
+      });
+    });
+  });
+
+  const signupForm = document.querySelector('[data-tcf-form]');
+  if (signupForm && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        window.tcfTrack('signup_view', {
+          form_name: signupForm.getAttribute('data-tcf-form'),
+          location: window.location.pathname,
+        });
+        observer.disconnect();
+      }
+    }, { threshold: 0.25 });
+    observer.observe(signupForm);
+  }
+
+  const dealRoot = document.querySelector('[data-tcf-deal-id]');
+  if (dealRoot) {
+    window.tcfTrack('deal_view', {
+      deal_id: dealRoot.getAttribute('data-tcf-deal-id') || undefined,
+      origin: dealRoot.getAttribute('data-origin') || undefined,
+      destination: dealRoot.getAttribute('data-destination') || undefined,
+      airline: dealRoot.getAttribute('data-airline') || undefined,
+      price: dealRoot.getAttribute('data-price') || undefined,
+    });
+  }
+
+  document.querySelectorAll('[data-tcf-booking]').forEach((link) => {
+    link.addEventListener('click', () => {
+      window.tcfTrack('booking_link_click', {
+        origin: link.getAttribute('data-origin') || undefined,
+        destination: link.getAttribute('data-destination') || undefined,
+        deal_id: link.getAttribute('data-deal-id') || undefined,
+      });
+    });
+  });
+
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeTcfTracking, { once: true });
+  } else {
+    initializeTcfTracking();
+  }
+</script>
+
+<script async src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}></script>

@@ -247,6 +247,11 @@ const AIRPORT_LABELS: Record<string, string> = {
       const email = urlParams.get('email');
       const airport = urlParams.get('airport');
 
+      window.tcfTrack?.('signup_success', {
+        airport: airport || undefined,
+        source: 'homepage_waitlist',
+      });
+
       const labels: Record<string, string> = {
         MFE: 'McAllen (MFE)',
         LRD: 'Laredo (LRD)',

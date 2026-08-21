@@ -398,6 +398,290 @@ export const blogPosts: BlogPost[] = [
       },
     ],
   },
+  {
+    slug: 'dfw-vs-dal-which-dallas-airport-is-cheaper',
+    title: 'DFW vs. DAL: Which Dallas Airport Is Cheaper for Your Trip?',
+    metaTitle: 'DFW vs. DAL: Which Dallas Airport Is Cheaper?',
+    description: 'Compare DFW and Dallas Love Field before booking. Learn which airport usually makes more sense for international trips, domestic Southwest flights, and the true cost of getting to the airport.',
+    publishedAt: '2026-08-21',
+    category: 'Airport Strategy',
+    readingMinutes: 7,
+    heroLabel: 'Dallas airport comparison',
+    primaryAirportCodes: ['DFW', 'DAL'],
+    relatedLinks: [
+      { label: 'Deals from DFW', href: '/deals/from/dfw' },
+      { label: 'Deals from Dallas Love Field', href: '/deals/from/dal' },
+      { label: 'Past Texas flight deals', href: '/past-deals' },
+      { label: 'Google Flights checklist', href: '/blog/google-flights-checklist-for-texas-deals' },
+    ],
+    tldr: [
+      'DFW is usually the better first search for international flights and routes with several airlines.',
+      'DAL is usually the better first search for domestic Southwest flights.',
+      'The lower fare is not always the lower trip cost. Add parking, gas, airport time, bags, and connection risk before deciding.',
+    ],
+    sections: [
+      {
+        heading: 'The short answer: DFW for international, DAL for domestic Southwest',
+        body: [
+          'Dallas has two airports, but they do different jobs. DFW is the broad-network airport with the strongest international reach. DAL is the Southwest-focused domestic airport near central Dallas.',
+          'That makes the first search simple. Start with DFW for Europe, Asia, Mexico, and other international trips. Start with DAL for domestic Southwest routes. Then compare the other airport if your dates are flexible.',
+        ],
+      },
+      {
+        heading: 'When DFW is the better choice',
+        body: [
+          'DFW is the better starting point when you need an international itinerary, a nonstop route, or more than one airline to compare. It also deserves a look when the schedule matters more than a small fare difference.',
+          'The airport can be a better fit for travelers on the north or west side of the metroplex, even when Love Field appears closer on a map. Your actual drive matters more than the airport label.',
+        ],
+        bullets: [
+          'International flights and long-haul routes',
+          'Trips where a nonstop schedule saves a connection',
+          'Routes where American or another carrier has more useful timing',
+          'Travelers who live closer to DFW than central Dallas',
+        ],
+      },
+      {
+        heading: 'When DAL is the better choice',
+        body: [
+          'DAL is the natural first search for domestic Southwest flights. It can also make sense for short trips where the airport is easier to reach and the schedule works.',
+          'Do not assume every Southwest sale is available on every date. Open the final fare, check the flight times, and make sure bags and seat choices do not erase the savings.',
+        ],
+        bullets: [
+          'Domestic Southwest routes',
+          'Texas city pairs and major U.S. destinations',
+          'Trips where Love Field is meaningfully easier to reach',
+          'Flexible dates that let you use a real sale fare',
+        ],
+      },
+      {
+        heading: 'How to compare the true cost',
+        body: [
+          'A $20 lower fare is not a $20 savings if it adds a long drive, expensive parking, or a separate positioning ticket. Write down the full cost for both airports before you book.',
+        ],
+        table: {
+          headers: ['Cost to compare', 'What to check'],
+          rows: [
+            ['Ticket', 'Round-trip fare, bags, seats, and change rules'],
+            ['Getting there', 'Gas, tolls, rideshare, or parking'],
+            ['Time', 'Drive length, airport arrival, and connection time'],
+            ['Risk', 'Separate tickets and missed-connection exposure'],
+          ],
+        },
+      },
+      {
+        heading: 'A practical Dallas search routine',
+        body: [
+          'Search DFW and DAL with the same dates and destination. Check the airline checkout page, not only the first price shown in a search result. If one airport is cheaper by a small amount, choose the airport that creates the easier day.',
+          'For international travel, start with DFW. For domestic Southwest travel, start with DAL. Keep both airport deal pages bookmarked so you can act when the fare is actually useful.',
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: 'Is DFW or DAL cheaper for flights from Dallas?',
+        answer: 'It depends on the route and date. DAL is often the better first search for domestic Southwest flights, while DFW usually gives you more choices for international travel. Compare the complete trip cost before booking.',
+      },
+      {
+        question: 'Is Dallas Love Field cheaper than DFW?',
+        answer: 'Sometimes, especially on domestic Southwest routes. A lower DAL fare may not be cheaper after parking, driving, bags, and schedule changes are included.',
+      },
+      {
+        question: 'Which Dallas airport should I use for international flights?',
+        answer: 'Start with DFW for international flights. Love Field is focused on domestic service, while DFW has the broader international network and more long-haul options.',
+      },
+      {
+        question: 'Can I fly from DAL and connect to an international flight?',
+        answer: 'You can use a domestic positioning flight in some situations, but separate tickets add missed-connection risk. Leave a large buffer or book a single itinerary when possible.',
+      },
+    ],
+  },
+  {
+    slug: 'cheap-flights-from-san-antonio-guide',
+    title: 'Cheap Flights from San Antonio: How to Find the Better Fare from SAT',
+    metaTitle: 'Cheap Flights from San Antonio: SAT Deal Guide',
+    description: 'A practical San Antonio flight guide covering SAT deals, Mexico routes, nearby Austin comparisons, flexible dates, and what to check before booking a low fare.',
+    publishedAt: '2026-08-21',
+    category: 'Regional Flight Strategy',
+    readingMinutes: 8,
+    heroLabel: 'San Antonio deal guide',
+    primaryAirportCodes: ['SAT', 'AUS'],
+    relatedLinks: [
+      { label: 'Deals from San Antonio', href: '/deals/from/sat' },
+      { label: 'San Antonio airport guide', href: '/guides/sat' },
+      { label: 'Deals from Austin', href: '/deals/from/aus' },
+      { label: 'Past Texas flight deals', href: '/past-deals' },
+    ],
+    tldr: [
+      'Search SAT first when the trip starts in San Antonio. A nearby airport only helps when the fare difference covers the added drive and parking.',
+      'Mexico routes, domestic Texas routes, and flexible-date searches are good places to start looking for a lower SAT fare.',
+      'Check the airline checkout page and wait for confirmation before booking nonrefundable parts of the trip.',
+    ],
+    sections: [
+      {
+        heading: 'Start with SAT, then compare Austin when it makes sense',
+        body: [
+          'The cheapest flight search is not always the search with the most airports. If your trip begins in San Antonio, open SAT first. You already know the drive, parking routine, and departure time that work for you.',
+          'Austin is worth comparing when it has a much better fare, a nonstop route SAT does not offer, or a schedule that saves enough time to justify the drive. Do not turn a small ticket difference into an expensive airport day.',
+        ],
+      },
+      {
+        heading: 'Routes worth watching from San Antonio',
+        body: [
+          'SAT is useful for travelers headed to Mexico, major U.S. cities, and other Texas airports. The route that looks cheapest changes with the season, airline schedule, and travel dates, so a watchlist works better than one permanent claim about the lowest fare.',
+        ],
+        bullets: [
+          'Mexico, especially when several carriers are competing for the same traveler',
+          'Domestic trips to Dallas, Houston, the West Coast, and the Northeast',
+          'Weekend trips where Tuesday or Wednesday departures are possible',
+          'Award flights when points price the SAT itinerary reasonably',
+        ],
+      },
+      {
+        heading: 'Use flexible dates before changing airports',
+        body: [
+          'Try moving the departure or return by one or two days before committing to the drive north. A cheaper day from SAT often saves more than the headline fare from Austin once you add gas and parking.',
+          'Friday and Sunday flights are popular because they fit normal work schedules. If you can leave Tuesday or Wednesday, check those days first and compare the complete itinerary.',
+        ],
+      },
+      {
+        heading: 'Know when the Austin drive is worth it',
+        body: [
+          'Austin can win when the fare gap is large, the route is nonstop, or the schedule avoids a long connection. It is harder to justify when the difference is small or when the Austin flight leaves early enough to require a hotel.',
+        ],
+        table: {
+          headers: ['Austin advantage', 'What it needs to cover'],
+          rows: [
+            ['Lower ticket price', 'Gas, tolls, parking, and your time'],
+            ['Nonstop route', 'Extra drive and airport arrival time'],
+            ['Better schedule', 'The value of a shorter or easier travel day'],
+            ['More award space', 'Any positioning risk and separate-ticket exposure'],
+          ],
+        },
+      },
+      {
+        heading: 'What to verify before booking',
+        body: [
+          'A low fare is useful only when the details survive a closer look. Confirm that the route starts at SAT, the dates are correct, the airline is the one shown, and the final checkout price includes the bags or seats you need.',
+          'If the fare is unusually low, wait for the airline confirmation before booking hotels, rental cars, or event tickets. A deal alert is a starting point for verification.',
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: 'What are the cheapest flights from San Antonio?',
+        answer: 'The cheapest SAT routes change with the date. Mexico, Texas city pairs, the West Coast, and selected East Coast routes are all worth watching. Flexible dates usually matter more than a permanent list of destinations.',
+      },
+      {
+        question: 'Is it cheaper to fly from San Antonio or Austin?',
+        answer: 'Sometimes Austin has the lower fare, but SAT may be cheaper after you include driving, parking, and your time. Compare the full trip rather than only the ticket price.',
+      },
+      {
+        question: 'When should I book a flight from San Antonio?',
+        answer: 'Start watching as soon as you know the travel window, then act when the fare fits your dates and budget. There is no single booking day that guarantees the lowest SAT price.',
+      },
+      {
+        question: 'How do I get alerts for cheap flights from SAT?',
+        answer: 'Use an airport-specific alert list for SAT so the deals match the airport you can actually use. You can also compare the SAT and AUS pages when a trip has flexible departure options.',
+      },
+    ],
+  },
+  {
+    slug: 'iah-vs-hou-cheap-flights-from-houston',
+    title: 'IAH vs. HOU: How to Find Cheap Flights from Houston',
+    metaTitle: 'IAH vs. HOU: Cheap Flights from Houston',
+    description: 'Compare Houston Bush and Houston Hobby before booking. Learn when IAH is the better international search, when HOU makes sense for Southwest, and how to compare the real trip cost.',
+    publishedAt: '2026-08-21',
+    category: 'Airport Strategy',
+    readingMinutes: 8,
+    heroLabel: 'Houston airport comparison',
+    primaryAirportCodes: ['IAH', 'HOU'],
+    relatedLinks: [
+      { label: 'Deals from Houston IAH', href: '/deals/from/iah' },
+      { label: 'Deals from Houston Hobby', href: '/deals/from/hou' },
+      { label: 'Houston airport guide', href: '/guides/hou' },
+      { label: 'Google Flights checklist', href: '/blog/google-flights-checklist-for-texas-deals' },
+    ],
+    tldr: [
+      'IAH is the better first search for international trips and routes with United or more connecting options.',
+      'HOU is the better first search for domestic Southwest flights and some Mexico or Caribbean routes.',
+      'Compare the final fare, airport drive, parking, bags, and schedule before deciding that one Houston airport is cheaper.',
+    ],
+    sections: [
+      {
+        heading: 'IAH and HOU are different searches',
+        body: [
+          'Houston travelers often search both airports because each one has a different strength. IAH is the broad international airport and United hub. HOU is the Southwest-focused airport for domestic routes and selected international service.',
+          'The right choice depends on the trip. If you are flying to Europe, South America, or a destination with several connection choices, begin at IAH. If you are flying domestically on Southwest, begin at HOU.',
+        ],
+      },
+      {
+        heading: 'When IAH is the better starting point',
+        body: [
+          'IAH deserves the first search for international travel, especially when you want a single itinerary with a connection through Houston. It also gives you more carrier and schedule combinations for many long-haul routes.',
+          'For domestic trips, do not assume IAH loses. A better departure time, a nonstop flight, or a fare that includes the right baggage can make IAH the easier choice.',
+        ],
+        bullets: [
+          'International travel beyond Mexico and the Caribbean',
+          'United itineraries and broader connection choices',
+          'Trips where a single booking matters',
+          'Routes where IAH has the better nonstop schedule',
+        ],
+      },
+      {
+        heading: 'When HOU is the better starting point',
+        body: [
+          'HOU is the natural first search for domestic Southwest travel. The airport can also be useful for Mexico and Caribbean routes when Southwest has a sale that fits your dates.',
+          'Check the fare details before you book. A sale may apply to only certain travel days, and the lowest base price may not be the lowest final price for your bags or schedule.',
+        ],
+        bullets: [
+          'Domestic Southwest flights',
+          'Texas city pairs and popular U.S. leisure routes',
+          'Mexico and Caribbean trips that fit Southwest service',
+          'Travelers who live closer to Hobby',
+        ],
+      },
+      {
+        heading: 'Compare the full Houston trip',
+        body: [
+          'IAH and HOU can be far enough apart that a small fare difference is not the whole story. Add the cost and time of getting to each airport before you choose.',
+        ],
+        table: {
+          headers: ['Question', 'Why it matters'],
+          rows: [
+            ['Which airport is closer?', 'A shorter drive can outweigh a small fare gap.'],
+            ['Is the flight nonstop?', 'A connection changes the value of the ticket.'],
+            ['What is included?', 'Bags, seats, and change rules affect the total.'],
+            ['Is it one itinerary?', 'Separate tickets add missed-connection risk.'],
+          ],
+        },
+      },
+      {
+        heading: 'A simple Houston deal-search routine',
+        body: [
+          'Search IAH and HOU with the same destination and dates. Use IAH as the international baseline and HOU as the Southwest domestic check. If the fares are close, choose the airport with the better schedule and easier drive.',
+          'When a fare looks unusually low, verify it on the airline site and wait for the confirmation email before making the rest of the trip nonrefundable.',
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: 'Is IAH or HOU cheaper for flights from Houston?',
+        answer: 'It depends on the route and date. HOU is often the better first search for domestic Southwest flights, while IAH is usually the better first search for international travel. Compare the full trip cost.',
+      },
+      {
+        question: 'Which Houston airport is better for international flights?',
+        answer: 'Start with IAH for international flights beyond Mexico and the Caribbean. It has the broader international network and more connection choices. HOU is still worth checking for Southwest routes that fit its schedule.',
+      },
+      {
+        question: 'Is Houston Hobby only for Southwest?',
+        answer: 'HOU is strongly associated with Southwest and is a good place to start for domestic Southwest fares. Always check the current route and airline schedule for your dates.',
+      },
+      {
+        question: 'How do I compare IAH and HOU for a cheap flight?',
+        answer: 'Search both airports with the same dates, then compare the final fare, bags, schedule, airport drive, parking, and whether the itinerary is booked on one ticket.',
+      },
+    ],
+  },
 ];
 
 export const publishedBlogPosts = blogPosts.filter((post) => post.status !== 'draft');

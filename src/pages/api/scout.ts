@@ -2,6 +2,8 @@ import type { APIRoute } from 'astro';
 import { processDeal } from '../../lib/engine';
 import { getCarrierTier, normalizeAirlineName } from '../../lib/airlines';
 import { validateWithFli } from '../../lib/fli-validator';
+import { persistDealObservations } from '../../lib/deal-observations';
+import { selectDiverseCandidates } from '../../lib/deal-quality';
 
 type OriginGroup = 'regional' | 'major';
 
@@ -99,6 +101,22 @@ function extractDestinationCode(destination: any): string | undefined {
         .find((value) => /^[A-Z]{3}$/.test(value));
 
     return code || undefined;
+}
+
+function extractDestinations(data: any): any[] {
+    if (Array.isArray(data?.destinations)) return data.destinations;
+    if (!Array.isArray(data?.deals)) return [];
+
+    return data.deals
+        .map((deal: any) => ({
+            ...deal,
+            name: deal.name || deal.destination_name || deal.destination || deal.arrival_airport?.name,
+            flight_price: deal.flight_price ?? deal.price ?? deal.total_price,
+            airline: deal.airline || deal.airlines?.join?.(', '),
+            share_flights_url: deal.share_flights_url || deal.booking_link || deal.link,
+            destination_id: deal.destination_id || deal.arrival_airport?.id,
+        }))
+        .filter((deal: any) => typeof deal.name === 'string' && deal.name.length > 0);
 }
 
 function buildCandidates(origin: string, originGroup: OriginGroup, destinations: any[]): ScoutCandidate[] {
@@ -201,11 +219,11 @@ function selectTopDeals(candidates: ScoutCandidate[]): ScoutCandidate[] {
     }
 
     for (const candidate of sorted) {
-        if (selected.length >= 5) break;
+        if (selected.length >= 8) break;
         tryAddCandidate(candidate);
     }
 
-    return selected;
+    return selectDiverseCandidates(selected, 5);
 }
 
 export const GET: APIRoute = async ({ request }) => {
@@ -219,8 +237,16 @@ export const GET: APIRoute = async ({ request }) => {
         const urlParams = new URL(request.url).searchParams;
         const isTest = urlParams.get('test') === 'true';
         const isDryRun = urlParams.get('dryRun') === 'true';
+        const isShadow = urlParams.get('shadow') === 'true';
         const shouldValidateWithFli = urlParams.get('validate') === 'fli';
         const originOverride = urlParams.get('origin')?.toUpperCase();
+        const requestedTripLength = urlParams.get('trip_length') || '';
+        const shadowProfiles = ['2,4', '5,9', '10,16'];
+        const shadowTripLength = shadowProfiles.includes(requestedTripLength)
+            ? requestedTripLength
+            : shadowProfiles[Math.floor(Date.now() / (24 * 60 * 60 * 1000)) % shadowProfiles.length];
+        const sourceEngine = isShadow ? 'google_flights_deals' : 'google_travel_explore';
+        const readOnly = isDryRun || isShadow;
 
         // Check for a secret to prevent random people from triggering this
         const cronSecret = import.meta.env.CRON_SECRET || process.env.CRON_SECRET;
@@ -238,6 +264,12 @@ export const GET: APIRoute = async ({ request }) => {
             major: ["DFW", "IAH", "AUS", "SAT", "HOU", "DAL"]
         };
         const scanSlot = Math.floor(Date.now() / (12 * 60 * 60 * 1000));
+        if (isShadow && !originOverride) {
+            return new Response(JSON.stringify({
+                error: 'Shadow mode requires one origin per request.',
+                example: '/api/scout?shadow=true&origin=DFW&trip_length=2,4',
+            }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+        }
         const scoutList = originOverride && PRIMARY_TX_AIRPORTS.includes(originOverride)
             ? [originOverride]
             : [
@@ -252,32 +284,55 @@ export const GET: APIRoute = async ({ request }) => {
 
         for (const origin of scoutList) {
             const params = new URLSearchParams({
-                engine: 'google_travel_explore',
+                engine: sourceEngine,
                 departure_id: origin,
                 currency: 'USD',
                 hl: 'en',
                 api_key: serpApiKey
             });
+            if (isShadow) {
+                params.set('trip_length', shadowTripLength);
+            }
 
             const url = `https://serpapi.com/search.json?${params.toString()}`;
 
             const res = await fetch(url);
             const data = await res.json();
 
-            if (data.destinations && data.destinations.length > 0) {
+            const destinations = extractDestinations(data);
+            if (destinations.length > 0) {
                 const originGroup: OriginGroup = originPools.major.includes(origin) ? 'major' : 'regional';
-                allDealsFound.push(...buildCandidates(origin, originGroup, data.destinations));
+                allDealsFound.push(...buildCandidates(origin, originGroup, destinations));
             }
         }
 
         if (allDealsFound.length === 0) {
             console.log(`   ❌ Scout found no candidates that cleared the value thresholds today.`);
+            if (readOnly) {
+                return new Response(JSON.stringify({
+                    success: true,
+                    dryRun: isDryRun,
+                    shadow: isShadow,
+                    sourceEngine,
+                    tripLength: isShadow ? shadowTripLength : null,
+                    selectedOrigins: scoutList,
+                    dealsFound: 0,
+                    topDeals: [],
+                    sideEffects: {
+                        processDealCalled: false,
+                        supabaseWrites: false,
+                        discordAlerts: false,
+                        resendDrafts: false,
+                        socialPosts: false,
+                    }
+                }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+            }
             return new Response(JSON.stringify({ message: "No deals found." }), { status: 200, headers: { 'Content-Type': 'application/json' } });
         }
 
         const topDeals = selectTopDeals(allDealsFound);
 
-        if (isDryRun) {
+        if (readOnly) {
             const validatedDeals = shouldValidateWithFli
                 ? await Promise.all(topDeals.map(async (flight) => ({
                     ...flight,
@@ -292,16 +347,34 @@ export const GET: APIRoute = async ({ request }) => {
                 })))
                 : topDeals;
 
+            const observationResult = isShadow
+                ? await persistDealObservations(topDeals.map((flight) => ({
+                    sourceEngine,
+                    origin: flight.origin,
+                    destination: flight.destination,
+                    destinationCode: flight.destinationCode,
+                    airline: flight.airline,
+                    price: flight.price,
+                    startDate: flight.start_date,
+                    endDate: flight.end_date,
+                    bookingLink: flight.link,
+                })))
+                : { persisted: false, count: 0, reason: 'dry-run' };
+
             return new Response(JSON.stringify({
                 success: true,
-                dryRun: true,
+                dryRun: isDryRun,
+                shadow: isShadow,
+                sourceEngine,
+                tripLength: isShadow ? shadowTripLength : null,
                 validation: shouldValidateWithFli ? 'fli' : 'none',
                 selectedOrigins: scoutList,
                 dealsFound: allDealsFound.length,
                 topDeals: validatedDeals,
+                observations: observationResult,
                 sideEffects: {
                     processDealCalled: false,
-                    supabaseWrites: false,
+                    supabaseWrites: observationResult.persisted,
                     discordAlerts: false,
                     resendDrafts: false,
                     socialPosts: false,

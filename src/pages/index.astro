@@ -320,14 +320,6 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap">
     <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,300,400&display=swap">
   </noscript>
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XSTNVD0CLC"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-XSTNVD0CLC');
-  </script>
 </head>
 
 <body class="bg-primary text-primary font-body scroll-smooth selection:bg-tcf-aviation-blue/30 selection:text-white">
@@ -366,12 +358,27 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
         Two types of anomalies, both worth money: <span class="text-white font-semibold">Cash glitches</span> where fares briefly fall far below normal, and <span class="text-white font-semibold">award sweet spots</span> where points go further from Texas. We monitor 19 Texas airports and route the best finds through manual review.
       </p>
 
+      <div class="anim-fade-up delay-3 mb-10 grid w-full max-w-3xl grid-cols-1 gap-3 text-left sm:grid-cols-3">
+        <div class="rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4 backdrop-blur-sm">
+          <p class="text-2xl font-black text-white">19</p>
+          <p class="mt-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">Texas airports watched</p>
+        </div>
+        <div class="rounded-2xl border border-tcf-gold/20 bg-tcf-gold/[0.06] px-5 py-4 backdrop-blur-sm">
+          <p class="text-2xl font-black text-tcf-gold">{archivedAlertCount ?? '—'}</p>
+          <p class="mt-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">Verified alerts archived</p>
+        </div>
+        <div class="rounded-2xl border border-tcf-aviation-blue/20 bg-tcf-aviation-blue/[0.06] px-5 py-4 backdrop-blur-sm">
+          <p class="text-2xl font-black text-tcf-aviation-blue">{subscriberCount ?? '—'}</p>
+          <p class="mt-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">Active email subscribers</p>
+        </div>
+      </div>
+
       <!-- WAITLIST FORM -->
       <div class="anim-fade-up delay-4 w-full max-w-lg scroll-mt-32" id="waitlist">
         <div class="liquid-glass p-8 md:p-10 rounded-[2.5rem] shadow-2xl relative">
           <div class="absolute -top-10 -left-10 w-20 h-20 bg-tcf-aviation-blue/20 blur-2xl rounded-full"></div>
           
-          <form id="waitlist-form" class="flex flex-col gap-6 relative">
+          <form id="waitlist-form" data-tcf-form="homepage_waitlist" class="flex flex-col gap-6 relative">
             <div class="flex flex-col gap-2.5 text-left">
               <label for="airport" class="text-slate-400 text-xs font-bold uppercase tracking-widest pl-1">Home Airport</label>
               <select id="airport" name="airport" required class="input appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20class%3D%22lucide%20lucide-chevron-down%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25em] bg-[right_1.25rem_center] bg-no-repeat">
@@ -394,7 +401,7 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
               />
             </div>
 
-            <button type="submit" id="submit-btn" class="btn-primary w-full mt-2 text-lg">
+            <button type="submit" id="submit-btn" data-tcf-event="cta_clicked" data-tcf-location="homepage_waitlist" class="btn-primary w-full mt-2 text-lg">
               Alert Me When Deals Drop
             </button>
 
@@ -404,7 +411,7 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
                 Secure & Private
               </div>
               <div class="w-1 h-1 rounded-full bg-slate-700"></div>
-              <span>April 2026 Batch</span>
+              <span>Founding list is open</span>
             </div>
             <p class="text-center text-[11px] text-slate-500 font-body leading-relaxed">
               No spam · One alert when your airport has a deal · Unsubscribe anytime
@@ -1034,7 +1041,7 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
           throw new Error(errorData.details || errorData.error || 'Subscription failed');
         }
 
-        // Success redirect
+        // The welcome page records the conversion after the redirect.
         window.location.href = `/welcome?email=${encodeURIComponent(emailInput.value)}&airport=${encodeURIComponent(airportInput.value)}`;
 
       } catch (err: any) {

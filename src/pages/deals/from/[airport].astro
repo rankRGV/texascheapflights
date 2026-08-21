@@ -122,6 +122,7 @@ const { data: deals } = await supabase
   .order('sent_at', { ascending: false });
 
 const dealList = deals ?? [];
+const lastUpdated = dealList[0]?.sent_at ? new Date(dealList[0].sent_at) : null;
 
 // ── Phase 1 priority airports: rich content for AI citability + ranking ──────
 const AIRPORT_CONTENT: Record<string, {
@@ -171,12 +172,12 @@ const AIRPORT_CONTENT: Record<string, {
     ],
   },
   DFW: {
-    intro: "Dallas/Fort Worth International is American Airlines' largest hub — making it the single best Texas airport for error fares. With 900+ daily flights and 260+ global destinations, DFW sees pricing glitches 2–4 times per month. The sheer volume of flights means errors surface more often here than any other airport in the state.",
+    intro: "If you live in North Texas, DFW is the first airport to check for cheap flights because it gives you the widest choice of routes. Use it as the starting point for international trips, then compare Dallas Love Field when a domestic Southwest fare may be a better fit.",
     stats: [
-      { label: "Annual passengers", value: "73M+" },
-      { label: "Nonstop destinations", value: "260+" },
-      { label: "Daily flights", value: "900+" },
-      { label: "Airlines at DFW", value: "25+" },
+      { label: "Best for", value: "Long-haul" },
+      { label: "Main hub", value: "American" },
+      { label: "Compare with", value: "DAL" },
+      { label: "Watch for", value: "Mexico + Europe" },
     ],
     routes: [
       { destination: "London (LHR)", typical: "$700–$950", errorFare: "$250–$450" },
@@ -185,37 +186,37 @@ const AIRPORT_CONTENT: Record<string, {
       { destination: "Paris (CDG)", typical: "$600–$900", errorFare: "$250–$450" },
     ],
     tips: [
-      "DFW is American Airlines' main hub — AA's frequent fare adjustments create more error fare windows here than anywhere else in Texas.",
-      "Business class error fares from DFW to Europe ($800–1,500 vs. typical $3,000–6,000) surface 3–4 times per year on average.",
-      "Watch Dallas Love Field (DAL) separately — it's exclusively Southwest and sometimes cheaper for domestic Texas routes.",
-      "DFW deals close fast. With millions of deal hunters monitoring this airport, most error fares disappear in under 2 hours.",
+      "Start with DFW for Europe, Asia, Mexico, and other international routes. The airport's size gives you more nonstop and one-stop combinations to compare.",
+      "Check DAL separately for domestic Southwest fares. A cheap Love Field ticket can beat a slightly lower DFW fare once parking, drive time, and airport hassle are included.",
+      "Search flexible dates before changing airports. Moving a trip by one or two days can save more than driving across the metroplex.",
+      "Treat an alert as a lead, not a guarantee. Confirm the fare, baggage rules, travel dates, and airline checkout price before making plans.",
     ],
     faqs: [
       {
         q: "What is the cheapest way to fly from Dallas to Europe?",
-        a: "Booking an error fare or flash sale from DFW is the most effective strategy — economy class deals to London, Paris, and Amsterdam surface for $250–450 several times per year. The typical price for these routes is $700–950. Flying during off-peak months (January, February, October, November) drops average fares 20–35%.",
+        a: "For international trips, start with DFW and search flexible dates across several months. Watch the fare, compare nearby dates, and sign up for DFW-specific alerts so you do not have to check every day. A short-lived sale can beat the normal price by hundreds of dollars, but the exact fare and availability must be verified before booking.",
       },
       {
         q: "What are the cheapest international flights from DFW?",
-        a: "DFW's cheapest international routes are typically to Mexico (Cancún $79–149 during error fares, Mexico City $89–149) and the Caribbean. Europe error fares to London, Paris, and Amsterdam surface several times per year for $250–500 — well below the typical $700–950.",
+        a: "Mexico and the Caribbean are often the easiest international markets to price from DFW. Europe and Asia are worth watching when your dates are flexible. The best destination depends on the travel window, airline, baggage cost, and whether the fare is still available when you open it.",
       },
       {
         q: "How does DFW compare to DAL (Love Field) for cheap flights?",
-        a: "DFW and Dallas Love Field serve very different needs. DFW offers 260+ destinations including extensive international service through American Airlines. DAL is exclusively Southwest Airlines with primarily domestic routes. For international cheap flights, DFW wins. For Southwest domestic routes, check DAL — fares are sometimes $30–80 cheaper.",
+        a: "Use DFW as the starting point for international travel and DAL as the starting point for domestic Southwest routes. Compare both for domestic trips, then include parking, drive time, baggage, and connection time in the total. The cheapest ticket is not always the cheapest trip.",
       },
       {
         q: "What is an error fare and how common are they at DFW?",
-        a: "An error fare is a pricing glitch — a missing fuel surcharge, currency conversion issue, or data feed mistake that creates a ticket price far below market rate. Because DFW operates through a large hub pricing system, these windows can appear and disappear quickly. They are legal to book, but airlines can cancel and refund mistaken fares in some cases.",
+        a: "An error fare is an unusually low price caused by a pricing or data mistake. It can disappear quickly, and an airline may cancel and refund a mistaken fare. Verify the itinerary and wait for the airline confirmation before booking hotels, tours, or other nonrefundable plans.",
       },
     ],
   },
   SAT: {
-    intro: "San Antonio International (SAT) is Texas' fourth-busiest airport and quietly one of the best for Mexico deals. Southwest, American, Delta, United, Spirit, and three Mexican carriers all compete here. SAT's position as a Mexico gateway — and its overlap with Austin's flight market just 1.5 hours north — makes it a dual-airport opportunity for Bexar County travelers.",
+    intro: "San Antonio travelers need a flight page that starts with SAT, shows the routes worth watching, and gives an honest Austin comparison. Use SAT as the first search for trips that begin in town, then check Austin when the fare or schedule is clearly better.",
     stats: [
-      { label: "Annual passengers", value: "10M+" },
-      { label: "Nonstop destinations", value: "55+" },
-      { label: "Airlines at SAT", value: "12+" },
-      { label: "Drive time from Austin", value: "1.5 hrs" },
+      { label: "Best for", value: "Mexico + U.S." },
+      { label: "Nearby option", value: "AUS" },
+      { label: "Compare drive", value: "About 1.5 hrs" },
+      { label: "Watch for", value: "Fare drops" },
     ],
     routes: [
       { destination: "Cancún (CUN)", typical: "$200–$350", errorFare: "$79–$149" },
@@ -224,27 +225,27 @@ const AIRPORT_CONTENT: Record<string, {
       { destination: "New York (JFK)", typical: "$150–$250", errorFare: "$79–$129" },
     ],
     tips: [
-      "SAT is large enough for real competition but small enough that fewer deal hunters are watching — giving you more time to book before an error fare closes.",
-      "San Antonio to Mexico via Aeromexico, Volaris, and Vivaaerobus creates a competitive Mexico corridor with frequent flash windows.",
-      "Fiesta (April), summer weekends, and holiday periods push SAT fares sharply higher — error fares outside these windows can be useful, but always wait for ticket confirmation before making non-refundable plans.",
-      "Monitoring both SAT and AUS (1.5 hrs north) doubles your error fare coverage for South-Central Texas travelers.",
+      "Check SAT first when the trip begins in San Antonio. A nearby airport only helps if the fare difference covers gas, parking, and the time spent getting there.",
+      "Keep Mexico routes on your watchlist, then compare domestic routes to the West Coast, Northeast, and major Texas hubs.",
+      "Use flexible dates around Fiesta, spring break, summer weekends, and the holidays. Those periods can make a normal fare look like a deal when it is not.",
+      "Monitor AUS as a comparison airport, not an automatic replacement. A one-hour flight search is easy; a longer drive is a real cost.",
     ],
     faqs: [
       {
         q: "What airlines fly nonstop from San Antonio (SAT)?",
-        a: "San Antonio International is served by American, Southwest, Delta, United, Spirit, Frontier, Aeromexico, Volaris, and Vivaaerobus. With 12+ airlines competing — including three Mexican carriers — SAT sees frequent flash sales on Mexico routes and periodic domestic error fares.",
+        a: "SAT has service from major U.S. airlines and carriers serving Mexico. The exact airline and nonstop route list changes, so check the current itinerary before booking. Our alerts focus on fare drops that are useful from San Antonio, not generic DFW deals.",
       },
       {
         q: "What are the cheapest flights from San Antonio?",
-        a: "SAT's cheapest routes historically include Cancún ($79–149 during error fares), Mexico City ($79–129), Dallas ($49–79), and Los Angeles ($79–119). Error fares to the East and West Coast from San Antonio surface several times per year at $79–129.",
+        a: "The best SAT deals depend on your dates. Mexico, Texas, the West Coast, and selected East Coast routes are all worth watching. We show the route, fare, dates, airline, and verification details so you can decide whether the price is useful for your trip.",
       },
       {
         q: "Is it cheaper to fly from San Antonio or Austin?",
-        a: "It depends on the route and timing. AUS has more routes and more airlines, meaning higher error fare frequency. SAT sometimes offers cheaper Mexico-specific deals and has fewer deal hunters competing. Monitoring both airports — just 1.5 hours apart — doubles your chances of catching the best deal.",
+        a: "Sometimes. AUS may offer more choices on a particular route, while SAT may win once you include the drive and parking. Compare the complete trip cost, not only the fare. If the difference is small, flying from SAT is usually the simpler choice.",
       },
       {
         q: "When is the cheapest time to fly from San Antonio?",
-        a: "January, February, and September are the cheapest months from SAT. Avoid Fiesta (April), spring break (March), and summer weekends. Mid-week departures are typically $30–60 cheaper than Friday/Sunday flights.",
+        a: "There is no single cheapest month for every SAT route. Start with flexible-date searches, then compare Tuesday and Wednesday departures with Friday and Sunday. Holiday periods, spring break, Fiesta, and summer weekends deserve extra scrutiny.",
       },
     ],
   },
@@ -368,12 +369,12 @@ const AIRPORT_CONTENT: Record<string, {
     ],
   },
   DAL: {
-    intro: "Dallas Love Field (DAL) is Southwest Airlines' home base and busiest station — a consistent source of domestic flash sales for Dallas-area travelers. While DAL's scope is domestic-focused, Southwest's 72-hour sales, holiday specials, and Wanna Get Away pricing produce real savings several times per month. For international deals, pair DAL monitoring with DFW.",
+    intro: "Dallas Love Field solves a different problem than DFW. DAL is the Southwest-focused domestic option for Dallas travelers, while DFW is the stronger starting point for international flights and broader airline choice. Compare both when the trip is flexible.",
     stats: [
-      { label: "Annual passengers", value: "8M+" },
-      { label: "Nonstop destinations", value: "50+" },
+      { label: "Best for", value: "Domestic" },
       { label: "Primary airline", value: "Southwest" },
-      { label: "From downtown Dallas", value: "10 min" },
+      { label: "Compare with", value: "DFW" },
+      { label: "International", value: "Use DFW" },
     ],
     routes: [
       { destination: "Houston (HOU/IAH)", typical: "$79–$150", errorFare: "$39–$69" },
@@ -382,39 +383,39 @@ const AIRPORT_CONTENT: Record<string, {
       { destination: "Chicago (MDW)", typical: "$100–$200", errorFare: "$49–$89" },
     ],
     tips: [
-      "DAL is Southwest's home base — their 72-hour sales frequently produce $39–59 one-way fares to Texas cities and major US hubs.",
-      "For international travel, use DAL for domestic positioning flights to international hubs and DFW for direct international routes.",
-      "Love Field's proximity to downtown Dallas (10 minutes vs. DFW's 30–45) can offset a slightly higher domestic fare — factor in total travel time.",
-      "Southwest's companion pass, earned through credit card spend, works from DAL and can effectively halve the cost of any paid fare.",
+      "Search DAL for domestic Southwest routes, especially when you can move your dates. Sale pricing can be useful, but it is not available on every flight or travel day.",
+      "Use DFW for international routes and for domestic trips where DFW has the better schedule or fare. Dallas has two airports, so compare both before booking.",
+      "Include airport transfer time and parking. Love Field may be closer to central Dallas, while DFW may be easier for travelers on the north or west side of the metroplex.",
+      "Check the final Southwest fare and flight schedule. A low base fare is only a good deal if the dates, bags, and departure time work for you.",
     ],
     faqs: [
       {
         q: "What airlines fly from Dallas Love Field (DAL)?",
-        a: "Dallas Love Field is primarily a Southwest Airlines hub, with Southwest operating the vast majority of flights. Love Field is the best Dallas-area airport for Southwest-specific deals, particularly for domestic routes to Texas cities and major US hubs.",
+        a: "Dallas Love Field is the Dallas-area airport to check first for domestic Southwest pricing. Confirm the current schedule and fare on Southwest or the booking page before treating a sale as available for your dates.",
       },
       {
         q: "Is DAL or DFW better for cheap flights from Dallas?",
-        a: "It depends on your destination. DFW wins for international routes with 260+ destinations through American Airlines. DAL wins for domestic Southwest-specific deals, especially Texas city pairs and major US hubs. Many Dallas travelers monitor both and book wherever the deal appears.",
+        a: "DAL is usually the better first check for domestic Southwest trips. DFW is the better first check for international travel and for routes with more airline choices. Compare the full itinerary, including airport travel and baggage costs.",
       },
       {
         q: "What are the cheapest flights from Dallas Love Field?",
-        a: "DAL's cheapest routes are Texas pairs (Houston $39–69 during flash sales, Austin $29–49) and major US hubs (Las Vegas $49–89, Chicago $49–89, Los Angeles $49–99). Southwest 72-hour sales make these prices available several times per month.",
+        a: "Texas city pairs and major domestic destinations are the main DAL opportunities. Search flexible dates and compare the final fare, schedule, and baggage rules. The exact cheapest route changes with Southwest's sale calendar.",
       },
       {
         q: "Does Dallas Love Field have international flights?",
-        a: "No — Dallas Love Field does not have scheduled international service. For international flights from Dallas, use DFW (Dallas/Fort Worth International). However, DAL is excellent for domestic positioning flights to international hubs if you're connecting onward.",
+        a: "Dallas Love Field is focused on domestic service. For international flights from the Dallas area, start with DFW. A separate DAL positioning flight can work in some cases, but separate tickets add missed-connection risk and should be treated carefully.",
       },
     ],
   },
 
   // ── Phase 3: Regional airports ───────────────────────────────────────────
   CRP: {
-    intro: "Corpus Christi International (CRP) serves South Texas' Gulf Coast city with connections to major Texas hubs. American, United, Southwest, and Delta compete here, creating periodic flash sale windows on the CRP-Houston and CRP-Dallas corridors that serve the region's oil, energy, and naval industry workforce.",
+    intro: "Corpus Christi International (CRP) does double duty as a Gulf Coast beach gateway and a Naval Air Station town — flight students from NAS Corpus Christi and tourists headed to Port Aransas and Mustang Island share the same small terminal. American, United, Southwest, and Delta keep the schedule alive, but nearly every seat connects through Houston or Dallas first. That narrow routing is actually CRP's opportunity: when IAH or DFW runs a fare war, the Corpus Christi leg often gets dragged down with it.",
     stats: [
       { label: "Annual passengers", value: "2M+" },
       { label: "Nonstop destinations", value: "10+" },
       { label: "Airlines at CRP", value: "4+" },
-      { label: "Drive time to SAT", value: "2.5 hrs" },
+      { label: "Nearest bigger airport", value: "SAT, 2.5 hrs" },
     ],
     routes: [
       { destination: "Dallas / DFW", typical: "$100–$200", errorFare: "$49–$89" },
@@ -423,37 +424,37 @@ const AIRPORT_CONTENT: Record<string, {
       { destination: "Phoenix (PHX)", typical: "$100–$200", errorFare: "$49–$89" },
     ],
     tips: [
-      "CRP has limited direct international options — for international deals, driving to SAT (2.5 hrs) or IAH (3.5 hrs) accesses significantly more carriers and routes.",
-      "Energy sector demand keeps CRP-Houston and CRP-Dallas fares relatively stable, but off-peak windows (January, September) still see flash sales.",
-      "American's regional network from CRP connects to DFW hub, where same-day international error fares are reachable with flexible timing.",
-      "Award zone pricing often places CRP in the same tier as SAT or AUS for hub-to-hub redemptions.",
+      "Corpus Christi's fares move with Houston's. Watch IAH and HOU fare wars closely — a Southwest or United price cut out of Houston frequently shows up on the CRP leg within days.",
+      "Hurricane season (June–November) scrambles Gulf Coast pricing in both directions — last-minute spikes before a storm, steep discounts once a system passes. Flexible dates pay off here more than almost anywhere else in Texas.",
+      "Port Aransas and Mustang Island tourism peaks Memorial Day through Labor Day. Book shoulder-season (April–May, September–October) for beach weather without the beach-season fares.",
+      "CRP has no direct international service. If Mexico or the Caribbean is the destination, price SAT (2.5 hrs) and IAH (3.5 hrs) side by side before committing to a Corpus Christi connection.",
     ],
     faqs: [
       {
-        q: "What airlines fly from Corpus Christi (CRP)?",
-        a: "Corpus Christi International is served by American, United, Southwest, and Delta. Most routes connect to Texas hubs (DFW, IAH, HOU) with onward connections. Direct nonstop routes outside Texas include Chicago and Phoenix.",
+        q: "Why does Corpus Christi have so few direct flights?",
+        a: "CRP is a connector airport — American, United, Southwest, and Delta route nearly everything through Houston or Dallas first. With military flight training at nearby NAS Corpus Christi and Gulf Coast tourism filling seats, airlines have little incentive to add nonstop routes beyond regional hubs and a handful of seasonal leisure markets like Chicago and Phoenix.",
       },
       {
-        q: "What are the cheapest flights from Corpus Christi?",
-        a: "CRP's cheapest routes connect to Texas hubs: Houston ($39–79 during flash sales), Dallas ($49–89), and San Antonio ($49–79). For cheaper international travel, driving to SAT (2.5 hours) or IAH (3.5 hours) significantly expands your options.",
+        q: "Best time of year to find cheap flights from Corpus Christi?",
+        a: "April, May, September, and October — after hurricane season concerns ease and before peak beach season hits. Avoid June through August, when Gulf Coast leisure travel pushes CRP fares well above its already-thin baseline.",
       },
       {
-        q: "Is it worth driving from Corpus Christi to San Antonio for flights?",
-        a: "For international travel, yes — SAT's 12+ airlines and 55+ destinations far exceed CRP's options. For domestic travel to Texas hubs, the 2.5-hour drive may not be worth it unless you find a significantly better deal. Monitor both and compare.",
+        q: "Does a hurricane threat affect Corpus Christi flight prices?",
+        a: "Yes, in both directions. Fares spike in the days before a storm as residents book outbound seats, then often drop once the system passes and airlines need to refill empty planes. Subscribers who can move fast on short notice catch some of CRP's best deals during these windows.",
       },
       {
-        q: "When is the cheapest time to fly from Corpus Christi?",
-        a: "January, February, and September are the cheapest months from CRP. Avoid spring break (March) and summer weekends when Gulf Coast leisure travel peaks.",
+        q: "Is it worth driving from Corpus Christi to San Antonio for a flight?",
+        a: "For international travel, usually yes — SAT's 12+ airlines beat CRP's four by a wide margin. For a routine Houston or Dallas trip, the 2.5-hour drive rarely beats just flying out of CRP directly.",
       },
     ],
   },
   MAF: {
-    intro: "Midland International Air & Space Port (MAF) serves the Permian Basin — one of the world's most active oil production regions. American, Southwest, Delta, and United compete here, and the energy industry workforce drives consistent demand. Flexible travel dates during energy sector downturns can surface surprisingly competitive fares on the MAF-Dallas and MAF-Houston corridors.",
+    intro: "Midland International Air & Space Port carries a name most regional airports don't — it's one of a small number of FAA-licensed commercial spaceports in the country, a leftover from a 2014 launch-site bid that never quite became a regular operation. What did take off is the Permian Basin oil business sitting on top of it. American, Southwest, Delta, and United all fly here primarily to move oilfield executives and crews between Midland and Dallas or Houston, and ticket prices track the price of crude almost as closely as the local economy does.",
     stats: [
       { label: "Annual passengers", value: "1M+" },
       { label: "Nonstop destinations", value: "8+" },
       { label: "Airlines at MAF", value: "4+" },
-      { label: "Drive time to ELP", value: "2.5 hrs" },
+      { label: "FAA spaceport license", value: "Since 2014" },
     ],
     routes: [
       { destination: "Dallas / DFW", typical: "$100–$200", errorFare: "$49–$89" },
@@ -462,37 +463,37 @@ const AIRPORT_CONTENT: Record<string, {
       { destination: "Denver (DEN)", typical: "$100–$200", errorFare: "$49–$89" },
     ],
     tips: [
-      "Oil sector cycles affect MAF demand — when energy prices drop, business travel declines and airlines occasionally discount to fill seats.",
-      "MAF to DFW and IAH connections open the full network of international routes for Permian Basin travelers.",
-      "Award zone pricing often places MAF in the same tier as SAT or AUS for hub-level redemptions.",
-      "Driving to ELP (2.5 hrs west) adds Southwest options that MAF doesn't have as strongly.",
+      "Oil price drops are MAF's best friend for cheap seats. When Permian Basin activity slows, corporate travel budgets shrink with it, and airlines discount to fill planes built for a busier oilfield economy.",
+      "MAF's name isn't just branding — it holds an actual FAA commercial spaceport license. No passenger launches have happened yet, but it means the airport's infrastructure and airspace agreements are unusually well-funded for a market this size.",
+      "Business travel dominates Tuesday through Thursday departures. Leisure travelers flying Saturday or off-peak Monday/Friday windows consistently find lower fares on the same Dallas and Houston routes.",
+      "For anything beyond Dallas or Houston, El Paso (2.5 hrs west) adds Southwest's wider domestic network — worth pricing out before committing to a MAF connection.",
     ],
     faqs: [
       {
-        q: "What airlines fly from Midland-Odessa (MAF)?",
-        a: "Midland International is served by American, Southwest, Delta, and United. Most routes connect to major hubs (DFW, IAH, PHX, DEN). The energy industry workforce creates consistent demand, particularly on the Dallas and Houston corridors.",
+        q: "Why is Midland International called an 'Air & Space Port'?",
+        a: "MAF holds an FAA commercial spaceport license issued in 2014, originally tied to a horizontal launch venture that never became a regular operation. The airport still functions as a standard commercial airport for American, Southwest, Delta, and United — the spaceport designation is real but mostly dormant.",
+      },
+      {
+        q: "How does the oil market affect Midland flight prices?",
+        a: "Directly. MAF's passenger volume is driven by Permian Basin business travel, so when oil prices and drilling activity fall, corporate travel demand drops and airlines cut fares to keep planes full. Energy downturns are historically the best time to catch a cheap MAF fare.",
       },
       {
         q: "What are the cheapest flights from Midland-Odessa?",
-        a: "MAF's most affordable routes connect to Dallas ($49–89 during flash sales) and Houston ($49–79). Denver and Phoenix connections are also competitively priced during off-peak windows. For international options, connecting through DFW or IAH is the standard strategy.",
+        a: "Dallas and Houston routes see the deepest discounts, typically $49–89 during flash sales. Denver and Phoenix follow close behind. Weekend departures consistently undercut the Tuesday–Thursday business-travel fares.",
       },
       {
-        q: "Is it cheaper to fly from Midland (MAF) or El Paso (ELP)?",
-        a: "Both serve West Texas but with different airline mixes. ELP has more domestic route options and slightly more competition. MAF is closer for Permian Basin residents. The fare difference rarely justifies a 2.5-hour drive.",
-      },
-      {
-        q: "When is the cheapest time to fly from Midland (MAF)?",
-        a: "January, February, and September are the cheapest months from MAF. Oil industry travel keeps some routes consistently priced — leisure travelers flying mid-week during slow energy months find the best deals.",
+        q: "Should I fly from Midland or drive to El Paso?",
+        a: "For Dallas or Houston trips, MAF is the easier choice. For anything else, El Paso's broader Southwest network (2.5 hours away) is usually worth the drive — MAF's eight nonstop destinations are almost entirely hub connections.",
       },
     ],
   },
   LBB: {
-    intro: "Lubbock Preston Smith International (LBB) serves West Texas' largest city and home of Texas Tech University. American, Southwest, United, Delta, and Frontier compete here, and the university calendar creates predictable pricing patterns — with cheaper windows during summer break, winter break, and mid-semester lulls between major TTU events.",
+    intro: "Lubbock Preston Smith International shares its skyline with two very different economies: Texas Tech's 40,000 students and the wind farms and cotton gins that cover the South Plains in every direction. American, Southwest, United, Delta, and Frontier all serve LBB — and Buddy Holly, Lubbock's most famous export, never had it this easy; in his touring days, this airport didn't have a single jet bridge. Today the routes still funnel mostly through Dallas and Houston, but Frontier's seasonal service occasionally undercuts everyone else on price.",
     stats: [
       { label: "Annual passengers", value: "1.5M+" },
       { label: "Nonstop destinations", value: "10+" },
       { label: "Airlines at LBB", value: "5+" },
-      { label: "Drive time to AMA", value: "1.5 hrs" },
+      { label: "Birthplace of", value: "Buddy Holly" },
     ],
     routes: [
       { destination: "Dallas / DFW", typical: "$100–$200", errorFare: "$49–$89" },
@@ -501,37 +502,37 @@ const AIRPORT_CONTENT: Record<string, {
       { destination: "Las Vegas (LAS)", typical: "$100–$200", errorFare: "$49–$89" },
     ],
     tips: [
-      "Texas Tech's fall/spring schedule drives demand spikes — book during summer break, winter break, and early January for cheapest fares.",
-      "Frontier operates seasonal routes from LBB with some of the lowest base fares available from this airport.",
-      "LBB to DFW connections open the full AA international network for Lubbock travelers planning international trips.",
-      "Monitoring LBB alongside AMA (1.5 hrs north) gives Lubbock-area travelers broader coverage of West Texas deals.",
+      "Texas Tech's academic calendar drives LBB pricing more than almost any other factor. Game weekends (fall Saturdays), move-in (August), and graduation (May) all spike fares — book around them, not during them.",
+      "Frontier's seasonal Lubbock routes carry the lowest base fares at this airport when they're running, but the schedule isn't year-round. Check current Frontier service before assuming it's an option.",
+      "South Plains wind and cotton industry travel keeps midweek business fares to Dallas and Houston fairly stable — leisure travelers flying weekends usually find more movement in price.",
+      "LBB connects through DFW for essentially all international travel. If you're chasing an overseas error fare, set your alert for DFW directly and treat the Lubbock leg as the easy part.",
     ],
     faqs: [
       {
-        q: "What airlines fly from Lubbock (LBB)?",
-        a: "Lubbock Preston Smith International is served by American, Southwest, United, Delta, and Frontier. American and Southwest have the strongest presence. The Texas Tech University campus generates consistent demand, particularly during football season and graduation.",
+        q: "What's Lubbock, Texas best known for besides Texas Tech?",
+        a: "Lubbock is Buddy Holly's hometown — the Buddy Holly Center and a statue downtown mark it — and the unofficial capital of the South Plains' cotton and wind energy industries. None of that affects flight prices directly, but it explains why LBB's passenger mix splits fairly evenly between university travel and industry business trips.",
       },
       {
-        q: "What are the cheapest flights from Lubbock, Texas?",
-        a: "LBB's most affordable routes connect to Dallas ($49–89 during flash sales), Houston ($49–89), and Denver ($49–89). Frontier's seasonal promotions occasionally produce the cheapest prices. Summer break and winter break windows are the best time to find deals.",
+        q: "Does Frontier fly out of Lubbock year-round?",
+        a: "Not reliably — LBB's Frontier service has historically run seasonally rather than as a permanent year-round route. When it's active, it tends to offer the lowest base fares at this airport; check current schedules before counting on it for a specific trip.",
       },
       {
-        q: "When is the cheapest time to fly from Lubbock (LBB)?",
-        a: "Summer break (May–August), winter break (mid-December–January), and early February are typically cheapest from LBB. Avoid football weekends (fall) and graduation (May) when Texas Tech demand spikes fares significantly.",
+        q: "When should I avoid flying out of Lubbock?",
+        a: "Texas Tech home football Saturdays, mid-August move-in week, and May graduation weekend. All three create demand spikes on an airport with a limited daily schedule, pushing fares well above LBB's normal range.",
       },
       {
-        q: "Is it worth driving from Lubbock to Amarillo for flights?",
-        a: "Generally no — both LBB and AMA have similar airline options and route networks. Unless a specific significantly cheaper deal appears at AMA, the 1.5-hour drive rarely outweighs the convenience of flying from Lubbock.",
+        q: "What are the cheapest international routes from Lubbock?",
+        a: "There aren't any direct ones — LBB has no international service. Every overseas trip connects through DFW, so the real strategy is catching an international error fare at Dallas and treating the Lubbock-to-DFW segment as a formality.",
       },
     ],
   },
   AMA: {
-    intro: "Rick Husband Amarillo International (AMA) serves the Texas Panhandle with connections to major hubs. American, Southwest, and United compete here, and the smaller market means fewer competing deal hunters — flash sales and error fares from AMA tend to attract less competition than those from Dallas or Houston, giving subscribers a small but real edge.",
+    intro: "Amarillo once supplied much of the world's helium — the federal government built a strategic reserve here, and locals still call it the Helium Capital of the World decades after the boom faded. What hasn't faded is cattle: the Texas Panhandle around AMA feeds more cattle than almost anywhere else in the country, and that ranching economy, not tourism, is what keeps American, Southwest, and United flying in and out of Rick Husband Amarillo International. Smaller market, fewer deal hunters watching it — which works in a subscriber's favor.",
     stats: [
       { label: "Annual passengers", value: "700K+" },
       { label: "Nonstop destinations", value: "8+" },
       { label: "Airlines at AMA", value: "3+" },
-      { label: "Drive time to LBB", value: "1.5 hrs" },
+      { label: "Historic nickname", value: "Helium Capital of the World" },
     ],
     routes: [
       { destination: "Dallas / DFW", typical: "$100–$200", errorFare: "$49–$89" },
@@ -540,37 +541,37 @@ const AIRPORT_CONTENT: Record<string, {
       { destination: "Denver (DEN)", typical: "$100–$200", errorFare: "$49–$89" },
     ],
     tips: [
-      "AMA has fewer competing deal hunters than Dallas or Austin — error fares and flash sales tend to stay open slightly longer here.",
-      "Southwest's straightforward pricing from AMA makes their 72-hour and holiday sales especially predictable to track.",
-      "Award zone pricing often places AMA in the same redemption tier as larger Texas airports — worth checking before driving to Lubbock.",
-      "Agriculture and ranching seasonality creates some demand variation — spring planting and fall harvest periods can affect availability.",
+      "AMA's small size cuts both ways: fewer nonstop options, but also fewer deal hunters competing for the same error fare. Flash sales here tend to stay open longer than at Dallas or Austin.",
+      "Cattle and ranching seasonality — spring shipping season and fall feedlot turnover — creates real demand swings on the Dallas and Houston business routes. Leisure travelers flying outside those windows see steadier pricing.",
+      "If you're road-tripping Route 66 or stopping for Cadillac Ranch, AMA is the regional airport to fly into — just don't expect much beyond Southwest's standard sale calendar for cheap seats.",
+      "Lubbock (1.5 hrs south) has a near-identical route map. Only worth the drive if a specific fare gap is large enough to justify it.",
     ],
     faqs: [
       {
-        q: "What airlines fly from Amarillo (AMA)?",
-        a: "Rick Husband Amarillo International is served by American, Southwest, and United. Routes primarily connect to major hubs (DFW, IAH, PHX, DEN) with onward connections. The smaller market means fewer direct options but also fewer deal hunters competing for the same fares.",
+        q: "Why is Amarillo called the Helium Capital of the World?",
+        a: "The federal government established the National Helium Reserve near Amarillo in the 1920s, and for decades the area supplied the majority of the world's helium. The nickname stuck even as the reserve's role diminished — it's a piece of Panhandle trivia, not a factor in current flight pricing.",
       },
       {
         q: "What are the cheapest flights from Amarillo, Texas?",
-        a: "AMA's most affordable routes connect to Dallas ($49–89 during flash sales), Houston ($49–89), Phoenix ($49–89), and Denver ($49–89). Southwest's periodic 72-hour sales produce the cheapest prices. January and September are historically the best months.",
+        a: "Dallas, Houston, Phoenix, and Denver are AMA's most affordable routes, typically $49–89 during Southwest's periodic sales. January and September are historically the cheapest months to fly.",
       },
       {
-        q: "Is it better to fly from Amarillo or Lubbock?",
-        a: "Both have similar airline options and route networks. AMA and LBB serve different parts of West Texas — fly from whichever is closer. If a significantly better deal appears at the other airport (1.5 hours away), the drive may occasionally be worthwhile.",
+        q: "Are there fewer deal hunters watching Amarillo flights?",
+        a: "Yes — AMA's small market means error fares and flash sales generally attract less attention than the same deal would at DFW or Austin, giving subscribers slightly more time to book before a mispriced fare gets corrected.",
       },
       {
-        q: "When is the cheapest time to fly from Amarillo?",
-        a: "January, February, and September are the cheapest months from AMA. Mid-week departures (Tuesday/Wednesday) are typically $20–40 cheaper than weekend flights on this regional airport's limited schedule.",
+        q: "Is Amarillo or Lubbock better for Panhandle and South Plains travelers?",
+        a: "They're close enough in route options that it rarely matters. Fly from whichever city you're closer to, and only consider the 1.5-hour drive between them if one airport has a meaningfully better fare on your specific dates.",
       },
     ],
   },
   GRK: {
-    intro: "Killeen-Fort Hood Regional Airport (GRK) serves one of the world's largest military installations — Fort Cavazos (formerly Fort Hood). American, Delta, and United connect GRK to major hubs, with passenger demand driven largely by military personnel and their families. Award zone pricing and military discount programs create unique opportunities for Killeen-area travelers.",
+    intro: "Fort Cavazos — renamed from Fort Hood in 2023 — is one of the largest military installations in the world by population, and Killeen-Fort Hood Regional Airport exists almost entirely because of it. Permanent Change of Station orders, deployment cycles, and family leave travel drive demand here far more than tourism or business travel ever could. American, Delta, and United connect GRK to their hubs, but for the soldiers and families who fly out of this airport, Space-A military flights are often the real competition to a commercial fare.",
     stats: [
       { label: "Annual passengers", value: "500K+" },
       { label: "Nonstop destinations", value: "5+" },
       { label: "Airlines at GRK", value: "3+" },
-      { label: "Drive time to AUS", value: "1.5 hrs" },
+      { label: "Anchored by", value: "Fort Cavazos" },
     ],
     routes: [
       { destination: "Dallas / DFW", typical: "$100–$200", errorFare: "$49–$89" },
@@ -579,37 +580,37 @@ const AIRPORT_CONTENT: Record<string, {
       { destination: "Charlotte (CLT)", typical: "$150–$250", errorFare: "$79–$129" },
     ],
     tips: [
-      "Military families at Fort Cavazos should always compare commercial deals with Space-A flights — both are worth monitoring simultaneously.",
-      "GRK to AUS (1.5 hrs south) significantly expands your airline options and international connectivity for non-military travel.",
-      "Delta's connection from GRK via Atlanta is often the best gateway for East Coast travel from this region.",
-      "Award zone pricing frequently places GRK in the same tier as AUS or SAT for international redemptions.",
+      "PCS season (summer, when most military families relocate) and deployment send-off and return windows create GRK's biggest demand spikes. If your travel isn't tied to military orders, book outside June–August when possible.",
+      "Space-A flights are free or near-free for eligible military and their dependents, but seats aren't guaranteed. Always price a commercial backup from GRK before counting on Space-A availability.",
+      "Delta's Atlanta connection is frequently GRK's best gateway to the East Coast — check it before assuming a Dallas or Houston routing is your only option.",
+      "Austin (1.5 hrs south) triples your airline and destination options. Worth the drive for any non-military international trip.",
     ],
     faqs: [
       {
-        q: "What airlines fly from Killeen (GRK)?",
-        a: "Killeen-Fort Hood Regional is served by American, Delta, and United. Routes connect to major hubs (DFW, IAH, ATL, CLT) with onward connections. The military presence at Fort Cavazos drives consistent demand on Texas hub routes.",
+        q: "Why was Fort Hood renamed Fort Cavazos, and does it affect GRK?",
+        a: "Fort Hood was renamed Fort Cavazos in 2023, honoring General Richard Cavazos. The base itself — and its role as Central Texas's largest driver of GRK's passenger traffic — is unchanged; only the name on the gate changed.",
       },
       {
-        q: "What are the cheapest flights from Killeen-Fort Hood?",
-        a: "GRK's most affordable routes connect to Dallas ($49–89) and Houston ($49–79). For broader options, Austin (1.5 hours south) adds 17+ airlines and 75+ destinations. Military personnel should check both commercial deals and Space-A flight availability.",
+        q: "Are Space-A military flights cheaper than booking from GRK commercially?",
+        a: "Often free or near-free for eligible personnel and dependents, but seats are standby and not guaranteed. Most military families monitor both Space-A availability and commercial GRK fares simultaneously rather than relying on one option.",
       },
       {
-        q: "Should military families fly from GRK or drive to Austin?",
-        a: "For routine travel to Texas hubs, GRK is convenient and reasonably priced. For international trips or destinations not served directly from GRK, driving to Austin (1.5 hours) is often worthwhile given AUS's significantly broader route network.",
+        q: "What are the cheapest commercial flights from Killeen?",
+        a: "Dallas and Houston routes run $49–89 during sales; Atlanta and Charlotte connections through Delta are typically $79–129. Booking outside PCS season (summer) and major deployment windows helps avoid the highest fares.",
       },
       {
-        q: "When is the cheapest time to fly from Killeen (GRK)?",
-        a: "January, February, and September are typically cheapest from GRK. Military deployment cycles can affect seat availability — booking early for holiday travel from this airport is especially important given high military family demand during Christmas and Thanksgiving.",
+        q: "Should military families drive to Austin instead of flying from GRK?",
+        a: "For international trips or destinations GRK doesn't serve directly, yes — Austin's 75+ destinations dwarf GRK's five. For routine Dallas or Houston travel tied to base business, GRK's convenience usually wins.",
       },
     ],
   },
   TYR: {
-    intro: "Tyler Pounds Regional Airport (TYR) serves East Texas' largest city with American Eagle connections to DFW. As a small regional airport with primarily one-stop connectivity, TYR's best deals come through error fares on the DFW connection and award redemptions that price TYR identically to Dallas. For broader options, Longview (GGG, 35 min) and Dallas (1.5 hrs) are the nearby alternatives.",
+    intro: "Tyler calls itself the Rose Capital of America — the Tyler Rose Garden grows more rose varieties than almost anywhere in the country, and the Tyler Rose Festival has run since 1933. None of that shows up in the flight schedule at Tyler Pounds Regional, though: American Eagle flies a handful of daily trips to DFW and that's essentially the entire route map. TYR works best as a fast on-ramp to American's full network at Dallas, not as a destination for deal hunting in its own right.",
     stats: [
       { label: "Annual passengers", value: "500K+" },
       { label: "Primary connection", value: "DFW via AA Eagle" },
       { label: "Drive time to DFW", value: "1.5 hrs" },
-      { label: "Drive time to GGG", value: "35 min" },
+      { label: "Local claim to fame", value: "Rose Capital of America" },
     ],
     routes: [
       { destination: "Dallas / DFW", typical: "$80–$180", errorFare: "$39–$79" },
@@ -618,37 +619,37 @@ const AIRPORT_CONTENT: Record<string, {
       { destination: "Shreveport (SHV)", typical: "1 hr drive", errorFare: "More options" },
     ],
     tips: [
-      "TYR primarily connects to DFW — for most destinations, catching an error fare at DFW and driving the 1.5 hours is often better value.",
-      "Award programs frequently zone TYR with DFW, meaning you can sometimes book TYR onward using DFW-priced award rates.",
-      "Nearby GGG (Longview, 35 min) has the same limited connectivity — compare both before booking for East Texas travel.",
-      "For significant international travel, driving to DFW (1.5 hrs) or DAL (2 hrs) provides dramatically better options.",
+      "TYR's entire value proposition is the DFW connection. Catch an error fare or flash sale at Dallas first, then check whether the Tyler leg adds meaningfully to the cost — often it doesn't.",
+      "Award programs frequently zone TYR identically to DFW, meaning a mileage redemption from Tyler can cost the same points as flying out of Dallas directly. Worth checking before assuming you need to drive.",
+      "October's Tyler Rose Festival and the surrounding rose-garden tourist season can tighten the limited daily schedule — book early if traveling during it.",
+      "Longview (GGG, 35 minutes away) has the same DFW-only route structure. Compare both before booking, but don't expect either to beat a 1.5-hour drive straight to Dallas for major trips.",
     ],
     faqs: [
       {
-        q: "What airlines fly from Tyler, Texas (TYR)?",
-        a: "Tyler Pounds Regional is served by American Eagle (American Airlines' regional carrier), with connections to Dallas/Fort Worth (DFW). The small market means a limited daily schedule — typically a few flights to DFW.",
+        q: "Why doesn't Tyler, Texas have more flight options?",
+        a: "TYR is a small regional market built around a single American Eagle connection to DFW. With Dallas only 1.5 hours by car, airlines have little incentive to add routes that would compete with driving distance to a major hub.",
       },
       {
-        q: "Is it better to fly from Tyler or drive to Dallas?",
-        a: "For most travel, driving to DFW (1.5 hours) provides dramatically better options — 260+ destinations vs. TYR's single DFW connection, and often better pricing. TYR's main advantage is convenience for frequent Dallas business travelers who prefer a smaller airport.",
+        q: "Does the Tyler Rose Festival affect flight prices?",
+        a: "It can tighten availability on TYR's limited daily schedule during the festival's October dates, since visitor traffic adds to the airport's normally light passenger load. It rarely moves fares dramatically given how few seats TYR has to begin with.",
       },
       {
-        q: "What are the cheapest flights from Tyler (TYR)?",
-        a: "TYR's routes connect primarily to DFW ($39–79 during flash sales). From DFW, onward connections to any domestic or international destination are available. Award programs often zone TYR identically to DFW, so a TYR departure can sometimes cost the same miles as flying from Dallas directly.",
+        q: "Is it better to fly from Tyler or drive to DFW?",
+        a: "For most travel, driving to DFW wins — 260+ destinations versus TYR's single connection, often at a comparable or lower price. TYR's advantage is convenience for travelers who specifically want to avoid DFW's size and traffic.",
       },
       {
-        q: "Should I fly from Tyler or Longview (GGG)?",
-        a: "Both TYR and GGG (35 minutes apart) have similar limited connectivity through American Eagle to DFW. Compare schedules and prices for your specific dates — occasionally one has a better option. For most travel beyond Dallas, driving to DFW provides significantly more choices.",
+        q: "Tyler or Longview — which is the better East Texas airport?",
+        a: "Functionally identical: both connect almost exclusively through DFW via American Eagle. Check schedules for your specific dates; the better option usually comes down to which has a more convenient departure time, not price.",
       },
     ],
   },
   GGG: {
-    intro: "East Texas Regional Airport (GGG) in Longview serves the Piney Woods region with American Eagle connections to DFW. Like nearby Tyler (TYR, 35 miles west), GGG's connectivity is primarily through its Dallas hub connection. The airport's best value comes from award zone pricing and the occasional DFW connection deal — supplemented by easy access to Dallas or Shreveport for broader options.",
+    intro: "The East Texas Oil Field — discovered near Longview in 1930 and still one of the largest oil fields ever found in the lower 48 — built this region's economy almost overnight and put towns like Longview and Kilgore on the map. Nearly a century later, East Texas Regional Airport's role is far more modest: American Eagle flies a small daily schedule to DFW, and that's effectively the entire route network. GGG isn't where you hunt for a deal; it's where you start the trip before the real shopping begins at Dallas.",
     stats: [
       { label: "Annual passengers", value: "300K+" },
       { label: "Primary connection", value: "DFW via AA Eagle" },
-      { label: "Drive time to TYR", value: "35 min" },
       { label: "Drive time to DFW", value: "2 hrs" },
+      { label: "Regional claim to fame", value: "East Texas Oil Field, 1930" },
     ],
     routes: [
       { destination: "Dallas / DFW", typical: "$80–$180", errorFare: "$39–$79" },
@@ -657,27 +658,27 @@ const AIRPORT_CONTENT: Record<string, {
       { destination: "Dallas (DFW/DAL)", typical: "2 hr drive", errorFare: "Full network" },
     ],
     tips: [
-      "Compare GGG schedules with Tyler (TYR, 35 min away) before booking — both airports have similar options but occasionally one offers better timing or pricing.",
-      "For any destination beyond Dallas connections, driving to DFW (2 hrs) or Shreveport (1.5 hrs) gives significantly more options.",
-      "American's award program often zones GGG identically to DFW — worth checking award charts for international redemptions.",
-      "East Texas travelers with flexibility can monitor both GGG and TYR — two small airports in the same zone creates occasional competitive pricing.",
+      "Compare GGG's schedule against Tyler's (TYR, 35 minutes away) before booking — both run the same DFW-only route, but departure times occasionally differ enough to matter.",
+      "GGG's award zone pricing often matches DFW exactly, so a points booking from Longview can cost the same miles as flying out of Dallas — check award charts before driving anywhere.",
+      "With only a handful of daily flights, GGG has little room to absorb demand spikes. Book 3–4 weeks out for the best seat selection on the limited DFW schedule.",
+      "For anything beyond a DFW connection, driving 2 hours to Dallas or 1.5 hours to Shreveport opens dramatically more route and price options than GGG offers directly.",
     ],
     faqs: [
       {
-        q: "What airlines fly from Longview (GGG)?",
-        a: "East Texas Regional Airport is served by American Eagle, American Airlines' regional carrier, with connections to Dallas/Fort Worth (DFW). The small market means limited daily schedules — typically a few round trips to DFW.",
+        q: "What's the connection between Longview and the East Texas Oil Field?",
+        a: "The East Texas Oil Field was discovered in 1930 near Longview and Kilgore and remains one of the largest oil fields ever found in the continental US. It built the regional economy that still surrounds GGG today, though the airport itself now runs on a small American Eagle schedule rather than oil-driven passenger volume.",
       },
       {
         q: "What are the cheapest flights from Longview, Texas?",
-        a: "GGG's routes connect primarily to DFW ($39–79 during flash sales). For international or broader domestic travel, driving to DFW (2 hours) or Shreveport (1.5 hours) opens significantly more options. Award programs often zone GGG identically to DFW for miles-based travel.",
+        a: "GGG's only real route is to DFW, running $39–79 during flash sales. Everything else requires driving — 2 hours to DFW directly or 1.5 hours to Shreveport for a different airline mix.",
       },
       {
-        q: "Is Tyler (TYR) or Longview (GGG) better for East Texas flights?",
-        a: "Both are similar in size and connectivity, primarily connecting through DFW via American Eagle. Compare schedules and fares for your specific travel dates. For most travel beyond Dallas, driving to DFW provides dramatically more options from either East Texas city.",
+        q: "Is Longview or Tyler the better East Texas airport to fly from?",
+        a: "They're essentially the same airport in two locations — both connect solely through DFW via American Eagle. Pick whichever is closer to you and compare same-day schedules rather than expecting a price difference.",
       },
       {
-        q: "When is the cheapest time to fly from Longview (GGG)?",
-        a: "January, February, and September are typically cheapest from GGG. Given the limited schedule, flexibility on departure time matters more than day of week. Book 3–4 weeks in advance for best availability on the limited DFW connections.",
+        q: "When should I book flights from Longview in advance?",
+        a: "3–4 weeks out, given how few daily departures GGG has. The limited schedule means seats fill up faster relative to capacity than at a larger airport, even though overall demand is low.",
       },
     ],
   },
@@ -760,12 +761,12 @@ const AIRPORT_CONTENT: Record<string, {
     ],
   },
   BRO: {
-    intro: "Brownsville South Padre Island International (BRO) is South Texas' southernmost commercial airport — serving the Brownsville-Matamoros metro area. American Eagle provides connections to DFW, while the small market means limited competition. BRO's best deals come through award zone pricing and the occasional DFW connection flash sale. Nearby HRL (45 min) or MFE (1 hr) are practical alternatives for more options.",
+    intro: "Brownsville is the southernmost city in Texas and, since SpaceX broke ground at nearby Boca Chica, one of the most-watched. Starship test flights and launches now draw a steady stream of space-industry employees and spectators through Brownsville South Padre Island International — a passenger mix this small airport never had before. The flight schedule hasn't caught up to the attention: American Eagle's connection to DFW is still essentially the whole route map, with South Padre Island's beach season layered on top for seasonal demand.",
     stats: [
       { label: "Annual passengers", value: "400K+" },
       { label: "Primary connection", value: "DFW via AA Eagle" },
       { label: "Drive time to HRL", value: "45 min" },
-      { label: "Drive time to MFE", value: "1 hr" },
+      { label: "Nearby", value: "SpaceX Starbase" },
     ],
     routes: [
       { destination: "Dallas / DFW", typical: "$100–$200", errorFare: "$49–$89" },
@@ -774,37 +775,37 @@ const AIRPORT_CONTENT: Record<string, {
       { destination: "Houston (via DFW)", typical: "Hub connection", errorFare: "Via DFW" },
     ],
     tips: [
-      "BRO's limited connectivity means driving to HRL (45 min) or MFE (1 hr) is often worthwhile for any trip beyond Dallas connections.",
-      "Award programs often zone BRO identically to HRL or MFE — compare charts before assuming you need to drive for a miles-based booking.",
-      "South Padre Island season (spring break, summer) creates demand spikes even at this small airport — book off-peak for best pricing.",
-      "American's award program zones BRO with DFW in many markets, making international award redemptions possible at Dallas pricing.",
+      "SpaceX Starship launch and test windows at Boca Chica now create their own demand spikes at BRO — spectator and contractor travel can tighten the limited schedule around major test dates.",
+      "South Padre Island's spring break and summer season pushes BRO fares up sharply. Off-peak months see far steadier pricing on the same DFW connection.",
+      "BRO's award zone pricing is frequently identical to HRL or MFE — check award charts before assuming a drive to the Valley is necessary for a points booking.",
+      "For anything beyond a Dallas connection, Harlingen (45 min) or McAllen (1 hr) multiply your airline and destination options several times over.",
     ],
     faqs: [
       {
-        q: "What airlines fly from Brownsville (BRO)?",
-        a: "Brownsville South Padre Island International is primarily served by American Eagle (American Airlines' regional carrier), with connections to Dallas/Fort Worth (DFW). The limited schedule and single hub connection means BRO travelers typically connect through DFW for most destinations.",
+        q: "Has SpaceX changed flight demand at Brownsville's airport?",
+        a: "Yes, noticeably around launch and test windows — Starbase at Boca Chica draws space-industry employees, contractors, and spectators through BRO, adding pressure to a schedule that's still built around a single American Eagle route to DFW.",
       },
       {
         q: "What are the cheapest flights from Brownsville, Texas?",
-        a: "BRO primarily connects to DFW ($49–89 during flash sales). For significantly more options, driving 45 minutes to HRL or 1 hour to MFE opens 6+ airlines and 10+ nonstop destinations. For most travel beyond Dallas, the drive to a larger Valley airport is worthwhile.",
+        a: "The only direct route is to DFW, running $49–89 during flash sales. For more options, Harlingen (45 minutes) or McAllen (1 hour) open up 6+ airlines and direct Mexico routes that BRO doesn't offer.",
+      },
+      {
+        q: "Does South Padre Island tourism affect Brownsville flight prices?",
+        a: "Yes — spring break and summer beach season both push BRO fares above their normal baseline, since the limited schedule has little slack to absorb the extra demand. Booking shoulder season avoids most of the increase.",
       },
       {
         q: "Should I fly from Brownsville or drive to Harlingen or McAllen?",
-        a: "For routine Dallas travel, BRO is convenient if you're in Brownsville. For any other destination, HRL (45 min) or MFE (1 hr) offer significantly more options. The additional drive is almost always worth it for non-DFW travel.",
-      },
-      {
-        q: "When is the cheapest time to fly from Brownsville (BRO)?",
-        a: "January, February, and September are cheapest from BRO. Spring break (March) and summer weekends push prices up as South Padre Island tourism peaks. Given the limited schedule, booking 4–6 weeks in advance is recommended.",
+        a: "For a routine Dallas trip, BRO is the simplest option. For literally any other destination — especially Mexico — the drive to HRL or MFE is almost always worth it given how much wider their route networks are.",
       },
     ],
   },
   LRD: {
-    intro: "Laredo International Airport (LRD) serves one of the largest US-Mexico border cities — a major hub for international trade with over $300 billion in annual cross-border commerce. American and United connect LRD to major hubs, with passenger demand split between trade industry business travelers and leisure travelers. Award zone pricing creates occasional value for Laredo-area travelers.",
+    intro: "More trade crosses the World Trade Bridge in Laredo than through almost any other land port in the country — by trade value, Laredo regularly ranks among the busiest ports in the entire US, ahead of most major seaports. That trucking and logistics economy, not tourism, is what fills seats at Laredo International, where American and United connect business travelers to DFW and Houston on a schedule built around weekday commerce rather than weekend leisure.",
     stats: [
       { label: "Annual passengers", value: "400K+" },
       { label: "Primary connections", value: "DFW, IAH" },
       { label: "Airlines at LRD", value: "2+" },
-      { label: "Drive time to SAT", value: "2.5 hrs" },
+      { label: "Known for", value: "Busiest US-Mexico trade port" },
     ],
     routes: [
       { destination: "Dallas / DFW", typical: "$100–$200", errorFare: "$49–$89" },
@@ -813,37 +814,37 @@ const AIRPORT_CONTENT: Record<string, {
       { destination: "International (via hubs)", typical: "Hub connection", errorFare: "Via DFW/IAH" },
     ],
     tips: [
-      "LRD's trade-driven business traffic creates consistent demand on DFW and IAH routes — but also creates off-peak windows when leisure fares drop.",
-      "Driving to SAT (2.5 hrs north) opens 12+ airlines and 55+ destinations for Laredo travelers planning major trips.",
-      "Award programs sometimes zone LRD with SAT or AUS, making international redemptions possible at those airports' more competitive rates.",
-      "American and United corporate contracts dominate LRD demand — booking outside peak business travel windows (Monday–Friday mornings) yields better pricing.",
+      "LRD's fares track the trade and logistics business calendar — weekday morning departures serve corporate accounts and stay pricier, while weekend and evening flights have more room to drop.",
+      "American and United's corporate travel contracts dominate demand here. Booking outside Monday–Friday morning windows is the most reliable way to find a leisure-friendly fare.",
+      "Award programs sometimes zone LRD with San Antonio or Austin, making points redemptions from Laredo occasionally as cheap as flying from either larger market.",
+      "For anything beyond DFW or Houston, the 2.5-hour drive to San Antonio adds 12+ airlines and over 50 nonstop destinations LRD simply doesn't have.",
     ],
     faqs: [
       {
-        q: "What airlines fly from Laredo (LRD)?",
-        a: "Laredo International Airport is served by American and United, with connections to Dallas/Fort Worth (DFW) and Houston (IAH). The trade-driven market creates consistent business travel demand on these routes.",
+        q: "Why is Laredo's airport so business-travel focused?",
+        a: "Laredo's World Trade Bridge handles an enormous share of US-Mexico trade — by some measures more than any other land port in the country — and that logistics and trucking economy drives consistent weekday business travel between LRD and the American and United hubs at DFW and Houston.",
       },
       {
         q: "What are the cheapest flights from Laredo, Texas?",
-        a: "LRD's most affordable routes connect to Dallas ($49–89 during flash sales) and Houston ($49–79). For broader domestic or international options, driving to San Antonio (2.5 hours) gives access to 12+ airlines. Award zone pricing occasionally places LRD in the same redemption tier as larger Texas airports.",
+        a: "Dallas and Houston routes run $49–89 during flash sales, mostly on flights outside the Monday–Friday business-travel windows. For more options, San Antonio (2.5 hours away) opens up over 50 nonstop destinations LRD doesn't serve.",
       },
       {
-        q: "Is it worth driving from Laredo to San Antonio for flights?",
-        a: "For major trips — especially international travel — yes. SAT's 12+ airlines and 55+ destinations offer far more options. For routine Dallas or Houston business travel, LRD's convenience is usually worth it over the 2.5-hour drive.",
+        q: "When is the best time to book a flight out of Laredo?",
+        a: "September and January tend to be cheapest. Within any given week, weekend departures or Friday afternoon/Sunday leisure-pattern flights usually undercut the weekday-morning business fares that dominate LRD's schedule.",
       },
       {
-        q: "When is the cheapest time to fly from Laredo (LRD)?",
-        a: "September and January are typically the cheapest months from LRD. Business travel demand keeps weekday morning flights consistently priced — booking Friday afternoon or Sunday departures for leisure trips often yields better rates on the same routes.",
+        q: "Is it worth driving from Laredo to San Antonio for a flight?",
+        a: "For international trips or anything beyond Dallas/Houston, yes — SAT's route network dwarfs LRD's two-airline setup. For routine business travel to either Texas hub, LRD's convenience usually outweighs the 2.5-hour drive.",
       },
     ],
   },
   ABI: {
-    intro: "Abilene Regional Airport (ABI) serves West-Central Texas with American Eagle connections to DFW. The small market serves Abilene's university and military community (Dyess Air Force Base), with demand patterns driven by Abilene Christian University and Hardin-Simmons University's calendars. Award zone pricing often places ABI in the same tier as DFW for international redemptions.",
+    intro: "Dyess Air Force Base, home to the Air Force's B-1B Lancer bomber fleet, sits right next to Abilene Regional — giving this West-Central Texas airport a steady undercurrent of military travel alongside the university traffic from Abilene Christian and Hardin-Simmons. Downtown, Abilene markets itself as the Storybook Capital of America for its sculpture trail of fairy-tale characters, which has nothing to do with flight prices but tells you this is a city that knows how to make a small market interesting. The airport itself runs almost entirely on a single American Eagle connection to DFW.",
     stats: [
       { label: "Annual passengers", value: "300K+" },
       { label: "Primary connection", value: "DFW via AA Eagle" },
       { label: "Drive time to DFW", value: "3 hrs" },
-      { label: "Drive time to AUS", value: "3 hrs" },
+      { label: "Anchored by", value: "Dyess AFB (B-1B Lancer)" },
     ],
     routes: [
       { destination: "Dallas / DFW", typical: "$80–$180", errorFare: "$39–$79" },
@@ -852,27 +853,27 @@ const AIRPORT_CONTENT: Record<string, {
       { destination: "Dallas (DFW)", typical: "3 hr drive", errorFare: "260+ destinations" },
     ],
     tips: [
-      "ABI's single hub connection means the best strategy for major trips is often driving to DFW or AUS — or using ABI-to-DFW as a first leg to international travel.",
-      "Award programs frequently zone ABI with DFW — the same miles from Abilene can reach the same international destinations as from Dallas.",
-      "University calendars (ACU, HSU) create predictable demand spikes during graduation (May), move-in (August), and Thanksgiving — book outside these windows.",
-      "Dyess AFB military personnel should check Space-A availability alongside commercial deal alerts from ABI.",
+      "Dyess AFB personnel should check Space-A availability before booking commercial — it's frequently the cheaper option for eligible military travelers, though seats aren't guaranteed.",
+      "Abilene Christian and Hardin-Simmons create predictable demand spikes at graduation (May), move-in (August), and Thanksgiving. Book outside those windows for the best ABI fares.",
+      "Award programs frequently zone ABI identically to DFW — the same miles redeemed from Abilene can reach the same international destinations as flying out of Dallas.",
+      "ABI's three-hour drive to either DFW or Austin is long enough that it's only worth it for major international trips, not routine domestic travel — price both before committing to the drive.",
     ],
     faqs: [
       {
-        q: "What airlines fly from Abilene (ABI)?",
-        a: "Abilene Regional Airport is served by American Eagle (American Airlines' regional carrier), with connections to Dallas/Fort Worth (DFW). The single hub connection provides access to American's full domestic and international network via DFW.",
+        q: "Does Dyess Air Force Base affect flights from Abilene?",
+        a: "Dyess AFB, home to the B-1B Lancer bomber fleet, adds a steady stream of military travel to ABI's passenger base alongside the university traffic from Abilene Christian and Hardin-Simmons. Eligible military personnel should compare Space-A flight availability against commercial ABI fares before booking.",
       },
       {
         q: "What are the cheapest flights from Abilene, Texas?",
-        a: "ABI's routes connect to DFW ($39–79 during flash sales). For international travel or destinations not directly served via DFW, driving to Austin or Dallas (both ~3 hours) offers significantly more options. Award programs often zone ABI identically to DFW for international redemptions.",
+        a: "ABI's only direct route is to DFW, typically $39–79 during flash sales. Beyond that, you're pricing a 3-hour drive to Dallas or Austin against whatever the DFW connection costs — often the drive only pays off for international trips.",
       },
       {
-        q: "Is it worth flying from Abilene or driving to Dallas?",
-        a: "For convenience on frequent business travel to Dallas, ABI is practical. For any other destination, driving 3 hours to DFW or AUS gives you 260+ and 75+ destinations respectively vs. ABI's single hub connection. For major leisure trips, the drive is almost always worthwhile.",
+        q: "When does Abilene see the biggest flight price spikes?",
+        a: "University graduation in May, move-in week in August, and Thanksgiving travel all push ABI fares higher on an already-limited daily schedule. January, February, and September are typically the cheapest months.",
       },
       {
-        q: "When is the cheapest time to fly from Abilene (ABI)?",
-        a: "January, February, and September are cheapest from ABI. Avoid graduation weekend (May), university move-in (August), and Thanksgiving — all create demand spikes on the limited DFW schedule. Given few daily departures, booking 4–6 weeks in advance secures better availability.",
+        q: "Is ABI's nickname 'Storybook Capital of America' related to its airport?",
+        a: "No — it refers to a downtown sculpture trail of fairy-tale characters and has no bearing on flight schedules or pricing. It's local color, not a factor in how American Eagle prices the DFW route.",
       },
     ],
   },
@@ -966,6 +967,11 @@ const jsonLd = {
         <p class="text-lg text-slate-400 max-w-2xl font-body leading-relaxed">
           We monitor every major airline and award program departing from {airportData.city}. No more generic alerts for DFW when you're flying out of {airportData.code}.
         </p>
+        <div class="mt-6 flex flex-wrap items-center gap-3 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
+          <span class="rounded-full border border-tcf-gold/20 bg-tcf-gold/5 px-3 py-2 text-tcf-gold">Airport-specific radar</span>
+          <span>{dealList.length} archived alerts</span>
+          {lastUpdated && <span>Last alert {lastUpdated.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>}
+        </div>
       </header>
 
       {dealList.length > 0 ? (
@@ -1033,7 +1039,7 @@ const jsonLd = {
               <p class="font-black text-white text-lg mb-1">Get the first alert when a deal drops from {airportData.city}.</p>
               <p class="text-sm text-slate-400 font-body">No spam. One alert per deal. Unsubscribe in one click.</p>
             </div>
-            <a href="/#waitlist" class="btn-primary whitespace-nowrap no-underline" style="background: var(--tcf-gold); color: #050a14; font-weight: 900; padding: 0.75rem 2rem; border-radius: 9999px; font-size: 0.875rem; letter-spacing: 0.1em; text-transform: uppercase;">
+              <a href="/#waitlist" data-tcf-event="cta_clicked" data-tcf-location="airport_hub" data-tcf-label={`Alert Me for ${airportData.code}`} data-airport={airportData.code} class="btn-primary whitespace-nowrap no-underline" style="background: var(--tcf-gold); color: #050a14; font-weight: 900; padding: 0.75rem 2rem; border-radius: 9999px; font-size: 0.875rem; letter-spacing: 0.1em; text-transform: uppercase;">
               Alert Me for {airportData.code}
             </a>
           </div>

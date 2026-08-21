@@ -27,6 +27,7 @@ const normalizedAirline = normalizeAirlineName(deal.airline);
 const title = `${priceDisplay} Flight from ${deal.origin} to ${deal.destination} on ${normalizedAirline || 'Major Airline'} | Texas Cheap Flights`;
 const description = `Scouted from ${deal.origin}: ${normalizedAirline ? normalizedAirline + ' flight to ' : ''}${deal.destination} for ${priceDisplay}. ${deal.travel_dates ? 'Travel dates: ' + deal.travel_dates : ''}. Exclusive Texas deal alert.`;
 const ogImage = 'https://texascheapflights.com/og-image.png';
+const bookingLink = deal.booking_link || `https://www.google.com/travel/flights?q=Flights+to+${encodeURIComponent(deal.destination)}+from+${encodeURIComponent(deal.origin)}`;
 
 // Structured Data (JSON-LD)
 const dealSentAt = new Date(deal.sent_at || deal.created_at);
@@ -137,7 +138,7 @@ const { data: relatedDeals } = await supabase
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;900&family=Outfit:wght@400;500;700&display=swap" rel="stylesheet" />
 </head>
-<body class="bg-tcf-navy-deep text-white min-h-screen">
+<body class="bg-tcf-navy-deep text-white min-h-screen" data-tcf-deal-id={deal.id} data-origin={deal.origin} data-destination={deal.destination} data-airline={normalizedAirline} data-price={deal.price ?? ''}>
 
   <GlobalNav activePage="past-deals" />
 
@@ -197,9 +198,14 @@ const { data: relatedDeals } = await supabase
                     <p class="text-sm text-slate-300 mb-4 leading-relaxed">
                         Deals like this appear and disappear in hours. To get alerted the second our scout finds the next one:
                     </p>
-                    <a href="/#waitlist" class="btn-primary w-full py-4 text-center text-sm no-underline font-black uppercase tracking-widest" style="background: var(--tcf-gold); color: #050a14;">
-                        Join the Scout List
-                    </a>
+                    <div class="grid gap-3">
+                      <a href={bookingLink} target="_blank" rel="noopener noreferrer" data-tcf-booking data-deal-id={deal.id} data-origin={deal.origin} data-destination={deal.destination} class="btn-primary w-full py-4 text-center text-sm no-underline font-black uppercase tracking-widest" style="background: var(--tcf-gold); color: #050a14;">
+                        Check this route
+                      </a>
+                      <a href="/#waitlist" data-tcf-event="cta_clicked" data-tcf-location="deal_detail" data-tcf-label="Join the Scout List" class="text-center text-xs font-black uppercase tracking-widest text-slate-400 hover:text-white no-underline">
+                        Get the next alert
+                      </a>
+                    </div>
                 </div>
             </div>
 

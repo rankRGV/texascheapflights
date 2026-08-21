@@ -15,8 +15,6 @@ export async function GET() {
     '/past-deals',
     '/blog',
     '/skeptics-guide',
-    '/privacy',
-    '/terms',
   ];
 
   // Regional Guides
