@@ -20,6 +20,7 @@ export type BlogPost = {
   sections: Array<{
     heading: string;
     body: string[];
+    bodyHtml?: string[];
     bullets?: string[];
     table?: {
       headers: string[];
@@ -35,6 +36,11 @@ export type BlogPost = {
   faqs?: Array<{
     question: string;
     answer: string;
+  }>;
+  sources?: Array<{
+    label: string;
+    url: string;
+    accessedAt: string;
   }>;
 };
 
@@ -404,6 +410,7 @@ export const blogPosts: BlogPost[] = [
     metaTitle: 'DFW vs. DAL: Which Dallas Airport Is Cheaper?',
     description: 'Compare DFW and Dallas Love Field before booking. Learn which airport usually makes more sense for international trips, domestic Southwest flights, and the true cost of getting to the airport.',
     publishedAt: '2026-08-21',
+    updatedAt: '2026-08-21',
     category: 'Airport Strategy',
     readingMinutes: 7,
     heroLabel: 'Dallas airport comparison',
@@ -413,6 +420,10 @@ export const blogPosts: BlogPost[] = [
       { label: 'Deals from Dallas Love Field', href: '/deals/from/dal' },
       { label: 'Past Texas flight deals', href: '/past-deals' },
       { label: 'Google Flights checklist', href: '/blog/google-flights-checklist-for-texas-deals' },
+    ],
+    sources: [
+      { label: 'DFW International Airport: airlines', url: 'https://www.dfwairport.com/explore/plan/airlines/', accessedAt: 'August 21, 2026' },
+      { label: 'Dallas Love Field: passenger FAQs', url: 'https://www.dallas-lovefield.com/passenger-services/faqs', accessedAt: 'August 21, 2026' },
     ],
     tldr: [
       'DFW is usually the better first search for international flights and routes with several airlines.',
@@ -425,6 +436,10 @@ export const blogPosts: BlogPost[] = [
         body: [
           'Dallas has two airports, but they do different jobs. DFW is the broad-network airport with the strongest international reach. DAL is the Southwest-focused domestic airport near central Dallas.',
           'That makes the first search simple. Start with DFW for Europe, Asia, Mexico, and other international trips. Start with DAL for domestic Southwest routes. Then compare the other airport if your dates are flexible.',
+        ],
+        bodyHtml: [
+          'Dallas has two airports, but they do different jobs. <a href="https://www.dfwairport.com/explore/plan/airlines/" target="_blank" rel="noopener noreferrer">DFW\'s official airline directory</a> lists American and a wide range of international carriers. <a href="https://www.dallas-lovefield.com/passenger-services/faqs" target="_blank" rel="noopener noreferrer">Love Field\'s official FAQ</a> lists Delta and Southwest at DAL.',
+          'That makes the first search simple. Start with <a href="/deals/from/dfw">DFW deal alerts</a> for Europe, Asia, Mexico, and other international trips. Start with <a href="/deals/from/dal">DAL deal alerts</a> for domestic Southwest routes, then compare the other airport if your dates are flexible.',
         ],
       },
       {
@@ -501,6 +516,7 @@ export const blogPosts: BlogPost[] = [
     metaTitle: 'Cheap Flights from San Antonio: SAT Deal Guide',
     description: 'A practical San Antonio flight guide covering SAT deals, Mexico routes, nearby Austin comparisons, flexible dates, and what to check before booking a low fare.',
     publishedAt: '2026-08-21',
+    updatedAt: '2026-08-21',
     category: 'Regional Flight Strategy',
     readingMinutes: 8,
     heroLabel: 'San Antonio deal guide',
@@ -510,6 +526,10 @@ export const blogPosts: BlogPost[] = [
       { label: 'San Antonio airport guide', href: '/guides/sat' },
       { label: 'Deals from Austin', href: '/deals/from/aus' },
       { label: 'Past Texas flight deals', href: '/past-deals' },
+    ],
+    sources: [
+      { label: 'San Antonio International Airport: airlines', url: 'https://flysanantonio.com/home/flights/airlines/', accessedAt: 'August 21, 2026' },
+      { label: 'San Antonio International Airport: nonstop destinations', url: 'https://flysanantonio.com/home/flights/nonstop-destinations/', accessedAt: 'August 21, 2026' },
     ],
     tldr: [
       'Search SAT first when the trip starts in San Antonio. A nearby airport only helps when the fare difference covers the added drive and parking.',
@@ -523,11 +543,18 @@ export const blogPosts: BlogPost[] = [
           'The cheapest flight search is not always the search with the most airports. If your trip begins in San Antonio, open SAT first. You already know the drive, parking routine, and departure time that work for you.',
           'Austin is worth comparing when it has a much better fare, a nonstop route SAT does not offer, or a schedule that saves enough time to justify the drive. Do not turn a small ticket difference into an expensive airport day.',
         ],
+        bodyHtml: [
+          'The cheapest flight search is not always the search with the most airports. If your trip begins in San Antonio, open the <a href="/deals/from/sat">SAT deal page</a> first. You already know the drive, parking routine, and departure time that work for you.',
+          '<a href="/deals/from/aus">Austin</a> is worth comparing when it has a much better fare, a nonstop route SAT does not offer, or a schedule that saves enough time to justify the drive. The <a href="/guides/sat">San Antonio airport guide</a> is useful for the practical details before you decide.',
+        ],
       },
       {
         heading: 'Routes worth watching from San Antonio',
         body: [
           'SAT is useful for travelers headed to Mexico, major U.S. cities, and other Texas airports. The route that looks cheapest changes with the season, airline schedule, and travel dates, so a watchlist works better than one permanent claim about the lowest fare.',
+        ],
+        bodyHtml: [
+          'SAT is useful for travelers headed to Mexico, major U.S. cities, and other Texas airports. The <a href="https://flysanantonio.com/home/flights/nonstop-destinations/" target="_blank" rel="noopener noreferrer">airport\'s current nonstop list</a> includes destinations such as Cancun, Mexico City, Dallas, Houston, Los Angeles, and New York. Schedules change, so check the airline before booking.',
         ],
         bullets: [
           'Mexico, especially when several carriers are competing for the same traveler',
@@ -591,6 +618,7 @@ export const blogPosts: BlogPost[] = [
     metaTitle: 'IAH vs. HOU: Cheap Flights from Houston',
     description: 'Compare Houston Bush and Houston Hobby before booking. Learn when IAH is the better international search, when HOU makes sense for Southwest, and how to compare the real trip cost.',
     publishedAt: '2026-08-21',
+    updatedAt: '2026-08-21',
     category: 'Airport Strategy',
     readingMinutes: 8,
     heroLabel: 'Houston airport comparison',
@@ -600,6 +628,10 @@ export const blogPosts: BlogPost[] = [
       { label: 'Deals from Houston Hobby', href: '/deals/from/hou' },
       { label: 'Houston airport guide', href: '/guides/hou' },
       { label: 'Google Flights checklist', href: '/blog/google-flights-checklist-for-texas-deals' },
+    ],
+    sources: [
+      { label: 'Houston Airports: IAH and HOU overview', url: 'https://www.fly2houston.com/airport-business/about/', accessedAt: 'August 21, 2026' },
+      { label: 'Houston Airports: current destinations', url: 'https://www.fly2houston.com/app/app/flight-and-travel/app/', accessedAt: 'August 21, 2026' },
     ],
     tldr: [
       'IAH is the better first search for international trips and routes with United or more connecting options.',
@@ -612,6 +644,10 @@ export const blogPosts: BlogPost[] = [
         body: [
           'Houston travelers often search both airports because each one has a different strength. IAH is the broad international airport and United hub. HOU is the Southwest-focused airport for domestic routes and selected international service.',
           'The right choice depends on the trip. If you are flying to Europe, South America, or a destination with several connection choices, begin at IAH. If you are flying domestically on Southwest, begin at HOU.',
+        ],
+        bodyHtml: [
+          'Houston travelers often search both airports because each one has a different strength. <a href="https://www.fly2houston.com/airport-business/about/" target="_blank" rel="noopener noreferrer">Houston Airports\' current overview</a> reports 48.7 million passengers and more than 189 destinations at IAH in 2025, compared with 13.9 million passengers and 81 destinations at HOU. IAH is the broader international search; HOU is the smaller Southwest-focused option.',
+          'The right choice depends on the trip. Start with <a href="/deals/from/iah">IAH deal alerts</a> for Europe, South America, or a destination with several connection choices. Start with <a href="/deals/from/hou">HOU deal alerts</a> for domestic Southwest routes, then compare the other airport when the fare or schedule makes it worthwhile.',
         ],
       },
       {

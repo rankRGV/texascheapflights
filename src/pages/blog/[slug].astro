@@ -35,11 +35,12 @@ const articleSections = post.sections.map((section, index) => ({
   ...section,
   id: `section-${index + 1}-${slugify(section.heading)}`,
 }));
-const formattedDate = new Date(post.updatedAt || post.publishedAt).toLocaleDateString('en-US', {
+const formattedDate = new Date(`${post.updatedAt || post.publishedAt}T12:00:00`).toLocaleDateString('en-US', {
   month: 'long',
   day: 'numeric',
   year: 'numeric',
 });
+const dateLabel = post.updatedAt ? 'Updated' : 'Published';
 const tocItems = articleSections.map((section) => ({
   id: section.id,
   label: section.heading,
@@ -117,7 +118,7 @@ const jsonLd = faqJsonLd ? [blogPostingJsonLd, faqJsonLd] : blogPostingJsonLd;
             <span>{post.category}</span>
             {isDraft && <span class="article-draft">Draft preview</span>}
             <span>{post.readingMinutes} min read</span>
-            <time datetime={post.updatedAt || post.publishedAt}>{formattedDate}</time>
+            <time datetime={post.updatedAt || post.publishedAt}>{dateLabel} {formattedDate}</time>
           </div>
           <h1>{post.title}</h1>
           <p>{post.description}</p>
@@ -167,9 +168,9 @@ const jsonLd = faqJsonLd ? [blogPostingJsonLd, faqJsonLd] : blogPostingJsonLd;
               <section id={section.id} class="article-section">
                 <h2>{section.heading}</h2>
                 <div class="article-prose">
-                  {section.body.map((paragraph) => (
-                    <p>{paragraph}</p>
-                  ))}
+                  {section.bodyHtml
+                    ? section.bodyHtml.map((paragraph) => <p set:html={paragraph} />)
+                    : section.body.map((paragraph) => <p>{paragraph}</p>)}
                 </div>
                 {section.bullets && (
                   <ul class="article-bullets">
@@ -222,6 +223,20 @@ const jsonLd = faqJsonLd ? [blogPostingJsonLd, faqJsonLd] : blogPostingJsonLd;
                     </section>
                   ))}
                 </div>
+              </section>
+            )}
+            {post.sources?.length && (
+              <section class="article-sources">
+                <h2>Sources</h2>
+                <p>Airport and airline details were checked against these current public sources.</p>
+                <ul>
+                  {post.sources.map((source) => (
+                    <li>
+                      <a href={source.url} target="_blank" rel="noopener noreferrer">{source.label}</a>
+                      <span>Accessed {source.accessedAt}</span>
+                    </li>
+                  ))}
+                </ul>
               </section>
             )}
           </div>
@@ -654,7 +669,52 @@ const jsonLd = faqJsonLd ? [blogPostingJsonLd, faqJsonLd] : blogPostingJsonLd;
     margin: 1.4rem 0 0;
     font-family: 'Outfit', sans-serif;
     font-size: 0.92rem;
-    line-height: 1.55;
+  .article-prose a,
+  .article-sources a {
+    color: #0b79a8;
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: rgba(11, 121, 168, 0.35);
+    text-underline-offset: 2px;
+  }
+
+  .article-prose a:hover,
+  .article-sources a:hover {
+    text-decoration-color: #0b79a8;
+  }
+
+  .article-sources {
+    margin-top: 3.25rem;
+    padding-top: 3rem;
+    border-top: 1px solid rgba(16, 32, 51, 0.1);
+  }
+
+  .article-sources > p {
+    margin-bottom: 1rem;
+  }
+
+  .article-sources ul {
+    display: grid;
+    gap: 0.7rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .article-sources li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.75rem;
+    align-items: baseline;
+  }
+
+  .article-sources li span {
+    color: #6b7a8d;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.86rem;
+  }
+
+
   }
 
   .article-note a {
