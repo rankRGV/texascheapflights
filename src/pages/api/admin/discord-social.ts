@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { supabase } from '../../../lib/supabase';
-import { buildSocialWebhookPayload } from '../../../lib/social-payload';
+import { publishDealToSocial } from '../../../lib/social-publisher';
 
 // GET renders a confirmation page to prevent Discord unfurler from auto-triggering
 export const GET: APIRoute = async ({ url }) => {
@@ -80,8 +80,6 @@ export const POST: APIRoute = async ({ request }) => {
             return new Response('Missing Deal ID', { status: 400 });
         }
 
-        const n8nWebhookUrl = import.meta.env.N8N_WEBHOOK_URL ?? 'https://jarvis-ens.app.n8n.cloud/webhook/433eb27d-eee4-4eaa-92fa-bba533544d43';
-
         const { data: deal, error: fetchError } = await supabase
             .from('deals')
             .select('*')
@@ -100,23 +98,7 @@ export const POST: APIRoute = async ({ request }) => {
             );
         }
 
-        const DEAL_CARD_SECRET = import.meta.env.DEAL_CARD_SECRET ?? ADMIN_PASSWORD;
-        const n8nPayload = buildSocialWebhookPayload(deal, DEAL_CARD_SECRET);
-
-        const n8nResponse = await fetch(n8nWebhookUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(n8nPayload)
-        });
-
-        if (!n8nResponse.ok) {
-            throw new Error(`n8n Webhook failed with status: ${n8nResponse.status}`);
-        }
-
-        await supabase
-            .from('deals')
-            .update({ posted_to_social: true })
-            .eq('id', dealId);
+        await publishDealToSocial(deal);
 
         return new Response(
             `<html>
@@ -136,7 +118,7 @@ export const POST: APIRoute = async ({ request }) => {
                     <div class="card">
                         <div class="icon">🚀 ✅</div>
                         <h1>Posted to Socials!</h1>
-                        <p>The deal from <strong>${deal.origin}</strong> to <strong>${deal.destination}</strong> ($${deal.price}) has been successfully sent to the n8n webhook.</p>
+                        <p>The deal from <strong>${deal.origin}</strong> to <strong>${deal.destination}</strong> ($${deal.price}) was published directly to Facebook and Instagram.</p>
                         <a href="javascript:window.close();" class="btn">Close Window</a>
                     </div>
                 </body>

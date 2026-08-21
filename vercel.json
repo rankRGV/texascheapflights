@@ -38,5 +38,9 @@
                 }
             ]
         }
+    ],
+    "crons": [
+        { "path": "/api/poll-rss", "schedule": "0 */12 * * *" },
+        { "path": "/api/scout", "schedule": "30 */12 * * *" }
     ]
 }

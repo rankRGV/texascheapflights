@@ -1,6 +1,14 @@
 import { normalizeAirlineName } from './airlines';
 import { estimateReferencePrice, type ShowcaseDeal } from './deal-showcase';
 
+export type SocialVisualVariant = 'radar' | 'regional' | 'weekend' | 'last-call';
+
+export function selectSocialVisualVariant(dealId?: string): SocialVisualVariant {
+  const variants: SocialVisualVariant[] = ['radar', 'regional', 'weekend', 'last-call'];
+  const seed = (dealId || 'texas-cheap-flights').split('').reduce((total, character) => total + character.charCodeAt(0), 0);
+  return variants[seed % variants.length];
+}
+
 type DealForSocial = ShowcaseDeal & {
   booking_link?: string | null;
   travel_dates?: string | null;
@@ -12,7 +20,7 @@ function buildGoogleFlightsSearchUrl(deal: DealForSocial): string {
   return `https://www.google.com/travel/flights?q=Flights+from+${origin}+to+${destination}`;
 }
 
-function buildDealCardUrl(deal: DealForSocial, imageSecretKey: string): string {
+function buildDealCardUrl(deal: DealForSocial, imageSecretKey: string, variant: SocialVisualVariant, endpoint: string): string {
   const params = new URLSearchParams({
     origin: deal.origin,
     destination: deal.destination,
@@ -20,10 +28,12 @@ function buildDealCardUrl(deal: DealForSocial, imageSecretKey: string): string {
     type: deal.deal_type || 'sale',
     dates: deal.travel_dates || 'Flexible Dates',
     key: imageSecretKey,
+    variant,
+    theme: variant === 'regional' || variant === 'weekend' ? 'light' : 'dark',
   });
 
   if (deal.price) params.set('price', String(deal.price));
-  return `https://texascheapflights.com/api/deal-card?${params.toString()}`;
+  return `https://texascheapflights.com${endpoint}?${params.toString()}`;
 }
 
 function buildSavingsSnapshotUrl(
@@ -50,6 +60,7 @@ function buildSavingsSnapshotUrl(
 }
 
 export function buildSocialWebhookPayload(deal: DealForSocial, imageSecretKey: string) {
+  const variant = selectSocialVisualVariant(deal.id);
   const referencePrice = estimateReferencePrice(deal);
   const dealPrice = typeof deal.price === 'number' ? deal.price : null;
   const savingsAmount = dealPrice ? Math.max(0, referencePrice - dealPrice) : null;
@@ -72,7 +83,10 @@ export function buildSocialWebhookPayload(deal: DealForSocial, imageSecretKey: s
     image_secret_key: imageSecretKey,
     social_context: {
       deal_page_url: `https://texascheapflights.com/deal/${deal.id}`,
-      deal_card_url: buildDealCardUrl(deal, imageSecretKey),
+      variant,
+      deal_card_url: buildDealCardUrl(deal, imageSecretKey, variant, '/api/deal-card'),
+      ig_deal_card_url: buildDealCardUrl(deal, imageSecretKey, variant, '/api/deal-card-ig'),
+      story_deal_card_url: buildDealCardUrl(deal, imageSecretKey, variant, '/api/deal-card-story'),
       savings_snapshot_card_url: savingsSnapshotCardUrl,
       google_flights_url: googleFlightsUrl,
       route,

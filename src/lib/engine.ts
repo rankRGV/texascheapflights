@@ -2,7 +2,7 @@ import { Resend } from 'resend';
 import { parseEmailToDeal, type ParsedDeal } from './gemini';
 import { supabase } from './supabase';
 import { normalizeAirlineName } from './airlines';
-import { buildSocialWebhookPayload } from './social-payload';
+import { publishDealToSocial } from './social-publisher';
 
 interface RegionalCluster {
   [key: string]: string[];
@@ -229,7 +229,6 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string, dealId?:
   try {
     const resendApiKey = import.meta.env.RESEND_API_KEY || process.env.RESEND_API_KEY;
     const discordWebhookUrl = import.meta.env.DISCORD_WEBHOOK_URL || process.env.DISCORD_WEBHOOK_URL;
-    const n8nWebhookUrl = import.meta.env.N8N_WEBHOOK_URL || 'https://jarvis-ens.app.n8n.cloud/webhook/433eb27d-eee4-4eaa-92fa-bba533544d43';
 
     let draftLink = "https://resend.com/broadcasts";
 
@@ -246,8 +245,8 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string, dealId?:
       }
     }
 
-    // 1. Social Automation (Trigger n8n if score is 9+)
-    // Rate-limit: only one auto-post per 30 minutes to avoid webhook throttling
+    // 1. Social Automation (direct publisher when autoPost is enabled)
+    // Rate-limit: only one auto-post per 30 minutes to avoid API throttling
     let isRateLimited = false;
     if (autoPost && dealId) {
       const THIRTY_MIN_AGO = new Date(Date.now() - 30 * 60 * 1000).toISOString();
@@ -266,20 +265,15 @@ async function triggerAlerts(dealData: ParsedDeal, rawContent?: string, dealId?:
       }
     }
 
-    if (autoPost && n8nWebhookUrl) {
+    if (autoPost && dealId) {
       try {
-        // Fetch full deal from DB to ensure n8n has everything
         const { data: deal } = await supabase.from('deals').select('*').eq('id', dealId).single();
         if (deal) {
-          await fetch(n8nWebhookUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(buildSocialWebhookPayload(deal, import.meta.env.ADMIN_PASSWORD ?? 'tcf-admin-2026'))
-          });
-          console.log(`   🚀 n8n Social Webhook triggered for auto-posting`);
+          await publishDealToSocial(deal);
+          console.log(`   🚀 Direct social publisher completed for deal ${dealId}`);
         }
       } catch (err) {
-        console.warn("   ⚠️ n8n trigger failed:", err);
+        console.warn("   ⚠️ Direct social publisher failed:", err);
       }
     }
 

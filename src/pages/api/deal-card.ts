@@ -26,6 +26,11 @@ export const GET: APIRoute = async ({ url }) => {
     const dates = (rawDates === 'null' || !rawDates) ? 'Flexible Dates' : rawDates;
 
     const theme = p.get('theme') ?? 'dark';
+    const variant = p.get('variant') ?? 'radar';
+    const variantAccent = variant === 'regional' ? '#38bdf8'
+        : variant === 'weekend' ? '#f97316'
+            : variant === 'last-call' ? '#fb7185'
+                : '#d4a843';
 
     // Load logo as base64 for reliable rendering in Vercel OG
     let logoData = '';
@@ -49,7 +54,7 @@ export const GET: APIRoute = async ({ url }) => {
     const fontFamily = satoshiFontData ? 'Satoshi' : 'Inter, sans-serif';
 
     // Brand colors
-    const gold = '#d4a843';
+    const gold = variantAccent;
     const navyDeep = '#050a14';
     const slate400 = '#94a3b8';
 
