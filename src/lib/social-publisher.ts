@@ -15,7 +15,7 @@ type MetaResponse = {
   [key: string]: unknown;
 };
 
-const GRAPH_VERSION = import.meta.env.META_GRAPH_VERSION || process.env.META_GRAPH_VERSION || 'v19.0';
+const GRAPH_VERSION = import.meta.env.META_GRAPH_VERSION || process.env.META_GRAPH_VERSION || 'v25.0';
 const PAGE_ID = import.meta.env.META_PAGE_ID || process.env.META_PAGE_ID || '100525161325639';
 const INSTAGRAM_USER_ID = import.meta.env.META_INSTAGRAM_USER_ID || process.env.META_INSTAGRAM_USER_ID || '17841418564319174';
 const ACCESS_TOKEN = import.meta.env.META_ACCESS_TOKEN || process.env.META_ACCESS_TOKEN || '';
