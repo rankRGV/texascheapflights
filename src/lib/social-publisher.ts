@@ -90,16 +90,26 @@ function buildSocialCopy(deal: SocialDeal, variant: SocialVisualVariant) {
         ? 'Dallas travelers, check both airports before booking.'
         : 'Texas travelers, check this before the fare moves.';
 
+  // Rotate the voice independently from the visual card so repeated deals do
+  // not receive the same caption simply because they share a visual family.
+  const seed = deal.id.split('').reduce((total, character) => total + character.charCodeAt(0), 0);
+  const index = seed % 4;
   const facebookTemplates = [
-    '✈️ ' + route + ' for ' + price + ' roundtrip on ' + airline + '.' + localNote + dates + ' Verify the live fare before booking: ' + (deal.booking_link || 'https://texascheapflights.com'),
-    'This is the kind of fare worth checking twice: ' + route + ' for ' + price + ' roundtrip.' + localNote + dates + ' See the deal details at texascheapflights.com.',
-    'A Texas departure just hit our deal radar: ' + route + ' for ' + price + '.' + localNote + ' Fares can change, so verify the dates and final price before you book.',
+    '✈️ ' + route + ' is showing at ' + price + ' roundtrip on ' + airline + '.' + dates + ' ' + localNote + ' Check the live fare before booking: ' + (deal.booking_link || 'https://texascheapflights.com'),
+    'Would you take ' + route + ' for ' + price + '? It is listed on ' + airline + '.' + dates + ' ' + localNote + ' Fares can move, so verify the final price before booking.',
+    'A Texas departure worth a quick look: ' + route + ' for ' + price + ' roundtrip.' + dates + ' ' + localNote + ' Deal details: texascheapflights.com.',
+    'Today\'s fare check: ' + route + ' at ' + price + ' on ' + airline + '.' + dates + ' ' + localNote + ' Open the deal and compare the live fare before you book.',
   ];
-  const index = variant === 'regional' ? 0 : variant === 'weekend' ? 1 : 2;
+  const instagramTemplates = [
+    price + ' roundtrip: ' + route + ' ✈️\n' + airline + (deal.travel_dates ? '\n' + deal.travel_dates : '') + '\nCheck the live fare before booking.',
+    route + ' for ' + price + ' ✈️\n' + airline + (deal.travel_dates ? '\n' + deal.travel_dates : '') + '\nWould you take this trip?',
+    'Texas fare check ✈️\n' + route + '\n' + price + ' roundtrip on ' + airline + (deal.travel_dates ? '\n' + deal.travel_dates : '') + '\nWorth a quick look before the fare changes.',
+    'A route to watch:\n' + route + '\n' + price + ' on ' + airline + (deal.travel_dates ? '\n' + deal.travel_dates : '') + '\nVerify the live price before booking.',
+  ];
 
   return {
     facebook: facebookTemplates[index],
-    instagram: price + ' roundtrip: ' + route + ' ✈️\n' + airline + '.' + (deal.travel_dates ? '\n' + deal.travel_dates + '.' : '') + '\nCheck the fare while it is available.\n\n#TexasCheapFlights #' + deal.origin + ' #FlightDeals #TravelTexas',
+    instagram: instagramTemplates[index] + '\n\n#TexasCheapFlights #' + deal.origin + ' #FlightDeals #TravelTexas',
   };
 }
 

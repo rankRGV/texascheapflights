@@ -58,6 +58,24 @@ export const GET: APIRoute = async ({ url }) => {
     const navyDeep = '#050a14';
     const slate400 = '#94a3b8';
 
+    // Each family gets a different visual cue so the feed feels edited, not stamped out.
+    const variantDecoration = variant === 'regional'
+        ? {
+            type: 'div',
+            props: { style: { position: 'absolute', top: 0, left: 0, bottom: 0, width: '22px', background: `linear-gradient(180deg, ${gold}, #38bdf855 70%, transparent)` } },
+        }
+        : variant === 'weekend'
+            ? {
+                type: 'div',
+                props: { style: { position: 'absolute', top: '28px', left: '50%', transform: 'translateX(-50%)', border: `2px solid ${gold}88`, borderRadius: '999px', padding: '10px 24px', color: gold, fontSize: '18px', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase' }, children: 'WEEKEND IDEA' },
+            }
+            : variant === 'last-call'
+                ? {
+                    type: 'div',
+                    props: { style: { position: 'absolute', top: '28px', right: '-64px', transform: 'rotate(8deg)', background: gold, color: navyDeep, padding: '12px 72px', fontSize: '17px', fontWeight: 900, letterSpacing: '0.1em', textTransform: 'uppercase' }, children: 'CHECK BEFORE IT MOVES' },
+                }
+                : null;
+
     // Font scaling — same thresholds as IG card (same 1080px width)
     const scaledFontSize = (text: string) => {
         const len = text.length;
@@ -71,10 +89,15 @@ export const GET: APIRoute = async ({ url }) => {
     const destSize = scaledFontSize(destination);
     const routeSize = parseInt(originSize) < parseInt(destSize) ? originSize : destSize;
 
-    const dealLabel =
+    const dealTypeLabel =
         dealType === 'error_fare' ? '⚡ ERROR FARE'
             : dealType === 'sweetspot' ? '🎯 SWEET SPOT'
                 : '✈ DEAL ALERT';
+    const dealLabel =
+        variant === 'regional' ? '🛫 REGIONAL ROUTE'
+            : variant === 'weekend' ? '☀ WEEKEND ESCAPE'
+                : variant === 'last-call' ? '⏱ LAST CALL'
+                    : dealTypeLabel;
 
     const displayValue = price ? `$${price}` : points ? `${points}k pts` : '$89';
     const displayLabel = price ? 'roundtrip' : 'one-way';
@@ -102,6 +125,8 @@ export const GET: APIRoute = async ({ url }) => {
                     color: theme === 'light' ? '#0f172a' : 'white',
                 },
                 children: [
+                    variantDecoration,
+
                     // Dot grid atmosphere
                     {
                         type: 'div',
@@ -178,7 +203,7 @@ export const GET: APIRoute = async ({ url }) => {
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            gap: '40px',
+                                            gap: variant === 'regional' ? '28px' : variant === 'weekend' ? '56px' : '40px',
                                             width: '100%',
                                         },
                                         children: [
