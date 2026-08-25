@@ -3,6 +3,7 @@ import { parseEmailToDeal, type ParsedDeal } from './gemini';
 import { supabase } from './supabase';
 import { normalizeAirlineName } from './airlines';
 import { publishDealToSocial } from './social-publisher';
+import { getTripLengthBucket, isMateriallyBetter, normalizeDealDestination, parseTravelDateRange } from './deal-quality';
 
 interface RegionalCluster {
   [key: string]: string[];
@@ -78,11 +79,12 @@ export async function processDeal(title: string, content: string, source: string
       ? 48 * 60 * 60 * 1000        // 48h cooldown for auto-post unicorns
       : 7 * 24 * 60 * 60 * 1000;  // 7-day window for standard deals
 
-    const isDupe = await checkFatigue(dealData, fatigueWindow);
+    const travelDates = extractTravelDates(content);
+    const fatigueReason = await checkFatigue(dealData, fatigueWindow, travelDates);
 
-    if (isDupe) {
+    if (fatigueReason) {
       const windowLabel = isHighPriority ? '48h' : '7d';
-      console.log(`   💤 FATIGUE (${windowLabel}): Already sent ${dealData.originAirport} ➔ ${dealData.destination} recently. Skipping.`);
+      console.log(`   💤 FATIGUE (${windowLabel}, ${fatigueReason}): Already sent a similar ${dealData.originAirport} ➔ ${dealData.destination} deal recently. Skipping.`);
       await logDealToDb(dealData, title, content, source, false, 'Fatigue/Duplicate');
       return { success: false, reason: 'Fatigue/Duplicate' };
     }
@@ -159,33 +161,87 @@ async function checkBlocklist(deal: ParsedDeal): Promise<boolean> {
   }
 }
 
-async function checkFatigue(deal: ParsedDeal, windowMs: number = 7 * 24 * 60 * 60 * 1000): Promise<boolean> {
+function extractTravelDates(content?: string | null): string | null {
+  if (!content) return null;
+
+  const datesMatch = content.match(/Dates:\s*([^\n<]+)/i);
+  const value = datesMatch?.[1]?.trim() || '';
+  return value && !/^flexible(?:\s+to\s+flexible)?$/i.test(value) ? value : null;
+}
+
+async function checkFatigue(
+  deal: ParsedDeal,
+  windowMs: number = 7 * 24 * 60 * 60 * 1000,
+  travelDates?: string | null,
+): Promise<'route' | 'destination' | 'trip-profile' | false> {
   try {
     const windowStart = new Date(Date.now() - windowMs).toISOString();
-    const incomingAirline = normalizeAirlineName(deal.airline);
+    const incomingDates = parseTravelDateRange(travelDates);
+    const incomingProfile = getTripLengthBucket(incomingDates.startDate, incomingDates.endDate);
+    const incoming = {
+      origin: deal.originAirport,
+      destination: deal.destination,
+      airline: normalizeAirlineName(deal.airline),
+      price: deal.price,
+      score: deal.totalScore,
+      deal_type: deal.totalScore >= 9 ? 'error_fare' : 'sale',
+      ...incomingDates,
+    };
 
     const { data } = await supabase
       .from('deals')
-      .select('id, airline, price')
-      .eq('origin', deal.originAirport)
-      .eq('destination', deal.destination)
+      .select('id, origin, destination, airline, price, score, deal_type, travel_dates')
       .not('sent_at', 'is', null)
       .gt('sent_at', windowStart)
-      .limit(10);
+      .order('sent_at', { ascending: false })
+      .limit(50);
 
     if (!data || data.length === 0) return false;
 
-    return data.some((existingDeal) => {
-      const existingAirline = normalizeAirlineName(existingDeal.airline);
-      const sameAirline = existingAirline === incomingAirline;
+    const destinationKey = normalizeDealDestination(deal.destination);
+    const sameDestinationDeals = data.filter((existingDeal) =>
+      normalizeDealDestination(existingDeal.destination) === destinationKey,
+    );
+    const sameOriginProfileCount = data.filter((existingDeal) => {
+      if (existingDeal.origin?.toUpperCase() !== deal.originAirport.toUpperCase() || incomingProfile === 'unknown') return false;
+      const existingDates = parseTravelDateRange(existingDeal.travel_dates);
+      return getTripLengthBucket(existingDates.startDate, existingDates.endDate) === incomingProfile;
+    }).length;
 
-      if (!sameAirline) return false;
-      if (typeof existingDeal.price === 'number' && typeof deal.price === 'number' && deal.price <= existingDeal.price * 0.85) {
-        return false;
-      }
+    for (const existingDeal of data) {
+      const existingDates = parseTravelDateRange(existingDeal.travel_dates);
+      const existing = {
+        origin: existingDeal.origin,
+        destination: existingDeal.destination,
+        airline: normalizeAirlineName(existingDeal.airline),
+        price: Number(existingDeal.price) || Number.MAX_SAFE_INTEGER,
+        score: typeof existingDeal.score === 'number' ? existingDeal.score : undefined,
+        deal_type: existingDeal.deal_type,
+        ...existingDates,
+      };
 
-      return true;
-    });
+      if (isMateriallyBetter(incoming, existing)) continue;
+
+      const sameRoute = existing.origin?.toUpperCase() === deal.originAirport.toUpperCase()
+        && normalizeDealDestination(existing.destination) === destinationKey;
+      const sameProfile = existing.origin?.toUpperCase() === deal.originAirport.toUpperCase()
+        && incomingProfile !== 'unknown'
+        && getTripLengthBucket(existing.start_date, existing.end_date) === incomingProfile;
+
+      // Level 1: do not repeat the same Texas origin and destination during
+      // the cooldown window unless the new fare is clearly better.
+      if (sameRoute) return 'route';
+
+      // Level 2: cap ordinary repeats to the same destination across Texas
+      // airports, while preserving materially better exceptions above.
+      if (sameDestinationDeals.length >= 2) return 'destination';
+
+      // Level 3: prevent one airport from receiving a stream of identical
+      // trip-length profiles. Unknown dates are deliberately excluded.
+      if (sameProfile && sameOriginProfileCount >= 3) return 'trip-profile';
+    }
+
+    return false;
   } catch (err) {
     console.warn("   ⚠️ Fatigue check failed:", err);
     return false;
@@ -195,8 +251,7 @@ async function checkFatigue(deal: ParsedDeal, windowMs: number = 7 * 24 * 60 * 6
 async function logDealToDb(deal: ParsedDeal, title: string, content: string, source: string, wasSent: boolean, status: string): Promise<string> {
   try {
     // Extract dates if present in content
-    const datesMatch = content.match(/Dates:\s*([^\n<]+)/i);
-    const travelDates = datesMatch ? datesMatch[1].trim() : null;
+    const travelDates = extractTravelDates(content);
 
     // Extract booking link if present
     const linkMatch = content.match(/Book Link:\s*(https?:\/\/[^\s<]+)/i);

@@ -7,6 +7,8 @@ export interface DiversityCandidate {
     start_date?: string;
     end_date?: string;
     price: number;
+    score?: number;
+    deal_type?: string;
 }
 
 export function normalizeDealDestination(destination: string): string {
@@ -31,8 +33,28 @@ export function getTripLengthBucket(startDate?: string, endDate?: string): TripL
     return 'unknown';
 }
 
-function isMateriallyBetter(candidate: DiversityCandidate, existing: DiversityCandidate): boolean {
-    return candidate.price <= existing.price * 0.85;
+export function parseTravelDateRange(value?: string | null): { startDate?: string; endDate?: string } {
+    if (!value) return {};
+
+    const match = value.match(/(\d{4}-\d{2}-\d{2})\s*(?:to|[-–])\s*(\d{4}-\d{2}-\d{2})/i);
+    return match ? { startDate: match[1], endDate: match[2] } : {};
+}
+
+/**
+ * A repeat is allowed when the new candidate is clearly better than the
+ * recent alert. This keeps a genuine fare drop eligible while stopping
+ * ordinary rechecks from filling the alert stream.
+ */
+export function isMateriallyBetter(candidate: DiversityCandidate, existing: DiversityCandidate): boolean {
+    const priceImprovement = candidate.price <= existing.price * 0.85;
+    const scoreImprovement = typeof candidate.score === 'number'
+        && typeof existing.score === 'number'
+        && candidate.score >= existing.score + 2;
+    const exceptionalType = candidate.deal_type === 'error_fare'
+        && existing.deal_type !== 'error_fare'
+        && (candidate.score ?? 0) >= 9;
+
+    return priceImprovement || scoreImprovement || exceptionalType;
 }
 
 /**
