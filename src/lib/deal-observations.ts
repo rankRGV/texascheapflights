@@ -15,11 +15,13 @@ export interface DealObservationInput {
 }
 
 /**
- * Persistence is opt-in so a shadow request remains safe until its table exists
- * in the deployed Supabase project.
+ * Shadow observations are persisted by default. Set
+ * PERSIST_SCOUT_OBSERVATIONS=false to pause collection without disabling the
+ * read-only shadow request itself.
  */
 export async function persistDealObservations(observations: DealObservationInput[]) {
-    const enabled = (import.meta.env.PERSIST_SCOUT_OBSERVATIONS || process.env.PERSIST_SCOUT_OBSERVATIONS) === 'true';
+    const configured = import.meta.env.PERSIST_SCOUT_OBSERVATIONS || process.env.PERSIST_SCOUT_OBSERVATIONS;
+    const enabled = configured !== 'false';
     if (!enabled || !isSupabaseConfigured || observations.length === 0) {
         return { persisted: false, count: 0, reason: 'opted-out-or-unconfigured' };
     }
