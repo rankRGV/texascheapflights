@@ -63,9 +63,10 @@ export const POST: APIRoute = async ({ request }) => {
           email: email,
           audienceId: audienceId,
           unsubscribed: false,
-          metadata: {
+          properties: {
             magical_token: magicalToken,
-            home_airport: airport.toUpperCase()
+            home_airport: airport.toUpperCase(),
+            alert_scope: 'regional'
           }
         } as any);
         console.log(`Contact added to audience with token metadata`);
@@ -75,9 +76,10 @@ export const POST: APIRoute = async ({ request }) => {
           await resend.contacts.update({
             email: email,
             audienceId: audienceId,
-            metadata: {
+            properties: {
               magical_token: magicalToken,
-              home_airport: airport.toUpperCase()
+              home_airport: airport.toUpperCase(),
+              alert_scope: 'regional'
             }
           } as any);
           console.log(`Contact updated in audience with token metadata`);
