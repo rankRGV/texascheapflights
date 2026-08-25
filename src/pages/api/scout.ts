@@ -21,10 +21,13 @@ type ScoutCandidate = {
     benchmarkLow: number;
     benchmarkHigh: number;
     estimatedDiscountPct: number;
+    benchmarkSource: 'serpapi_average_price' | 'scout_estimate';
+    stops?: number;
+    durationMinutes?: number;
     valueScore: number;
 };
 
-const PRIMARY_TX_AIRPORTS = [
+export const PRIMARY_TX_AIRPORTS = [
     "MFE", "HRL", "LRD", "BRO", "CRP", "ELP", "LBB", "MAF", "AMA",
     "GRK", "TYR", "GGG", "ABI", "DFW", "IAH", "AUS", "SAT", "HOU", "DAL"
 ];
@@ -89,6 +92,7 @@ function extractDestinationCode(destination: any): string | undefined {
         destination?.id,
         destination?.iata_code,
         destination?.airport_code,
+        destination?.arrival_airport_code,
         destination?.airport?.id,
         destination?.airport?.iata_code,
         destination?.airports?.[0]?.id,
@@ -113,8 +117,13 @@ function extractDestinations(data: any): any[] {
             name: deal.name || deal.destination_name || deal.destination || deal.arrival_airport?.name,
             flight_price: deal.flight_price ?? deal.price ?? deal.total_price,
             airline: deal.airline || deal.airlines?.join?.(', '),
-            share_flights_url: deal.share_flights_url || deal.booking_link || deal.link,
-            destination_id: deal.destination_id || deal.arrival_airport?.id,
+            share_flights_url: deal.share_flights_url || deal.flight_link || deal.booking_link || deal.link,
+            destination_id: deal.destination_id || deal.arrival_airport_code || deal.arrival_airport?.id,
+            arrival_airport_code: deal.arrival_airport_code,
+            average_price: deal.average_price,
+            discount_percentage: deal.discount_percentage,
+            stops: deal.stops,
+            flight_duration: deal.flight_duration,
         }))
         .filter((deal: any) => typeof deal.name === 'string' && deal.name.length > 0);
 }
@@ -140,8 +149,20 @@ function buildCandidates(origin: string, originGroup: OriginGroup, destinations:
             const airline = normalizeAirlineName(destination.airline || 'Multiple Airlines');
             const lane = getLane(originGroup, airline, price);
             const { benchmarkLow, benchmarkHigh } = estimateBenchmark(price, airline, originGroup, priceStats);
-            const benchmarkMid = Math.round((benchmarkLow + benchmarkHigh) / 2);
-            const estimatedDiscountPct = Math.max(0, Math.round(((benchmarkMid - price) / benchmarkMid) * 100));
+            const sourceAveragePrice = Number(destination.average_price);
+            const hasSourceBenchmark = Number.isFinite(sourceAveragePrice) && sourceAveragePrice > price;
+            const sourceDiscount = Number(destination.discount_percentage);
+            const hasSourceDiscount = Number.isFinite(sourceDiscount) && sourceDiscount > 0;
+            const finalBenchmarkLow = hasSourceBenchmark
+                ? Math.max(price + 35, Math.round(sourceAveragePrice * 0.85))
+                : benchmarkLow;
+            const finalBenchmarkHigh = hasSourceBenchmark
+                ? Math.max(finalBenchmarkLow + 80, Math.round(sourceAveragePrice * 1.15))
+                : benchmarkHigh;
+            const benchmarkMid = Math.round((finalBenchmarkLow + finalBenchmarkHigh) / 2);
+            const estimatedDiscountPct = hasSourceDiscount
+                ? Math.round(sourceDiscount)
+                : Math.max(0, Math.round(((benchmarkMid - price) / benchmarkMid) * 100));
             const carrierBonus = {
                 premium: 18,
                 legacy: 14,
@@ -170,9 +191,12 @@ function buildCandidates(origin: string, originGroup: OriginGroup, destinations:
                 end_date: destination.end_date,
                 originGroup,
                 lane,
-                benchmarkLow,
-                benchmarkHigh,
+                benchmarkLow: finalBenchmarkLow,
+                benchmarkHigh: finalBenchmarkHigh,
                 estimatedDiscountPct,
+                benchmarkSource: hasSourceBenchmark ? 'serpapi_average_price' : 'scout_estimate',
+                stops: Number.isFinite(Number(destination.stops)) ? Number(destination.stops) : undefined,
+                durationMinutes: Number.isFinite(Number(destination.flight_duration)) ? Number(destination.flight_duration) : undefined,
                 valueScore,
             } satisfies ScoutCandidate;
         })
@@ -395,10 +419,13 @@ export const GET: APIRoute = async ({ request }) => {
                 Dates: ${flight.start_date || 'Flexible'} to ${flight.end_date || 'Flexible'}
                 Price: $${flight.price}
                 Airline: ${flight.airline}
+                Stops: ${typeof flight.stops === 'number' ? flight.stops : 'Unknown'}
+                Flight Duration: ${typeof flight.durationMinutes === 'number' ? `${flight.durationMinutes} minutes` : 'Unknown'}
                 
                 Typical: $${flight.benchmarkLow} - $${flight.benchmarkHigh}
                 Cheaper: $${Math.max(0, flight.benchmarkLow - flight.price)}
                 Estimated Discount: ${flight.estimatedDiscountPct}%
+                Benchmark Source: ${flight.benchmarkSource}
                 Scout Lane: ${flight.lane}
                 
                 Book Link: ${flight.link}
