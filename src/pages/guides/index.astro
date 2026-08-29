@@ -34,38 +34,38 @@ const description = "The Texas Regional Moat is our network of intelligence guid
   <meta name="description" content="Explore our comprehensive travel hacking guides for every Texas airport. Discover parking secrets, TSA tips, and the best flight sweet spots." />
   <link rel="canonical" href="https://texascheapflights.com/guides" />
 </head>
-<body class="bg-navy-deep text-white selection:bg-gold/30">
+<body class="text-tcf-ink selection:bg-tcf-gold/30">
   <GlobalNav activePage="guides" />
 
   <main class="max-w-7xl mx-auto px-6 pt-40 pb-24">
     <div class="mb-16 text-center">
       <h2 class="text-gold font-black uppercase tracking-[0.4em] text-sm mb-4">Texas Airport Intelligence</h2>
-      <h1 class="text-5xl md:text-7xl font-black text-white italic mb-8">Texas Airport <span class="text-gold">Moat</span></h1>
-      <p class="text-slate-400 max-w-2xl mx-auto text-lg leading-relaxed">
+      <h1 class="text-5xl md:text-7xl font-black text-tcf-ink italic mb-8">Texas Airport <span class="text-gold">Moat</span></h1>
+      <p class="text-tcf-ink-muted max-w-2xl mx-auto text-lg leading-relaxed">
         {description}
       </p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {airports.map((airport) => (
-        <a href={`/guides/${airport.code.toLowerCase()}`} class="group relative bg-navy-mid/50 border border-white/5 rounded-3xl p-8 hover:bg-navy-mid hover:border-gold/30 transition-all duration-500 overflow-hidden no-underline">
+        <a href={`/guides/${airport.code.toLowerCase()}`} class="group relative bg-white border border-tcf-ink/10 rounded-3xl p-8 hover:border-tcf-gold/30 hover:shadow-lg transition-all duration-500 overflow-hidden no-underline">
           <!-- Background accent -->
-          <div class="absolute -top-12 -right-12 w-24 h-24 bg-gold/5 rounded-full blur-3xl group-hover:bg-gold/10 transition-colors"></div>
+          <div class="absolute -top-12 -right-12 w-24 h-24 bg-tcf-gold/5 rounded-full blur-3xl group-hover:bg-tcf-gold/10 transition-colors"></div>
           
           <div class="flex flex-col h-full">
             <div class="flex items-center justify-between mb-6">
-              <span class="text-4xl font-black text-white italic tracking-tighter group-hover:text-gold transition-colors">{airport.code}</span>
+              <span class="text-4xl font-black text-tcf-ink italic tracking-tighter group-hover:text-gold transition-colors">{airport.code}</span>
               <div class={`px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest ${
-                airport.tier === 1 ? 'bg-gold/20 text-gold border border-gold/20' : 
-                airport.tier === 2 ? 'bg-aviation-blue/20 text-aviation-blue border border-aviation-blue/20' : 
-                'bg-slate-500/10 text-slate-500 border border-slate-500/10'
+                airport.tier === 1 ? 'bg-tcf-gold/20 text-gold border border-tcf-gold/20' : 
+                airport.tier === 2 ? 'bg-tcf-aviation-blue/20 text-tcf-aviation-blue border border-tcf-aviation-blue/20' : 
+                'bg-tcf-ink/5 text-tcf-ink-muted border border-tcf-ink/10'
               }`}>
                 Tier {airport.tier}
               </div>
             </div>
             
-            <h3 class="text-xl font-black text-white mb-2">{airport.city}</h3>
-            <p class="text-slate-500 text-xs font-medium leading-relaxed mb-6 flex-grow">
+            <h3 class="text-xl font-black text-tcf-ink mb-2">{airport.city}</h3>
+            <p class="text-tcf-ink-muted text-xs font-medium leading-relaxed mb-6 flex-grow">
               {airport.name}
             </p>
             
@@ -78,11 +78,11 @@ const description = "The Texas Regional Moat is our network of intelligence guid
     </div>
 
     <!-- Strategy CTA -->
-    <section class="mt-24 p-12 bg-gradient-to-br from-navy-mid to-navy-deep border border-white/10 rounded-[2.5rem] text-center relative overflow-hidden">
-      <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1436491865332-7a61a1082e12?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-5"></div>
+    <section class="mt-24 p-12 bg-tcf-cream border border-tcf-ink/10 rounded-[2.5rem] text-center relative overflow-hidden">
+      <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1436491865332-7a61a1082e12?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-10"></div>
       <div class="relative z-10">
-        <h2 class="text-3xl font-black text-white mb-4">Don't fly blindly from Texas.</h2>
-        <p class="text-slate-400 mb-8 max-w-xl mx-auto">
+        <h2 class="text-3xl font-black text-tcf-ink mb-4">Don't fly blindly from Texas.</h2>
+        <p class="text-tcf-ink-muted mb-8 max-w-xl mx-auto">
           We monitor these airports so you don't have to.
         </p>
         <a href="/#waitlist" class="btn-primary">

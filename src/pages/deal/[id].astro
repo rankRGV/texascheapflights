@@ -138,7 +138,7 @@ const { data: relatedDeals } = await supabase
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;900&family=Outfit:wght@400;500;700&display=swap" rel="stylesheet" />
 </head>
-<body class="bg-tcf-navy-deep text-white min-h-screen" data-tcf-deal-id={deal.id} data-origin={deal.origin} data-destination={deal.destination} data-airline={normalizedAirline} data-price={deal.price ?? ''}>
+<body class="text-tcf-ink min-h-screen" data-tcf-deal-id={deal.id} data-origin={deal.origin} data-destination={deal.destination} data-airline={normalizedAirline} data-price={deal.price ?? ''}>
 
   <GlobalNav activePage="past-deals" />
 
@@ -146,10 +146,10 @@ const { data: relatedDeals } = await supabase
     <div class="max-w-4xl mx-auto">
       
       <div class="mb-8">
-        <a href="/past-deals" class="text-tcf-gold hover:underline text-sm font-bold uppercase tracking-wider">← Back to Archive</a>
+        <a href="/past-deals" class="text-tcf-gold-deep hover:underline text-sm font-bold uppercase tracking-wider">← Back to Archive</a>
       </div>
 
-      <div class="rounded-[2.5rem] border border-white/10 bg-white/5 overflow-hidden shadow-2xl">
+      <div class="rounded-[2.5rem] border border-tcf-ink/10 bg-tcf-ink/5 overflow-hidden shadow-2xl">
         <!-- Deal Card Image -->
         <div class="aspect-[1200/630] w-full bg-slate-900 relative">
             <img src={ogImage} alt={title} class="w-full h-full object-cover" />
@@ -159,50 +159,50 @@ const { data: relatedDeals } = await supabase
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
                 <div>
                     <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-2">
-                        {deal.origin} <span class="text-slate-500 font-normal">→</span> {deal.destination}
+                        {deal.origin} <span class="text-tcf-ink-muted font-normal">→</span> {deal.destination}
                     </h1>
-                    <p class="text-xl text-slate-400 font-body">
+                    <p class="text-xl text-tcf-ink-muted font-body">
                         {normalizedAirline} · {deal.travel_dates}
                     </p>
                 </div>
                 <div class="text-left md:text-right">
                     {deal.price ? (
-                        <div class="text-5xl md:text-7xl font-black text-tcf-gold tracking-tighter">${deal.price}</div>
+                        <div class="text-5xl md:text-7xl font-black text-tcf-gold-deep tracking-tighter">${deal.price}</div>
                     ) : (
                         <div class="text-3xl font-black text-sky-400">Points Deal</div>
                     )}
-                    <p class="text-xs text-slate-500 uppercase tracking-[0.2em] mt-1">Roundtrip Total</p>
+                    <p class="text-xs text-tcf-ink-muted uppercase tracking-[0.2em] mt-1">Roundtrip Total</p>
                 </div>
             </div>
 
             <div class="grid md:grid-cols-2 gap-8 mb-12">
-                <div class="p-6 rounded-2xl bg-white/5 border border-white/5">
-                    <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4">Market Context</h3>
+                <div class="p-6 rounded-2xl bg-tcf-ink/5 border border-tcf-ink/10">
+                    <h3 class="text-xs font-black text-tcf-ink-muted uppercase tracking-widest mb-4">Market Context</h3>
                     <div class="space-y-4">
                         <div class="flex justify-between items-center">
-                            <span class="text-sm text-slate-400">AI Scout Score</span>
+                            <span class="text-sm text-tcf-ink-muted">AI Scout Score</span>
                             <span class={`font-black ${deal.score >= 8 ? 'text-green-400' : 'text-amber-400'}`}>{deal.score}/10</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span class="text-sm text-slate-400">Lifespan</span>
-                            <span class="text-sm font-bold text-white">~24-48 hours</span>
+                            <span class="text-sm text-tcf-ink-muted">Lifespan</span>
+                            <span class="text-sm font-bold text-tcf-ink">~24-48 hours</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span class="text-sm text-slate-400">Status</span>
-                            <span class="text-xs font-black text-tcf-gold uppercase tracking-wider">Expired or Dynamic</span>
+                            <span class="text-sm text-tcf-ink-muted">Status</span>
+                            <span class="text-xs font-black text-tcf-gold-deep uppercase tracking-wider">Expired or Dynamic</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="p-6 rounded-2xl bg-tcf-gold/10 border border-tcf-gold/20 flex flex-col justify-center">
-                    <p class="text-sm text-slate-300 mb-4 leading-relaxed">
+                    <p class="text-sm text-tcf-ink-muted mb-4 leading-relaxed">
                         Deals like this appear and disappear in hours. To get alerted the second our scout finds the next one:
                     </p>
                     <div class="grid gap-3">
                       <a href={bookingLink} target="_blank" rel="noopener noreferrer" data-tcf-booking data-deal-id={deal.id} data-origin={deal.origin} data-destination={deal.destination} class="btn-primary w-full py-4 text-center text-sm no-underline font-black uppercase tracking-widest" style="background: var(--tcf-gold); color: #050a14;">
                         Check this route
                       </a>
-                      <a href="/#waitlist" data-tcf-event="cta_clicked" data-tcf-location="deal_detail" data-tcf-label="Join the Scout List" class="text-center text-xs font-black uppercase tracking-widest text-slate-400 hover:text-white no-underline">
+                      <a href="/#waitlist" data-tcf-event="cta_clicked" data-tcf-location="deal_detail" data-tcf-label="Join the Scout List" class="text-center text-xs font-black uppercase tracking-widest text-tcf-ink-muted hover:text-tcf-ink no-underline">
                         Get the next alert
                       </a>
                     </div>
@@ -210,28 +210,28 @@ const { data: relatedDeals } = await supabase
             </div>
 
             <div class="mb-12">
-                <h2 class="text-xl font-black text-white uppercase tracking-wider mb-6">Deal Breakdown</h2>
-                <div class="space-y-6 text-slate-300 font-body leading-relaxed">
+                <h2 class="text-xl font-black text-tcf-ink uppercase tracking-wider mb-6">Deal Breakdown</h2>
+                <div class="space-y-6 text-tcf-ink-muted font-body leading-relaxed">
                     <p>
-                        This alert was triggered because the price for <strong class="text-white" data-ai-key="destination">{deal.destination}</strong> stood out against our live scout thresholds for departures from <strong class="text-white" data-ai-key="origin">{deal.origin}</strong> and cleared the send threshold for Texas subscribers.
+                        This alert was triggered because the price for <strong class="text-tcf-ink" data-ai-key="destination">{deal.destination}</strong> stood out against our live scout thresholds for departures from <strong class="text-tcf-ink" data-ai-key="origin">{deal.origin}</strong> and cleared the send threshold for Texas subscribers.
                     </p>
                     <div class="grid gap-4">
-                        <div class="p-6 rounded-2xl bg-white/5 border border-white/5 flex gap-4 items-start">
+                        <div class="p-6 rounded-2xl bg-tcf-ink/5 border border-tcf-ink/10 flex gap-4 items-start">
                             <div class="w-10 h-10 rounded-full bg-tcf-aviation-blue/10 flex items-center justify-center text-tcf-aviation-blue flex-shrink-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.5 9 11.5"/></svg>
                             </div>
                             <div>
-                                <p class="text-sm font-bold text-white mb-1 uppercase tracking-tight">Verified Route</p>
-                                <p class="text-xs text-slate-500">Operated by <span data-ai-key="airline" class="text-slate-300">{normalizedAirline || 'Major Carrier'}</span>. It made the feed because it cleared our current value and route-quality thresholds, not just because it was cheap in raw dollars.</p>
+                                <p class="text-sm font-bold text-tcf-ink mb-1 uppercase tracking-tight">Verified Route</p>
+                                <p class="text-xs text-tcf-ink-muted">Operated by <span data-ai-key="airline" class="text-tcf-ink-muted">{normalizedAirline || 'Major Carrier'}</span>. It made the feed because it cleared our current value and route-quality thresholds, not just because it was cheap in raw dollars.</p>
                             </div>
                         </div>
-                        <div class="p-6 rounded-2xl bg-white/5 border border-white/5 flex gap-4 items-start">
-                            <div class="w-10 h-10 rounded-full bg-tcf-gold/10 flex items-center justify-center text-tcf-gold flex-shrink-0">
+                        <div class="p-6 rounded-2xl bg-tcf-ink/5 border border-tcf-ink/10 flex gap-4 items-start">
+                            <div class="w-10 h-10 rounded-full bg-tcf-gold/10 flex items-center justify-center text-tcf-gold-deep flex-shrink-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
                             </div>
                             <div>
-                                <p class="text-sm font-bold text-white mb-1 uppercase tracking-tight">Travel Window</p>
-                                <p class="text-xs text-slate-500" data-ai-key="travel_dates">{deal.travel_dates || 'Dates vary, check availability.'}</p>
+                                <p class="text-sm font-bold text-tcf-ink mb-1 uppercase tracking-tight">Travel Window</p>
+                                <p class="text-xs text-tcf-ink-muted" data-ai-key="travel_dates">{deal.travel_dates || 'Dates vary, check availability.'}</p>
                             </div>
                         </div>
                     </div>
@@ -239,7 +239,7 @@ const { data: relatedDeals } = await supabase
             </div>
 
             <div class="text-center">
-                <p class="text-xs text-slate-600 font-body">
+                <p class="text-xs text-tcf-ink-muted font-body">
                     Scouted on <time datetime={new Date(deal.sent_at || deal.created_at).toISOString()} data-ai-key="scout_date">{new Date(deal.sent_at || deal.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</time>.
                     Prices are subject to airline availability.
                 </p>
@@ -251,17 +251,17 @@ const { data: relatedDeals } = await supabase
 
   <!-- ══ RELATED DEALS ══ -->
   {relatedDeals && relatedDeals.length > 0 && (
-    <section class="border-t border-white/5 px-6 py-16">
+    <section class="border-t border-tcf-ink/10 px-6 py-16">
       <div class="max-w-4xl mx-auto">
-        <h2 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-6">More deals from {deal.origin}</h2>
+        <h2 class="text-xs font-black text-tcf-ink-muted uppercase tracking-widest mb-6">More deals from {deal.origin}</h2>
         <div class="grid gap-3">
           {relatedDeals.map(r => (
-            <a href={`/deal/${r.id}`} class="flex justify-between items-center p-4 rounded-2xl liquid-glass border border-white/5 hover:border-tcf-gold/30 transition-all no-underline group">
+            <a href={`/deal/${r.id}`} class="flex justify-between items-center p-4 rounded-2xl liquid-glass border border-tcf-ink/10 hover:border-tcf-gold/30 transition-all no-underline group">
               <div>
-                <span class="text-sm font-black text-white group-hover:text-tcf-gold transition-colors">{r.origin} → {r.destination}</span>
-                <span class="text-xs text-slate-500 ml-3">{normalizeAirlineName(r.airline)}</span>
+                <span class="text-sm font-black text-tcf-ink group-hover:text-tcf-gold-deep transition-colors">{r.origin} → {r.destination}</span>
+                <span class="text-xs text-tcf-ink-muted ml-3">{normalizeAirlineName(r.airline)}</span>
               </div>
-              <span class="text-sm font-black text-tcf-gold">{r.price ? `$${r.price}` : 'Points'}</span>
+              <span class="text-sm font-black text-tcf-gold-deep">{r.price ? `$${r.price}` : 'Points'}</span>
             </a>
           ))}
         </div>
@@ -270,16 +270,16 @@ const { data: relatedDeals } = await supabase
   )}
 
   <!-- ══ HUB LINK ══ -->
-  <section class="border-t border-white/5 px-6 py-10 text-center">
-    <p class="text-sm text-slate-500 mb-3">More deals departing this airport:</p>
-    <a href={`/deals/from/${deal.origin.toLowerCase()}`} class="inline-flex items-center gap-2 text-tcf-aviation-blue hover:underline font-bold text-sm no-underline hover:text-white transition-colors">
+  <section class="border-t border-tcf-ink/10 px-6 py-10 text-center">
+    <p class="text-sm text-tcf-ink-muted mb-3">More deals departing this airport:</p>
+    <a href={`/deals/from/${deal.origin.toLowerCase()}`} class="inline-flex items-center gap-2 text-tcf-aviation-blue hover:underline font-bold text-sm no-underline hover:text-tcf-ink transition-colors">
       View all deals from {deal.origin} →
     </a>
   </section>
 
   <!-- ══ FOOTER ══ -->
-  <footer class="border-t border-white/5 px-6 py-10 text-center text-xs text-slate-600">
-    <p>© 2026 Texas Cheap Flights · <a href="/skeptics-guide" class="text-slate-500 hover:text-white transition-colors no-underline">Skeptic's Guide</a> · <a href="/past-deals" class="text-slate-500 hover:text-white transition-colors no-underline">All Deals</a> · <a href="/" class="text-slate-500 hover:text-white transition-colors no-underline">Home</a></p>
+  <footer class="border-t border-tcf-ink/10 px-6 py-10 text-center text-xs text-tcf-ink-muted">
+    <p>© 2026 Texas Cheap Flights · <a href="/skeptics-guide" class="text-tcf-ink-muted hover:text-tcf-ink transition-colors no-underline">Skeptic's Guide</a> · <a href="/past-deals" class="text-tcf-ink-muted hover:text-tcf-ink transition-colors no-underline">All Deals</a> · <a href="/" class="text-tcf-ink-muted hover:text-tcf-ink transition-colors no-underline">Home</a></p>
   </footer>
 
 </body>

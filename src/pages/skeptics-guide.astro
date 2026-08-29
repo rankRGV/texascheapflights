@@ -112,7 +112,7 @@ const OBJECTIONS = [
   </noscript>
 </head>
 
-<body class="bg-primary text-primary font-body selection:bg-tcf-aviation-blue/30 selection:text-white">
+<body class="bg-primary text-primary font-body selection:bg-tcf-aviation-blue/30 selection:text-tcf-ink">
 
   <GlobalNav activePage="skeptics-guide" />
 
@@ -122,28 +122,28 @@ const OBJECTIONS = [
       <!-- Hero -->
       <header class="text-center mb-20 anim-fade-up">
         <span class="label text-gold uppercase tracking-[0.3em] font-bold text-xs mb-6 inline-block">The Honest Breakdown</span>
-        <h1 class="text-5xl md:text-7xl mb-8 text-white font-black leading-tight">
+        <h1 class="text-5xl md:text-7xl mb-8 text-tcf-ink font-black leading-tight">
           The Skeptic's Guide to <span class="text-gold">Texas Cheap Flights</span>
         </h1>
-        <p class="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-          Are these deals real? Will alerts arrive in time? Do you need to know about points?<br/><span class="text-white font-bold">Straight answers. No gurus. No pitch.</span>
+        <p class="text-xl text-tcf-ink-muted max-w-2xl mx-auto leading-relaxed">
+          Are these deals real? Will alerts arrive in time? Do you need to know about points?<br/><span class="text-tcf-ink font-bold">Straight answers. No gurus. No pitch.</span>
         </p>
-        <p class="text-center text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-8">
+        <p class="text-center text-[10px] text-tcf-ink-muted font-bold uppercase tracking-widest mt-8">
           Last updated: <time datetime="2026-03-08">March 8, 2026</time>
         </p>
       </header>
 
       <!-- Objections List -->
       <section class="space-y-12 mb-32">
-        <h2 class="text-3xl font-black text-center text-white mb-16">Five objections. Five honest answers.</h2>
+        <h2 class="text-3xl font-black text-center text-tcf-ink mb-16">Five objections. Five honest answers.</h2>
         <div class="grid gap-8">
           {OBJECTIONS.map(obj => (
-            <div id={obj.id} class="liquid-glass p-8 md:p-12 rounded-[2.5rem] border-white/5 hover:border-white/20 transition-all duration-300">
+            <div id={obj.id} class="liquid-glass p-8 md:p-12 rounded-[2.5rem] border-tcf-ink/10 hover:border-tcf-ink/10 transition-all duration-300">
               <div class="flex flex-col md:flex-row gap-8">
-                <div class="w-16 h-16 rounded-2xl bg-tcf-gold/10 flex items-center justify-center text-tcf-gold flex-shrink-0" set:html={obj.icon}></div>
+                <div class="w-16 h-16 rounded-2xl bg-tcf-gold/10 flex items-center justify-center text-tcf-gold-deep flex-shrink-0" set:html={obj.icon}></div>
                 <div>
-                  <h3 class="text-2xl font-black text-white mb-4 tracking-tight">{obj.q}</h3>
-                  <p class="text-lg text-slate-400 leading-relaxed font-body">{obj.a}</p>
+                  <h3 class="text-2xl font-black text-tcf-ink mb-4 tracking-tight">{obj.q}</h3>
+                  <p class="text-lg text-tcf-ink-muted leading-relaxed font-body">{obj.a}</p>
                 </div>
               </div>
             </div>
@@ -156,26 +156,26 @@ const OBJECTIONS = [
         <div class="liquid-glass p-10 md:p-16 rounded-[3rem] relative overflow-hidden">
           <div class="absolute -top-20 -left-20 w-64 h-64 bg-tcf-aviation-blue/10 blur-[120px] rounded-full"></div>
 
-          <h2 class="text-3xl font-black mb-6 text-white">Rule #1: Error fares are legal to book — but never guaranteed.</h2>
-          <p class="text-slate-400 mb-8 leading-relaxed text-lg font-body">
+          <h2 class="text-3xl font-black mb-6 text-tcf-ink">Rule #1: Error fares are legal to book — but never guaranteed.</h2>
+          <p class="text-tcf-ink-muted mb-8 leading-relaxed text-lg font-body">
             An error fare happens when a carrier's pricing system misfires — a currency conversion glitch, a misplaced decimal, a data feed error — and publishes a fare at a fraction of its intended price. They're not a loophole or a hack. They're a pricing mistake.
           </p>
           <div class="grid md:grid-cols-2 gap-10">
             <div class="space-y-4">
-              <h3 class="text-white font-bold flex items-center gap-2">
+              <h3 class="text-tcf-ink font-bold flex items-center gap-2">
                 <span class="w-6 h-6 rounded-full bg-tcf-aviation-blue/20 flex items-center justify-center text-[10px] text-tcf-aviation-blue">1</span>
                 Are they guaranteed to honor it?
               </h3>
-              <p class="text-sm text-slate-500 leading-relaxed font-body">
+              <p class="text-sm text-tcf-ink-muted leading-relaxed font-body">
                 No service can guarantee that. Many error fares are honored after ticketing, but airlines can identify a mistaken fare, cancel the booking, and refund the charge. That is why we frame these as time-sensitive opportunities with risk, not guaranteed inventory.
               </p>
             </div>
             <div class="space-y-4">
-              <h3 class="text-white font-bold flex items-center gap-2">
+              <h3 class="text-tcf-ink font-bold flex items-center gap-2">
                 <span class="w-6 h-6 rounded-full bg-tcf-aviation-blue/20 flex items-center justify-center text-[10px] text-tcf-aviation-blue">2</span>
                 What's the worst case?
               </h3>
-              <p class="text-sm text-slate-500 leading-relaxed font-body">
+              <p class="text-sm text-tcf-ink-muted leading-relaxed font-body">
                 The most common downside is a cancellation and refund from the airline. You may lose the time it took to book, and you should not make non-refundable hotel or activity plans until the ticket is confirmed and stable. Low-confidence glitches get held back.
               </p>
             </div>
@@ -191,17 +191,17 @@ const OBJECTIONS = [
             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-[9px] font-black uppercase tracking-widest text-red-400 mb-8 inline-block">
               ⚡ Two Types, One Service
             </span>
-            <h2 class="text-3xl font-black mb-6 text-white">Rule #2: There are two types of deals. You benefit from both.</h2>
+            <h2 class="text-3xl font-black mb-6 text-tcf-ink">Rule #2: There are two types of deals. You benefit from both.</h2>
             <div class="grid md:grid-cols-2 gap-10">
               <div>
                 <p class="text-xs font-black text-red-400 uppercase tracking-widest mb-3">Cash Error Fares</p>
-                <p class="text-slate-400 leading-relaxed font-body">
+                <p class="text-tcf-ink-muted leading-relaxed font-body">
                   When an airline's algorithm misfires and publishes a $1,200 roundtrip for $180. No points. No cards. Buy it like any normal ticket. These glitch windows are real, they happen weekly, and they close within hours. By the time it surfaces on a deal blog, it's usually patched. We send the alert the moment the bot catches it.
                 </p>
               </div>
               <div>
                 <p class="text-xs font-black text-tcf-aviation-blue uppercase tracking-widest mb-3">Award Sweet Spots</p>
-                <p class="text-slate-400 leading-relaxed font-body">
+                <p class="text-tcf-ink-muted leading-relaxed font-body">
                   When an airline's award chart prices a route by geographic zone instead of distance — meaning a flight from McAllen to London can cost the same miles as DFW to London. These aren't errors. They're structural advantages baked into the program that most Texans don't know about.
                 </p>
               </div>
@@ -214,17 +214,17 @@ const OBJECTIONS = [
       <section class="mb-32 text-center">
         <div class="p-12 md:p-20 rounded-[4rem] bg-tcf-gold/5 border border-tcf-gold/10 relative overflow-hidden">
           <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tcf-gold)_0%,_transparent_20%)] opacity-10"></div>
-          <h2 class="text-4xl md:text-5xl font-black text-white mb-8">Still not convinced? See every deal we've actually sent.</h2>
-          <p class="text-xl text-slate-400 max-w-2xl mx-auto mb-8 font-body">
-            Real routes. Real prices. Real airlines. Every deal AI Scout has found and sent to Texas subscribers — publicly archived and never edited. From <span class="text-tcf-gold font-bold">MFE, LRD, BRO, CRP, HRL</span> and every major Texas airport.
+          <h2 class="text-4xl md:text-5xl font-black text-tcf-ink mb-8">Still not convinced? See every deal we've actually sent.</h2>
+          <p class="text-xl text-tcf-ink-muted max-w-2xl mx-auto mb-8 font-body">
+            Real routes. Real prices. Real airlines. Every deal AI Scout has found and sent to Texas subscribers — publicly archived and never edited. From <span class="text-tcf-gold-deep font-bold">MFE, LRD, BRO, CRP, HRL</span> and every major Texas airport.
           </p>
-          <p class="text-lg text-white font-bold mb-10">No cherry-picking. No expired deals dressed up as wins. Just the actual record.</p>
+          <p class="text-lg text-tcf-ink font-bold mb-10">No cherry-picking. No expired deals dressed up as wins. Just the actual record.</p>
           <div class="flex flex-col sm:flex-row items-center justify-center gap-6 w-full">
           <a href="/#waitlist" class="btn-primary w-full sm:w-auto px-16 py-6 text-xl">
             Secure My Early Access
           </a>
         </div>
-        <p class="mt-8 text-slate-500 text-xs font-black uppercase tracking-[0.2em]">
+        <p class="mt-8 text-tcf-ink-muted text-xs font-black uppercase tracking-[0.2em]">
           Free to join · Unsubscribe anytime
         </p>
       </div>
@@ -232,8 +232,8 @@ const OBJECTIONS = [
   </main>
 
   <!-- Footer -->
-  <footer class="py-20 bg-tcf-navy-deep border-t border-white/5 text-center">
-    <p class="text-slate-600 text-xs font-bold uppercase tracking-widest">
+  <footer class="py-20 bg-tcf-cream border-t border-tcf-ink/10 text-center">
+    <p class="text-tcf-ink-muted text-xs font-bold uppercase tracking-widest">
       © 2026 Texas Cheap Flights. No fluff, just math.
     </p>
   </footer>

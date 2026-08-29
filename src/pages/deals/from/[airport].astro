@@ -952,7 +952,7 @@ const jsonLd = {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;900&family=Outfit:wght@400;500;700&display=swap" rel="stylesheet" />
 </head>
-<body class="bg-tcf-navy-deep text-white min-h-screen">
+<body class="text-tcf-ink min-h-screen">
 
   <GlobalNav activePage="past-deals" />
 
@@ -960,15 +960,15 @@ const jsonLd = {
     <div class="max-w-4xl mx-auto">
       
       <header class="mb-16">
-        <span class="text-tcf-gold font-bold text-xs uppercase tracking-[0.3em] mb-4 inline-block">Regional Airport Scout</span>
+        <span class="text-tcf-gold-deep font-bold text-xs uppercase tracking-[0.3em] mb-4 inline-block">Regional Airport Scout</span>
         <h1 class="text-4xl md:text-6xl font-black mb-6 leading-tight">
           Cheap Flights from <br/><span class="text-gold italic">{airportData.city} ({airportData.code})</span>
         </h1>
-        <p class="text-lg text-slate-400 max-w-2xl font-body leading-relaxed">
+        <p class="text-lg text-tcf-ink-muted max-w-2xl font-body leading-relaxed">
           We monitor every major airline and award program departing from {airportData.city}. No more generic alerts for DFW when you're flying out of {airportData.code}.
         </p>
-        <div class="mt-6 flex flex-wrap items-center gap-3 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
-          <span class="rounded-full border border-tcf-gold/20 bg-tcf-gold/5 px-3 py-2 text-tcf-gold">Airport-specific radar</span>
+        <div class="mt-6 flex flex-wrap items-center gap-3 text-[10px] font-black uppercase tracking-[0.18em] text-tcf-ink-muted">
+          <span class="rounded-full border border-tcf-gold/20 bg-tcf-gold/5 px-3 py-2 text-tcf-gold-deep">Airport-specific radar</span>
           <span>{dealList.length} archived alerts</span>
           {lastUpdated && <span>Last alert {lastUpdated.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>}
         </div>
@@ -976,24 +976,24 @@ const jsonLd = {
 
       {dealList.length > 0 ? (
         <div class="space-y-6">
-          <h2 class="text-sm font-black text-white uppercase tracking-widest mb-8">Recent Alerts from {airportData.code}</h2>
+          <h2 class="text-sm font-black text-tcf-ink uppercase tracking-widest mb-8">Recent Alerts from {airportData.code}</h2>
           <div class="grid gap-4">
             {dealList.map((deal) => (
-              <a href={`/deal/${deal.id}`} class="block liquid-glass p-6 rounded-2xl border border-white/5 hover:border-tcf-gold/30 transition-all duration-300 group no-underline text-inherit">
+              <a href={`/deal/${deal.id}`} class="block liquid-glass p-6 rounded-2xl border border-tcf-ink/10 hover:border-tcf-gold/30 transition-all duration-300 group no-underline text-inherit">
                 <div class="flex justify-between items-center">
                   <div>
                     <div class="flex items-center gap-2 mb-2">
-                        <span class={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border ${deal.score >= 8 ? 'text-tcf-gold border-tcf-gold/30 bg-tcf-gold/5' : 'text-slate-500 border-white/10'}`}>
+                        <span class={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border ${deal.score >= 8 ? 'text-tcf-gold-deep border-tcf-gold/30 bg-tcf-gold/5' : 'text-tcf-ink-muted border-tcf-ink/10'}`}>
                             Score: {deal.score}/10
                         </span>
-                        <span class="text-[10px] text-slate-500">{new Date(deal.sent_at).toLocaleDateString()}</span>
+                        <span class="text-[10px] text-tcf-ink-muted">{new Date(deal.sent_at).toLocaleDateString()}</span>
                     </div>
-                    <div class="text-xl font-black text-white group-hover:text-tcf-gold transition-colors">{deal.origin} → {deal.destination}</div>
-                    <div class="text-xs text-slate-500 mt-1">{deal.airline} · {deal.travel_dates}</div>
+                    <div class="text-xl font-black text-tcf-ink group-hover:text-tcf-gold-deep transition-colors">{deal.origin} → {deal.destination}</div>
+                    <div class="text-xs text-tcf-ink-muted mt-1">{deal.airline} · {deal.travel_dates}</div>
                   </div>
                   <div class="text-right">
-                    <div class="text-2xl font-black text-white">{deal.price ? `$${deal.price}` : 'Points'}</div>
-                    <div class="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Roundtrip</div>
+                    <div class="text-2xl font-black text-tcf-ink">{deal.price ? `$${deal.price}` : 'Points'}</div>
+                    <div class="text-[10px] text-tcf-ink-muted uppercase tracking-widest mt-1">Roundtrip</div>
                   </div>
                 </div>
               </a>
@@ -1009,35 +1009,35 @@ const jsonLd = {
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tcf-gold opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-3 w-3 bg-tcf-gold"></span>
               </span>
-              <span class="text-xs font-black text-tcf-gold uppercase tracking-[0.2em]">AI Scout Active — {airportData.code}</span>
+              <span class="text-xs font-black text-tcf-gold-deep uppercase tracking-[0.2em]">AI Scout Active — {airportData.code}</span>
             </div>
-            <h3 class="text-2xl font-black text-white mb-3">No archived deals yet — Scout is watching.</h3>
-            <p class="text-slate-400 leading-relaxed font-body max-w-xl">
+            <h3 class="text-2xl font-black text-tcf-ink mb-3">No archived deals yet — Scout is watching.</h3>
+            <p class="text-tcf-ink-muted leading-relaxed font-body max-w-xl">
               Our AI hasn't flagged a sendable deal from {airportData.city} yet, but the radar is live. Error fares and award arbitrage windows from {airportData.code} tend to be brief — most close within 2–4 hours. Subscribers get the alert the moment one surfaces.
             </p>
           </div>
 
           <!-- What We Watch For -->
           <div class="grid md:grid-cols-3 gap-4">
-            <div class="p-6 rounded-2xl bg-white/5 border border-white/5">
-              <p class="text-xs font-black text-tcf-gold uppercase tracking-widest mb-3">Error Fares</p>
-              <p class="text-sm text-slate-400 leading-relaxed font-body">Airline pricing glitches that can slip through for hours before the carrier pulls them. Legal to book, often honored, but never guaranteed.</p>
+            <div class="p-6 rounded-2xl bg-tcf-ink/5 border border-tcf-ink/10">
+              <p class="text-xs font-black text-tcf-gold-deep uppercase tracking-widest mb-3">Error Fares</p>
+              <p class="text-sm text-tcf-ink-muted leading-relaxed font-body">Airline pricing glitches that can slip through for hours before the carrier pulls them. Legal to book, often honored, but never guaranteed.</p>
             </div>
-            <div class="p-6 rounded-2xl bg-white/5 border border-white/5">
+            <div class="p-6 rounded-2xl bg-tcf-ink/5 border border-tcf-ink/10">
               <p class="text-xs font-black text-tcf-aviation-blue uppercase tracking-widest mb-3">Zone Awards</p>
-              <p class="text-sm text-slate-400 leading-relaxed font-body">Award programs price by zone, not distance. {airportData.code} often costs the same points as DFW or IAH to the same destination.</p>
+              <p class="text-sm text-tcf-ink-muted leading-relaxed font-body">Award programs price by zone, not distance. {airportData.code} often costs the same points as DFW or IAH to the same destination.</p>
             </div>
-            <div class="p-6 rounded-2xl bg-white/5 border border-white/5">
+            <div class="p-6 rounded-2xl bg-tcf-ink/5 border border-tcf-ink/10">
               <p class="text-xs font-black uppercase tracking-widest mb-3" style="color: var(--tcf-success)">Sweet Spots</p>
-              <p class="text-sm text-slate-400 leading-relaxed font-body">Partner award pricing that's mispriced relative to cash. Rare but high-value — often 70–80% below retail.</p>
+              <p class="text-sm text-tcf-ink-muted leading-relaxed font-body">Partner award pricing that's mispriced relative to cash. Rare but high-value — often 70–80% below retail.</p>
             </div>
           </div>
 
           <!-- CTA -->
           <div class="p-8 rounded-[2rem] bg-tcf-gold/5 border border-tcf-gold/20 flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
-              <p class="font-black text-white text-lg mb-1">Get the first alert when a deal drops from {airportData.city}.</p>
-              <p class="text-sm text-slate-400 font-body">No spam. One alert per deal. Unsubscribe in one click.</p>
+              <p class="font-black text-tcf-ink text-lg mb-1">Get the first alert when a deal drops from {airportData.city}.</p>
+              <p class="text-sm text-tcf-ink-muted font-body">No spam. One alert per deal. Unsubscribe in one click.</p>
             </div>
               <a href="/#waitlist" data-tcf-event="cta_clicked" data-tcf-location="airport_hub" data-tcf-label={`Alert Me for ${airportData.code}`} data-airport={airportData.code} class="btn-primary whitespace-nowrap no-underline" style="background: var(--tcf-gold); color: #050a14; font-weight: 900; padding: 0.75rem 2rem; border-radius: 9999px; font-size: 0.875rem; letter-spacing: 0.1em; text-transform: uppercase;">
               Alert Me for {airportData.code}
@@ -1047,18 +1047,18 @@ const jsonLd = {
       )}
 
       <!-- Rich Airport Content Section -->
-      <section class="mt-24 pt-24 border-t border-white/5">
+      <section class="mt-24 pt-24 border-t border-tcf-ink/10">
         {airportContent ? (
           <div class="space-y-20">
 
             <!-- Intro + Stats -->
             <div>
-              <p class="text-slate-300 text-lg leading-relaxed max-w-3xl font-body mb-10">{airportContent.intro}</p>
+              <p class="text-tcf-ink-muted text-lg leading-relaxed max-w-3xl font-body mb-10">{airportContent.intro}</p>
               <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {airportContent.stats.map(stat => (
-                  <div class="p-4 rounded-xl bg-white/5 border border-white/5 text-center">
-                    <div class="text-2xl font-black text-white">{stat.value}</div>
-                    <div class="text-xs text-slate-500 mt-1 uppercase tracking-wider">{stat.label}</div>
+                  <div class="p-4 rounded-xl bg-tcf-ink/5 border border-tcf-ink/10 text-center">
+                    <div class="text-2xl font-black text-tcf-ink">{stat.value}</div>
+                    <div class="text-xs text-tcf-ink-muted mt-1 uppercase tracking-wider">{stat.label}</div>
                   </div>
                 ))}
               </div>
@@ -1066,23 +1066,23 @@ const jsonLd = {
 
             <!-- Historical Deal Ranges -->
             <div>
-              <h2 class="text-xl font-black text-white mb-2">Typical vs. Error Fare Prices from {airportData.city}</h2>
-              <p class="text-sm text-slate-500 mb-6 font-body">Historical ranges based on observed deals. Error fares close within 2–6 hours — subscribe to get notified instantly.</p>
-              <div class="overflow-x-auto rounded-2xl border border-white/10">
+              <h2 class="text-xl font-black text-tcf-ink mb-2">Typical vs. Error Fare Prices from {airportData.city}</h2>
+              <p class="text-sm text-tcf-ink-muted mb-6 font-body">Historical ranges based on observed deals. Error fares close within 2–6 hours — subscribe to get notified instantly.</p>
+              <div class="overflow-x-auto rounded-2xl border border-tcf-ink/10">
                 <table class="w-full text-sm min-w-[500px]">
                   <thead>
-                    <tr class="bg-white/5 border-b border-white/10">
-                      <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Destination</th>
-                      <th class="text-left px-4 py-3 text-xs text-slate-500 font-bold uppercase tracking-wider">Typical Price</th>
-                      <th class="text-left px-4 py-3 text-xs font-bold uppercase tracking-wider" style="color: var(--tcf-gold);">Error Fare Range</th>
+                    <tr class="bg-tcf-ink/5 border-b border-tcf-ink/10">
+                      <th class="text-left px-4 py-3 text-xs text-tcf-ink-muted font-bold uppercase tracking-wider">Destination</th>
+                      <th class="text-left px-4 py-3 text-xs text-tcf-ink-muted font-bold uppercase tracking-wider">Typical Price</th>
+                      <th class="text-left px-4 py-3 text-xs font-bold uppercase tracking-wider" style="color: var(--tcf-gold-deep);">Error Fare Range</th>
                     </tr>
                   </thead>
                   <tbody>
                     {airportContent.routes.map((route, i) => (
-                      <tr class={`border-b border-white/5 ${i % 2 === 0 ? '' : 'bg-white/[0.02]'}`}>
-                        <td class="px-4 py-3 font-bold text-white">{route.destination}</td>
-                        <td class="px-4 py-3 text-slate-500 line-through text-sm">{route.typical}</td>
-                        <td class="px-4 py-3 font-black" style="color: var(--tcf-gold);">{route.errorFare}</td>
+                      <tr class={`border-b border-tcf-ink/10 ${i % 2 === 0 ? '' : 'bg-tcf-ink/5'}`}>
+                        <td class="px-4 py-3 font-bold text-tcf-ink">{route.destination}</td>
+                        <td class="px-4 py-3 text-tcf-ink-muted line-through text-sm">{route.typical}</td>
+                        <td class="px-4 py-3 font-black" style="color: var(--tcf-gold-deep);">{route.errorFare}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -1092,12 +1092,12 @@ const jsonLd = {
 
             <!-- Pro Tips -->
             <div>
-              <h2 class="text-xl font-black text-white mb-6">Pro Tips for Finding Cheap Flights from {airportData.city}</h2>
+              <h2 class="text-xl font-black text-tcf-ink mb-6">Pro Tips for Finding Cheap Flights from {airportData.city}</h2>
               <div class="space-y-3">
                 {airportContent.tips.map((tip, i) => (
-                  <div class="flex gap-4 p-4 rounded-xl bg-white/5 border border-white/5">
-                    <span class="font-black text-sm mt-0.5 shrink-0" style="color: var(--tcf-gold);">{i + 1}.</span>
-                    <p class="text-slate-300 text-sm leading-relaxed font-body">{tip}</p>
+                  <div class="flex gap-4 p-4 rounded-xl bg-tcf-ink/5 border border-tcf-ink/10">
+                    <span class="font-black text-sm mt-0.5 shrink-0" style="color: var(--tcf-gold-deep);">{i + 1}.</span>
+                    <p class="text-tcf-ink-muted text-sm leading-relaxed font-body">{tip}</p>
                   </div>
                 ))}
               </div>
@@ -1105,12 +1105,12 @@ const jsonLd = {
 
             <!-- FAQ Section -->
             <div>
-              <h2 class="text-xl font-black text-white mb-6">Frequently Asked Questions — Cheap Flights from {airportData.city}</h2>
+              <h2 class="text-xl font-black text-tcf-ink mb-6">Frequently Asked Questions — Cheap Flights from {airportData.city}</h2>
               <div class="space-y-4">
                 {airportContent.faqs.map(faq => (
-                  <div class="p-6 rounded-2xl bg-white/5 border border-white/5">
-                    <h3 class="font-black text-white mb-2 text-base">{faq.q}</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed font-body">{faq.a}</p>
+                  <div class="p-6 rounded-2xl bg-tcf-ink/5 border border-tcf-ink/10">
+                    <h3 class="font-black text-tcf-ink mb-2 text-base">{faq.q}</h3>
+                    <p class="text-tcf-ink-muted text-sm leading-relaxed font-body">{faq.a}</p>
                   </div>
                 ))}
               </div>
@@ -1119,15 +1119,15 @@ const jsonLd = {
           </div>
         ) : (
           <div class="grid md:grid-cols-2 gap-12">
-            <article class="prose prose-invert prose-sm max-w-none">
-              <h3 class="text-white font-black text-lg mb-4">Why monitor {airportData.city}?</h3>
-              <p class="text-slate-400 leading-relaxed">
+            <article class="prose prose-sm max-w-none">
+              <h3 class="text-tcf-ink font-black text-lg mb-4">Why monitor {airportData.city}?</h3>
+              <p class="text-tcf-ink-muted leading-relaxed">
                 Departing from {airportData.code} often means you're limited to regional connections or high-priced positioning flights. However, award programs often price {airportData.code} to international destinations the same as DFW or IAH. This creates arbitrage windows where you can fly from your backyard for the same price as a major airport.
               </p>
             </article>
-            <article class="prose prose-invert prose-sm max-w-none">
-              <h3 class="text-white font-black text-lg mb-4">Best Strategy for {airportData.code}</h3>
-              <p class="text-slate-400 leading-relaxed">
+            <article class="prose prose-sm max-w-none">
+              <h3 class="text-tcf-ink font-black text-lg mb-4">Best Strategy for {airportData.code}</h3>
+              <p class="text-tcf-ink-muted leading-relaxed">
                 Our AI Scout specifically looks for Zone-Based redemptions and error fares that propagate to regional TX feeders. For {airportData.city} travelers, we recommend keeping a stash of transferable points to lock in these windows before they vanish.
               </p>
             </article>
@@ -1137,8 +1137,8 @@ const jsonLd = {
     </div>
   </main>
 
-  <footer class="py-20 border-t border-white/5 text-center text-xs text-slate-600">
-    <p>© 2026 Texas Cheap Flights · <a href="/past-deals" class="text-slate-500 hover:text-white transition-colors no-underline">Back to All Deals</a></p>
+  <footer class="py-20 border-t border-tcf-ink/10 text-center text-xs text-tcf-ink-muted">
+    <p>© 2026 Texas Cheap Flights · <a href="/past-deals" class="text-tcf-ink-muted hover:text-tcf-ink transition-colors no-underline">Back to All Deals</a></p>
   </footer>
 
 </body>

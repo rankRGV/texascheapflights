@@ -86,7 +86,7 @@ function getDealTypeLabel(type: string, score: number) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;900&family=Outfit:wght@400;500;700&display=swap" rel="stylesheet" />
 </head>
-<body class="bg-tcf-navy-deep text-white min-h-screen">
+<body class="text-tcf-ink min-h-screen">
 
   <GlobalNav activePage="past-deals" />
 
@@ -94,33 +94,33 @@ function getDealTypeLabel(type: string, score: number) {
   <section class="pt-32 pb-16 px-6 text-center relative overflow-hidden">
     <div class="absolute inset-0 bg-gradient-to-b from-tcf-gold/5 via-transparent to-transparent pointer-events-none"></div>
     <div class="max-w-4xl mx-auto relative z-10">
-      <span class="inline-flex items-center gap-2 text-tcf-gold font-bold text-xs uppercase tracking-[0.3em] mb-6 border border-tcf-gold/30 rounded-full px-4 py-2 bg-tcf-gold/5">
+      <span class="inline-flex items-center gap-2 text-tcf-gold-deep font-bold text-xs uppercase tracking-[0.3em] mb-6 border border-tcf-gold/30 rounded-full px-4 py-2 bg-tcf-gold/5">
         <span class="w-2 h-2 rounded-full bg-tcf-gold animate-pulse inline-block"></span>
         Live Deal Archive
       </span>
       <h1 class="text-5xl md:text-7xl font-black tracking-tight leading-[1.05] mb-6">
         Deals You<br/>
-        <span style="color: var(--tcf-gold); font-style: italic;">Might Have Missed.</span>
+        <span style="color: var(--tcf-gold-deep); font-style: italic;">Might Have Missed.</span>
       </h1>
-      <p class="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed font-body mb-4">
+      <p class="text-xl text-tcf-ink-muted max-w-2xl mx-auto leading-relaxed font-body mb-4">
         Every alert our Scout has fired — real routes, real prices, straight from Texas airports.
         These aren't cherry-picked. This is the unfiltered feed.
       </p>
-      <p class="text-xs text-slate-500 font-bold uppercase tracking-[0.2em] mt-8">
+      <p class="text-xs text-tcf-ink-muted font-bold uppercase tracking-[0.2em] mt-8">
         Last updated: <time datetime={lastUpdated || new Date().toISOString()}>{lastUpdated ? new Date(lastUpdated).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Live'}</time>
       </p>
-      <p class="text-sm text-slate-500 font-body">
-        Error fares typically vanish within <strong class="text-slate-300">12–24 hours</strong>. The only way not to miss the next one is to be on the list.
+      <p class="text-sm text-tcf-ink-muted font-body">
+        Error fares typically vanish within <strong class="text-tcf-ink-muted">12–24 hours</strong>. The only way not to miss the next one is to be on the list.
       </p>
     </div>
   </section>
 
   <section class="px-6 pb-10">
-    <div class="max-w-4xl mx-auto rounded-3xl border border-white/10 bg-white/5 p-6 md:p-8">
+    <div class="max-w-4xl mx-auto rounded-3xl border border-tcf-ink/10 bg-tcf-ink/5 p-6 md:p-8">
       <form method="GET" class="grid gap-4 md:grid-cols-[1fr,1fr,1fr,auto] md:items-end">
         <label class="block">
-          <span class="block text-[10px] font-black uppercase tracking-[0.25em] text-slate-500 mb-2">Origin</span>
-          <select name="origin" class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white focus:outline-none focus:border-tcf-gold/40">
+          <span class="block text-[10px] font-black uppercase tracking-[0.25em] text-tcf-ink-muted mb-2">Origin</span>
+          <select name="origin" class="w-full rounded-2xl border border-tcf-ink/10 bg-white px-4 py-3 text-sm text-tcf-ink focus:outline-none focus:border-tcf-gold/40">
             <option value="all" selected={originFilter === 'all'}>All airports</option>
             {availableOrigins.map((origin) => (
               <option value={origin} selected={originFilter === origin}>{origin}</option>
@@ -128,8 +128,8 @@ function getDealTypeLabel(type: string, score: number) {
           </select>
         </label>
         <label class="block">
-          <span class="block text-[10px] font-black uppercase tracking-[0.25em] text-slate-500 mb-2">Airline</span>
-          <select name="airline" class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white focus:outline-none focus:border-tcf-gold/40">
+          <span class="block text-[10px] font-black uppercase tracking-[0.25em] text-tcf-ink-muted mb-2">Airline</span>
+          <select name="airline" class="w-full rounded-2xl border border-tcf-ink/10 bg-white px-4 py-3 text-sm text-tcf-ink focus:outline-none focus:border-tcf-gold/40">
             <option value="all" selected={airlineFilter === 'all'}>All airlines</option>
             {availableAirlines.map((airline) => (
               <option value={airline} selected={airlineFilter === airline}>{airline}</option>
@@ -137,8 +137,8 @@ function getDealTypeLabel(type: string, score: number) {
           </select>
         </label>
         <label class="block">
-          <span class="block text-[10px] font-black uppercase tracking-[0.25em] text-slate-500 mb-2">Deal type</span>
-          <select name="type" class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white focus:outline-none focus:border-tcf-gold/40">
+          <span class="block text-[10px] font-black uppercase tracking-[0.25em] text-tcf-ink-muted mb-2">Deal type</span>
+          <select name="type" class="w-full rounded-2xl border border-tcf-ink/10 bg-white px-4 py-3 text-sm text-tcf-ink focus:outline-none focus:border-tcf-gold/40">
             <option value="all" selected={typeFilter === 'all'}>All sent deals</option>
             <option value="error_fare" selected={typeFilter === 'error_fare'}>Error fares</option>
             <option value="sale" selected={typeFilter === 'sale'}>Sales / sweet spots</option>
@@ -146,7 +146,7 @@ function getDealTypeLabel(type: string, score: number) {
         </label>
         <div class="flex gap-3">
           <button type="submit" class="btn-primary whitespace-nowrap">Apply Filters</button>
-          <a href="/past-deals" class="inline-flex items-center justify-center rounded-2xl border border-white/10 px-5 py-3 text-xs font-black uppercase tracking-[0.2em] text-slate-400 no-underline hover:text-white hover:border-white/20 transition-colors">Reset</a>
+          <a href="/past-deals" class="inline-flex items-center justify-center rounded-2xl border border-tcf-ink/10 px-5 py-3 text-xs font-black uppercase tracking-[0.2em] text-tcf-ink-muted no-underline hover:text-tcf-ink hover:border-tcf-ink/10 transition-colors">Reset</a>
         </div>
       </form>
     </div>
@@ -156,26 +156,26 @@ function getDealTypeLabel(type: string, score: number) {
   {hasDeals && (
     <section class="px-6 pb-12">
       <div class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="rounded-2xl border border-white/10 bg-white/5 p-6 text-center">
-          <p class="text-4xl font-black text-white mb-1">{stats.totalScouted}</p>
-          <p class="text-xs text-slate-400 uppercase tracking-widest font-bold">Deals Scouted</p>
+        <div class="rounded-2xl border border-tcf-ink/10 bg-tcf-ink/5 p-6 text-center">
+          <p class="text-4xl font-black text-tcf-ink mb-1">{stats.totalScouted}</p>
+          <p class="text-xs text-tcf-ink-muted uppercase tracking-widest font-bold">Deals Scouted</p>
         </div>
         {stats.bestDeal && (
           <div class="rounded-2xl border border-tcf-gold/20 bg-tcf-gold/5 p-6 text-center">
-            <p class="text-4xl font-black text-tcf-gold mb-1">${stats.bestDeal}</p>
-            <p class="text-xs text-slate-400 uppercase tracking-widest font-bold">Lowest Price Found</p>
+            <p class="text-4xl font-black text-tcf-gold-deep mb-1">${stats.bestDeal}</p>
+            <p class="text-xs text-tcf-ink-muted uppercase tracking-widest font-bold">Lowest Price Found</p>
           </div>
         )}
         {stats.avgPrice > 0 && (
-          <div class="rounded-2xl border border-white/10 bg-white/5 p-6 text-center">
-            <p class="text-4xl font-black text-white mb-1">${stats.avgPrice}</p>
-            <p class="text-xs text-slate-400 uppercase tracking-widest font-bold">Avg Deal Price</p>
+          <div class="rounded-2xl border border-tcf-ink/10 bg-tcf-ink/5 p-6 text-center">
+            <p class="text-4xl font-black text-tcf-ink mb-1">${stats.avgPrice}</p>
+            <p class="text-xs text-tcf-ink-muted uppercase tracking-widest font-bold">Avg Deal Price</p>
           </div>
         )}
         {stats.topDestination && (
           <div class="rounded-2xl border border-sky-500/20 bg-sky-500/5 p-6 text-center">
             <p class="text-2xl font-black text-sky-400 mb-1">{stats.topDestination}</p>
-            <p class="text-xs text-slate-400 uppercase tracking-widest font-bold">Most Recurring</p>
+            <p class="text-xs text-tcf-ink-muted uppercase tracking-widest font-bold">Most Recurring</p>
           </div>
         )}
       </div>
@@ -194,9 +194,9 @@ function getDealTypeLabel(type: string, score: number) {
             const age = getDealAge(dealDate);
             const isRecent = new Date(dealDate).getTime() > Date.now() - 48 * 60 * 60 * 1000;
             return (
-              <div class={`relative rounded-2xl border p-6 md:p-8 transition-all duration-300 group ${isRecent ? 'border-tcf-gold/30 bg-tcf-gold/5 hover:border-tcf-gold/50' : 'border-white/8 bg-white/3 hover:border-white/20 hover:bg-white/5'}`}>
+              <div class={`relative rounded-2xl border p-6 md:p-8 transition-all duration-300 group ${isRecent ? 'border-tcf-gold/30 bg-tcf-gold/5 hover:border-tcf-gold/50' : 'border-tcf-ink/10 bg-tcf-ink/5 hover:border-tcf-ink/10 hover:bg-tcf-ink/5'}`}>
                 {isRecent && (
-                  <span class="absolute top-4 right-4 text-xs font-bold text-tcf-gold bg-tcf-gold/10 border border-tcf-gold/30 rounded-full px-3 py-1 uppercase tracking-wider">
+                  <span class="absolute top-4 right-4 text-xs font-bold text-tcf-gold-deep bg-tcf-gold/10 border border-tcf-gold/30 rounded-full px-3 py-1 uppercase tracking-wider">
                     ⚡ Recent
                   </span>
                 )}
@@ -205,14 +205,14 @@ function getDealTypeLabel(type: string, score: number) {
                   <div class="flex-1">
                     <div class="flex items-center gap-3 mb-2">
                       <span class={`text-xs font-bold uppercase tracking-wider px-2 py-1 rounded-full border ${badge.color}`}>{badge.label}</span>
-                      <span class="text-xs text-slate-500">{age}</span>
+                      <span class="text-xs text-tcf-ink-muted">{age}</span>
                     </div>
-                    <h3 class="text-2xl md:text-3xl font-black text-white tracking-tight leading-tight mb-1 group-hover:text-tcf-gold transition-colors">
-                      <a href={`/deal/${deal.id}`} class="no-underline text-inherit">{deal.origin} <span class="text-slate-500 font-normal">→</span> {deal.destination}</a>
+                    <h3 class="text-2xl md:text-3xl font-black text-tcf-ink tracking-tight leading-tight mb-1 group-hover:text-tcf-gold-deep transition-colors">
+                      <a href={`/deal/${deal.id}`} class="no-underline text-inherit">{deal.origin} <span class="text-tcf-ink-muted font-normal">→</span> {deal.destination}</a>
                     </h3>
-                    <p class="text-sm text-slate-400">
-                      {deal.airline && <span class="text-slate-300 font-medium">{normalizeAirlineName(deal.airline)}</span>}
-                      {deal.travel_dates && <span class="text-slate-500"> · {deal.travel_dates}</span>}
+                    <p class="text-sm text-tcf-ink-muted">
+                      {deal.airline && <span class="text-tcf-ink-muted font-medium">{normalizeAirlineName(deal.airline)}</span>}
+                      {deal.travel_dates && <span class="text-tcf-ink-muted"> · {deal.travel_dates}</span>}
                     </p>
                   </div>
 
@@ -220,34 +220,34 @@ function getDealTypeLabel(type: string, score: number) {
                   <div class="text-left md:text-right shrink-0">
                     {deal.price ? (
                       <div>
-                        <p class="text-4xl md:text-5xl font-black text-white leading-none mb-1">${deal.price}</p>
-                        <p class="text-xs text-slate-500 uppercase tracking-wider">Roundtrip</p>
+                        <p class="text-4xl md:text-5xl font-black text-tcf-ink leading-none mb-1">${deal.price}</p>
+                        <p class="text-xs text-tcf-ink-muted uppercase tracking-wider">Roundtrip</p>
                       </div>
                     ) : (
-                      <p class="text-slate-500 text-sm italic">Points Deal</p>
+                      <p class="text-tcf-ink-muted text-sm italic">Points Deal</p>
                     )}
                   </div>
 
                   <!-- AI Score -->
                   {deal.score && (
                     <div class="shrink-0 text-center">
-                      <div class={`w-14 h-14 rounded-xl flex items-center justify-center font-black text-xl border ${deal.score >= 9 ? 'border-red-500/30 bg-red-500/10 text-red-400' : deal.score >= 7 ? 'border-amber-500/30 bg-amber-500/10 text-amber-400' : 'border-white/10 bg-white/5 text-slate-400'}`}>
+                      <div class={`w-14 h-14 rounded-xl flex items-center justify-center font-black text-xl border ${deal.score >= 9 ? 'border-red-500/30 bg-red-500/10 text-red-400' : deal.score >= 7 ? 'border-amber-500/30 bg-amber-500/10 text-amber-400' : 'border-tcf-ink/10 bg-tcf-ink/5 text-tcf-ink-muted'}`}>
                         {deal.score}
                       </div>
-                      <p class="text-xs text-slate-500 mt-1 uppercase tracking-wider">Score</p>
+                      <p class="text-xs text-tcf-ink-muted mt-1 uppercase tracking-wider">Score</p>
                     </div>
                   )}
                 </div>
 
                 <!-- Scout status -->
-                <div class="mt-4 pt-4 border-t border-white/5 flex items-center justify-between">
+                <div class="mt-4 pt-4 border-t border-tcf-ink/10 flex items-center justify-between">
                   <div class="flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={deal.sent_at ? "#f5c842" : "#94a3b8"} stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-tcf-ink-muted">
                       {deal.sent_at ? 'Alert dispatched to Founding Members' : 'Scouted by AI intelligence'}
                     </span>
                   </div>
-                  <span class="text-[10px] text-slate-600 font-bold uppercase tracking-widest">{formatDate(dealDate)}</span>
+                  <span class="text-[10px] text-tcf-ink-muted font-bold uppercase tracking-widest">{formatDate(dealDate)}</span>
                 </div>
               </div>
             );
@@ -259,10 +259,10 @@ function getDealTypeLabel(type: string, score: number) {
           <div class="w-20 h-20 rounded-2xl bg-tcf-gold/10 border border-tcf-gold/20 flex items-center justify-center mx-auto mb-8">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--tcf-gold)" stroke-width="2"><path d="M2 22h20"/><path d="M6.36 17.4 4 17l-2-4 1.1-.55L5.05 15l4.44.75L10.5 11l4.44.75L14.5 17h1l5.5-5.5L22 13l-4 4 2 4h-1.5l-2.5-4-3.5-1.5h-2L6.36 17.4z"/></svg>
           </div>
-          <h2 class="text-3xl font-black mb-4 text-white">The Scout is warming up.</h2>
-          <p class="text-slate-400 max-w-lg mx-auto font-body text-lg leading-relaxed mb-8">
+          <h2 class="text-3xl font-black mb-4 text-tcf-ink">The Scout is warming up.</h2>
+          <p class="text-tcf-ink-muted max-w-lg mx-auto font-body text-lg leading-relaxed mb-8">
             Our AI is scanning Texas airports right now. The first deals will appear here the moment we find something worth sending.
-            <strong class="text-white block mt-3">Don't be the person who finds out about it too late.</strong>
+            <strong class="text-tcf-ink block mt-3">Don't be the person who finds out about it too late.</strong>
           </p>
           <a href="/#waitlist" class="btn-primary">
             Get on the list first &rarr;
@@ -279,16 +279,16 @@ function getDealTypeLabel(type: string, score: number) {
       <div class="relative z-10">
         <h2 class="text-4xl md:text-5xl font-black mb-4 leading-tight">
           These deals won't<br/>
-          <span style="color: var(--tcf-gold); font-style: italic;">wait for you.</span>
+          <span style="color: var(--tcf-gold-deep); font-style: italic;">wait for you.</span>
         </h2>
-        <p class="text-slate-400 max-w-lg mx-auto font-body text-lg leading-relaxed mb-8">
+        <p class="text-tcf-ink-muted max-w-lg mx-auto font-body text-lg leading-relaxed mb-8">
           Error fares close in hours. The subscribers who got these deals didn't find them by searching Kayak.
           They got an alert the moment we did.
         </p>
         <a href="/#waitlist" class="btn-primary">
           Alert Me When the Next Deal Drops &rarr;
         </a>
-        <p class="text-xs text-slate-500 mt-4 font-body">Free. No credit card. Unsubscribe anytime.</p>
+        <p class="text-xs text-tcf-ink-muted mt-4 font-body">Free. No credit card. Unsubscribe anytime.</p>
       </div>
     </div>
   </section>

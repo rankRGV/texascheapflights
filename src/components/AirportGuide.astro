@@ -12,19 +12,19 @@ interface Props {
 const { airportCode, airportName, city, description, parkingTips, tsaWaitStatus, sweetSpots } = Astro.props;
 ---
 
-<div class="airport-guide-container bg-navy-mid border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
+<div class="airport-guide-container bg-white border border-tcf-ink/10 rounded-3xl overflow-hidden shadow-xl">
   <!-- Hero Section -->
   <div class="relative h-64 flex items-center justify-center overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-br from-navy-deep to-aviation-blue/20"></div>
-    <div class="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1436491865332-7a61a1082e12?auto=format&fit=crop&q=80')] bg-cover bg-center"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-tcf-cream to-tcf-aviation-blue/10"></div>
+    <div class="absolute inset-0 opacity-10 bg-[url('https://images.unsplash.com/photo-1436491865332-7a61a1082e12?auto=format&fit=crop&q=80')] bg-cover bg-center"></div>
     <div class="relative text-center px-6">
-      <div class="inline-block px-3 py-1 bg-gold/20 border border-gold/30 rounded-full mb-4">
+      <div class="inline-block px-3 py-1 bg-tcf-gold/20 border border-tcf-gold/30 rounded-full mb-4">
         <span class="text-gold text-xs font-black tracking-widest uppercase">Texas regional moat</span>
       </div>
-      <h1 class="text-4xl md:text-5xl font-black text-white mb-2 leading-tight">
+      <h1 class="text-4xl md:text-5xl font-black text-tcf-ink mb-2 leading-tight">
         {airportCode} <span class="text-gold">Intelligence</span>
       </h1>
-      <p class="text-blue-200/60 font-medium tracking-tight uppercase text-sm">
+      <p class="text-tcf-sky-deep/60 font-medium tracking-tight uppercase text-sm">
         The Ultimate Travel Hacking Guide for {city} Travelers
       </p>
     </div>
@@ -37,29 +37,29 @@ const { airportCode, airportName, city, description, parkingTips, tsaWaitStatus,
       <!-- Main Content -->
       <div class="lg:col-span-2 space-y-8">
         <section>
-          <h2 class="text-2xl font-black text-white mb-4 flex items-center gap-3">
+          <h2 class="text-2xl font-black text-tcf-ink mb-4 flex items-center gap-3">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gold"><path d="M22 10v6M2 10v6M12 2v20M2 10l10-8 10 8M2 16l10 8 10-8"/></svg>
             Flyer Intel: {airportName}
           </h2>
-          <div class="prose prose-invert max-w-none text-slate-400 leading-relaxed">
+          <div class="prose max-w-none text-tcf-ink-muted leading-relaxed">
             <p>{description}</p>
           </div>
         </section>
 
-        <section class="bg-navy-deep/50 border border-white/5 rounded-2xl p-8">
-          <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-aviation-blue"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+        <section class="bg-tcf-cream border border-tcf-ink/10 rounded-2xl p-8">
+          <h3 class="text-xl font-bold text-tcf-ink mb-6 flex items-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-tcf-aviation-blue"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
             {airportCode} Sweet Spots
           </h3>
           <div class="space-y-4">
             {sweetSpots.map((spot) => (
-              <div class="flex gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:border-gold/20 transition-all group">
-                <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-gold/10 text-gold font-bold group-hover:scale-110 transition-transform">
+              <div class="flex gap-4 p-4 rounded-xl bg-tcf-ink/5 border border-tcf-ink/10 hover:border-tcf-gold/20 transition-all group">
+                <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-tcf-gold/10 text-gold font-bold group-hover:scale-110 transition-transform">
                   {spot.destination.substring(0, 1)}
                 </div>
                 <div>
-                  <h4 class="text-white font-bold mb-1">{spot.destination}</h4>
-                  <p class="text-slate-500 text-sm leading-snug">{spot.reason}</p>
+                  <h4 class="text-tcf-ink font-bold mb-1">{spot.destination}</h4>
+                  <p class="text-tcf-ink-muted text-sm leading-snug">{spot.reason}</p>
                 </div>
               </div>
             ))}
@@ -69,28 +69,28 @@ const { airportCode, airportName, city, description, parkingTips, tsaWaitStatus,
 
       <!-- Side Intel -->
       <div class="space-y-8">
-        <div class="bg-gold/10 border border-gold/20 rounded-2xl p-6">
+        <div class="bg-tcf-gold/10 border border-tcf-gold/20 rounded-2xl p-6">
           <h3 class="text-gold font-black uppercase text-xs tracking-widest mb-4">Operations & Logistics</h3>
           <div class="space-y-6">
             {parkingTips && (
               <div>
-                <p class="text-white font-bold text-sm mb-1 uppercase tracking-tight">Parking Strategy</p>
-                <p class="text-slate-400 text-xs leading-relaxed">{parkingTips}</p>
+                <p class="text-tcf-ink font-bold text-sm mb-1 uppercase tracking-tight">Parking Strategy</p>
+                <p class="text-tcf-ink-muted text-xs leading-relaxed">{parkingTips}</p>
               </div>
             )}
             {tsaWaitStatus && (
               <div>
-                <p class="text-white font-bold text-sm mb-1 uppercase tracking-tight">TSA Efficiency</p>
-                <p class="text-slate-400 text-xs leading-relaxed">{tsaWaitStatus}</p>
+                <p class="text-tcf-ink font-bold text-sm mb-1 uppercase tracking-tight">TSA Efficiency</p>
+                <p class="text-tcf-ink-muted text-xs leading-relaxed">{tsaWaitStatus}</p>
               </div>
             )}
           </div>
         </div>
 
-        <div class="bg-aviation-blue/10 border border-aviation-blue/20 rounded-2xl p-6">
-          <h3 class="text-aviation-blue font-black uppercase text-xs tracking-widest mb-4">Hedge Status</h3>
-          <p class="text-white font-bold text-sm mb-2">Regional Arbitrage Active</p>
-          <p class="text-slate-400 text-xs leading-relaxed mb-4">
+        <div class="bg-tcf-aviation-blue/10 border border-tcf-aviation-blue/20 rounded-2xl p-6">
+          <h3 class="text-tcf-aviation-blue font-black uppercase text-xs tracking-widest mb-4">Hedge Status</h3>
+          <p class="text-tcf-ink font-bold text-sm mb-2">Regional Arbitrage Active</p>
+          <p class="text-tcf-ink-muted text-xs leading-relaxed mb-4">
             We are currently monitoring {airportCode} for cash glitches. If a price drops below the 80th percentile, you'll receive an alert instantly.
           </p>
           <a href="/past-deals" class="inline-flex items-center gap-2 text-gold text-xs font-black uppercase tracking-widest hover:gap-3 transition-all">

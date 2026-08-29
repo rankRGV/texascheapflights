@@ -75,7 +75,7 @@ const AIRPORT_LABELS: Record<string, string> = {
   </noscript>
 </head>
 
-<body class="bg-primary text-primary font-body selection:bg-tcf-aviation-blue/30 selection:text-white">
+<body class="bg-primary text-primary font-body selection:bg-tcf-aviation-blue/30 selection:text-tcf-ink">
 
   <GlobalNav activePage="welcome" />
 
@@ -87,17 +87,17 @@ const AIRPORT_LABELS: Record<string, string> = {
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div>
             <span class="label text-gold uppercase tracking-[0.3em] font-bold text-[10px] mb-4 inline-block">You're in. Here's what happens next.</span>
-            <h1 class="text-4xl md:text-6xl text-white font-black leading-tight">
+            <h1 class="text-4xl md:text-6xl text-tcf-ink font-black leading-tight">
               Your Texas deal <br/><span class="text-gold italic">alerts are live.</span>
             </h1>
           </div>
-          <div class="liquid-glass p-6 rounded-3xl border border-white/10 min-w-[300px]">
+          <div class="liquid-glass p-6 rounded-3xl border border-tcf-ink/10 min-w-[300px]">
             <div class="flex items-center justify-between mb-4">
-              <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Monitoring System</span>
+              <span class="text-[10px] font-black uppercase tracking-widest text-tcf-ink-muted">Monitoring System</span>
               <span class="text-[10px] font-black uppercase tracking-widest text-tcf-success">Active</span>
             </div>
-            <div class="text-2xl font-black text-white mb-2" id="display-airport">...</div>
-            <p class="text-[10px] text-slate-500 font-medium">The moment a sweet spot opens from here, you'll know before anyone else.</p>
+            <div class="text-2xl font-black text-tcf-ink mb-2" id="display-airport">...</div>
+            <p class="text-[10px] text-tcf-ink-muted font-medium">The moment a sweet spot opens from here, you'll know before anyone else.</p>
           </div>
         </div>
       </header>
@@ -108,13 +108,13 @@ const AIRPORT_LABELS: Record<string, string> = {
         <div class="lg:col-span-2 space-y-12">
           <section>
             <div class="flex items-center justify-between mb-8">
-              <h2 class="text-2xl font-black text-white uppercase tracking-tight">Sample Anomaly Alerts</h2>
-              <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Alerts delivered straight to your inbox</span>
+              <h2 class="text-2xl font-black text-tcf-ink uppercase tracking-tight">Sample Anomaly Alerts</h2>
+              <span class="text-[10px] font-black uppercase tracking-widest text-tcf-ink-muted">Alerts delivered straight to your inbox</span>
             </div>
 
             <div class="grid md:grid-cols-2 gap-6">
               {typedDeals.map((deal: any) => (
-                <div class={`liquid-glass group overflow-hidden rounded-[2.5rem] border transition-all duration-500 ${deal.type === 'cash_glitch' ? 'border-red-500/20 hover:border-red-500/40' : 'border-white/5 hover:border-tcf-aviation-blue/30'}`}>
+                <div class={`liquid-glass group overflow-hidden rounded-[2.5rem] border transition-all duration-500 ${deal.type === 'cash_glitch' ? 'border-red-500/20 hover:border-red-500/40' : 'border-tcf-ink/10 hover:border-tcf-aviation-blue/30'}`}>
                   <div class="px-8 pt-6 pb-0">
                     {deal.type === 'cash_glitch' ? (
                       <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-[9px] font-black uppercase tracking-widest text-red-400">
@@ -128,19 +128,19 @@ const AIRPORT_LABELS: Record<string, string> = {
                   </div>
                   <div class="p-8 pb-4 pt-4">
                     <div class="flex justify-between items-start mb-6">
-                      <div class={`p-4 rounded-2xl bg-white/5 group-hover:scale-110 transition-all duration-500 ${deal.type === 'cash_glitch' ? 'text-red-400 group-hover:bg-red-500/10' : 'text-white group-hover:bg-tcf-aviation-blue/10'}`} set:html={ICON_MAP[deal.icon]} />
+                      <div class={`p-4 rounded-2xl bg-tcf-ink/5 group-hover:scale-110 transition-all duration-500 ${deal.type === 'cash_glitch' ? 'text-red-400 group-hover:bg-red-500/10' : 'text-tcf-ink group-hover:bg-tcf-aviation-blue/10'}`} set:html={ICON_MAP[deal.icon]} />
                       <div class="text-right">
-                        <div class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-1">Origin</div>
-                        <div class="text-lg font-black text-white">{deal.origin}</div>
+                        <div class="text-[10px] font-black uppercase tracking-[0.2em] text-tcf-ink-muted mb-1">Origin</div>
+                        <div class="text-lg font-black text-tcf-ink">{deal.origin}</div>
                       </div>
                     </div>
                     <div class="mb-6">
-                      <div class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-1">Destination</div>
-                      <div class="text-2xl font-black text-white">{deal.dest}</div>
+                      <div class="text-[10px] font-black uppercase tracking-[0.2em] text-tcf-ink-muted mb-1">Destination</div>
+                      <div class="text-2xl font-black text-tcf-ink">{deal.dest}</div>
                     </div>
                   </div>
                   <div class="p-8 pt-0 mt-auto">
-                    <div class="h-px w-full bg-white/5 mb-6"></div>
+                    <div class="h-px w-full bg-tcf-ink/5 mb-6"></div>
                     {deal.type === 'cash_glitch' ? (
                       <div>
                         <div class="flex items-end justify-between mb-4">
@@ -149,11 +149,11 @@ const AIRPORT_LABELS: Record<string, string> = {
                             <div class="text-2xl font-black text-red-400">{deal.glitch_price}</div>
                           </div>
                           <div class="text-right">
-                            <div class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-1">Normal Price</div>
-                            <div class="text-md font-bold text-slate-400 line-through decoration-red-900/50">{deal.normal_price}</div>
+                            <div class="text-[10px] font-black uppercase tracking-[0.2em] text-tcf-ink-muted mb-1">Normal Price</div>
+                            <div class="text-md font-bold text-tcf-ink-muted line-through decoration-red-900/50">{deal.normal_price}</div>
                           </div>
                         </div>
-                        <div class="pt-4 border-t border-white/5">
+                        <div class="pt-4 border-t border-tcf-ink/10">
                           <span class="text-[10px] font-black uppercase tracking-widest text-red-400/70">Glitch lifespan: ~{deal.lifespan}</span>
                         </div>
                       </div>
@@ -162,13 +162,13 @@ const AIRPORT_LABELS: Record<string, string> = {
                         <div>
                           <div class="text-[10px] font-black uppercase tracking-[0.2em] text-tcf-aviation-blue mb-1">Award Cost</div>
                           <div class="flex items-baseline gap-1.5">
-                            <span class="text-2xl font-black text-white">{deal.points}</span>
-                            <span class="text-[10px] font-bold text-slate-500">pts</span>
+                            <span class="text-2xl font-black text-tcf-ink">{deal.points}</span>
+                            <span class="text-[10px] font-bold text-tcf-ink-muted">pts</span>
                           </div>
                         </div>
                         <div class="text-right">
-                          <div class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-1">Cash Price</div>
-                          <div class="text-md font-bold text-slate-400 line-through decoration-red-900/50">{deal.cash}</div>
+                          <div class="text-[10px] font-black uppercase tracking-[0.2em] text-tcf-ink-muted mb-1">Cash Price</div>
+                          <div class="text-md font-bold text-tcf-ink-muted line-through decoration-red-900/50">{deal.cash}</div>
                         </div>
                       </div>
                     )}
@@ -179,12 +179,12 @@ const AIRPORT_LABELS: Record<string, string> = {
           </section>
 
           <!-- The Guide Callout -->
-          <section class="liquid-glass p-10 md:p-16 rounded-[4rem] border-white/10 relative overflow-hidden group">
+          <section class="liquid-glass p-10 md:p-16 rounded-[4rem] border-tcf-ink/10 relative overflow-hidden group">
             <div class="absolute -top-24 -right-24 w-64 h-64 bg-tcf-aviation-blue/10 blur-[120px] rounded-full group-hover:bg-tcf-aviation-blue/20 transition-all duration-700"></div>
             <div class="relative z-10">
               <span class="label text-gold uppercase tracking-[0.3em] font-bold text-[10px] mb-6 inline-block">Before Your First Alert</span>
-              <h2 class="text-3xl md:text-5xl text-white font-black mb-6 leading-tight">Unlock the <br/><span class="text-gold">Skeptic's Masterclass.</span></h2>
-              <p class="text-slate-400 mb-10 max-w-xl leading-relaxed">
+              <h2 class="text-3xl md:text-5xl text-tcf-ink font-black mb-6 leading-tight">Unlock the <br/><span class="text-gold">Skeptic's Masterclass.</span></h2>
+              <p class="text-tcf-ink-muted mb-10 max-w-xl leading-relaxed">
                 Most Texans overpay for flights because no one ever showed them the math. This guide does that in 10 minutes. Once you read it, every deal we send you will make sense.
               </p>
               <a href="/skeptics-guide" class="btn-primary px-10 py-4 inline-flex items-center gap-3">
@@ -197,8 +197,8 @@ const AIRPORT_LABELS: Record<string, string> = {
 
         <!-- Right Col: Checklists & Status -->
         <div class="space-y-8">
-          <div class="liquid-glass p-8 rounded-3xl border border-white/5">
-            <h3 class="text-sm font-black text-white uppercase tracking-widest mb-8">Onboarding Status</h3>
+          <div class="liquid-glass p-8 rounded-3xl border border-tcf-ink/10">
+            <h3 class="text-sm font-black text-tcf-ink uppercase tracking-widest mb-8">Onboarding Status</h3>
             <div class="space-y-6">
               {[
                 { label: 'Founding Member Spot — Locked In', done: true },
@@ -208,27 +208,27 @@ const AIRPORT_LABELS: Record<string, string> = {
                 { label: 'Full Platform — Launching Soon', done: false },
               ].map(item => (
                 <div class="flex items-center gap-4">
-                  <div class={`w-5 h-5 rounded-full flex items-center justify-center border ${item.done ? 'bg-tcf-success/20 border-tcf-success/50 text-tcf-success' : 'border-white/10 text-transparent'}`}>
+                  <div class={`w-5 h-5 rounded-full flex items-center justify-center border ${item.done ? 'bg-tcf-success/20 border-tcf-success/50 text-tcf-success' : 'border-tcf-ink/10 text-transparent'}`}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                   </div>
-                  <span id={item.id} class={`text-xs font-bold ${item.done ? 'text-slate-300' : 'text-slate-600'}`}>{item.label}</span>
+                  <span id={item.id} class={`text-xs font-bold ${item.done ? 'text-tcf-ink-muted' : 'text-tcf-ink-muted'}`}>{item.label}</span>
                 </div>
               ))}
             </div>
-            <div class="mt-10 pt-8 border-t border-white/5">
-                <p class="text-[10px] text-slate-500 uppercase tracking-widest font-black mb-4">Move Up the List</p>
-                <p class="text-xs text-slate-400 mb-6 leading-relaxed">Every share moves you 500 spots closer to full platform access. Founding members who refer friends get first access to the Dream Trip Engine.</p>
+            <div class="mt-10 pt-8 border-t border-tcf-ink/10">
+                <p class="text-[10px] text-tcf-ink-muted uppercase tracking-widest font-black mb-4">Move Up the List</p>
+                <p class="text-xs text-tcf-ink-muted mb-6 leading-relaxed">Every share moves you 500 spots closer to full platform access. Founding members who refer friends get first access to the Dream Trip Engine.</p>
                 <div class="flex gap-4">
                     <!-- X / Twitter -->
-                    <a id="share-twitter" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 p-3 rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-tcf-aviation-blue/30 hover:text-tcf-aviation-blue transition-all duration-300 flex items-center justify-center">
+                    <a id="share-twitter" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 p-3 rounded-xl bg-tcf-ink/5 border border-tcf-ink/10 text-tcf-ink hover:bg-tcf-ink/5 hover:border-tcf-aviation-blue/30 hover:text-tcf-aviation-blue transition-all duration-300 flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
                     </a>
                     <!-- LinkedIn -->
-                    <a id="share-linkedin" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 p-3 rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-tcf-aviation-blue/30 hover:text-tcf-aviation-blue transition-all duration-300 flex items-center justify-center">
+                    <a id="share-linkedin" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 p-3 rounded-xl bg-tcf-ink/5 border border-tcf-ink/10 text-tcf-ink hover:bg-tcf-ink/5 hover:border-tcf-aviation-blue/30 hover:text-tcf-aviation-blue transition-all duration-300 flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
                     </a>
                     <!-- Facebook -->
-                    <a id="share-facebook" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 p-3 rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-tcf-aviation-blue/30 hover:text-tcf-aviation-blue transition-all duration-300 flex items-center justify-center">
+                    <a id="share-facebook" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 p-3 rounded-xl bg-tcf-ink/5 border border-tcf-ink/10 text-tcf-ink hover:bg-tcf-ink/5 hover:border-tcf-aviation-blue/30 hover:text-tcf-aviation-blue transition-all duration-300 flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
                     </a>
                 </div>

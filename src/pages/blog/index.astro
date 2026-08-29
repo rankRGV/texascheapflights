@@ -55,7 +55,7 @@ const jsonLd = {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;900&family=Outfit:wght@400;500;700&display=swap" rel="stylesheet" />
 </head>
-<body class="bg-tcf-navy-deep text-white min-h-screen">
+<body class="text-tcf-ink min-h-screen">
   <GlobalNav activePage="blog" />
 
   <main>
@@ -68,7 +68,7 @@ const jsonLd = {
           <h1 class="text-5xl md:text-7xl font-black tracking-tight leading-[1.02] mb-6">
             Practical cheap flight strategy for Texas travelers.
           </h1>
-          <p class="text-lg md:text-xl text-slate-400 font-body leading-relaxed">
+          <p class="text-lg md:text-xl text-tcf-ink-muted font-body leading-relaxed">
             Airport-specific guides, Google Flights verification steps, and deal hunting playbooks built around how Texans actually fly.
           </p>
         </div>
@@ -79,30 +79,30 @@ const jsonLd = {
       <div class="max-w-6xl mx-auto grid lg:grid-cols-[1.2fr,0.8fr] gap-6">
         <a href={`/blog/${featuredPost.slug}`} class="group rounded-[2rem] border border-tcf-gold/20 bg-tcf-gold/5 p-7 md:p-10 no-underline transition-all duration-300 hover:border-tcf-gold/50 hover:bg-tcf-gold/10">
           <div class="flex flex-wrap items-center gap-3 mb-8">
-            <span class="text-[10px] font-black uppercase tracking-[0.25em] text-tcf-gold">{featuredPost.heroLabel}</span>
+            <span class="text-[10px] font-black uppercase tracking-[0.25em] text-tcf-gold-deep">{featuredPost.heroLabel}</span>
             <span class="h-1 w-1 rounded-full bg-slate-600"></span>
-            <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">{featuredPost.readingMinutes} min read</span>
+            <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-tcf-ink-muted">{featuredPost.readingMinutes} min read</span>
           </div>
-          <h2 class="text-4xl md:text-5xl font-black text-white tracking-tight mb-5 group-hover:text-tcf-gold transition-colors">
+          <h2 class="text-4xl md:text-5xl font-black text-tcf-ink tracking-tight mb-5 group-hover:text-tcf-gold-deep transition-colors">
             {featuredPost.title}
           </h2>
-          <p class="text-slate-400 font-body leading-relaxed max-w-2xl mb-8">{featuredPost.description}</p>
+          <p class="text-tcf-ink-muted font-body leading-relaxed max-w-2xl mb-8">{featuredPost.description}</p>
           <div class="flex flex-wrap gap-2">
             {featuredPost.primaryAirportCodes.map((code) => (
-              <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-black text-slate-300">{code}</span>
+              <span class="rounded-full border border-tcf-ink/10 bg-tcf-ink/5 px-3 py-1 text-xs font-black text-tcf-ink-muted">{code}</span>
             ))}
           </div>
         </a>
 
         <div class="grid gap-6">
           {secondaryPosts.map((post) => (
-            <a href={`/blog/${post.slug}`} class="group rounded-[2rem] border border-white/10 bg-white/5 p-7 no-underline transition-all duration-300 hover:border-white/20 hover:bg-white/8">
+            <a href={`/blog/${post.slug}`} class="group rounded-[2rem] border border-tcf-ink/10 bg-tcf-ink/5 p-7 no-underline transition-all duration-300 hover:border-tcf-ink/10 hover:bg-tcf-ink/5">
               <div class="flex items-center justify-between gap-4 mb-5">
-                <span class="text-[10px] font-black uppercase tracking-[0.25em] text-tcf-gold">{post.category}</span>
-                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-600">{post.readingMinutes} min</span>
+                <span class="text-[10px] font-black uppercase tracking-[0.25em] text-tcf-gold-deep">{post.category}</span>
+                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-tcf-ink-muted">{post.readingMinutes} min</span>
               </div>
-              <h2 class="text-2xl font-black text-white mb-3 group-hover:text-tcf-gold transition-colors">{post.title}</h2>
-              <p class="text-sm text-slate-400 font-body leading-relaxed">{post.description}</p>
+              <h2 class="text-2xl font-black text-tcf-ink mb-3 group-hover:text-tcf-gold-deep transition-colors">{post.title}</h2>
+              <p class="text-sm text-tcf-ink-muted font-body leading-relaxed">{post.description}</p>
             </a>
           ))}
         </div>
@@ -112,9 +112,9 @@ const jsonLd = {
     <section class="light-section px-6 py-20">
       <div class="max-w-6xl mx-auto grid md:grid-cols-[0.75fr,1.25fr] gap-10 items-start">
         <div>
-          <p class="text-[10px] font-black uppercase tracking-[0.3em] text-tcf-gold mb-4">Content roadmap</p>
+          <p class="text-[10px] font-black uppercase tracking-[0.3em] text-tcf-gold-deep mb-4">Content roadmap</p>
           <h2 class="text-3xl md:text-4xl font-black mb-4">The blog should reinforce the airport moat.</h2>
-          <p class="font-body text-slate-600 leading-relaxed">
+          <p class="font-body text-tcf-ink-muted leading-relaxed">
             Best next posts are not generic destination listicles. They should answer Texas-origin search intent and route readers into the airport guides, deal archive, and waitlist.
           </p>
         </div>

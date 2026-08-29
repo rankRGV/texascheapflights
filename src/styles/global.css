@@ -4,39 +4,50 @@
     --color-tcf-navy-deep: var(--tcf-navy-deep);
     --color-tcf-navy-mid: var(--tcf-navy-mid);
     --color-tcf-gold: var(--tcf-gold);
+    --color-tcf-gold-deep: var(--tcf-gold-deep);
     --color-tcf-gold-muted: var(--tcf-gold-muted);
     --color-tcf-aviation-blue: var(--tcf-aviation-blue);
+    --color-tcf-sky-deep: var(--tcf-sky-deep);
     --color-tcf-success: var(--tcf-success);
     --color-tcf-caution: var(--tcf-caution);
     --color-tcf-danger: var(--tcf-danger);
+    --color-tcf-ink: var(--tcf-ink);
+    --color-tcf-ink-muted: var(--tcf-ink-muted);
+    --color-tcf-paper: var(--tcf-paper);
+    --color-tcf-cream: var(--tcf-cream);
 }
 
 :root {
-    /* Core Colors - "Aviation Tech Luxury" */
+    /* Core Colors - warm, friendly "Texas Sky" theme */
     --tcf-navy-deep: #050a14;
-    /* Obsidian Navy */
+    /* Obsidian Navy — kept for footer/legacy accents only */
     --tcf-navy-mid: #0d1832;
-    /* Brand Navy */
     --tcf-gold: #d4a843;
-    /* Texas Gold */
-    --tcf-gold-muted: rgba(212, 168, 67, 0.1);
+    /* Texas Gold — decorative surfaces, icons, large text */
+    --tcf-gold-deep: #92400e;
+    /* Deepened gold — passes AA as text/button labels on light bg */
+    --tcf-gold-muted: rgba(212, 168, 67, 0.12);
     --tcf-aviation-blue: #0ea5e9;
-    /* High-Aviation Sky Blue */
-    --tcf-success: #10b981;
-    --tcf-caution: #f59e0b;
-    --tcf-danger: #ef4444;
-    --tcf-ink: #102033;
+    /* Texas Sky Blue — decorative surfaces, icons, large text */
+    --tcf-sky-deep: #0369a1;
+    /* Deepened sky blue — passes AA as text/button labels on light bg */
+    --tcf-success: #059669;
+    --tcf-caution: #b45309;
+    --tcf-danger: #b91c1c;
+    --tcf-ink: #1b2a3d;
+    --tcf-ink-muted: #52616f;
     --tcf-paper: #fffdf7;
+    --tcf-cream: #f6efe1;
     --tcf-surface: #f6f8f5;
     --tcf-sky-soft: #d9ecff;
 
     /* Text */
-    --tcf-text-primary: #f8fafc;
-    --tcf-text-secondary: #94a3b8;
+    --tcf-text-primary: var(--tcf-ink);
+    --tcf-text-secondary: var(--tcf-ink-muted);
 
-    /* Glassmorphism - "Liquid Glass" */
-    --glass-bg: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.08);
+    /* Card surface — soft paper, not dark glass */
+    --glass-bg: rgba(255, 255, 255, 0.72);
+    --glass-border: rgba(27, 42, 61, 0.08);
     --glass-blur: 16px;
 
     /* Spacing Scale */
@@ -54,7 +65,7 @@
 
 /* Base Styles */
 body {
-    background-color: var(--tcf-navy-deep);
+    background-color: var(--tcf-paper);
     color: var(--tcf-text-primary);
     font-family: 'Satoshi', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -81,60 +92,60 @@ h3,
     letter-spacing: -0.01em;
 }
 
-/* Glassmorphism Utilities */
+/* Card surface — soft paper card, replaces the old dark "liquid glass" */
 .liquid-glass {
     background: var(--glass-bg);
     backdrop-filter: blur(var(--glass-blur));
     border: 1px solid var(--glass-border);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    box-shadow: 0 8px 32px 0 rgba(27, 42, 61, 0.08);
     transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .liquid-glass:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.92);
+    border-color: rgba(27, 42, 61, 0.14);
     transform: translateY(-4px);
-    box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.5);
+    box-shadow: 0 12px 48px 0 rgba(27, 42, 61, 0.12);
 }
 
 /* Branded Components */
 .btn-primary {
-    @apply relative inline-flex items-center justify-center px-8 py-4 font-bold text-tcf-navy-deep transition-all duration-300 rounded-full overflow-hidden;
-    background: linear-gradient(135deg, #f5c842 0%, #d4a843 100%);
-    box-shadow: 0 4px 20px rgba(212, 168, 67, 0.2);
+    @apply relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 rounded-full overflow-hidden;
+    background: linear-gradient(135deg, #c9922e 0%, var(--tcf-gold-deep) 100%);
+    box-shadow: 0 4px 20px rgba(146, 64, 14, 0.2);
 }
 
 .btn-primary:hover {
     @apply -translate-y-0.5;
-    box-shadow: 0 8px 30px rgba(212, 168, 67, 0.4);
+    box-shadow: 0 8px 30px rgba(146, 64, 14, 0.35);
 }
 
 .btn-secondary {
-    @apply inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 rounded-full border border-white/20 hover:bg-white/5;
+    @apply inline-flex items-center justify-center px-8 py-4 font-bold text-tcf-ink transition-all duration-300 rounded-full border border-tcf-ink/15 hover:bg-tcf-ink/5;
 }
 
 .badge-gold {
     @apply px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest;
     background: var(--tcf-gold-muted);
-    color: var(--tcf-gold);
-    border: 1px solid rgba(212, 168, 67, 0.2);
+    color: var(--tcf-gold-deep);
+    border: 1px solid rgba(146, 64, 14, 0.2);
 }
 
 .input {
-    @apply w-full px-5 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-slate-500 transition-all duration-300 outline-none;
+    @apply w-full px-5 py-4 bg-white border border-tcf-ink/12 rounded-2xl text-tcf-ink placeholder-slate-400 transition-all duration-300 outline-none;
 }
 
 .input:focus {
-    @apply border-tcf-aviation-blue/50 ring-4 ring-tcf-aviation-blue/10;
+    @apply border-tcf-sky-deep/50 ring-4 ring-tcf-sky-deep/10;
 }
 
 /* Fix dropdown unreadability on some browsers */
 select.input option {
-    background-color: var(--tcf-navy-mid);
-    color: white;
+    background-color: white;
+    color: var(--tcf-ink);
 }
 
-/* Background Effects */
+/* Background Effects — soft warm haze, replaces the old white-dot starfield */
 .starfield {
     position: absolute;
     top: 0;
@@ -142,11 +153,8 @@ select.input option {
     width: 100%;
     height: 100%;
     background-image:
-        radial-gradient(white, rgba(255, 255, 255, 0.2) 2px, transparent 40px),
-        radial-gradient(white, rgba(255, 255, 255, 0.15) 1px, transparent 30px);
-    background-size: 550px 550px, 350px 350px;
-    background-position: 0 0, 40px 60px;
-    opacity: 0.1;
+        radial-gradient(circle at 20% 20%, rgba(212, 168, 67, 0.12), transparent 45%),
+        radial-gradient(circle at 80% 10%, rgba(14, 165, 233, 0.10), transparent 45%);
     pointer-events: none;
 }
 
@@ -187,8 +195,8 @@ select.input option {
 }
 
 .nav-scrolled {
-    @apply py-3 shadow-2xl;
-    background: rgba(5, 10, 20, 0.85);
+    @apply py-3 shadow-lg;
+    background: rgba(255, 253, 247, 0.92);
     backdrop-filter: blur(20px);
 }
 
@@ -219,11 +227,11 @@ select.input option {
 
 /* Utilities */
 .hero-gradient {
-    background: radial-gradient(circle at top center, #1a2c4e 0%, var(--tcf-navy-deep) 100%);
+    background: radial-gradient(circle at top center, var(--tcf-cream) 0%, var(--tcf-paper) 100%);
 }
 
 .text-gold {
-    color: var(--tcf-gold);
+    color: var(--tcf-gold-deep);
 }
 
 .glass-success {

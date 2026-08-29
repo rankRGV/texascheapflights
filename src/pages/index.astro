@@ -30,13 +30,13 @@ try {
 
 // Fallback: use hardcoded examples if no real data in DB yet
 const TICKER_ITEMS = RECENT_TICKER.length > 0 ? RECENT_TICKER : [
-  { text: "MFE to Orlando: $95 (Scouted 2h ago)", type: "glitch" },
-  { text: "SAT to Denver: $148 (Scouted 14h ago)", type: "sweetspot" },
-  { text: "CRP to Grand Canyon: $160 (Scouted 1d ago)", type: "glitch" },
-  { text: "AUS to Tokyo: 70k Pts (Scouted 2d ago)", type: "sweetspot" },
-  { text: "HRL to Cancun: $290 (Scouted 3d ago)", type: "glitch" },
-  { text: "DFW to London: $450 (Scouted 4d ago)", type: "sweetspot" },
-  { text: "LRD to Vegas: $118 (Scouted 1w ago)", type: "glitch" },
+  { text: "MFE to Orlando: $95 (Found 2h ago)", type: "glitch" },
+  { text: "SAT to Denver: $148 (Found 14h ago)", type: "sweetspot" },
+  { text: "CRP to Grand Canyon: $160 (Found 1d ago)", type: "glitch" },
+  { text: "AUS to Tokyo: 70k Pts (Found 2d ago)", type: "sweetspot" },
+  { text: "HRL to Cancun: $290 (Found 3d ago)", type: "glitch" },
+  { text: "DFW to London: $450 (Found 4d ago)", type: "sweetspot" },
+  { text: "LRD to Vegas: $118 (Found 1w ago)", type: "glitch" },
 ];
 
 const TX_AIRPORTS = [
@@ -62,13 +62,13 @@ const TX_AIRPORTS = [
 ];
 
 const PAIN_QUOTES = [
-  { 
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-frown"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>`, 
-    text: '"I have 60,000 Chase points and zero idea what they\'re worth."' 
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-frown"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>`,
+    text: '"I have 60,000 Chase points and zero idea what they\'re worth."'
   },
-  { 
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-alert-circle"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>`, 
-    text: '"Every time I search from Laredo, flights are $800. There has to be a better way."' 
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-alert-circle"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>`,
+    text: '"Every time I search from Laredo, flights are $800. There has to be a better way."'
   },
   {
     icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
@@ -77,29 +77,29 @@ const PAIN_QUOTES = [
 ];
 
 const HOW_IT_WORKS = [
-  { 
-    step: '01', 
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`, 
+  {
+    step: '01',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`,
     title: 'Pick your Texas airport',
-    desc: 'From MFE to DFW, AI Scout monitors for pricing failures and "fat-finger" errors specific to your airport — not generic deals built for JFK flyers.'
+    desc: 'From MFE to DFW, we watch for pricing mistakes and typos specific to your airport — not generic deals built for JFK flyers.'
   },
-  { 
-    step: '02', 
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`, 
-    title: 'Catch price anomalies',
-    desc: 'We track cash glitch windows (algorithm errors that slash fares for hours) and award sweet spots (points priced by zone, not distance). You get the alert the second they surface.'
+  {
+    step: '02',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
+    title: 'We catch the deal',
+    desc: 'We track error fares (pricing mistakes that slash a fare for a few hours) and point deals (miles that go further from Texas than the price chart suggests). You get the alert the second one shows up.'
   },
-  { 
-    step: '03', 
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>`, 
-    title: 'Verify, then move fast.', 
-    desc: 'Price glitches close fast, but every alert is routed through manual review before it reaches the list. You get the route, price context, and booking link in one place.' 
+  {
+    step: '03',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>`,
+    title: 'We double-check it, then you move fast.',
+    desc: 'Error fares can close within hours, but every alert is reviewed by a person before it reaches the list. You get the route, the price, and the booking link in one place.'
   },
 ];
 
 const HEDGING_TRIPS = [
-  { route: 'MFE → DFW → London', status: 'Hedged ✅', color: 'var(--tcf-success)' },
-  { route: 'AUS → Tokyo via ANA', status: 'Backup ready ⚡', color: 'var(--tcf-caution)' },
+  { route: 'MFE → DFW → London', status: 'Locked in ✅', color: 'var(--tcf-success)' },
+  { route: 'AUS → Tokyo via ANA', status: 'Backup found ⚡', color: 'var(--tcf-caution)' },
   { route: 'DFW → Cancun award', status: 'Refundable 🛡️', color: 'var(--tcf-success)' },
 ];
 
@@ -126,21 +126,21 @@ const AIRPORTS = [
 ];
 
 const ETHICS = [
-  { 
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>`, 
-    text: 'Never push you into debt' 
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>`,
+    text: 'Never push you into debt'
   },
-  { 
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clipboard-list"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>`, 
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clipboard-list"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>`,
     text: 'We earn via affiliates only'
   },
-  { 
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.5 9 11.5"/></svg>`, 
-    text: 'Safety-first redemptions' 
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.5 9 11.5"/></svg>`,
+    text: 'We double-check before you redeem'
   },
-  { 
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-target"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>`, 
-    text: 'Your airport. Your plan.' 
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-target"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>`,
+    text: 'Your airport. Your plan.'
   },
 ];
 
@@ -233,18 +233,18 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#050a14" />
+  <meta name="theme-color" content="#fffdf7" />
   <title>Texas Cheap Flights — Error Fares & Award Deal Alerts</title>
-  <meta name="description" content="AI-powered flight deal alerts for Texas. We monitor error fares and award sweet spots from 19 Texas airports, then alert you before the window closes." />
+  <meta name="description" content="Flight deal alerts for Texas travelers. We watch for error fares and point deals from 19 Texas airports, then alert you before the window closes." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://texascheapflights.com/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Texas Cheap Flights — Error Fares & Award Deal Alerts" />
-  <meta name="twitter:description" content="AI Scout monitors error fares and award sweet spots from 19 Texas airports. Get the alert before the window closes." />
+  <meta name="twitter:description" content="We watch for error fares and point deals from 19 Texas airports. Get the alert before the window closes." />
   <meta name="twitter:image" content="https://texascheapflights.com/og-image.png" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>" />
   <link rel="canonical" href="https://texascheapflights.com/" />
-  
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -258,7 +258,7 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
           "@type": "ImageObject",
           "url": "https://texascheapflights.com/logo-light.png"
         },
-        "description": "AI-powered flight deal alerts for Texas travelers. Monitors error fares and award sweet spots departing from Texas airports."
+        "description": "Flight deal alerts for Texas travelers. Watches for error fares and award sweet spots departing from Texas airports."
       },
       {
         "@type": "WebSite",
@@ -302,7 +302,7 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
             "name": "What is an 'Error Fare'?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "An error fare is when an airline's pricing algorithm makes a mistake, sometimes selling international tickets for 50-90% off. These 'glitch' windows usually close within hours, which is why we send alerts immediately."
+              "text": "An error fare is when an airline's pricing system makes a mistake, sometimes selling international tickets for 50-90% off. These windows usually close within hours, which is why we send alerts immediately."
             }
           }
         ]
@@ -322,7 +322,7 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
   </noscript>
 </head>
 
-<body class="bg-primary text-primary font-body scroll-smooth selection:bg-tcf-aviation-blue/30 selection:text-white">
+<body class="font-body scroll-smooth selection:bg-tcf-gold/30 selection:text-tcf-ink">
 
   <GlobalNav activePage="home" />
 
@@ -332,56 +332,56 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
   <section class="hero-gradient relative min-h-screen flex flex-col items-center justify-center px-6 pt-32 pb-20 overflow-hidden text-center">
     <div class="starfield"></div>
 
-    <!-- Ambient Glows -->
+    <!-- Ambient warmth -->
     <div class="absolute top-1/4 -right-20 w-[500px] h-[500px] bg-tcf-aviation-blue/10 blur-[150px] rounded-full"></div>
-    <div class="absolute bottom-1/4 -left-20 w-[500px] h-[500px] bg-tcf-gold/5 blur-[150px] rounded-full"></div>
+    <div class="absolute bottom-1/4 -left-20 w-[500px] h-[500px] bg-tcf-gold/10 blur-[150px] rounded-full"></div>
 
     <div class="z-content max-w-5xl mx-auto w-full flex flex-col items-center">
 
       <!-- Badge -->
-      <div class="anim-fade-up delay-1 inline-flex items-center gap-3 badge-gold mb-10 border-tcf-gold/20 backdrop-blur-sm">
+      <div class="anim-fade-up delay-1 inline-flex items-center gap-3 badge-gold mb-10 backdrop-blur-sm">
         <span class="flex h-2 w-2 relative">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tcf-gold opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2 w-2 bg-tcf-gold"></span>
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tcf-gold-deep opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-tcf-gold-deep"></span>
         </span>
         Live scanning Dallas, Houston, and 17 more Texas airports
       </div>
 
       <!-- Hero headline -->
-      <h1 class="anim-fade-up delay-2 mb-8 text-white w-full max-w-4xl" style="font-size: clamp(2.5rem, 8vw, 5.5rem);">
-        Airline algorithms make mistakes.<br/>
-        We send Texas <span class="text-gold">the alert first.</span>
+      <h1 class="anim-fade-up delay-2 mb-8 text-tcf-ink w-full max-w-4xl" style="font-size: clamp(2.5rem, 8vw, 5.5rem);">
+        Airlines make pricing mistakes.<br/>
+        We make sure Texas <span class="text-gold">hears about it first.</span>
       </h1>
 
       <!-- Subheadline -->
-      <p class="anim-fade-up delay-3 max-w-2xl text-xl mb-12 text-slate-400 leading-relaxed font-body">
-        Two types of anomalies, both worth money: <span class="text-white font-semibold">Cash glitches</span> where fares briefly fall far below normal, and <span class="text-white font-semibold">award sweet spots</span> where points go further from Texas. We monitor 19 Texas airports and route the best finds through manual review.
+      <p class="anim-fade-up delay-3 max-w-2xl text-xl mb-12 text-tcf-ink-muted leading-relaxed font-body">
+        We watch for two kinds of deals: <span class="text-tcf-ink font-semibold">error fares</span>, where a pricing mistake slashes a fare for a few hours, and <span class="text-tcf-ink font-semibold">point deals</span>, where your miles go further than usual from a Texas airport. Every alert is checked by a person before it reaches you.
       </p>
 
       <div class="anim-fade-up delay-3 mb-10 grid w-full max-w-3xl grid-cols-1 gap-3 text-left sm:grid-cols-3">
-        <div class="rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4 backdrop-blur-sm">
-          <p class="text-2xl font-black text-white">19</p>
-          <p class="mt-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">Texas airports watched</p>
+        <div class="rounded-2xl border border-tcf-ink/10 bg-white/60 px-5 py-4 backdrop-blur-sm">
+          <p class="text-2xl font-black text-tcf-ink">19</p>
+          <p class="mt-1 text-[11px] font-black uppercase tracking-[0.18em] text-tcf-ink-muted">Texas airports watched</p>
         </div>
-        <div class="rounded-2xl border border-tcf-gold/20 bg-tcf-gold/[0.06] px-5 py-4 backdrop-blur-sm">
-          <p class="text-2xl font-black text-tcf-gold">{archivedAlertCount ?? '—'}</p>
-          <p class="mt-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">Verified alerts archived</p>
+        <div class="rounded-2xl border border-tcf-gold/25 bg-tcf-gold/[0.08] px-5 py-4 backdrop-blur-sm">
+          <p class="text-2xl font-black text-tcf-gold-deep">{archivedAlertCount ?? '—'}</p>
+          <p class="mt-1 text-[11px] font-black uppercase tracking-[0.18em] text-tcf-ink-muted">Verified alerts archived</p>
         </div>
-        <div class="rounded-2xl border border-tcf-aviation-blue/20 bg-tcf-aviation-blue/[0.06] px-5 py-4 backdrop-blur-sm">
-          <p class="text-2xl font-black text-tcf-aviation-blue">{subscriberCount ?? '—'}</p>
-          <p class="mt-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">Active email subscribers</p>
+        <div class="rounded-2xl border border-tcf-aviation-blue/25 bg-tcf-aviation-blue/[0.08] px-5 py-4 backdrop-blur-sm">
+          <p class="text-2xl font-black text-tcf-sky-deep">{subscriberCount ?? '—'}</p>
+          <p class="mt-1 text-[11px] font-black uppercase tracking-[0.18em] text-tcf-ink-muted">Active email subscribers</p>
         </div>
       </div>
 
       <!-- WAITLIST FORM -->
       <div class="anim-fade-up delay-4 w-full max-w-lg scroll-mt-32" id="waitlist">
-        <div class="liquid-glass p-8 md:p-10 rounded-[2.5rem] shadow-2xl relative">
-          <div class="absolute -top-10 -left-10 w-20 h-20 bg-tcf-aviation-blue/20 blur-2xl rounded-full"></div>
-          
+        <div class="liquid-glass p-8 md:p-10 rounded-[2.5rem] shadow-xl relative">
+          <div class="absolute -top-10 -left-10 w-20 h-20 bg-tcf-aviation-blue/15 blur-2xl rounded-full"></div>
+
           <form id="waitlist-form" data-tcf-form="homepage_waitlist" class="flex flex-col gap-6 relative">
             <div class="flex flex-col gap-2.5 text-left">
-              <label for="airport" class="text-slate-400 text-xs font-bold uppercase tracking-widest pl-1">Home Airport</label>
-              <select id="airport" name="airport" required class="input appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20class%3D%22lucide%20lucide-chevron-down%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25em] bg-[right_1.25rem_center] bg-no-repeat">
+              <label for="airport" class="text-tcf-ink-muted text-xs font-bold uppercase tracking-widest pl-1">Home Airport</label>
+              <select id="airport" name="airport" required class="input appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2352616f%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20class%3D%22lucide%20lucide-chevron-down%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25em] bg-[right_1.25rem_center] bg-no-repeat">
                 <option value="" disabled selected>Select your departure airport...</option>
                 {TX_AIRPORTS.map(a => (
                   <option value={a.code}>{a.city} ({a.code})</option>
@@ -390,7 +390,7 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
             </div>
 
             <div class="flex flex-col gap-2.5 text-left">
-              <label for="email" class="text-slate-400 text-xs font-bold uppercase tracking-widest pl-1">Email Address</label>
+              <label for="email" class="text-tcf-ink-muted text-xs font-bold uppercase tracking-widest pl-1">Email Address</label>
               <input
                 id="email"
                 name="email"
@@ -405,15 +405,15 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
               Alert Me When Deals Drop
             </button>
 
-            <div class="flex items-center justify-center gap-4 text-xs text-slate-500">
+            <div class="flex items-center justify-center gap-4 text-xs text-tcf-ink-muted">
               <div class="flex items-center gap-1.5">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-tcf-success"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>
                 Secure & Private
               </div>
-              <div class="w-1 h-1 rounded-full bg-slate-700"></div>
+              <div class="w-1 h-1 rounded-full bg-tcf-ink/20"></div>
               <span>Founding list is open</span>
             </div>
-            <p class="text-center text-[11px] text-slate-500 font-body leading-relaxed">
+            <p class="text-center text-[11px] text-tcf-ink-muted font-body leading-relaxed">
               No spam · One alert when your airport has a deal · Unsubscribe anytime
             </p>
           </form>
@@ -421,18 +421,18 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
           <!-- Success state -->
           <div id="success-state" class="hidden text-center py-6">
             <div class="w-20 h-20 bg-tcf-success/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-tcf-success/20">
-              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check"><path d="M20 6 9 17l-5-5"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check"><path d="M20 6 9 17l-5-5"/></svg>
             </div>
-            <h3 class="text-3xl font-black text-white mb-3">Scout Activated.</h3>
-            <p class="text-slate-400 mb-8 max-w-sm mx-auto leading-relaxed">AI Scout is now watching for error fares and award sweet spots from your airport. When one surfaces, you'll be the first to know.</p>
+            <h3 class="text-3xl font-black text-tcf-ink mb-3">You're in.</h3>
+            <p class="text-tcf-ink-muted mb-8 max-w-sm mx-auto leading-relaxed">We're now watching for error fares and point deals from your airport. When one shows up, you'll be the first to know.</p>
 
             <div class="p-6 rounded-3xl bg-tcf-aviation-blue/5 border border-tcf-aviation-blue/20 text-left">
-              <p class="font-black text-tcf-aviation-blue mb-2 uppercase tracking-widest text-[10px]">🚀 Fast-Track Access</p>
-              <p class="text-sm text-slate-300 mb-5 leading-relaxed">
-                Refer 3 Texas friends and get instant access to our "Airport Sweet Spot" hidden database.
+              <p class="font-black text-tcf-sky-deep mb-2 uppercase tracking-widest text-[10px]">🚀 Skip the Line</p>
+              <p class="text-sm text-tcf-ink-muted mb-5 leading-relaxed">
+                Refer 3 Texas friends and get early access to our full regional deals list.
               </p>
               <div class="flex gap-2">
-                <input id="referral-link" readonly value="txflights.co/ref/TEXAS" class="input flex-1 text-sm bg-black/40 h-10 px-4" />
+                <input id="referral-link" readonly value="txflights.co/ref/TEXAS" class="input flex-1 text-sm bg-tcf-surface h-10 px-4" />
                 <button id="copy-btn" class="btn-primary h-10 px-6 py-0 text-sm">Copy</button>
               </div>
             </div>
@@ -440,16 +440,16 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
         </div>
 
         <!-- Social Proof -->
-        <div class="mt-8 flex flex-col items-center justify-center gap-4 text-sm text-slate-500 w-full font-bold">
-          <div class="flex items-center gap-4 px-5 py-2.5 rounded-full border border-white/5 bg-white/2 backdrop-blur-sm">
+        <div class="mt-8 flex flex-col items-center justify-center gap-4 text-sm text-tcf-ink-muted w-full font-bold">
+          <div class="flex items-center gap-4 px-5 py-2.5 rounded-full border border-tcf-ink/10 bg-white/50 backdrop-blur-sm">
             <div class="flex -space-x-3">
               {[1,2,3,4].map(() => (
-                <div class="w-8 h-8 rounded-full border-2 border-tcf-navy-deep bg-tcf-navy-mid flex items-center justify-center text-[10px] liquid-glass">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="var(--tcf-aviation-blue)" stroke="var(--tcf-aviation-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <div class="w-8 h-8 rounded-full border-2 border-tcf-paper bg-tcf-cream flex items-center justify-center text-[10px] liquid-glass">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="var(--tcf-gold-deep)" stroke="var(--tcf-gold-deep)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                 </div>
               ))}
             </div>
-            <p class="m-0 text-slate-400"><span class="text-white">{proofLine}</span></p>
+            <p class="m-0 text-tcf-ink-muted"><span class="text-tcf-ink">{proofLine}</span></p>
           </div>
         </div>
       </div>
@@ -457,16 +457,16 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
   </section>
 
   <!-- ═══════════════════════════ LIVE TICKER (FOMO) ═══════════════════════════ -->
-  <div class="w-full bg-tcf-gold text-tcf-navy-deep py-3 overflow-hidden flex border-y border-tcf-gold/50 relative z-20 shadow-[0_0_30px_rgba(212,168,67,0.15)] group">
-    <div class="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-tcf-gold to-transparent z-10 pointer-events-none"></div>
-    <div class="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-tcf-gold to-transparent z-10 pointer-events-none"></div>
-    
+  <div class="w-full bg-tcf-gold-deep text-white py-3 overflow-hidden flex border-y border-tcf-gold-deep/50 relative z-20 group">
+    <div class="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-tcf-gold-deep to-transparent z-10 pointer-events-none"></div>
+    <div class="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-tcf-gold-deep to-transparent z-10 pointer-events-none"></div>
+
     <!-- Unified seamless scrolling track -->
     <div class="flex whitespace-nowrap animate-marquee items-center font-black text-xs md:text-sm uppercase tracking-[0.2em] w-max group-hover:[animation-play-state:paused]">
       {TICKER_ITEMS.map(item => (
-        <a href={item.id ? `/deal/${item.id}` : '#'} class="mx-12 flex items-center gap-3 no-underline text-inherit hover:text-white transition-colors">
+        <a href={item.id ? `/deal/${item.id}` : '#'} class="mx-12 flex items-center gap-3 no-underline text-inherit hover:text-tcf-navy-deep transition-colors">
           {item.type === 'glitch' ? (
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="animate-pulse"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fecaca" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
           ) : (
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 22h20"/><path d="M6.36 17.4 4 17l-2-4 1.1-.55L5.05 15l4.44.75L10.5 11l4.44.75L14.5 17h1l5.5-5.5L22 13l-4 4 2 4h-1.5l-2.5-4-3.5-1.5h-2L6.36 17.4z"/></svg>
           )}
@@ -477,26 +477,26 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
   </div>
 
   <!-- ═══════════════════════════ PROOF / VERIFICATION ═══════════════════════════ -->
-  <section class="section-padding bg-slate-100 text-slate-900 relative overflow-hidden">
+  <section class="section-padding bg-tcf-cream text-tcf-ink relative overflow-hidden">
     <div class="max-w-6xl mx-auto px-6">
       <div class="grid lg:grid-cols-[0.9fr,1.1fr] gap-12 items-center">
         <div>
-          <span class="label uppercase tracking-[0.3em] font-bold text-xs mb-4 inline-block text-slate-500">How Alerts Are Checked</span>
-          <h2 class="text-4xl md:text-5xl font-black mb-6 text-slate-950">Fast alerts still need a sanity check.</h2>
-          <p class="text-lg leading-relaxed font-body text-slate-600">
+          <span class="label uppercase tracking-[0.3em] font-bold text-xs mb-4 inline-block text-tcf-ink-muted">How Alerts Are Checked</span>
+          <h2 class="text-4xl md:text-5xl font-black mb-6 text-tcf-ink">Fast alerts still need a sanity check.</h2>
+          <p class="text-lg leading-relaxed font-body text-tcf-ink-muted">
             The scanner finds candidates automatically, but the live list stays human-reviewed. We check route, price context, airline, available dates, and whether the find is actually useful for Texas travelers before an email draft goes out.
           </p>
         </div>
         <div class="grid md:grid-cols-3 gap-4">
           {[
-            { label: '1', title: 'Scout', text: 'SerpAPI watches the 19-airport Texas network for unusually low cash fares and award-style opportunities.' },
-            { label: '2', title: 'Validate', text: 'Promising routes are checked against price benchmarks and, in dry-runs, fli date searches across 3-14 day trips.' },
-            { label: '3', title: 'Review', text: 'Nothing auto-sends. A Discord/Resend draft is created for manual review before subscribers see it.' },
+            { label: '1', title: 'Scout', text: 'We watch the 19-airport Texas network for unusually low cash fares and point deals.' },
+            { label: '2', title: 'Validate', text: 'Promising routes are checked against price benchmarks and date searches across 3-14 day trips.' },
+            { label: '3', title: 'Review', text: 'Nothing auto-sends. A draft is created for manual review before subscribers see it.' },
           ].map(item => (
-            <div class="rounded-2xl bg-white border border-slate-200 p-6 shadow-sm">
-              <div class="w-10 h-10 rounded-xl bg-slate-950 text-tcf-gold flex items-center justify-center font-black mb-5">{item.label}</div>
-              <h3 class="text-lg font-black text-slate-950 mb-3">{item.title}</h3>
-              <p class="text-sm text-slate-600 leading-relaxed font-body">{item.text}</p>
+            <div class="rounded-2xl bg-white border border-tcf-ink/10 p-6 shadow-sm">
+              <div class="w-10 h-10 rounded-xl bg-tcf-ink text-tcf-gold flex items-center justify-center font-black mb-5">{item.label}</div>
+              <h3 class="text-lg font-black text-tcf-ink mb-3">{item.title}</h3>
+              <p class="text-sm text-tcf-ink-muted leading-relaxed font-body">{item.text}</p>
             </div>
           ))}
         </div>
@@ -505,20 +505,20 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
   </section>
 
   <!-- ═══════════════════════════ INOCULATION (SKEPTIC CHECK) ═══════════════════════════ -->
-  <section class="section-padding relative overflow-hidden flex flex-col items-center">
+  <section class="section-padding relative overflow-hidden flex flex-col items-center bg-tcf-paper">
     <div class="max-w-6xl mx-auto px-6 w-full relative z-10">
-      <div class="liquid-glass p-12 md:p-20 rounded-[4rem] bg-tcf-navy-mid/40 border-white/10 shadow-2xl relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-64 h-64 bg-tcf-gold/5 blur-[100px] rounded-full"></div>
-        
+      <div class="liquid-glass p-12 md:p-20 rounded-[4rem] bg-white shadow-xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-tcf-gold/10 blur-[100px] rounded-full"></div>
+
         <div class="grid lg:grid-cols-2 gap-20 items-center">
           <div class="stack-y-md">
             <span class="label text-tcf-caution uppercase tracking-[0.3em] font-bold text-xs mb-2 inline-block">The Skeptic's Check</span>
-            <h2 class="text-4xl md:text-5xl mb-6 text-white leading-tight">Wait... is any of this<br/><span class="text-gold italic">actually real?</span></h2>
-            <p class="text-lg text-slate-400 mb-8 leading-relaxed font-body max-w-lg">
+            <h2 class="text-4xl md:text-5xl mb-6 text-tcf-ink leading-tight">Wait... is any of this<br/><span class="text-gold italic">actually real?</span></h2>
+            <p class="text-lg text-tcf-ink-muted mb-8 leading-relaxed font-body max-w-lg">
               Fair question. Error fares sound too good. Alerts sound too slow. Points sound too complicated. Here's the honest breakdown — no gurus, no pitch.
             </p>
             <div class="pt-4">
-              <a href="/skeptics-guide" class="text-tcf-aviation-blue font-bold flex items-center gap-2 group/link no-underline text-lg">
+              <a href="/skeptics-guide" class="text-tcf-sky-deep font-bold flex items-center gap-2 group/link no-underline text-lg">
                 Read the full Skeptic's Guide
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover/link:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </a>
@@ -528,22 +528,22 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
           <div class="grid gap-6">
             {[
               {
-                title: 'Objection: "The alert will arrive too late."',
-                response: 'We run our own monitoring bot, then review the strongest candidates before they become email drafts. Error fare windows can be short, so speed matters, but we still avoid sending unverified noise.',
+                title: '"The alert will arrive too late."',
+                response: 'We run our own monitoring, then review the strongest candidates before they become email drafts. Error fare windows can be short, so speed matters, but we still avoid sending unverified noise.',
                 icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`
               },
               {
-                title: 'Objection: "I don\'t know anything about points."',
-                response: 'You don\'t need to. Many high-impact alerts are straight cash fares. Points are a secondary hedge tool for travelers who already have them, not a requirement to get value.',
+                title: '"I don\'t know anything about points."',
+                response: 'You don\'t need to. Many high-impact alerts are straight cash fares. Points are a secondary option for travelers who already have them, not a requirement to get value.',
                 icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-credit-card"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>`
               }
             ].map(item => (
-              <div class="p-8 rounded-3xl bg-white/5 border border-white/5 hover:border-white/20 transition-all duration-300">
+              <div class="p-8 rounded-3xl bg-tcf-cream border border-tcf-ink/5 hover:border-tcf-ink/15 transition-all duration-300">
                 <div class="flex gap-5 items-start">
                   <div class="w-12 h-12 rounded-xl bg-tcf-caution/10 flex items-center justify-center text-tcf-caution flex-shrink-0" set:html={item.icon}></div>
                   <div>
-                    <h3 class="font-black text-white text-lg mb-2 tracking-tight">{item.title}</h3>
-                    <p class="text-sm text-slate-400 leading-relaxed font-body">{item.response}</p>
+                    <h3 class="font-black text-tcf-ink text-lg mb-2 tracking-tight">{item.title}</h3>
+                    <p class="text-sm text-tcf-ink-muted leading-relaxed font-body">{item.response}</p>
                   </div>
                 </div>
               </div>
@@ -556,19 +556,18 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
 
 
   <!-- ═══════════════════════════ PAIN ═══════════════════════════ -->
-  <section id="pain" class="section-padding light-section relative border-y flex flex-col items-center overflow-hidden">
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_var(--tcf-aviation-blue)_0%,_transparent_20%)] opacity-5"></div>
+  <section id="pain" class="section-padding relative border-y border-tcf-ink/10 flex flex-col items-center overflow-hidden bg-tcf-cream">
     <div class="max-w-6xl mx-auto px-6 w-full flex flex-col items-center relative z-10">
       <div class="text-center mb-24 anim-fade-up">
         <span class="label text-gold uppercase tracking-[0.3em] font-bold text-xs mb-4 inline-block">The Reality</span>
-        <h2 class="text-4xl md:text-6xl mb-8 text-white">Generic flight deals<br/><span class="text-slate-500 italic">weren't built for Texas.</span></h2>
+        <h2 class="text-4xl md:text-6xl mb-8 text-tcf-ink">Generic flight deals<br/><span class="text-tcf-ink-muted italic">weren't built for Texas.</span></h2>
       </div>
 
       <div class="grid md:grid-cols-3 gap-8 w-full">
         {PAIN_QUOTES.map(item => (
-          <div class="liquid-glass p-10 rounded-[2.5rem] flex flex-col items-center text-center cursor-pointer group">
-            <div class="w-14 h-14 rounded-2xl bg-tcf-aviation-blue/10 flex items-center justify-center text-tcf-aviation-blue mb-8 transition-all duration-300 group-hover:scale-110 group-hover:bg-tcf-aviation-blue/20" set:html={item.icon} />
-            <p class="text-lg text-white font-medium italic leading-relaxed font-body">{item.text}</p>
+          <div class="liquid-glass p-10 rounded-[2.5rem] flex flex-col items-center text-center cursor-pointer group bg-white">
+            <div class="w-14 h-14 rounded-2xl bg-tcf-aviation-blue/10 flex items-center justify-center text-tcf-sky-deep mb-8 transition-all duration-300 group-hover:scale-110 group-hover:bg-tcf-aviation-blue/20" set:html={item.icon} />
+            <p class="text-lg text-tcf-ink font-medium italic leading-relaxed font-body">{item.text}</p>
           </div>
         ))}
       </div>
@@ -576,20 +575,20 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
   </section>
 
   <!-- ═══════════════════════════ HOW IT WORKS ═══════════════════════════ -->
-  <section id="how-it-works" class="section-padding light-section relative flex flex-col items-center">
+  <section id="how-it-works" class="section-padding relative flex flex-col items-center bg-tcf-paper">
     <div class="max-w-6xl mx-auto px-6 w-full flex flex-col items-center">
       <div class="text-center mb-20">
-        <span class="label text-tcf-aviation-blue uppercase tracking-[0.3em] font-bold text-xs">The Strategy</span>
-        <h2 class="text-4xl md:text-6xl mt-6 text-white">Your TX-first playbook<br/><span class="text-gold">in three simple steps.</span></h2>
+        <span class="label text-tcf-sky-deep uppercase tracking-[0.3em] font-bold text-xs">How It Works</span>
+        <h2 class="text-4xl md:text-6xl mt-6 text-tcf-ink">Built for Texas,<br/><span class="text-gold">in three simple steps.</span></h2>
       </div>
 
       <div class="grid md:grid-cols-3 gap-8 w-full">
         {HOW_IT_WORKS.map((f, idx) => (
-          <div class={`liquid-glass p-10 rounded-[3rem] relative overflow-hidden group anim-fade-up delay-${idx+1} flex flex-col items-center text-center cursor-pointer`}>
-            <span class="absolute top-6 right-10 text-8xl font-black text-white/5 select-none">{f.step}</span>
-            <div class="w-16 h-16 rounded-2xl bg-tcf-gold/10 flex items-center justify-center text-tcf-gold mb-12 group-hover:scale-110 transition-transform duration-500" set:html={f.icon} />
-            <h3 class="text-2xl font-black mb-5 text-white">{f.title}</h3>
-            <p class="text-slate-400 leading-relaxed font-body">{f.desc}</p>
+          <div class={`liquid-glass p-10 rounded-[3rem] relative overflow-hidden group anim-fade-up delay-${idx+1} flex flex-col items-center text-center cursor-pointer bg-white`}>
+            <span class="absolute top-6 right-10 text-8xl font-black text-tcf-ink/5 select-none">{f.step}</span>
+            <div class="w-16 h-16 rounded-2xl bg-tcf-gold/10 flex items-center justify-center text-tcf-gold-deep mb-12 group-hover:scale-110 transition-transform duration-500" set:html={f.icon} />
+            <h3 class="text-2xl font-black mb-5 text-tcf-ink">{f.title}</h3>
+            <p class="text-tcf-ink-muted leading-relaxed font-body">{f.desc}</p>
           </div>
         ))}
       </div>
@@ -597,48 +596,48 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
   </section>
 
   <!-- ═══════════════════════════ TRAVEL HEDGING ═══════════════════════════ -->
-  <section class="section-padding bg-black/40 overflow-hidden relative">
-    <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-tcf-aviation-blue/5 blur-[120px] rounded-full"></div>
+  <section class="section-padding overflow-hidden relative bg-tcf-cream">
+    <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-tcf-aviation-blue/10 blur-[120px] rounded-full"></div>
     <div class="max-w-6xl mx-auto px-6 relative z-10">
       <div class="grid lg:grid-cols-2 gap-20 items-center">
         <div class="text-center lg:text-left flex flex-col items-center lg:items-start">
-          <span class="badge-gold px-4 py-2 mb-8 inline-block">Category-Defining Framework</span>
-          <h2 class="text-4xl md:text-6xl mb-8 text-white">
-            Don't just spend.<br/>
-            Start <span class="text-gold">Hedging.</span>
+          <span class="badge-gold px-4 py-2 mb-8 inline-block">A Smarter Way to Use Points</span>
+          <h2 class="text-4xl md:text-6xl mb-8 text-tcf-ink">
+            Protect your points<br/>
+            from <span class="text-gold">price spikes.</span>
           </h2>
-          <p class="text-lg text-slate-400 mb-10 leading-relaxed font-body max-w-xl">
+          <p class="text-lg text-tcf-ink-muted mb-10 leading-relaxed font-body max-w-xl">
             Cash prices swing. Award charts can stay steadier. We teach you how to use refundable award holds and backup routes where they make sense, so you have more options when cash fares spike.
           </p>
-          
+
           <div class="grid sm:grid-cols-2 gap-8 w-full max-w-2xl">
             {[
-              { 
-                icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>`, 
-                title: 'Refundable awards', 
-                desc: 'Lock in deals with zero risk to your stash.' 
+              {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>`,
+                title: 'Refundable awards',
+                desc: 'Hold a trip with points, cancel free if plans change.'
               },
-              { 
-                icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.3-4.3"/><path d="M18 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"/><path d="M18 8c0 4.5-4.5 9-9 9s-9-4.5-9-9 4.5-9 9-9 9 4.5 9 9Z"/><circle cx="9" cy="8" r="3"/></svg>`, 
-                title: 'Backup routes', 
-                desc: 'Always have a Plan B from regional TX airports.' 
+              {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.3-4.3"/><path d="M18 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"/><path d="M18 8c0 4.5-4.5 9-9 9s-9-4.5-9-9 4.5-9 9-9 9 4.5 9 9Z"/><circle cx="9" cy="8" r="3"/></svg>`,
+                title: 'Backup routes',
+                desc: 'Always have a Plan B from regional TX airports.'
               },
-              { 
-                icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>`, 
-                title: 'Risk scoring', 
-                desc: 'Proprietary engine tells you when to pay cash.' 
+              {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>`,
+                title: 'Smart price checks',
+                desc: 'We tell you when it makes more sense to just pay cash.'
               },
-              { 
-                icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>`, 
-                title: 'Sweet spots', 
-                desc: 'Hidden regional arbitrage values built for TX.' 
+              {
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>`,
+                title: 'Regional deals',
+                desc: 'Point prices that only make sense from Texas airports.'
               },
             ].map(item => (
               <div class="flex gap-4 items-start text-left cursor-pointer group">
-                <div class="w-10 h-10 rounded-xl bg-tcf-aviation-blue/10 flex items-center justify-center text-tcf-aviation-blue flex-shrink-0 group-hover:bg-tcf-aviation-blue/20 transition-colors" set:html={item.icon} />
+                <div class="w-10 h-10 rounded-xl bg-tcf-aviation-blue/10 flex items-center justify-center text-tcf-sky-deep flex-shrink-0 group-hover:bg-tcf-aviation-blue/20 transition-colors" set:html={item.icon} />
                 <div>
-                  <h3 class="font-black text-white text-sm mb-1 uppercase tracking-tight">{item.title}</h3>
-                  <p class="text-xs text-slate-400 leading-relaxed font-body">{item.desc}</p>
+                  <h3 class="font-black text-tcf-ink text-sm mb-1 uppercase tracking-tight">{item.title}</h3>
+                  <p class="text-xs text-tcf-ink-muted leading-relaxed font-body">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -647,12 +646,12 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
 
         <!-- Dashboard Mockup -->
         <div class="relative group w-full max-w-md mx-auto">
-          <div class="absolute -inset-10 bg-tcf-aviation-blue/20 blur-[100px] rounded-full opacity-30 group-hover:opacity-50 transition-opacity"></div>
-          <div class="liquid-glass rounded-[2rem] p-10 relative overflow-hidden border-white/10 shadow-2xl w-full">
+          <div class="absolute -inset-10 bg-tcf-aviation-blue/15 blur-[100px] rounded-full opacity-40 group-hover:opacity-60 transition-opacity"></div>
+          <div class="liquid-glass rounded-[2rem] p-10 relative overflow-hidden shadow-xl w-full bg-white">
             <div class="flex items-center justify-between mb-12">
               <div class="flex flex-col">
-                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-1">Portfolio</span>
-                <h4 class="text-xl font-black text-white">TX Hedge Stash</h4>
+                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-tcf-ink-muted mb-1">Your Trips</span>
+                <h4 class="text-xl font-black text-tcf-ink">Saved & Watched</h4>
               </div>
               <div class="flex gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-red-400"></span>
@@ -660,17 +659,17 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
                 <span class="w-2.5 h-2.5 rounded-full bg-tcf-success"></span>
               </div>
             </div>
-            
+
             <div class="space-y-6 mb-10">
               {HEDGING_TRIPS.map(trip => (
-                <div class="p-5 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between hover:bg-white/10 transition-all duration-300 cursor-pointer group/item">
+                <div class="p-5 rounded-2xl bg-tcf-cream border border-tcf-ink/5 flex items-center justify-between hover:bg-tcf-gold/5 transition-all duration-300 cursor-pointer group/item">
                   <div class="text-left">
-                    <div class="font-black text-sm text-white mb-1 tracking-tight group-hover/item:text-tcf-aviation-blue transition-colors">{trip.route}</div>
-                    <div class="text-[10px] uppercase tracking-widest font-black opacity-80" style={`color: ${trip.color}`}>{trip.status}</div>
+                    <div class="font-black text-sm text-tcf-ink mb-1 tracking-tight group-hover/item:text-tcf-sky-deep transition-colors">{trip.route}</div>
+                    <div class="text-[10px] uppercase tracking-widest font-black opacity-90" style={`color: ${trip.color}`}>{trip.status}</div>
                   </div>
                   <div class="flex flex-col items-end gap-1.5">
-                    <span class="text-[9px] font-bold text-slate-500">Stability</span>
-                    <div class="h-1.5 w-20 bg-white/10 rounded-full overflow-hidden">
+                    <span class="text-[9px] font-bold text-tcf-ink-muted">Confidence</span>
+                    <div class="h-1.5 w-20 bg-tcf-ink/10 rounded-full overflow-hidden">
                       <div class="h-full bg-tcf-aviation-blue w-3/4 rounded-full"></div>
                     </div>
                   </div>
@@ -681,9 +680,9 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
             <div class="p-5 rounded-2xl bg-tcf-success/10 border border-tcf-success/20 text-center backdrop-blur-md">
               <div class="flex items-center justify-center gap-2 mb-1.5">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tcf-success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>
-                <p class="font-black text-tcf-success text-xs uppercase tracking-widest">Aviation Shield Active</p>
+                <p class="font-black text-tcf-success text-xs uppercase tracking-widest">You're Covered</p>
               </div>
-              <p class="text-[10px] text-slate-400 font-medium">Your itineraries are protected from price spikes.</p>
+              <p class="text-[10px] text-tcf-ink-muted font-medium">We'll flag it if prices move against you.</p>
             </div>
           </div>
         </div>
@@ -692,55 +691,55 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
   </section>
 
   <!-- ═══════════════════════════ FEATURED DEALS ═══════════════════════════ -->
-  <section id="featured-deals" class="section-padding light-section relative overflow-hidden">
-    <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+  <section id="featured-deals" class="section-padding relative overflow-hidden bg-tcf-paper">
+    <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-tcf-ink/10 to-transparent"></div>
     <div class="max-w-7xl mx-auto px-6 relative z-10">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20 anim-fade-up">
         <div class="max-w-xl">
-          <span class="label text-tcf-aviation-blue uppercase tracking-[0.3em] font-bold text-xs mb-4 inline-block">Live Anomaly Tracker</span>
-          <h2 class="text-4xl md:text-5xl text-white font-black mb-6">Recent <span class="text-tcf-aviation-blue">Texas Anomaly Alerts.</span></h2>
-          <p class="text-slate-400 font-body leading-relaxed">
-            Award seats priced far below cash. Cash fares that briefly drop under normal market rates. Both can be real. Both can close fast. Here's what the archive has caught.
+          <span class="label text-tcf-sky-deep uppercase tracking-[0.3em] font-bold text-xs mb-4 inline-block">Recent Deals We Caught</span>
+          <h2 class="text-4xl md:text-5xl text-tcf-ink font-black mb-6">Recent <span class="text-tcf-sky-deep">deals from the archive.</span></h2>
+          <p class="text-tcf-ink-muted font-body leading-relaxed">
+            Sometimes points go further than cash. Sometimes cash fares drop below normal for a few hours. Both are real, and both move fast — here's what we've caught recently.
           </p>
         </div>
-        <div class="flex items-center gap-4 text-xs font-black uppercase tracking-widest text-slate-500">
+        <div class="flex items-center gap-4 text-xs font-black uppercase tracking-widest text-tcf-ink-muted">
           <span class="w-2 h-2 rounded-full bg-tcf-success animate-pulse"></span>
-          Live Market Data
+          Updated Daily
         </div>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {FEATURED_DEALS.map((deal: any) => (
-          <div class={`liquid-glass group overflow-hidden rounded-[2.5rem] border transition-all duration-500 ${deal.type === 'cash_glitch' ? 'border-red-500/20 hover:border-red-500/40' : 'border-white/5 hover:border-tcf-aviation-blue/30'}`}>
+          <div class={`liquid-glass group overflow-hidden rounded-[2.5rem] border transition-all duration-500 bg-white ${deal.type === 'cash_glitch' ? 'border-red-300 hover:border-red-400' : 'border-tcf-ink/10 hover:border-tcf-aviation-blue/40'}`}>
             <div class="px-8 pt-6 pb-0">
               {deal.type === 'cash_glitch' ? (
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-[9px] font-black uppercase tracking-widest text-red-400">
-                  ⚡ Algorithm Glitch
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 border border-red-200 text-[9px] font-black uppercase tracking-widest text-tcf-danger">
+                  ⚡ Error Fare
                 </span>
               ) : (
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tcf-aviation-blue/10 border border-tcf-aviation-blue/20 text-[9px] font-black uppercase tracking-widest text-tcf-aviation-blue">
-                  ✈ Award Sweet Spot
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tcf-aviation-blue/10 border border-tcf-aviation-blue/20 text-[9px] font-black uppercase tracking-widest text-tcf-sky-deep">
+                  ✈ Point Deal
                 </span>
               )}
             </div>
             <div class="p-8 pb-4 pt-4">
               <div class="flex justify-between items-start mb-8">
-                <div class={`p-4 rounded-2xl bg-white/5 group-hover:scale-110 transition-all duration-500 ${deal.type === 'cash_glitch' ? 'text-red-400 group-hover:bg-red-500/10' : 'text-white group-hover:bg-tcf-aviation-blue/10'}`} set:html={deal.icon} />
+                <div class={`p-4 rounded-2xl bg-tcf-cream group-hover:scale-110 transition-all duration-500 ${deal.type === 'cash_glitch' ? 'text-tcf-danger group-hover:bg-red-50' : 'text-tcf-ink group-hover:bg-tcf-aviation-blue/10'}`} set:html={deal.icon} />
                 <div class="text-right">
-                  <div class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-1">Origin</div>
-                  <div class="text-xl font-black text-white">{deal.origin}</div>
+                  <div class="text-[10px] font-black uppercase tracking-[0.2em] text-tcf-ink-muted mb-1">Origin</div>
+                  <div class="text-xl font-black text-tcf-ink">{deal.origin}</div>
                 </div>
               </div>
 
               <div class="mb-8">
-                <div class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-2">Destination</div>
-                <div class={`text-3xl font-black text-white transition-colors ${deal.type === 'cash_glitch' ? 'group-hover:text-red-400' : 'group-hover:text-tcf-aviation-blue'}`}>{deal.dest}</div>
+                <div class="text-[10px] font-black uppercase tracking-[0.2em] text-tcf-ink-muted mb-2">Destination</div>
+                <div class={`text-3xl font-black text-tcf-ink transition-colors ${deal.type === 'cash_glitch' ? 'group-hover:text-tcf-danger' : 'group-hover:text-tcf-sky-deep'}`}>{deal.dest}</div>
               </div>
 
               {deal.type !== 'cash_glitch' && deal.tags && (
                 <div class="flex flex-wrap gap-2 mb-8">
                   {deal.tags.map((tag: string) => (
-                    <span class="px-3 py-1 rounded-full bg-white/5 text-[9px] font-black uppercase tracking-widest text-slate-400 border border-white/5">
+                    <span class="px-3 py-1 rounded-full bg-tcf-cream text-[9px] font-black uppercase tracking-widest text-tcf-ink-muted border border-tcf-ink/10">
                       {tag}
                     </span>
                   ))}
@@ -749,39 +748,39 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
             </div>
 
             <div class="p-8 pt-0 mt-auto">
-              <div class="h-px w-full bg-white/5 mb-8"></div>
+              <div class="h-px w-full bg-tcf-ink/10 mb-8"></div>
               {deal.type === 'cash_glitch' ? (
                 <div>
                   <div class="flex items-end justify-between mb-4">
                     <div>
-                      <div class="text-[10px] font-black uppercase tracking-[0.2em] text-red-400 mb-2">Glitch Price</div>
-                      <div class="text-3xl font-black text-red-400">{deal.glitch_price}</div>
+                      <div class="text-[10px] font-black uppercase tracking-[0.2em] text-tcf-danger mb-2">Deal Price</div>
+                      <div class="text-3xl font-black text-tcf-danger">{deal.glitch_price}</div>
                     </div>
                     <div class="text-right">
-                      <div class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-2">Normal Price</div>
-                      <div class="text-lg font-bold text-slate-400 line-through decoration-red-900/50 decoration-2">{deal.normal_price}</div>
+                      <div class="text-[10px] font-black uppercase tracking-[0.2em] text-tcf-ink-muted mb-2">Normal Price</div>
+                      <div class="text-lg font-bold text-tcf-ink-muted line-through decoration-red-300 decoration-2">{deal.normal_price}</div>
                     </div>
                   </div>
-                  <div class="pt-4 border-t border-white/5">
-                    <span class="text-[10px] font-black uppercase tracking-widest text-red-400/70">Glitch lifespan: ~{deal.lifespan}</span>
+                  <div class="pt-4 border-t border-tcf-ink/10">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-tcf-danger/70">Usually gone within ~{deal.lifespan}</span>
                   </div>
                 </div>
               ) : (
                 <div>
                   <div class="flex items-end justify-between">
                     <div>
-                      <div class="text-[10px] font-black uppercase tracking-[0.2em] text-tcf-aviation-blue mb-2">Award Cost</div>
+                      <div class="text-[10px] font-black uppercase tracking-[0.2em] text-tcf-sky-deep mb-2">Award Cost</div>
                       <div class="flex items-baseline gap-2">
-                        <span class="text-3xl font-black text-white">{deal.points}</span>
-                        <span class="text-xs font-bold text-slate-500">pts</span>
+                        <span class="text-3xl font-black text-tcf-ink">{deal.points}</span>
+                        <span class="text-xs font-bold text-tcf-ink-muted">pts</span>
                       </div>
                     </div>
                     <div class="text-right">
-                      <div class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-2">Cash equivalent</div>
-                      <div class="text-lg font-bold text-slate-400 line-through decoration-red-900/50 decoration-2">{deal.cash}</div>
+                      <div class="text-[10px] font-black uppercase tracking-[0.2em] text-tcf-ink-muted mb-2">Cash equivalent</div>
+                      <div class="text-lg font-bold text-tcf-ink-muted line-through decoration-red-300 decoration-2">{deal.cash}</div>
                     </div>
                   </div>
-                  <div class="mt-8 pt-8 border-t border-white/5 flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-slate-500">
+                  <div class="mt-8 pt-8 border-t border-tcf-ink/10 flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-tcf-ink-muted">
                     <div class="flex items-center gap-2">
                       <div class="w-1.5 h-1.5 rounded-full bg-tcf-success"></div>
                       {deal.airline}
@@ -796,8 +795,8 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
       </div>
 
       <div class="mt-20 text-center">
-        <a href="#waitlist" class="inline-flex items-center gap-3 text-slate-400 hover:text-white transition-colors group">
-          <span class="text-xs font-black uppercase tracking-[0.3em]">Want more sweet spots?</span>
+        <a href="#waitlist" class="inline-flex items-center gap-3 text-tcf-ink-muted hover:text-tcf-ink transition-colors group">
+          <span class="text-xs font-black uppercase tracking-[0.3em]">Want to see more deals?</span>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="translate-y-px group-hover:translate-x-1 transition-transform"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </a>
       </div>
@@ -806,20 +805,19 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
   <!-- End Featured Deals -->
 
   <!-- ═══════════════════════════ AIRPORTS ═══════════════════════════ -->
-  <section class="section-padding light-section border-y text-center flex flex-col items-center relative overflow-hidden">
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tcf-gold)_0%,_transparent_15%)] opacity-5"></div>
+  <section class="section-padding border-y border-tcf-ink/10 text-center flex flex-col items-center relative overflow-hidden bg-tcf-cream">
     <div class="max-w-4xl mx-auto px-6 w-full flex flex-col items-center relative z-10">
       <span class="label text-gold uppercase tracking-[0.3em] font-bold text-xs mb-6">Texas Coverage</span>
-      <h2 class="text-4xl md:text-6xl mb-10 text-white font-black">We monitor <span class="text-gold">19 Texas airports.</span></h2>
-      <p class="text-lg text-slate-400 mb-16 max-w-2xl leading-relaxed font-body">
+      <h2 class="text-4xl md:text-6xl mb-10 text-tcf-ink font-black">We monitor <span class="text-gold">19 Texas airports.</span></h2>
+      <p class="text-lg text-tcf-ink-muted mb-16 max-w-2xl leading-relaxed font-body">
         From the Valley to the Panhandle. We track award availability and cash parity for every regional airport in the state.
       </p>
 
       <div class="flex flex-wrap justify-center gap-4 w-full">
         {AIRPORTS.map(a => (
-          <a href={`/deals/from/${a.code.toLowerCase()}`} class={`px-6 py-4 rounded-2xl text-sm font-black transition-all duration-300 no-underline ${a.hot ? 'bg-tcf-gold text-tcf-navy-deep shadow-lg shadow-tcf-gold/20 hover:opacity-90' : 'liquid-glass text-slate-400 hover:text-white hover:border-white/20'}`}>
+          <a href={`/deals/from/${a.code.toLowerCase()}`} class={`px-6 py-4 rounded-2xl text-sm font-black transition-all duration-300 no-underline ${a.hot ? 'bg-tcf-gold-deep text-white shadow-md hover:opacity-90' : 'liquid-glass bg-white text-tcf-ink-muted hover:text-tcf-ink hover:border-tcf-ink/20'}`}>
             <span class="tracking-widest uppercase">{a.code}</span>
-            <span class="mx-2 opacity-30 font-light">|</span>
+            <span class="mx-2 opacity-40 font-light">|</span>
             <span class="font-body font-bold">{a.city}</span>
             {a.hot && <span class="ml-2">🔥</span>}
           </a>
@@ -829,13 +827,13 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
   </section>
 
   <!-- ═══════════════════════════ TESTIMONIALS ═══════════════════════════ -->
-  <section class="section-padding light-section relative overflow-hidden">
-    <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-tcf-gold/20 to-transparent"></div>
+  <section class="section-padding relative overflow-hidden bg-tcf-paper">
+    <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-tcf-gold/30 to-transparent"></div>
     <div class="max-w-6xl mx-auto px-6 relative z-10">
       <div class="text-center mb-20 anim-fade-up">
         <span class="label text-gold uppercase tracking-[0.3em] font-bold text-xs mb-4 inline-block">Traveler Scenarios</span>
-        <h2 class="text-4xl md:text-5xl text-white font-black mb-6">What this helps <span class="text-gold">Texans avoid.</span></h2>
-        <p class="text-slate-400 font-body max-w-xl mx-auto leading-relaxed">
+        <h2 class="text-4xl md:text-5xl text-tcf-ink font-black mb-6">What this helps <span class="text-gold">Texans avoid.</span></h2>
+        <p class="text-tcf-ink-muted font-body max-w-xl mx-auto leading-relaxed">
           Example situations based on the routes and problems Texas travelers run into. The live archive is the proof record.
         </p>
       </div>
@@ -861,18 +859,18 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
             initial: "3"
           }
         ].map(t => (
-          <div class="liquid-glass p-8 rounded-[2.5rem] border border-tcf-gold/10 hover:border-tcf-gold/25 flex flex-col gap-6 transition-all duration-300">
-            <div class="inline-flex w-fit items-center gap-2 rounded-full bg-tcf-gold/10 border border-tcf-gold/20 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-tcf-gold">
-              Use Case
+          <div class="liquid-glass p-8 rounded-[2.5rem] border border-tcf-gold/15 hover:border-tcf-gold/30 flex flex-col gap-6 transition-all duration-300 bg-white">
+            <div class="inline-flex w-fit items-center gap-2 rounded-full bg-tcf-gold/10 border border-tcf-gold/20 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-tcf-gold-deep">
+              Example
             </div>
-            <p class="text-white text-base leading-relaxed font-body italic flex-1">"{t.quote}"</p>
-            <div class="flex items-center gap-4 pt-4 border-t border-white/5">
-              <div class="w-10 h-10 rounded-full bg-tcf-gold/10 border border-tcf-gold/20 flex items-center justify-center text-sm font-black text-gold flex-shrink-0">
+            <p class="text-tcf-ink text-base leading-relaxed font-body italic flex-1">"{t.quote}"</p>
+            <div class="flex items-center gap-4 pt-4 border-t border-tcf-ink/10">
+              <div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-black text-white flex-shrink-0" style="background: var(--tcf-gold-deep);">
                 {t.initial}
               </div>
               <div>
-                <div class="font-black text-white text-sm">{t.name}</div>
-                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">{t.tag}</div>
+                <div class="font-black text-tcf-ink text-sm">{t.name}</div>
+                <div class="text-[10px] font-bold text-tcf-ink-muted uppercase tracking-widest mt-0.5">{t.tag}</div>
               </div>
             </div>
           </div>
@@ -882,13 +880,13 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
   </section>
 
   <!-- ═══════════════════════════ ETHICS ═══════════════════════════ -->
-  <section class="py-16 light-section relative border-y text-center">
+  <section class="py-16 relative border-y border-tcf-ink/10 text-center bg-tcf-cream">
     <div class="max-w-7xl mx-auto px-6">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
         {ETHICS.map(item => (
           <div class="flex flex-col md:flex-row items-center justify-center gap-5 group cursor-pointer">
-            <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-tcf-aviation-blue group-hover:bg-tcf-aviation-blue/10 transition-colors" set:html={item.icon} />
-            <span class="text-sm font-black text-white/90 uppercase tracking-widest">{item.text}</span>
+            <div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center text-tcf-sky-deep group-hover:bg-tcf-aviation-blue/10 transition-colors" set:html={item.icon} />
+            <span class="text-sm font-black text-tcf-ink uppercase tracking-widest">{item.text}</span>
           </div>
         ))}
       </div>
@@ -896,42 +894,42 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
   </section>
 
   <!-- ═══════════════════════════ FOUNDER ═══════════════════════════ -->
-  <section class="section-padding light-section relative overflow-hidden border-y">
-    <div class="absolute top-0 left-0 w-[500px] h-[500px] bg-tcf-aviation-blue/5 blur-[120px] rounded-full"></div>
+  <section class="section-padding relative overflow-hidden border-y border-tcf-ink/10 bg-tcf-paper">
+    <div class="absolute top-0 left-0 w-[500px] h-[500px] bg-tcf-aviation-blue/10 blur-[120px] rounded-full"></div>
     <div class="max-w-5xl mx-auto px-6 relative z-10">
-      <div class="liquid-glass p-10 md:p-16 rounded-[3rem] relative overflow-hidden">
-        <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-tcf-gold/5 blur-[100px] rounded-full"></div>
+      <div class="liquid-glass p-10 md:p-16 rounded-[3rem] relative overflow-hidden bg-white shadow-sm">
+        <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-tcf-gold/10 blur-[100px] rounded-full"></div>
         <div class="grid md:grid-cols-[160px,1fr] gap-12 items-center relative z-10">
 
           <!-- Avatar column -->
           <div class="flex flex-col items-center gap-5">
-            <div class="w-28 h-28 rounded-2xl bg-tcf-gold/10 border-2 border-tcf-gold/20 flex items-center justify-center">
+            <div class="w-28 h-28 rounded-2xl bg-tcf-gold/10 border-2 border-tcf-gold/25 flex items-center justify-center">
               <span class="text-4xl font-black text-gold">E</span>
             </div>
             <div class="px-4 py-1.5 rounded-full bg-tcf-aviation-blue/10 border border-tcf-aviation-blue/20 text-center">
-              <span class="text-[9px] font-black uppercase tracking-widest text-tcf-aviation-blue">RGV Native · Founded 2026</span>
+              <span class="text-[9px] font-black uppercase tracking-widest text-tcf-sky-deep">RGV Native · Founded 2026</span>
             </div>
           </div>
 
           <!-- Story column -->
           <div>
-            <span class="label text-tcf-aviation-blue uppercase tracking-[0.3em] font-bold text-xs mb-4 inline-block">Why We Built This</span>
-            <h2 class="text-3xl md:text-4xl font-black text-white mb-6 leading-tight">
+            <span class="label text-tcf-sky-deep uppercase tracking-[0.3em] font-bold text-xs mb-4 inline-block">Why We Built This</span>
+            <h2 class="text-3xl md:text-4xl font-black text-tcf-ink mb-6 leading-tight">
               Built by a Texas traveler who was sick of<br class="hidden md:block"/> paying full price.
             </h2>
-            <p class="text-slate-400 leading-relaxed font-body mb-5">
+            <p class="text-tcf-ink-muted leading-relaxed font-body mb-5">
               I grew up flying out of the Rio Grande Valley and spent years watching friends pay $800 for flights I was booking for 15,000 points. The gap wasn't effort — it was access. Every travel blog was written for JFK flyers, not MFE or HRL. Texas regional airports were an afterthought.
             </p>
-            <p class="text-slate-400 leading-relaxed font-body mb-8">
-              Texas Cheap Flights exists to close that gap. We track the award windows, the algorithm glitches, and the regional sweet spots specific to your airport — so the math that used to require a travel guru now lands in your inbox.
+            <p class="text-tcf-ink-muted leading-relaxed font-body mb-8">
+              Texas Cheap Flights exists to close that gap. We track the award windows, the error fares, and the regional deals specific to your airport — so the math that used to require a travel guru now lands in your inbox.
             </p>
             <div class="flex items-center gap-4">
-              <div class="w-10 h-10 rounded-full bg-tcf-gold/10 border border-tcf-gold/20 flex items-center justify-center flex-shrink-0">
+              <div class="w-10 h-10 rounded-full bg-tcf-gold/10 border border-tcf-gold/25 flex items-center justify-center flex-shrink-0">
                 <span class="text-sm font-black text-gold">E</span>
               </div>
               <div>
-                <div class="font-black text-white">Eddie</div>
-                <div class="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Founder · Texas Cheap Flights · RGV</div>
+                <div class="font-black text-tcf-ink">Eddie</div>
+                <div class="text-[10px] text-tcf-ink-muted uppercase tracking-widest font-bold">Founder · Texas Cheap Flights · RGV</div>
               </div>
             </div>
           </div>
@@ -942,11 +940,11 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
   </section>
 
   <!-- ═══════════════════════════ FAQ ═══════════════════════════ -->
-  <section id="faq" class="section-padding light-section relative overflow-hidden">
+  <section id="faq" class="section-padding relative overflow-hidden bg-tcf-cream">
     <div class="max-w-4xl mx-auto px-6 relative z-10">
       <div class="text-center mb-16">
-        <span class="label text-tcf-aviation-blue uppercase tracking-[0.3em] font-bold text-xs mb-4 inline-block">Questions?</span>
-        <h2 class="text-4xl md:text-6xl text-white font-black mb-6">Common <span class="text-gold italic">Curiosities.</span></h2>
+        <span class="label text-tcf-sky-deep uppercase tracking-[0.3em] font-bold text-xs mb-4 inline-block">Questions?</span>
+        <h2 class="text-4xl md:text-6xl text-tcf-ink font-black mb-6">Common <span class="text-gold italic">Curiosities.</span></h2>
       </div>
 
       <div class="space-y-4">
@@ -957,7 +955,7 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
           },
           {
             q: "Do I need to be a travel expert?",
-            a: "No. Our AI Scout does the research. You just get an alert that says 'Book this route on this airline for this many points.' We provide the step-by-step instructions for every deal."
+            a: "No. We do the research. You just get an alert that says 'Book this route on this airline for this many points.' We provide the step-by-step instructions for every deal."
           },
           {
             q: "Does this work for regional airports?",
@@ -965,15 +963,15 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
           },
           {
             q: "Is it really free?",
-            a: "The baseline alert service is free. We earn through affiliate partnerships when you book travel or sign up for cards through our links. This keeps the scout's eyes open 24/7 at no cost to you."
+            a: "The baseline alert service is free. We earn through affiliate partnerships when you book travel or sign up for cards through our links. This keeps someone watching 24/7 at no cost to you."
           }
         ].map((item) => (
-          <div class="liquid-glass p-8 rounded-[2rem] border border-white/5 hover:border-white/10 transition-all duration-300 group cursor-pointer">
-            <h3 class="text-lg font-black text-white mb-4 flex justify-between items-center group-hover:text-tcf-aviation-blue transition-colors">
+          <div class="liquid-glass p-8 rounded-[2rem] border border-tcf-ink/10 hover:border-tcf-ink/20 transition-all duration-300 group cursor-pointer bg-white">
+            <h3 class="text-lg font-black text-tcf-ink mb-4 flex justify-between items-center group-hover:text-tcf-sky-deep transition-colors">
               {item.q}
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-slate-600 group-hover:text-tcf-aviation-blue transition-transform group-hover:rotate-90 duration-300"><path d="m9 18 6-6-6-6"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-tcf-ink-muted group-hover:text-tcf-sky-deep transition-transform group-hover:rotate-90 duration-300"><path d="m9 18 6-6-6-6"/></svg>
             </h3>
-            <p class="text-slate-400 leading-relaxed font-body text-sm md:text-base">{item.a}</p>
+            <p class="text-tcf-ink-muted leading-relaxed font-body text-sm md:text-base">{item.a}</p>
           </div>
         ))}
       </div>
@@ -985,18 +983,18 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
     <div class="starfield"></div>
     <div class="z-content max-w-4xl mx-auto px-6 flex flex-col items-center">
       <div class="w-24 h-24 bg-tcf-aviation-blue/10 rounded-full flex items-center justify-center mb-12 border border-tcf-aviation-blue/20 anim-float">
-        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--tcf-aviation-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plane-takeoff"><path d="M2 22h20"/><path d="M6.36 17.4 4 17l-2-4 1.1-.55L5.05 15l4.44.75L10.5 11l4.44.75L14.5 17h1l5.5-5.5L22 13l-4 4 2 4h-1.5l-2.5-4-3.5-1.5h-2L6.36 17.4z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--tcf-sky-deep)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plane-takeoff"><path d="M2 22h20"/><path d="M6.36 17.4 4 17l-2-4 1.1-.55L5.05 15l4.44.75L10.5 11l4.44.75L14.5 17h1l5.5-5.5L22 13l-4 4 2 4h-1.5l-2.5-4-3.5-1.5h-2L6.36 17.4z"/></svg>
       </div>
-      <h2 class="text-5xl md:text-8xl mb-10 w-full font-black text-white">Your next trip<br/><span class="text-gold">starts at home.</span></h2>
-      <p class="text-xl md:text-2xl text-slate-400 mb-16 max-w-2xl leading-relaxed font-body">
-        Join the waitlist to secure <span class="text-white font-bold">Founding Member</span> access and be the first to receive our regional Texas points intelligence.
+      <h2 class="text-5xl md:text-8xl mb-10 w-full font-black text-tcf-ink">Your next trip<br/><span class="text-gold">starts at home.</span></h2>
+      <p class="text-xl md:text-2xl text-tcf-ink-muted mb-16 max-w-2xl leading-relaxed font-body">
+        Join the waitlist to secure <span class="text-tcf-ink font-bold">Founding Member</span> access and be the first to hear about regional Texas flight deals.
       </p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-6 w-full">
         <a href="#waitlist" class="btn-primary w-full sm:w-auto px-16 py-6 text-xl">
           Secure My Early Access
         </a>
       </div>
-      <p class="mt-12 text-slate-400 text-xs font-black uppercase tracking-[0.2em]">
+      <p class="mt-12 text-tcf-ink-muted text-xs font-black uppercase tracking-[0.2em]">
         Built for Texans, by a Texan · Free to join · Unsubscribe anytime
       </p>
     </div>
@@ -1015,7 +1013,7 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
 
     form?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+
       const emailInput = document.getElementById('email') as HTMLInputElement;
       const airportInput = document.getElementById('airport') as HTMLSelectElement;
 
@@ -1095,12 +1093,12 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
         e.preventDefault();
         const href = this.getAttribute('href');
         if (!href || href === '#') return;
-        
+
         const target = document.querySelector(href);
         if (target) {
           const navHeight = nav?.offsetHeight || 80;
           const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
-          
+
           window.scrollTo({
             top: targetPosition,
             behavior: 'smooth'
