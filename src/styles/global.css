@@ -232,7 +232,10 @@ select.input option {
 }
 
 .light-section {
-    background:
+    /* Solid fallback so ink-colored text never lands on the dark page background
+       if the gradient layer fails to composite (seen on deep-scroll/GPU-layer cases). */
+    background-color: var(--tcf-paper);
+    background-image:
         linear-gradient(180deg, rgba(255, 253, 247, 0.96), rgba(246, 248, 245, 0.98)),
         radial-gradient(circle at 15% 0%, rgba(14, 165, 233, 0.14), transparent 34%),
         radial-gradient(circle at 90% 20%, rgba(212, 168, 67, 0.16), transparent 30%);
@@ -252,19 +255,40 @@ select.input option {
     box-shadow: 0 24px 60px rgba(16, 32, 51, 0.12);
 }
 
+/* !important is required here: Tailwind v4's utilities live in a native CSS
+   @layer, and these unlayered context-override rules otherwise lose to it
+   regardless of selector specificity. */
 .light-section .text-white,
 .light-section .text-white\/90 {
-    color: var(--tcf-ink);
+    color: var(--tcf-ink) !important;
 }
 
 .light-section .text-slate-300,
 .light-section .text-slate-400,
 .light-section .text-slate-500 {
-    color: #5c6b7c;
+    color: #465568 !important;
 }
 
 .light-section .text-slate-600 {
-    color: #465568;
+    color: #465568 !important;
+}
+
+.light-section .text-tcf-gold {
+    color: #92400e !important;
+}
+
+.light-section .badge-gold {
+    color: #92400e !important;
+    border-color: rgba(146, 64, 14, 0.3) !important;
+}
+
+.light-section .text-tcf-aviation-blue {
+    color: #0369a1 !important;
+}
+
+.light-section .text-red-400,
+.light-section .text-red-500 {
+    color: #b91c1c !important;
 }
 
 .light-section .border-white\/5,
@@ -295,7 +319,7 @@ select.input option {
 }
 
 .light-section .line-through {
-    color: #778393;
+    color: #465568 !important;
 }
 
 .light-section .shadow-2xl {
