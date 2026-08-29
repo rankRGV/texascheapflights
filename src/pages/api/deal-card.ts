@@ -25,7 +25,7 @@ export const GET: APIRoute = async ({ url }) => {
     // Null-safe date handling
     const dates = (rawDates === 'null' || !rawDates) ? 'Flexible Dates' : rawDates;
 
-    const theme = p.get('theme') ?? 'dark';
+    const theme = p.get('theme') ?? 'light';
     const variant = p.get('variant') ?? 'radar';
     const variantAccent = variant === 'regional' ? '#38bdf8'
         : variant === 'weekend' ? '#f97316'
@@ -56,7 +56,8 @@ export const GET: APIRoute = async ({ url }) => {
     // Brand colors
     const gold = variantAccent;
     const navyDeep = '#050a14';
-    const slate400 = '#94a3b8';
+    const slate400 = theme === 'light' ? '#52616f' : '#94a3b8';
+    const goldText = theme === 'light' ? '#92400e' : gold;
 
     // Each family gets a different visual cue so the feed feels edited, not stamped out.
     const variantDecoration = variant === 'regional'
@@ -67,7 +68,7 @@ export const GET: APIRoute = async ({ url }) => {
         : variant === 'weekend'
             ? {
                 type: 'div',
-                props: { style: { position: 'absolute', top: '28px', left: '50%', transform: 'translateX(-50%)', border: `2px solid ${gold}88`, borderRadius: '999px', padding: '10px 24px', color: gold, fontSize: '18px', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase' }, children: 'WEEKEND IDEA' },
+                props: { style: { position: 'absolute', top: '28px', left: '50%', transform: 'translateX(-50%)', border: `2px solid ${gold}88`, borderRadius: '999px', padding: '10px 24px', color: goldText, fontSize: '18px', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase' }, children: 'WEEKEND IDEA' },
             }
             : variant === 'last-call'
                 ? {
@@ -104,7 +105,7 @@ export const GET: APIRoute = async ({ url }) => {
     const displayLabel = price ? 'roundtrip' : 'one-way';
 
     const bgGradient = theme === 'light'
-        ? 'radial-gradient(circle at 75% 25%, #f1f5f9 0%, #e2e8f0 100%)'
+        ? 'radial-gradient(circle at 75% 25%, #f6efe1 0%, #fffdf7 100%)'
         : 'radial-gradient(circle at 75% 25%, #0a1628 0%, #050a14 100%)';
 
     const dotColor = theme === 'light'
@@ -123,7 +124,7 @@ export const GET: APIRoute = async ({ url }) => {
                     flexDirection: 'column',
                     fontFamily,
                     position: 'relative',
-                    color: theme === 'light' ? '#0f172a' : 'white',
+                    color: theme === 'light' ? '#1b2a3d' : 'white',
                     padding: variant === 'regional' ? '60px 60px 60px 86px' : '60px',
                 },
                 children: [
@@ -158,7 +159,7 @@ export const GET: APIRoute = async ({ url }) => {
                                 {
                                     type: 'div',
                                     props: {
-                                        style: { fontSize: '20px', fontWeight: 800, color: gold, letterSpacing: '0.1em', textTransform: 'uppercase' },
+                                        style: { fontSize: '20px', fontWeight: 800, color: goldText, letterSpacing: '0.1em', textTransform: 'uppercase' },
                                         children: dealLabel,
                                     },
                                 },
@@ -167,18 +168,30 @@ export const GET: APIRoute = async ({ url }) => {
                     },
 
                     // 2. Top Right Logo — top: 60px aligns with badge
-                    logoData ? {
-                        type: 'img',
-                        props: {
-                            src: logoData,
-                            style: {
-                                position: 'absolute', top: '60px', right: '60px',
-                                height: '70px',
-                                objectFit: 'contain',
-                                filter: theme === 'light' ? 'invert(1) brightness(0.2)' : 'none',
+                    // Light theme: text wordmark (the raster logo is baked for the dark theme
+                    // and doesn't recolor cleanly via filter). Dark theme: original logo image.
+                    theme === 'light'
+                        ? {
+                            type: 'div',
+                            props: {
+                                style: { position: 'absolute', top: '60px', right: '60px', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', lineHeight: 1 },
+                                children: [
+                                    { type: 'div', props: { style: { fontSize: '30px', fontWeight: 900, color: '#1b2a3d' }, children: 'TEXAS' } },
+                                    { type: 'div', props: { style: { fontSize: '13px', fontWeight: 800, color: '#92400e', letterSpacing: '0.15em', marginTop: '2px' }, children: 'CHEAP FLIGHTS' } },
+                                ],
                             },
-                        },
-                    } : null,
+                        }
+                        : logoData ? {
+                            type: 'img',
+                            props: {
+                                src: logoData,
+                                style: {
+                                    position: 'absolute', top: '60px', right: '60px',
+                                    height: '70px',
+                                    objectFit: 'contain',
+                                },
+                            },
+                        } : null,
 
                     // 3. Center Route — marginTop: 90px (was 120) recenters in the card
                     {
@@ -247,7 +260,7 @@ export const GET: APIRoute = async ({ url }) => {
                                                 props: {
                                                     style: { display: 'flex', alignItems: 'baseline', gap: '12px' },
                                                     children: [
-                                                        { type: 'div', props: { style: { fontSize: '110px', fontWeight: 900, color: gold, lineHeight: 0.9 }, children: displayValue } },
+                                                        { type: 'div', props: { style: { fontSize: '110px', fontWeight: 900, color: goldText, lineHeight: 0.9 }, children: displayValue } },
                                                         { type: 'div', props: { style: { fontSize: '28px', fontWeight: 700, color: slate400 }, children: displayLabel } },
                                                     ],
                                                 },
