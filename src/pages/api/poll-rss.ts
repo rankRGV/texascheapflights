@@ -6,9 +6,8 @@ const parser = new Parser();
 
 // Texas-specific feeds only - no global feeds to avoid non-Texas deals
 const FEEDS = [
-    'https://www.theflightdeal.com/category/flight-deals/hou/feed/',
-    'https://www.theflightdeal.com/category/flight-deals/dfw/feed/',
-    'https://www.faredealalert.com/feed/'
+    'https://www.theflightdeal.com/category/flight-deals/dallas/feed/',
+    'https://faredealalert.com/category/fare-deals/iah/feed/'
 ];
 
 export const GET: APIRoute = async ({ request }) => {
