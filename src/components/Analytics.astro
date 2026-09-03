@@ -44,14 +44,20 @@ const measurementId = 'G-XSTNVD0CLC';
     });
   });
 
-  document.querySelectorAll('[data-tcf-form]').forEach((form) => {
-    form.addEventListener('submit', () => {
-      window.tcfTrack('signup_submit', {
-        form_name: form.getAttribute('data-tcf-form'),
-        airport: form.querySelector('[name="airport"]')?.value || undefined,
-      });
+  // Delegated on document in the capture phase, not attached directly to
+  // each form: GA4's own Enhanced Measurement listener sits on document
+  // for 'submit' and calls stopPropagation(), which happens during the
+  // capturing phase and stops the event before it ever reaches the
+  // target — so a listener attached to the form itself never fires. A
+  // sibling capture-phase listener on the same document node still does.
+  document.addEventListener('submit', (e) => {
+    const form = e.target.closest('[data-tcf-form]');
+    if (!form) return;
+    window.tcfTrack('signup_submit', {
+      form_name: form.getAttribute('data-tcf-form'),
+      airport: form.querySelector('[name="airport"]')?.value || undefined,
     });
-  });
+  }, true);
 
   const signupForm = document.querySelector('[data-tcf-form]');
   if (signupForm && 'IntersectionObserver' in window) {
