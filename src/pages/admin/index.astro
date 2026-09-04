@@ -74,7 +74,6 @@ function timeAgo(dateStr: string) {
 <body class="bg-tcf-navy-deep text-white min-h-screen font-body" style="font-family: 'Outfit', sans-serif; background: #050a14;">
 
 {!isAuthed ? (
-  <!-- ══ LOGIN ══ -->
   <div class="min-h-screen flex items-center justify-center px-6">
     <div class="w-full max-w-sm">
       <div class="text-center mb-10">
@@ -102,10 +101,8 @@ function timeAgo(dateStr: string) {
     </div>
   </div>
 ) : (
-  <!-- ══ DASHBOARD ══ -->
   <div class="min-h-screen">
 
-    <!-- Top Bar -->
     <header class="border-b border-white/5 px-6 py-4 flex items-center justify-between sticky top-0 z-10" style="background: rgba(5,10,20,0.95); backdrop-filter: blur(12px);">
       <div class="flex items-center gap-4">
         <a href="/" class="text-slate-500 hover:text-white transition-colors no-underline text-xs">← Site</a>
@@ -122,7 +119,6 @@ function timeAgo(dateStr: string) {
 
     <div class="max-w-7xl mx-auto px-6 py-10">
 
-      <!-- Stats Row -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
         {[
           { label: 'Deals Found', value: stats.totalDeals, color: 'text-white' },
@@ -137,7 +133,6 @@ function timeAgo(dateStr: string) {
         ))}
       </div>
 
-      <!-- Tabs -->
       <div class="flex gap-1 mb-8 bg-white/5 border border-white/10 rounded-2xl p-1 w-fit">
         {['deals', 'subscribers', 'blocklist'].map(tab => (
           <button
@@ -149,7 +144,6 @@ function timeAgo(dateStr: string) {
         ))}
       </div>
 
-      <!-- DEALS TAB -->
       <div id="tab-deals" class="tab-content">
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-sm font-black text-white uppercase tracking-widest">Recent Deals (last 50)</h2>
@@ -227,7 +221,6 @@ function timeAgo(dateStr: string) {
         </div>
       </div>
 
-      <!-- SUBSCRIBERS TAB -->
       <div id="tab-subscribers" class="tab-content hidden">
         <h2 class="text-sm font-black text-white uppercase tracking-widest mb-4">Subscribers ({subscribers.length})</h2>
         <div class="rounded-2xl border border-white/10 overflow-hidden">
@@ -265,13 +258,11 @@ function timeAgo(dateStr: string) {
         </div>
       </div>
 
-      <!-- BLOCKLIST TAB -->
       <div id="tab-blocklist" class="tab-content hidden">
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-sm font-black text-white uppercase tracking-widest">Blocklist ({blocklist.filter(b => b.active).length} active)</h2>
         </div>
 
-        <!-- Add form -->
         <form id="add-blocklist-form" class="mb-6 p-5 rounded-2xl border border-white/10 bg-white/5 flex flex-wrap gap-3 items-end">
           <div>
             <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Type</label>
@@ -295,7 +286,6 @@ function timeAgo(dateStr: string) {
           <p id="blocklist-feedback" class="hidden text-xs text-green-400 font-bold w-full"></p>
         </form>
 
-        <!-- Blocklist table -->
         <div class="rounded-2xl border border-white/10 overflow-hidden">
           <table class="w-full text-sm">
             <thead>
