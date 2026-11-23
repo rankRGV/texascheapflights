@@ -1010,6 +1010,14 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
     const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
     const referralLink = document.getElementById('referral-link') as HTMLInputElement | null;
     const copyBtn = document.getElementById('copy-btn') as HTMLButtonElement | null;
+    const signupParams = new URLSearchParams(window.location.search);
+    const fromValleyHub = signupParams.get('source') === 'valley-hub';
+    const preferredAirport = signupParams.get('airport');
+    const homeAirport = document.getElementById('airport') as HTMLSelectElement | null;
+
+    if (fromValleyHub && homeAirport && preferredAirport && ['BRO', 'HRL', 'MFE'].includes(preferredAirport)) {
+      homeAirport.value = preferredAirport;
+    }
 
     form?.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -1039,8 +1047,14 @@ const proofLine = subscriberCount !== null && archivedAlertCount !== null
           throw new Error(errorData.details || errorData.error || 'Subscription failed');
         }
 
-        // The welcome page records the conversion after the redirect.
-        window.location.href = `/welcome?email=${encodeURIComponent(emailInput.value)}&airport=${encodeURIComponent(airportInput.value)}`;
+        if (fromValleyHub) {
+          const result = await res.json().catch(() => ({}));
+          if (result.subscriberRecorded === true) {
+            window.tcfTrack?.('valley_hub_signup_confirmed', { airport: airportInput.value });
+          }
+        }
+
+        window.location.href = `/welcome?airport=${encodeURIComponent(airportInput.value)}`;
 
       } catch (err: any) {
         if (submitBtn) {

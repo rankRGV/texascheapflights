@@ -41,6 +41,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     // 1. Sync to Supabase Subscribers Table FIRST to get/generate the magical_token
     let magicalToken = '';
+    let subscriberRecorded = false;
     try {
       const { data: syncData, error: dbError } = await supabase.from('subscribers').upsert({
         email: email.toLowerCase(),
@@ -51,6 +52,7 @@ export const POST: APIRoute = async ({ request }) => {
 
       if (dbError) throw dbError;
       magicalToken = syncData?.magical_token || '';
+      subscriberRecorded = Boolean(syncData);
       console.log(`Contact synced to Supabase database. Token: ${magicalToken ? 'YES' : 'NO'}`);
     } catch (dbErr: any) {
       console.error('Supabase subscriber sync failed:', dbErr.message || dbErr);
@@ -115,7 +117,7 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
-    return new Response(JSON.stringify({ success: true }), {
+    return new Response(JSON.stringify({ success: true, subscriberRecorded }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });

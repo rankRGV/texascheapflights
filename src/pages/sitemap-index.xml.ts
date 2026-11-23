@@ -19,6 +19,7 @@ export async function GET() {
 
   // Regional Guides
   const guidePages = [
+    '/guides/rio-grande-valley',
     '/guides/mfe',
     '/guides/bro',
     '/guides/lrd',

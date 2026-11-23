@@ -46,6 +46,14 @@ const description = "The Texas Regional Moat is our network of intelligence guid
       </p>
     </div>
 
+    <section class="mb-10 flex flex-col items-start gap-5 rounded-3xl border border-tcf-ink/10 bg-tcf-cream p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8" aria-labelledby="valley-hub-title">
+      <div>
+        <h2 id="valley-hub-title" class="text-2xl font-black text-tcf-ink">Compare Rio Grande Valley airports</h2>
+        <p class="mt-2 text-tcf-ink-muted">Check past deals from McAllen, Harlingen, and Brownsville, and compare the drive to South Padre Island.</p>
+      </div>
+      <a href="/guides/rio-grande-valley" class="btn-primary shrink-0" data-tcf-event="valley_hub_open" data-tcf-location="airport_guides">Compare airports →</a>
+    </section>
+
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {airports.map((airport) => (
         <a href={`/guides/${airport.code.toLowerCase()}`} class="group relative bg-white border border-tcf-ink/10 rounded-3xl p-8 hover:border-tcf-gold/30 hover:shadow-lg transition-all duration-500 overflow-hidden no-underline">
