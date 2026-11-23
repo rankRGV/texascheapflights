@@ -7,9 +7,13 @@ interface Props {
   parkingTips?: string;
   tsaWaitStatus?: string;
   sweetSpots: { destination: string; reason: string }[];
+  heading?: string;
+  subheading?: string;
+  routesHeading?: string;
+  archiveHref?: string;
 }
 
-const { airportCode, airportName, city, description, parkingTips, tsaWaitStatus, sweetSpots } = Astro.props;
+const { airportCode, airportName, city, description, parkingTips, tsaWaitStatus, sweetSpots, heading, subheading, routesHeading, archiveHref } = Astro.props;
 ---
 
 <div class="airport-guide-container bg-white border border-tcf-ink/10 rounded-3xl overflow-hidden shadow-xl">
@@ -18,14 +22,14 @@ const { airportCode, airportName, city, description, parkingTips, tsaWaitStatus,
     <div class="absolute inset-0 bg-gradient-to-br from-tcf-cream to-tcf-aviation-blue/10"></div>
     <div class="absolute inset-0 opacity-10 bg-[url('https://images.unsplash.com/photo-1436491865332-7a61a1082e12?auto=format&fit=crop&q=80')] bg-cover bg-center"></div>
     <div class="relative text-center px-6">
-      <div class="inline-block px-3 py-1 bg-tcf-gold/20 border border-tcf-gold/30 rounded-full mb-4">
+      {!heading && <div class="inline-block px-3 py-1 bg-tcf-gold/20 border border-tcf-gold/30 rounded-full mb-4">
         <span class="text-gold text-xs font-black tracking-widest uppercase">Texas regional moat</span>
-      </div>
+      </div>}
       <h1 class="text-4xl md:text-5xl font-black text-tcf-ink mb-2 leading-tight">
-        {airportCode} <span class="text-gold">Intelligence</span>
+        {heading || <>{airportCode} <span class="text-gold">Intelligence</span></>}
       </h1>
       <p class="text-tcf-sky-deep/60 font-medium tracking-tight uppercase text-sm">
-        The Ultimate Travel Hacking Guide for {city} Travelers
+        {subheading || `The Ultimate Travel Hacking Guide for ${city} Travelers`}
       </p>
     </div>
   </div>
@@ -49,7 +53,7 @@ const { airportCode, airportName, city, description, parkingTips, tsaWaitStatus,
         <section class="bg-tcf-cream border border-tcf-ink/10 rounded-2xl p-8">
           <h3 class="text-xl font-bold text-tcf-ink mb-6 flex items-center gap-3">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-tcf-aviation-blue"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-            {airportCode} Sweet Spots
+            {routesHeading || `${airportCode} Sweet Spots`}
           </h3>
           <div class="space-y-4">
             {sweetSpots.map((spot) => (
@@ -87,7 +91,11 @@ const { airportCode, airportName, city, description, parkingTips, tsaWaitStatus,
           </div>
         </div>
 
-        <div class="bg-tcf-aviation-blue/10 border border-tcf-aviation-blue/20 rounded-2xl p-6">
+        {archiveHref ? (
+          <a href={archiveHref} class="block rounded-2xl border border-tcf-aviation-blue/20 bg-tcf-aviation-blue/10 p-6 font-bold text-tcf-sky-deep underline">
+            Check current flights and past deals from {airportCode}
+          </a>
+        ) : <div class="bg-tcf-aviation-blue/10 border border-tcf-aviation-blue/20 rounded-2xl p-6">
           <h3 class="text-tcf-aviation-blue font-black uppercase text-xs tracking-widest mb-4">Hedge Status</h3>
           <p class="text-tcf-ink font-bold text-sm mb-2">Regional Arbitrage Active</p>
           <p class="text-tcf-ink-muted text-xs leading-relaxed mb-4">
@@ -96,7 +104,7 @@ const { airportCode, airportName, city, description, parkingTips, tsaWaitStatus,
           <a href="/past-deals" class="inline-flex items-center gap-2 text-gold text-xs font-black uppercase tracking-widest hover:gap-3 transition-all">
             View recent {airportCode} deals &rarr;
           </a>
-        </div>
+        </div>}
       </div>
 
     </div>

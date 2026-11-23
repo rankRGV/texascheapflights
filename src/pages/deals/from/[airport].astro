@@ -1,6 +1,8 @@
 ---
 import '../../../styles/global.css';
 import GlobalNav from '../../../components/GlobalNav.astro';
+import { AIRPORT_ROUTE_SEARCH } from '../../../data/airport-route-search';
+import { formatSocialTravelDates } from '../../../lib/social-travel-dates';
 import { supabase } from '../../../lib/supabase';
 
 export const prerender = false;
@@ -39,8 +41,8 @@ const AIRPORT_META: Record<string, { title: string; description: string }> = {
     description: 'Track Harlingen flight deals from HRL, including Southwest fare drops, Valley airport comparisons, and low-cost routes from South Texas.',
   },
   BRO: {
-    title: 'Cheap Flights from Brownsville, TX (BRO) — South Padre Deal Alerts',
-    description: 'Watch Brownsville flight deals from BRO for South Padre, Starbase-area travel, and regional Texas fare drops before they disappear.',
+    title: 'Cheap Flights from Brownsville (BRO) | Routes & Past Deals',
+    description: 'Check nonstop flights from Brownsville to Dallas, Houston, Orlando, and Monterrey. Browse past BRO fares or compare airports for South Padre Island.',
   },
   LRD: {
     title: 'Cheap Flights from Laredo, TX (LRD) — Border Deal Alerts',
@@ -55,8 +57,8 @@ const AIRPORT_META: Record<string, { title: string; description: string }> = {
     description: 'See Midland/Odessa flight deals from MAF, including Permian Basin business-travel gaps, weekend fares, and regional Texas alerts.',
   },
   SAT: {
-    title: 'Cheap Flights from San Antonio, TX (SAT) — Mexico & Domestic Fare Drops',
-    description: 'Cheap flights to and from San Antonio (SAT) — error fares, Mexico routes, and Southwest deals tracked by our AI Scout. Round-trip and one-way fare drops, updated automatically.',
+    title: 'Cheap Flights from San Antonio (SAT) | Routes & Past Deals',
+    description: 'Check current flights from San Antonio to Mexico City, Cancun, Los Angeles, and New York. See past SAT fares and when it makes sense to compare Austin.',
   },
   AUS: {
     title: 'Cheap Flights from Austin, TX (AUS) — Error Fare & Deal Alerts',
@@ -211,41 +213,22 @@ const AIRPORT_CONTENT: Record<string, {
     ],
   },
   SAT: {
-    intro: "San Antonio travelers need a flight page that starts with SAT, shows the routes worth watching, and gives an honest Austin comparison. Use SAT as the first search for trips that begin in town, then check Austin when the fare or schedule is clearly better.",
-    stats: [
-      { label: "Best for", value: "Mexico + U.S." },
-      { label: "Nearby option", value: "AUS" },
-      { label: "Compare drive", value: "About 1.5 hrs" },
-      { label: "Watch for", value: "Fare drops" },
-    ],
-    routes: [
-      { destination: "Cancún (CUN)", typical: "$200–$350", errorFare: "$79–$149" },
-      { destination: "Mexico City (MEX)", typical: "$150–$250", errorFare: "$79–$129" },
-      { destination: "Los Angeles (LAX)", typical: "$150–$250", errorFare: "$79–$119" },
-      { destination: "New York (JFK)", typical: "$150–$250", errorFare: "$79–$129" },
-    ],
+    intro: "San Antonio International Airport has nonstop service to destinations in the U.S. and Mexico. Start with SAT on your exact dates, then compare Austin (AUS) if you need a better schedule or a lower total cost.",
+    stats: [],
+    routes: [],
     tips: [
-      "Check SAT first when the trip begins in San Antonio. A nearby airport only helps if the fare difference covers gas, parking, and the time spent getting there.",
-      "Keep Mexico routes on your watchlist, then compare domestic routes to the West Coast, Northeast, and major Texas hubs.",
-      "Use flexible dates around Fiesta, spring break, summer weekends, and the holidays. Those periods can make a normal fare look like a deal when it is not.",
-      "Monitor AUS as a comparison airport, not an automatic replacement. A one-hour flight search is easy; a longer drive is a real cost.",
+      "Compare the same dates and cabin from both airports. Include checked bags, parking, gas, and extra time on the road before choosing Austin.",
+      "For Cancun or Mexico City, check that the flight is nonstop on both legs. A cheaper result can include a connection or arrive at a different airport.",
+      "If your dates can move, compare nearby departures and returns before booking. The cheapest outbound date can have a more expensive return.",
     ],
     faqs: [
       {
-        q: "What airlines fly nonstop from San Antonio (SAT)?",
-        a: "SAT has service from major U.S. airlines and carriers serving Mexico. The exact airline and nonstop route list changes, so check the current itinerary before booking. Our alerts focus on fare drops that are useful from San Antonio, not generic DFW deals.",
-      },
-      {
-        q: "What are the cheapest flights from San Antonio?",
-        a: "The best SAT deals depend on your dates. Mexico, Texas, the West Coast, and selected East Coast routes are all worth watching. We show the route, fare, dates, airline, and verification details so you can decide whether the price is useful for your trip.",
+        q: "Where can you fly nonstop from San Antonio (SAT)?",
+        a: "The airport lists nonstop service to Mexico City (MEX), Los Angeles (LAX), and New York (JFK), plus seasonal service to Cancun (CUN). Check the airport route map for the full list and confirm your dates with the airline.",
       },
       {
         q: "Is it cheaper to fly from San Antonio or Austin?",
-        a: "Sometimes. AUS may offer more choices on a particular route, while SAT may win once you include the drive and parking. Compare the complete trip cost, not only the fare. If the difference is small, flying from SAT is usually the simpler choice.",
-      },
-      {
-        q: "When is the cheapest time to fly from San Antonio?",
-        a: "There is no single cheapest month for every SAT route. Start with flexible-date searches, then compare Tuesday and Wednesday departures with Friday and Sunday. Holiday periods, spring break, Fiesta, and summer weekends deserve extra scrutiny.",
+        a: "It depends on your route and dates. Compare the total flight price and travel time, including bags, parking, and the drive to Austin.",
       },
     ],
   },
@@ -761,41 +744,21 @@ const AIRPORT_CONTENT: Record<string, {
     ],
   },
   BRO: {
-    intro: "Brownsville is the southernmost city in Texas and, since SpaceX broke ground at nearby Boca Chica, one of the most-watched. Starship test flights and launches now draw a steady stream of space-industry employees and spectators through Brownsville South Padre Island International — a passenger mix this small airport never had before. The flight schedule hasn't caught up to the attention: American Eagle's connection to DFW is still essentially the whole route map, with South Padre Island's beach season layered on top for seasonal demand.",
-    stats: [
-      { label: "Annual passengers", value: "400K+" },
-      { label: "Primary connection", value: "DFW via AA Eagle" },
-      { label: "Drive time to HRL", value: "45 min" },
-      { label: "Nearby", value: "SpaceX Starbase" },
-    ],
-    routes: [
-      { destination: "Dallas / DFW", typical: "$100–$200", errorFare: "$49–$89" },
-      { destination: "Harlingen (HRL)", typical: "45 min drive", errorFare: "More options" },
-      { destination: "McAllen (MFE)", typical: "1 hr drive", errorFare: "Most options" },
-      { destination: "Houston (via DFW)", typical: "Hub connection", errorFare: "Via DFW" },
-    ],
+    intro: "Brownsville South Padre Island International Airport serves the lower Rio Grande Valley. Dallas/Fort Worth and Houston Intercontinental give you connecting options. The airport also lists nonstop service to Orlando and Monterrey.",
+    stats: [],
+    routes: [],
     tips: [
-      "SpaceX Starship launch and test windows at Boca Chica now create their own demand spikes at BRO — spectator and contractor travel can tighten the limited schedule around major test dates.",
-      "South Padre Island's spring break and summer season pushes BRO fares up sharply. Off-peak months see far steadier pricing on the same DFW connection.",
-      "BRO's award zone pricing is frequently identical to HRL or MFE — check award charts before assuming a drive to the Valley is necessary for a points booking.",
-      "For anything beyond a Dallas connection, Harlingen (45 min) or McAllen (1 hr) multiply your airline and destination options several times over.",
+      "For connections, compare total travel time through Dallas/Fort Worth and Houston Intercontinental. Leave time to change planes.",
+      "Check Harlingen (HRL) and McAllen (MFE) for your exact dates. Include parking or a ride to the airport when you compare prices.",
     ],
     faqs: [
       {
-        q: "Has SpaceX changed flight demand at Brownsville's airport?",
-        a: "Yes, noticeably around launch and test windows — Starbase at Boca Chica draws space-industry employees, contractors, and spectators through BRO, adding pressure to a schedule that's still built around a single American Eagle route to DFW.",
+        q: "Where can you fly nonstop from Brownsville (BRO)?",
+        a: "Brownsville airport lists American to Dallas/Fort Worth (DFW), United to Houston Intercontinental (IAH), Breeze to Orlando International (MCO), and Aerus to Monterrey (MTY). Check the airline for service on your dates.",
       },
       {
-        q: "What are the cheapest flights from Brownsville, Texas?",
-        a: "The only direct route is to DFW, running $49–89 during flash sales. For more options, Harlingen (45 minutes) or McAllen (1 hour) open up 6+ airlines and direct Mexico routes that BRO doesn't offer.",
-      },
-      {
-        q: "Does South Padre Island tourism affect Brownsville flight prices?",
-        a: "Yes — spring break and summer beach season both push BRO fares above their normal baseline, since the limited schedule has little slack to absorb the extra demand. Booking shoulder season avoids most of the increase.",
-      },
-      {
-        q: "Should I fly from Brownsville or drive to Harlingen or McAllen?",
-        a: "For a routine Dallas trip, BRO is the simplest option. For literally any other destination — especially Mexico — the drive to HRL or MFE is almost always worth it given how much wider their route networks are.",
+        q: "Which airport should I use for South Padre Island?",
+        a: "Brownsville is about a 30-minute drive from South Padre Island. Harlingen and McAllen are alternatives if the flight schedule or total trip cost works better for you.",
       },
     ],
   },
@@ -879,6 +842,10 @@ const AIRPORT_CONTENT: Record<string, {
   },
 };
 
+const routeSearch = AIRPORT_ROUTE_SEARCH[airportData.code];
+const isBrownsville = airportData.code === 'BRO';
+const archiveDate = (date: Date) => formatSocialTravelDates(date.toISOString().slice(0, 10));
+
 const airportContent = AIRPORT_CONTENT[airportData.code] ?? null;
 
 const airportMeta = AIRPORT_META[airportData.code] ?? {
@@ -960,46 +927,81 @@ const jsonLd = {
     <div class="max-w-4xl mx-auto">
       
       <header class="mb-16">
-        <span class="text-tcf-gold-deep font-bold text-xs uppercase tracking-[0.3em] mb-4 inline-block">Regional Airport Scout</span>
+        {!routeSearch && <span class="text-tcf-gold-deep font-bold text-xs uppercase tracking-[0.3em] mb-4 inline-block">Regional Airport Scout</span>}
         <h1 class="text-4xl md:text-6xl font-black mb-6 leading-tight">
           Cheap Flights from <br/><span class="text-gold italic">{airportData.city} ({airportData.code})</span>
         </h1>
-        <p class="text-lg text-tcf-ink-muted max-w-2xl font-body leading-relaxed">
+        {routeSearch ? <p class="text-lg text-tcf-ink-muted max-w-2xl font-body leading-relaxed">
+          Check current flights from {airportData.city} or browse fares we found on earlier dates.
+        </p> : <p class="text-lg text-tcf-ink-muted max-w-2xl font-body leading-relaxed">
           We monitor every major airline and award program departing from {airportData.city}. No more generic alerts for DFW when you're flying out of {airportData.code}.
-        </p>
-        <div class="mt-6 flex flex-wrap items-center gap-3 text-[10px] font-black uppercase tracking-[0.18em] text-tcf-ink-muted">
+        </p>}
+        {isBrownsville && <a href="/guides/rio-grande-valley#south-padre" class="inline-block mt-5 text-tcf-gold-deep font-bold underline">Flying to South Padre Island? Compare BRO, HRL, and MFE</a>}
+        {!routeSearch && <div class="mt-6 flex flex-wrap items-center gap-3 text-[10px] font-black uppercase tracking-[0.18em] text-tcf-ink-muted">
           <span class="rounded-full border border-tcf-gold/20 bg-tcf-gold/5 px-3 py-2 text-tcf-gold-deep">Airport-specific radar</span>
           <span>{dealList.length} archived alerts</span>
           {lastUpdated && <span>Last alert {lastUpdated.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>}
-        </div>
+        </div>}
       </header>
+
+      {routeSearch && <section class="mb-12" aria-labelledby="current-flights">
+        <h2 id="current-flights" class="text-2xl font-black mb-2">Check current flights from {airportData.code}</h2>
+        <p class="text-tcf-ink-muted mb-4">Open Google Flights for your dates, then confirm the price and schedule with the airline.</p>
+        <div class="grid sm:grid-cols-2 gap-3">
+          {routeSearch.routes.map((route) => (
+            <a
+              href={`https://www.google.com/travel/flights?${new URLSearchParams({ q: `Flights from ${airportData.code} to ${route.code}` })}`}
+              data-tcf-event="airport_flight_search_click"
+              data-tcf-location="airport_departure"
+              data-airport={airportData.code}
+              data-destination={route.code}
+              class="block p-4 rounded-xl border border-tcf-ink/10 hover:border-tcf-gold/40"
+            >
+              <span class="block text-tcf-ink font-bold">{route.destination} ({route.code})</span>
+              <span class="block text-sm text-tcf-ink-muted">{route.detail}</span>
+            </a>
+          ))}
+        </div>
+        <div class="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-tcf-gold-deep font-bold">
+          <a href={routeSearch.source} class="underline">See the airport’s route information</a>
+          {airportData.code === 'SAT' && <a href="/deals/from/aus" class="underline">Compare Austin departures</a>}
+        </div>
+      </section>}
 
       {dealList.length > 0 ? (
         <div class="space-y-6">
-          <h2 class="text-sm font-black text-tcf-ink uppercase tracking-widest mb-8">Recent Alerts from {airportData.code}</h2>
+          <div>
+            <h2 class="text-sm font-black text-tcf-ink uppercase tracking-widest">{routeSearch ? 'Archived fares' : 'Recent alerts'} from {airportData.code}</h2>
+            {routeSearch && <p class="mt-2 text-sm text-tcf-ink-muted">These are historical fares. Check current prices above.</p>}
+          </div>
           <div class="grid gap-4">
-            {dealList.map((deal) => (
+            {dealList.map((deal) => {
+              const travelDates = routeSearch ? formatSocialTravelDates(deal.travel_dates) : deal.travel_dates;
+              return (
               <a href={`/deal/${deal.id}`} class="block liquid-glass p-6 rounded-2xl border border-tcf-ink/10 hover:border-tcf-gold/30 transition-all duration-300 group no-underline text-inherit">
                 <div class="flex justify-between items-center">
                   <div>
                     <div class="flex items-center gap-2 mb-2">
-                        <span class={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border ${deal.score >= 8 ? 'text-tcf-gold-deep border-tcf-gold/30 bg-tcf-gold/5' : 'text-tcf-ink-muted border-tcf-ink/10'}`}>
+                        {!routeSearch && <span class={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border ${deal.score >= 8 ? 'text-tcf-gold-deep border-tcf-gold/30 bg-tcf-gold/5' : 'text-tcf-ink-muted border-tcf-ink/10'}`}>
                             Score: {deal.score}/10
-                        </span>
-                        <span class="text-[10px] text-tcf-ink-muted">{new Date(deal.sent_at).toLocaleDateString()}</span>
+                        </span>}
+                        <span class="text-xs text-tcf-ink-muted">{routeSearch ? `Published ${archiveDate(new Date(deal.sent_at))}` : new Date(deal.sent_at).toLocaleDateString()}</span>
                     </div>
                     <div class="text-xl font-black text-tcf-ink group-hover:text-tcf-gold-deep transition-colors">{deal.origin} → {deal.destination}</div>
-                    <div class="text-xs text-tcf-ink-muted mt-1">{deal.airline} · {deal.travel_dates}</div>
+                    <div class="text-xs text-tcf-ink-muted mt-1">{deal.airline}{travelDates && ` · ${routeSearch ? 'Travel dates ' : ''}${travelDates}`}</div>
                   </div>
                   <div class="text-right">
                     <div class="text-2xl font-black text-tcf-ink">{deal.price ? `$${deal.price}` : 'Points'}</div>
-                    <div class="text-[10px] text-tcf-ink-muted uppercase tracking-widest mt-1">Roundtrip</div>
+                    <div class="text-[10px] text-tcf-ink-muted uppercase tracking-widest mt-1">{routeSearch ? 'Past fare' : 'Roundtrip'}</div>
                   </div>
                 </div>
               </a>
-            ))}
+              );
+            })}
           </div>
         </div>
+      ) : routeSearch ? (
+        <p class="p-6 rounded-xl border border-tcf-ink/10 text-tcf-ink-muted">No archived fares to show for {airportData.code}. Use the links above to check flights for your dates.</p>
       ) : (
         <div class="space-y-6">
           <!-- Scout Status Card -->
@@ -1054,18 +1056,18 @@ const jsonLd = {
             <!-- Intro + Stats -->
             <div>
               <p class="text-tcf-ink-muted text-lg leading-relaxed max-w-3xl font-body mb-10">{airportContent.intro}</p>
-              <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {airportContent.stats.length > 0 && <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {airportContent.stats.map(stat => (
                   <div class="p-4 rounded-xl bg-tcf-ink/5 border border-tcf-ink/10 text-center">
                     <div class="text-2xl font-black text-tcf-ink">{stat.value}</div>
                     <div class="text-xs text-tcf-ink-muted mt-1 uppercase tracking-wider">{stat.label}</div>
                   </div>
                 ))}
-              </div>
+              </div>}
             </div>
 
             <!-- Historical Deal Ranges -->
-            <div>
+            {airportContent.routes.length > 0 && <div>
               <h2 class="text-xl font-black text-tcf-ink mb-2">Typical vs. Error Fare Prices from {airportData.city}</h2>
               <p class="text-sm text-tcf-ink-muted mb-6 font-body">Historical ranges based on observed deals. Error fares close within 2–6 hours — subscribe to get notified instantly.</p>
               <div class="overflow-x-auto rounded-2xl border border-tcf-ink/10">
@@ -1088,7 +1090,7 @@ const jsonLd = {
                   </tbody>
                 </table>
               </div>
-            </div>
+            </div>}
 
             <!-- Pro Tips -->
             <div>
