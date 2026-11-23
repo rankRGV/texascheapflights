@@ -1,4 +1,5 @@
 import { buildSocialWebhookPayload, type SocialVisualVariant } from './social-payload';
+import { formatSocialTravelDates } from './social-travel-dates';
 import { supabase } from './supabase';
 import type { ShowcaseDeal } from './deal-showcase';
 
@@ -81,7 +82,9 @@ function buildSocialCopy(deal: SocialDeal, variant: SocialVisualVariant) {
   const route = deal.origin + ' → ' + deal.destination;
   const price = deal.price ? '$' + deal.price : 'a low fare';
   const airline = deal.airline || 'multiple airlines';
-  const dates = deal.travel_dates ? ' Dates: ' + deal.travel_dates + '.' : '';
+  const travelDates = formatSocialTravelDates(deal.travel_dates);
+  const dates = travelDates ? ' Dates: ' + travelDates + '.' : '';
+  const instagramDates = travelDates ? '\n' + travelDates : '';
   const localNote = deal.origin === 'MFE' || deal.origin === 'HRL' || deal.origin === 'BRO'
     ? 'The Valley should see this one.'
     : deal.origin === 'SAT'
@@ -101,10 +104,10 @@ function buildSocialCopy(deal: SocialDeal, variant: SocialVisualVariant) {
     'Today\'s fare check: ' + route + ' at ' + price + ' on ' + airline + '.' + dates + ' ' + localNote + ' Open the deal and compare the live fare before you book.',
   ];
   const instagramTemplates = [
-    price + ' roundtrip: ' + route + ' ✈️\n' + airline + (deal.travel_dates ? '\n' + deal.travel_dates : '') + '\nCheck the live fare before booking.',
-    route + ' for ' + price + ' ✈️\n' + airline + (deal.travel_dates ? '\n' + deal.travel_dates : '') + '\nWould you take this trip?',
-    'Texas fare check ✈️\n' + route + '\n' + price + ' roundtrip on ' + airline + (deal.travel_dates ? '\n' + deal.travel_dates : '') + '\nWorth a quick look before the fare changes.',
-    'A route to watch:\n' + route + '\n' + price + ' on ' + airline + (deal.travel_dates ? '\n' + deal.travel_dates : '') + '\nVerify the live price before booking.',
+    price + ' roundtrip: ' + route + ' ✈️\n' + airline + instagramDates + '\nCheck the live fare before booking.',
+    route + ' for ' + price + ' ✈️\n' + airline + instagramDates + '\nWould you take this trip?',
+    'Texas fare check ✈️\n' + route + '\n' + price + ' roundtrip on ' + airline + instagramDates + '\nWorth a quick look before the fare changes.',
+    'A route to watch:\n' + route + '\n' + price + ' on ' + airline + instagramDates + '\nVerify the live price before booking.',
   ];
 
   return {
@@ -145,15 +148,16 @@ export async function publishDealToSocial(deal: SocialDeal) {
   const filePrefix = deal.id + '-' + variant;
 
   const feedImageUrl = await materializeImage(payload.social_context.deal_card_url, filePrefix + '-feed.png');
-  const instagramImageUrl = await materializeImage(payload.social_context.ig_deal_card_url, filePrefix + '-instagram.png');
-  const storyImageUrl = await materializeImage(payload.social_context.story_deal_card_url, filePrefix + '-story.png');
+  const storyImageUrl = env('META_PUBLISH_STORIES').toLowerCase() === 'true'
+    ? await materializeImage(payload.social_context.story_deal_card_url, filePrefix + '-story.png')
+    : null;
 
   const facebook = await metaPost('/' + PAGE_ID + '/photos', {
     url: feedImageUrl,
     caption: copy.facebook,
   });
 
-  const instagram = await publishInstagramImage(instagramImageUrl, copy.instagram);
+  const instagram = await publishInstagramImage(feedImageUrl, copy.instagram);
 
   const result: Record<string, unknown> = {
     skipped: false,
@@ -163,7 +167,7 @@ export async function publishDealToSocial(deal: SocialDeal) {
     instagramPostId: instagram.id || null,
   };
 
-  if (env('META_PUBLISH_STORIES').toLowerCase() === 'true') {
+  if (storyImageUrl) {
     const facebookStoryPhoto = await metaPost('/' + PAGE_ID + '/photos', {
       url: storyImageUrl,
       published: false,

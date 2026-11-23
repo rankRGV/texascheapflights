@@ -84,8 +84,7 @@ export function buildSocialWebhookPayload(deal: DealForSocial, imageSecretKey: s
     social_context: {
       deal_page_url: `https://texascheapflights.com/deal/${deal.id}`,
       variant,
-      deal_card_url: buildDealCardUrl(deal, imageSecretKey, variant, '/api/deal-card'),
-      ig_deal_card_url: buildDealCardUrl(deal, imageSecretKey, variant, '/api/deal-card-ig'),
+      deal_card_url: buildDealCardUrl(deal, imageSecretKey, variant, '/api/deal-card-ig'),
       story_deal_card_url: buildDealCardUrl(deal, imageSecretKey, variant, '/api/deal-card-story'),
       savings_snapshot_card_url: savingsSnapshotCardUrl,
       google_flights_url: googleFlightsUrl,
